@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="openstreetmap-cgimap 2.1.0 (1305 spike-08.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <node id="4221796116" visible="true" version="4" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2607949" lon="75.7068774"/>
+ <node id="4221796117" visible="true" version="3" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2604479" lon="75.7066270"/>
+ <node id="4221796118" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2604559" lon="75.7063326"/>
+ <node id="4221796119" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2599332" lon="75.7063486"/>
+ <node id="4221796120" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2599515" lon="75.7059731"/>
+ <node id="4221796121" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2593233" lon="75.7059678"/>
+ <node id="4221796122" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2589564" lon="75.7059570"/>
+ <node id="4221796123" visible="true" version="4" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2582788" lon="75.7059256"/>
+ <node id="4221796124" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2582732" lon="75.7056513"/>
+ <node id="4221796125" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2582686" lon="75.7045891"/>
+ <node id="4221796126" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2583374" lon="75.7045838"/>
+ <node id="4221796127" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2583419" lon="75.7038703"/>
+ <node id="4221796128" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2572093" lon="75.7038488"/>
+ <node id="4221796129" visible="true" version="3" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2572069" lon="75.7045221"/>
+ <node id="4221796130" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2564205" lon="75.7045086"/>
+ <node id="4221796131" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2564343" lon="75.7038059"/>
+ <node id="4221796132" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2556088" lon="75.7038113"/>
+ <node id="4221796134" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2542185" lon="75.6999847"/>
+ <node id="4221796135" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2540580" lon="75.7000954"/>
+ <node id="4221796136" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2538483" lon="75.7001523"/>
+ <node id="4221796137" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2537288" lon="75.7000984"/>
+ <node id="4221796138" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2536090" lon="75.7001920"/>
+ <node id="4221796139" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2535247" lon="75.7002047"/>
+ <node id="4221796140" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2533665" lon="75.7001613"/>
+ <node id="4221796141" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2532601" lon="75.6999974"/>
+ <node id="4221796143" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2531872" lon="75.7000516"/>
+ <node id="4221796144" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2531554" lon="75.7001152"/>
+ <node id="4221796145" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2531095" lon="75.7001796"/>
+ <node id="4221796146" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2530912" lon="75.7002976"/>
+ <node id="4221796147" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2530224" lon="75.7004746"/>
+ <node id="4221796148" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2530086" lon="75.7006248"/>
+ <node id="4221796149" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2530316" lon="75.7008287"/>
+ <node id="4221796150" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2530545" lon="75.7010432"/>
+ <node id="4221796151" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2530316" lon="75.7011720"/>
+ <node id="4221796152" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2529903" lon="75.7013168"/>
+ <node id="4221796153" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2529582" lon="75.7014938"/>
+ <node id="4221796154" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2529398" lon="75.7017299"/>
+ <node id="4221796155" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2529215" lon="75.7018908"/>
+ <node id="4221796156" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2527381" lon="75.7020410"/>
+ <node id="4221796159" visible="true" version="4" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2524660" lon="75.7000042"/>
+ <node id="4221796160" visible="true" version="4" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2522476" lon="75.6998935"/>
+ <node id="4221796161" visible="true" version="3" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2520774" lon="75.6998389"/>
+ <node id="4221796162" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2519128" lon="75.6983235"/>
+ <node id="4221796164" visible="true" version="4" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2505446" lon="75.6975364"/>
+ <node id="4221796165" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2487298" lon="75.6980445"/>
+ <node id="4221796166" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2487436" lon="75.6982162"/>
+ <node id="4221796167" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2482897" lon="75.6982871"/>
+ <node id="4221796168" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2483081" lon="75.6987234"/>
+ <node id="4221796169" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2471070" lon="75.6988713"/>
+ <node id="4221796170" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2468266" lon="75.6991603"/>
+ <node id="4221796171" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2465697" lon="75.6999596"/>
+ <node id="4221796172" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2466064" lon="75.7000294"/>
+ <node id="4221796173" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2466248" lon="75.7002976"/>
+ <node id="4221796174" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2457534" lon="75.7003029"/>
+ <node id="4221796175" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2458130" lon="75.7047500"/>
+ <node id="4221796176" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2467027" lon="75.7047232"/>
+ <node id="4221796177" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2467073" lon="75.7048734"/>
+ <node id="4221796178" visible="true" version="3" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2480888" lon="75.7047330"/>
+ <node id="4221796179" visible="true" version="3" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2493789" lon="75.7052851"/>
+ <node id="4221796180" visible="true" version="3" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2478987" lon="75.7074903"/>
+ <node id="4221796184" visible="true" version="3" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2478717" lon="75.7086676"/>
+ <node id="4221796185" visible="true" version="3" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2494348" lon="75.7086581"/>
+ <node id="4221802201" visible="true" version="3" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2504097" lon="75.7065339"/>
+ <node id="4221802202" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2552741" lon="75.7064345"/>
+ <node id="4221802203" visible="true" version="3" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2556546" lon="75.7061233"/>
+ <node id="4221802204" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2560903" lon="75.7064452"/>
+ <node id="4221802205" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2561087" lon="75.7071962"/>
+ <node id="4221802206" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2565627" lon="75.7072123"/>
+ <node id="4221802207" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2565719" lon="75.7077863"/>
+ <node id="4221802208" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2570442" lon="75.7077488"/>
+ <node id="4221802209" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2570304" lon="75.7081243"/>
+ <node id="4221802210" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2575257" lon="75.7081082"/>
+ <node id="4221802211" visible="true" version="3" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2576094" lon="75.7086030"/>
+ <node id="4221802212" visible="true" version="3" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2579506" lon="75.7086143"/>
+ <node id="4221802213" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2579292" lon="75.7078560"/>
+ <node id="4221802214" visible="true" version="3" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2583419" lon="75.7083764"/>
+ <node id="4221802215" visible="true" version="4" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2583726" lon="75.7091258"/>
+ <node id="4223010797" visible="true" version="3" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2606313" lon="75.7066108"/>
+ <node id="4223010801" visible="true" version="3" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2607031" lon="75.7067167"/>
+ <node id="4223010804" visible="true" version="3" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2607554" lon="75.7067230"/>
+ <node id="4226093994" visible="true" version="2" changeset="153566678" timestamp="2024-07-04T22:02:43Z" user="mohit poonia" uid="21702745" lat="31.2556010" lon="75.7007312"/>
+ <node id="4226093995" visible="true" version="3" changeset="188521103" timestamp="2026-09-04T11:39:02Z" user="Kovid" uid="24429292" lat="31.2543221" lon="75.6998377"/>
+ <node id="4226096879" visible="true" version="3" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2592269" lon="75.7090967"/>
+ <node id="12034805065" visible="true" version="2" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2519519" lon="75.6991333"/>
+ <node id="14101706198" visible="true" version="2" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2525016" lon="75.7020740"/>
+ <node id="14107324418" visible="true" version="2" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2594312" lon="75.7059687"/>
+ <node id="14268694499" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2583580" lon="75.7088069"/>
+ <node id="14268811654" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2517442" lon="75.6983283"/>
+ <node id="14268811655" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2517401" lon="75.6978347"/>
+ <node id="14268811656" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2511545" lon="75.6973688"/>
+ <node id="14268811657" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2509814" lon="75.6974100"/>
+ <node id="14268811658" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2509723" lon="75.6973474"/>
+ <node id="14268811659" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2507265" lon="75.6973972"/>
+ <node id="14268811660" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2507406" lon="75.6975029"/>
+ <node id="14268811661" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2505670" lon="75.6978368"/>
+ <node id="14268811679" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2502000" lon="75.7065280"/>
+ <node id="14268811680" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2500209" lon="75.7067848"/>
+ <node id="14268811681" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2498390" lon="75.7070412"/>
+ <node id="14268811682" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2495226" lon="75.7075511"/>
+ <node id="14268811683" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2494418" lon="75.7075680"/>
+ <node id="14268811684" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2484783" lon="75.7074790"/>
+ <node id="14268811685" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2484744" lon="75.7070654"/>
+ <node id="14268811686" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2487311" lon="75.7070677"/>
+ <node id="14268811687" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2487224" lon="75.7064053"/>
+ <node id="14268811688" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2484988" lon="75.7064031"/>
+ <node id="14268811689" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2484862" lon="75.7053098"/>
+ <node id="14268811690" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2493590" lon="75.7047243"/>
+ <node id="14268811691" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2481100" lon="75.7059025"/>
+ <node id="14268811692" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2471594" lon="75.7059123"/>
+ <node id="14268811693" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2471327" lon="75.7048718"/>
+ <node id="14268811738" visible="true" version="1" changeset="190268485" timestamp="2026-10-09T18:44:23Z" user="Kovid" uid="24429292" lat="31.2496621" lon="75.7072998"/>
+ <node id="14268926761" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2603836" lon="75.7075449"/>
+ <node id="14268926762" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2600682" lon="75.7075047"/>
+ <node id="14268926763" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2600585" lon="75.7072978"/>
+ <node id="14268926764" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2586866" lon="75.7072564"/>
+ <node id="14268926765" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2586564" lon="75.7072867"/>
+ <node id="14268926766" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2586334" lon="75.7073266"/>
+ <node id="14268926767" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2586506" lon="75.7079677"/>
+ <node id="14268926769" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2589207" lon="75.7079953"/>
+ <node id="14268926770" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2589790" lon="75.7086650"/>
+ <node id="14268926771" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2590960" lon="75.7086913"/>
+ <node id="14268926773" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2591488" lon="75.7091049"/>
+ <node id="14268926774" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292" lat="31.2590505" lon="75.7091108"/>
+ <way id="422435593" visible="true" version="20" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292">
+  <nd ref="4221796116"/>
+  <nd ref="4223010804"/>
+  <nd ref="4223010801"/>
+  <nd ref="4223010797"/>
+  <nd ref="4221796117"/>
+  <nd ref="4221796118"/>
+  <nd ref="4221796119"/>
+  <nd ref="4221796120"/>
+  <nd ref="14107324418"/>
+  <nd ref="4221796121"/>
+  <nd ref="4221796122"/>
+  <nd ref="4221796123"/>
+  <nd ref="4221796124"/>
+  <nd ref="4221796125"/>
+  <nd ref="4221796126"/>
+  <nd ref="4221796127"/>
+  <nd ref="4221796128"/>
+  <nd ref="4221796129"/>
+  <nd ref="4221796130"/>
+  <nd ref="4221796131"/>
+  <nd ref="4221796132"/>
+  <nd ref="4226093994"/>
+  <nd ref="4226093995"/>
+  <nd ref="4221796134"/>
+  <nd ref="4221796135"/>
+  <nd ref="4221796136"/>
+  <nd ref="4221796137"/>
+  <nd ref="4221796138"/>
+  <nd ref="4221796139"/>
+  <nd ref="4221796140"/>
+  <nd ref="4221796141"/>
+  <nd ref="4221796143"/>
+  <nd ref="4221796144"/>
+  <nd ref="4221796145"/>
+  <nd ref="4221796146"/>
+  <nd ref="4221796147"/>
+  <nd ref="4221796148"/>
+  <nd ref="4221796149"/>
+  <nd ref="4221796150"/>
+  <nd ref="4221796151"/>
+  <nd ref="4221796152"/>
+  <nd ref="4221796153"/>
+  <nd ref="4221796154"/>
+  <nd ref="4221796155"/>
+  <nd ref="4221796156"/>
+  <nd ref="14101706198"/>
+  <nd ref="4221796159"/>
+  <nd ref="4221796160"/>
+  <nd ref="4221796161"/>
+  <nd ref="12034805065"/>
+  <nd ref="4221796162"/>
+  <nd ref="14268811654"/>
+  <nd ref="14268811655"/>
+  <nd ref="14268811656"/>
+  <nd ref="14268811657"/>
+  <nd ref="14268811658"/>
+  <nd ref="14268811659"/>
+  <nd ref="14268811660"/>
+  <nd ref="4221796164"/>
+  <nd ref="14268811661"/>
+  <nd ref="4221796165"/>
+  <nd ref="4221796166"/>
+  <nd ref="4221796167"/>
+  <nd ref="4221796168"/>
+  <nd ref="4221796169"/>
+  <nd ref="4221796170"/>
+  <nd ref="4221796171"/>
+  <nd ref="4221796172"/>
+  <nd ref="4221796173"/>
+  <nd ref="4221796174"/>
+  <nd ref="4221796175"/>
+  <nd ref="4221796176"/>
+  <nd ref="4221796177"/>
+  <nd ref="14268811693"/>
+  <nd ref="14268811692"/>
+  <nd ref="14268811691"/>
+  <nd ref="4221796178"/>
+  <nd ref="14268811690"/>
+ </way>
+ <way id="1566901467" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292">
+  <nd ref="14268811690"/>
+  <nd ref="4221796179"/>
+  <nd ref="14268811689"/>
+  <nd ref="14268811688"/>
+  <nd ref="14268811687"/>
+  <nd ref="14268811686"/>
+  <nd ref="14268811685"/>
+  <nd ref="14268811684"/>
+  <nd ref="4221796180"/>
+  <nd ref="4221796184"/>
+  <nd ref="4221796185"/>
+  <nd ref="14268811683"/>
+  <nd ref="14268811682"/>
+  <nd ref="14268811738"/>
+  <nd ref="14268811681"/>
+  <nd ref="14268811680"/>
+  <nd ref="14268811679"/>
+  <nd ref="4221802201"/>
+  <nd ref="4221802202"/>
+  <nd ref="4221802203"/>
+  <nd ref="4221802204"/>
+  <nd ref="4221802205"/>
+  <nd ref="4221802206"/>
+  <nd ref="4221802207"/>
+  <nd ref="4221802208"/>
+  <nd ref="4221802209"/>
+  <nd ref="4221802210"/>
+  <nd ref="4221802211"/>
+  <nd ref="4221802212"/>
+  <nd ref="4221802213"/>
+  <nd ref="4221802214"/>
+  <nd ref="14268694499"/>
+  <nd ref="4221802215"/>
+  <nd ref="14268926774"/>
+  <nd ref="14268926773"/>
+  <nd ref="4226096879"/>
+  <nd ref="14268926771"/>
+  <nd ref="14268926770"/>
+  <nd ref="14268926769"/>
+  <nd ref="14268926767"/>
+  <nd ref="14268926766"/>
+  <nd ref="14268926765"/>
+  <nd ref="14268926764"/>
+  <nd ref="14268926763"/>
+  <nd ref="14268926762"/>
+  <nd ref="14268926761"/>
+  <nd ref="4221796116"/>
+ </way>
+ <relation id="21599790" visible="true" version="1" changeset="190271129" timestamp="2026-10-09T19:52:50Z" user="Kovid" uid="24429292">
+  <member type="way" ref="422435593" role="outer"/>
+  <member type="way" ref="1566901467" role="outer"/>
+  <tag k="addr:city" v="Phagwara"/>
+  <tag k="addr:country" v="IN"/>
+  <tag k="addr:postcode" v="144411"/>
+  <tag k="addr:state" v="Punjab"/>
+  <tag k="addr:street" v="Delhi Grand Trunk Road"/>
+  <tag k="amenity" v="university"/>
+  <tag k="contact:whatsapp" v="+91 98525 69000"/>
+  <tag k="education" v="university"/>
+  <tag k="email" v="info@lpu.co.in"/>
+  <tag k="name" v="Lovely Professional University"/>
+  <tag k="name:en" v="Lovely Professional University"/>
+  <tag k="name:pa" v="ਲਵਲੀ ਪ੍ਰੋਫੈਸ਼ਨਲ ਯੂਨੀਵਰਸਿਟੀ"/>
+  <tag k="name:pnb" v="لَولی یونیورسٹی"/>
+  <tag k="nohousenumber" v="yes"/>
+  <tag k="official_name:en" v="Lovely Professional University, Jalandhar"/>
+  <tag k="operator" v="Lovely Group"/>
+  <tag k="operator:type" v="private"/>
+  <tag k="phone" v="+91 1824-517000"/>
+  <tag k="related_law" v="Lovely Professional University Act, 2005"/>
+  <tag k="related_law:ref" v="Punjab Act No. 25 of 2005"/>
+  <tag k="related_law:url" v="https://www.ugc.ac.in/oldpdf/privateuni/lovelyuni.pdf"/>
+  <tag k="short_name:en" v="LPU"/>
+  <tag k="start_date" v="2006"/>
+  <tag k="type" v="multipolygon"/>
+  <tag k="website" v="https://www.lpu.in/"/>
+  <tag k="wikidata" v="Q5756621"/>
+  <tag k="wikipedia" v="pa:ਲਵਲੀ ਪ੍ਰੋਫ਼ੈਸ਼ਨਲ ਯੂਨੀਵਰਸਿਟੀ"/>
+ </relation>
+</osm>

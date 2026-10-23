@@ -1,0 +1,10 @@
+dist
+dev-dist
+coverage
+playwright-report
+test-results
+public/data
+data/raw
+data/live
+package-lock.json
+*.osm
