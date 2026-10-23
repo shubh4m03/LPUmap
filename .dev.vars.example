@@ -1,0 +1,20 @@
+# Local secrets for `npx wrangler pages dev dist` — copy to .dev.vars and fill in.
+# .dev.vars is git-ignored (see .gitignore); never commit real values.
+#
+# Password mode (simplest for local development):
+#   1. npm run admin:hash-password      (type a password of at least 12 characters)
+#   2. paste the printed pbkdf2-sha256$100000$... line below
+#   3. npm run db:migrate:local
+AUTH_MODE=password
+OWNER_PASSWORD_HASH=
+# Random string of at least 32 characters, e.g. `node -e "console.log(crypto.randomBytes(32).toString('base64url'))"`
+RATE_LIMIT_KEY=
+#
+# Cloudflare Access mode instead (production recommendation):
+# AUTH_MODE=access
+# ACCESS_TEAM_DOMAIN=https://<team>.cloudflareaccess.com
+# ACCESS_AUD=<Access application AUD tag>
+# OWNER_EMAILS=owner@example.org
+#
+# Optional extra allowed Origin for admin writes (e.g. the custom domain):
+# PUBLIC_ORIGIN=https://atlas.example.org

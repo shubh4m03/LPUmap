@@ -22,7 +22,11 @@
     "data:validate": "node scripts/validate-data.ts",
     "data:check": "npm run data:build && npm run data:validate",
     "smoke": "node scripts/smoke.ts",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run data:check && vite build && npm run smoke && npm run test:e2e"
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run data:check && vite build && npm run smoke && npm run test:e2e",
+    "admin:hash-password": "node scripts/admin-hash-password.ts",
+    "test:server": "vitest run -c vitest.server.config.ts",
+    "typecheck:server": "tsc --noEmit -p tsconfig.server.json",
+    "db:migrate:local": "wrangler d1 migrations apply lpu-atlas --local"
   },
   "author": "",
   "license": "MIT",

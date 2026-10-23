@@ -1,0 +1,30 @@
+# Cloudflare Pages project for LPU Campus Atlas (static site + Pages Functions + D1).
+# See docs/COMMUNITY_MODULE_CONTRACTS.md and docs/DEPLOYMENT.md.
+#
+# NO SECRETS IN THIS FILE. Set them with
+#   npx wrangler pages secret put OWNER_PASSWORD_HASH   (password mode)
+#   npx wrangler pages secret put RATE_LIMIT_KEY        (recommended, >= 32 random chars)
+# or in the Pages dashboard. Locally, copy .dev.vars.example to .dev.vars (git-ignored).
+#
+# AUTH_MODE is intentionally NOT set here: without it every /api/admin/** endpoint
+# answers 503 "not-configured" (fail closed). Configure one of:
+#   AUTH_MODE = "access"   + ACCESS_TEAM_DOMAIN, ACCESS_AUD, OWNER_EMAILS (Cloudflare Access)
+#   AUTH_MODE = "password" + OWNER_PASSWORD_HASH secret (npm run admin:hash-password)
+# Optional: PUBLIC_ORIGIN = "https://atlas.example.org" (extra allowed Origin for admin writes).
+
+name = "lpu-campus-atlas"
+compatibility_date = "2026-09-01"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "lpu-atlas"
+# REPLACE with the id printed by `npx wrangler d1 create lpu-atlas` before deploying.
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+[vars]
+# AUTH_MODE = "access"
+# ACCESS_TEAM_DOMAIN = "https://<team>.cloudflareaccess.com"
+# ACCESS_AUD = "<Access application AUD tag>"
+# OWNER_EMAILS = "owner@example.org"

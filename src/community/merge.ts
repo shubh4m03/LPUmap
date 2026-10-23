@@ -18,17 +18,15 @@
  *  6. published ids that collide with base ids (or repeat) → ignored, reported;
  *  7. manifest counts recomputed; datasetVersion stays the base version and the
  *     publication version is reported separately.
+ *
+ * Determinism: the output depends only on the SET of input records, never on
+ * their order. When two records share an id (the server never publishes that,
+ * but the merge does not trust it), the winner is chosen by a total order:
+ * highest revision, then latest updatedAt, then canonical JSON.
  */
 import { CATEGORIES } from '../config/categories.ts';
 import type { CampusData } from '../data/campus-data.ts';
-import type {
-  BuildingsFile,
-  LngLat,
-  Manifest,
-  Place,
-  Relation,
-  SourceRecord,
-} from '../data/schema.ts';
+import type { BuildingsFile, LngLat, Manifest, Place, Relation, SourceRecord } from '../data/schema.ts';
 import { placeKindSchema, relationTypeSchema } from '../data/schema.ts';
 import { isValidLngLat } from '../distance/geodesic.ts';
 import type { Publication, PublishedLocation, PublishedOverride } from './schema.ts';
@@ -45,6 +43,8 @@ export interface MergeReport {
   hiddenPlaces: string[];
   overriddenPlaces: string[];
   orphanOverrides: string[];
+  /** Target ids that had more than one override; only the newest (see `newestFirst`) was applied. */
+  duplicateOverrides: string[];
   addedLocations: string[];
   /** Published locations ignored because their id collides with a base place or repeats. */
   shadowedLocations: string[];
@@ -62,7 +62,8 @@ export interface MergeResult {
 export const OWNER_SOURCE: SourceRecord = {
   id: 'owner',
   name: 'Campus Atlas owner edits',
-  notes: 'Locations and corrections published by the site owner. Overlaid on the base dataset; never written into it.',
+  notes:
+    'Locations and corrections published by the site owner. Overlaid on the base dataset; never written into it.',
 };
 export const COMMUNITY_SOURCE: SourceRecord = {
   id: 'community',
@@ -71,6 +72,27 @@ export const COMMUNITY_SOURCE: SourceRecord = {
 };
 
 const byString = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
+
+/** JSON with object keys sorted at every level: equal records ⇔ equal strings. */
+function canonical(v: unknown): string {
+  if (Array.isArray(v)) return `[${v.map(canonical).join(',')}]`;
+  if (v !== null && typeof v === 'object') {
+    const entries = Object.entries(v as Record<string, unknown>)
+      .filter(([, x]) => x !== undefined)
+      .sort(([a], [b]) => byString(a, b));
+    return `{${entries.map(([k, x]) => `${JSON.stringify(k)}:${canonical(x)}`).join(',')}}`;
+  }
+  return JSON.stringify(v) ?? 'null';
+}
+
+type Versioned = { revision: number; updatedAt: string };
+
+/** Total order among records sharing an id: newest revision, then latest updatedAt, then content. */
+function newestFirst<T extends Versioned>(a: T, b: T): number {
+  return (
+    b.revision - a.revision || byString(b.updatedAt, a.updatedAt) || byString(canonical(a), canonical(b))
+  );
+}
 
 interface Ctx {
   nodes: readonly LngLat[];
@@ -92,7 +114,11 @@ function withRouting(place: Place, nodeId: number | null | undefined, ctx: Ctx, 
   }
   const check = checkAccessNode(ctx.nodes, ctx.foot, nodeId, place.location);
   if (!check.ok) {
-    ctx.report.invalidAccess.push({ id: place.id, reason: `${reasonPrefix}${check.reason}`, message: check.message });
+    ctx.report.invalidAccess.push({
+      id: place.id,
+      reason: `${reasonPrefix}${check.reason}`,
+      message: check.message,
+    });
     return rest;
   }
   return { ...rest, graphNodeId: check.nodeId, connectorLengthM: check.distanceM };
@@ -175,7 +201,17 @@ function rebuildBuildings(
     }
     const p = overridden.has(id) ? placesById.get(id) : undefined;
     features.push(
-      p ? { ...f, properties: { ...f.properties, name: p.name, displayName: p.displayName, categoryId: p.categoryId } } : f,
+      p
+        ? {
+            ...f,
+            properties: {
+              ...f.properties,
+              name: p.name,
+              displayName: p.displayName,
+              categoryId: p.categoryId,
+            },
+          }
+        : f,
     );
   }
   return { ...base, features };
@@ -196,7 +232,8 @@ function recount(base: Manifest, places: Place[], buildings: BuildingsFile, rela
   for (const k of placeKindSchema.options) c[`kind:${k}`] = count((p) => p.kind === k);
   for (const h of ['osm-height', 'osm-levels-estimate', 'fallback'])
     c[`heightSource:${h}`] = buildings.features.filter((f) => f.properties.heightSource === h).length;
-  for (const t of relationTypeSchema.options) c[`relation:${t}`] = relations.filter((r) => r.type === t).length;
+  for (const t of relationTypeSchema.options)
+    c[`relation:${t}`] = relations.filter((r) => r.type === t).length;
   return Object.fromEntries(Object.entries(c).sort(([a], [b]) => byString(a, b)));
 }
 
@@ -206,6 +243,7 @@ export function mergePublication(base: CampusData, pub: Publication): MergeResul
     hiddenPlaces: [],
     overriddenPlaces: [],
     orphanOverrides: [],
+    duplicateOverrides: [],
     addedLocations: [],
     shadowedLocations: [],
     invalidAccess: [],
@@ -221,8 +259,17 @@ export function mergePublication(base: CampusData, pub: Publication): MergeResul
   const baseIds = new Set(base.places.map((p) => p.id));
 
   const overrides = new Map<string, PublishedOverride>();
-  for (const o of [...pub.overrides].sort((a, b) => byString(a.targetId, b.targetId))) {
-    if (overrides.has(o.targetId)) continue;
+  const orderedOverrides = [...pub.overrides].sort(
+    (a, b) => byString(a.targetId, b.targetId) || newestFirst(a, b),
+  );
+  let previous: string | null = null;
+  for (const o of orderedOverrides) {
+    // Sorted by targetId, so repeats are adjacent; the first of each run is the newest.
+    if (o.targetId === previous) {
+      if (report.duplicateOverrides.at(-1) !== o.targetId) report.duplicateOverrides.push(o.targetId);
+      continue;
+    }
+    previous = o.targetId;
     if (!baseIds.has(o.targetId)) report.orphanOverrides.push(o.targetId);
     else overrides.set(o.targetId, o);
   }
@@ -261,7 +308,7 @@ export function mergePublication(base: CampusData, pub: Publication): MergeResul
   report.droppedRelations = base.relations.length - relations.length;
 
   const origins = new Set<string>();
-  for (const l of [...pub.locations].sort((a, b) => byString(a.id, b.id))) {
+  for (const l of [...pub.locations].sort((a, b) => byString(a.id, b.id) || newestFirst(a, b))) {
     if (seen.has(l.id) || !isValidLngLat(l.location)) {
       report.shadowedLocations.push(l.id);
       continue;
@@ -275,7 +322,8 @@ export function mergePublication(base: CampusData, pub: Publication): MergeResul
   const sourceIds = new Set(base.manifest.sources.map((s) => s.id));
   const extraSources: SourceRecord[] = [];
   const needOwner = origins.has('owner') || overridden.size > 0;
-  if (needOwner && !sourceIds.has('owner')) extraSources.push({ ...OWNER_SOURCE, retrievedAt: pub.generatedAt });
+  if (needOwner && !sourceIds.has('owner'))
+    extraSources.push({ ...OWNER_SOURCE, retrievedAt: pub.generatedAt });
   if (origins.has('community') && !sourceIds.has('community'))
     extraSources.push({ ...COMMUNITY_SOURCE, retrievedAt: pub.generatedAt });
 

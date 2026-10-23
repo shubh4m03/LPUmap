@@ -15,3 +15,5 @@ data/.cache
 .dev.vars.*
 !.dev.vars.example
 .wrangler
+# Third-party design references (copyrighted; local study only, never committed)
+reference/

@@ -92,7 +92,8 @@ export function findPossibleDuplicates(
     let reason: string | null = null;
     if (srcKey && distanceM <= radiusM) {
       const sim = keySimilarity(key, srcKey);
-      if (sim >= threshold) reason = `Similar name (${Math.round(sim * 100)}% match) ${Math.round(distanceM)} m away`;
+      if (sim >= threshold)
+        reason = `Similar name (${Math.round(sim * 100)}% match) ${Math.round(distanceM)} m away`;
     }
     if (!reason && src.categoryId === subject.categoryId && distanceM <= sameCatM) {
       reason = `Same category ${Math.round(distanceM)} m away`;

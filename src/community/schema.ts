@@ -35,11 +35,26 @@ export const LIMITS = {
   adminBodyBytes: 32 * 1024,
 } as const;
 
-/** True when `s` contains a C0 control character or DEL, except the listed allowed code points. */
+/** Bidi embedding/override (U+202A–202E) and isolate (U+2066–2069) controls: display spoofing. */
+const isBidiControl = (c: number) => (c >= 0x202a && c <= 0x202e) || (c >= 0x2066 && c <= 0x2069);
+
+/**
+ * True when `s` contains a C0/C1 control character, DEL, a bidi
+ * embedding/override/isolate control or an unpaired UTF-16 surrogate, except
+ * the listed allowed code points. ZWJ/ZWNJ and LRM/RLM stay allowed (needed
+ * by Indic and RTL scripts).
+ */
 function hasControlChars(s: string, allowed: readonly number[] = []): boolean {
   for (let i = 0; i < s.length; i++) {
     const c = s.charCodeAt(i);
-    if ((c < 0x20 || c === 0x7f) && !allowed.includes(c)) return true;
+    if (c >= 0xd800 && c <= 0xdbff) {
+      const next = s.charCodeAt(i + 1);
+      if (!(next >= 0xdc00 && next <= 0xdfff)) return true;
+      i++;
+      continue;
+    }
+    if (c >= 0xdc00 && c <= 0xdfff) return true;
+    if ((c < 0x20 || (c >= 0x7f && c <= 0x9f) || isBidiControl(c)) && !allowed.includes(c)) return true;
   }
   return false;
 }

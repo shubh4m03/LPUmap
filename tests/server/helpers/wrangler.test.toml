@@ -1,0 +1,9 @@
+# Test-only Wrangler config: a throwaway local D1 binding for the server test
+# harness (tests/server/helpers/test-db.ts). Never deployed.
+name = "lpu-campus-atlas-test"
+compatibility_date = "2025-09-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "atlas-test"
+database_id = "00000000-0000-4000-8000-000000000000"

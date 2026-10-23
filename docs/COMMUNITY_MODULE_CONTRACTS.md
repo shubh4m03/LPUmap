@@ -42,8 +42,8 @@ All timestamps ISO-8601 UTC text. All ids random, non-guessable
 | `locations`    | id PK; origin CHECK IN (owner, community); suggestion_id UNIQUE NULL REFERENCES suggestions; name; category_id; lon; lat; description; opening_hours; wheelchair; website; source_url; verification_status; last_verified_at; access_node_id NULL; access_note; status CHECK IN (active, hidden); created_by; created_at; updated_by; updated_at; revision |
 | `overrides`    | target_id PK (base place id); fields_json (validated `OverrideFields`); hidden INT 0/1; access_node_id NULL; note (private); base_dataset_version (dataset version when last edited); updated_by; updated_at; revision                                                                                                                                     |
 | `audit_events` | id INTEGER PK AUTOINCREMENT; at; actor; action; entity_type; entity_id; before_json; after_json; outcome CHECK IN (success, rejected, failed); detail. **Append-only**: triggers `BEFORE UPDATE`/`BEFORE DELETE` → `RAISE(ABORT)`. Never contains secrets, tokens, cookies, IPs.                                                                           |
-| `sessions`     | id_hash PK (SHA-256 of the random token — raw token only in the cookie); actor; csrf_token; created_at; expires_at; last_seen_at                                                                                                                                                                                                                           |
-| `rate_limits`  | bucket PK (HMAC of client IP + scope + window); count; window_start; expires_at. Purged opportunistically after expiry (≤ 48 h retention). Raw IPs are never stored.                                                                                                                                                                                       |
+| `sessions`     | id_hash PK (HMAC-SHA256 of the random token keyed by the configured password hash, so rotating the hash revokes all sessions — raw token only in the cookie); actor; csrf_token; created_at; expires_at; last_seen_at                                                                                                                                      |
+| `rate_limits`  | bucket PK (HMAC of client IP + scope + window); count; window_start; expires_at. Purged opportunistically after expiry — on every rate-limited request and on `GET /api/admin/overview` (≤ 48 h retention; see docs/ADMIN_OPERATIONS.md §8). Raw IPs are never stored.                                                                                     |
 | `meta`         | key PK, value — `publication_version` (bumped in the same batch as every public change), `rate_salt` + `rate_salt_day` (daily-rotated salt when no `RATE_LIMIT_KEY` secret)                                                                                                                                                                                |
 
 Atomicity: every multi-statement change (approve = update suggestion +
@@ -144,6 +144,12 @@ Deterministic precedence (documented & tested):
    ignored + reported (cannot shadow base).
 7. Manifest counts are recomputed from the merged data; `datasetVersion`
    stays the base version and `publicationVersion` is exposed separately.
+
+Determinism: the result depends only on the set of input records, never on
+their order. Records sharing an id (never produced by the server, but not
+trusted) are resolved by a total order — highest `revision`, then latest
+`updatedAt`, then canonical JSON; extra overrides are reported in
+`duplicateOverrides`, extra locations in `shadowedLocations`.
 
 The browser fetches `/api/locations` after the base dataset; on failure the
 app runs on the base dataset and shows a small "Community updates

@@ -74,6 +74,13 @@ export function findNearest(args: FindNearestArgs): NearestResult[] {
   const routed: NearestResult[] = [];
   const fallback: NearestResult[] = [];
   for (const c of candidates) {
+    // Only places with a validated network connection are routed. Routing a
+    // place without one would let the router snap it onto an arbitrary nearby
+    // node — an invented connection presented as a walking distance.
+    if (c.place.graphNodeId === undefined) {
+      fallback.push(strip(c));
+      continue;
+    }
     const route = routeTo(router, origin, c.place, c.location, profile);
     if (route) {
       routed.push({

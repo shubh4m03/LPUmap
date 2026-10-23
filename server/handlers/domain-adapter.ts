@@ -1,0 +1,51 @@
+/**
+ * Binds the HTTP layer's DomainPort to the domain barrel (server/domain/index.ts).
+ * Listing every operation explicitly lets the compiler check each signature
+ * against the port; the only translation is the typed suggestion filter.
+ */
+import * as domain from '../domain/index.ts';
+import type { DomainPort, Filter } from './ports.ts';
+
+const str = (v: unknown): string | undefined => (typeof v === 'string' && v !== '' ? v : undefined);
+const num = (v: unknown): number | undefined => (typeof v === 'number' && Number.isFinite(v) ? v : undefined);
+
+export const domainAdapter: DomainPort = {
+  createSuggestion: domain.createSuggestion,
+  listSuggestions: (db, f: Filter) =>
+    domain.listSuggestions(db, {
+      status: str(f.status),
+      category: str(f.category),
+      q: str(f.q),
+      sort: str(f.sort),
+      limit: num(f.limit),
+      cursor: str(f.cursor),
+    }),
+  getSuggestion: domain.getSuggestion,
+  editSuggestion: domain.editSuggestion,
+  approveSuggestion: domain.approveSuggestion,
+  rejectSuggestion: domain.rejectSuggestion,
+  markDuplicate: domain.markDuplicate,
+  requestInformation: domain.requestInformation,
+  reopenSuggestion: domain.reopenSuggestion,
+
+  listLocations: domain.listLocations,
+  createLocation: domain.createLocation,
+  updateLocation: domain.updateLocation,
+  hideLocation: domain.hideLocation,
+  restoreLocation: domain.restoreLocation,
+  deleteLocation: domain.deleteLocation,
+
+  listOverrides: domain.listOverrides,
+  getOverride: domain.getOverride,
+  putOverride: domain.putOverride,
+  hideOverride: domain.hideOverride,
+  unhideOverride: domain.unhideOverride,
+  deleteOverride: domain.deleteOverride,
+
+  revertAuditEvent: domain.revertAuditEvent,
+  listAudit: domain.listAudit,
+
+  getPublication: domain.getPublication,
+  getOverview: domain.getOverview,
+  getQualityWarnings: domain.getQualityWarnings,
+};

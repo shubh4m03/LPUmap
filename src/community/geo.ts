@@ -23,7 +23,9 @@ export function pointInRing(p: LngLat, ring: readonly LngLat[]): boolean {
 }
 
 export function pointInPolygons(p: LngLat, polygons: readonly PolygonRings[]): boolean {
-  return polygons.some(([outer, ...holes]) => !!outer && pointInRing(p, outer) && !holes.some((h) => pointInRing(p, h)));
+  return polygons.some(
+    ([outer, ...holes]) => !!outer && pointInRing(p, outer) && !holes.some((h) => pointInRing(p, h)),
+  );
 }
 
 const isRing = (r: unknown): r is LngLat[] => Array.isArray(r) && r.length >= 4 && r.every(isValidLngLat);
@@ -81,7 +83,11 @@ export function checkAccessNode(
 ): AccessNodeCheck {
   const node = Number.isInteger(nodeId) && nodeId >= 0 ? nodes[nodeId] : undefined;
   if (!node || !isValidLngLat(node)) {
-    return { ok: false, reason: 'missing-node', message: `Path node ${nodeId} does not exist in the routing graph.` };
+    return {
+      ok: false,
+      reason: 'missing-node',
+      message: `Path node ${nodeId} does not exist in the routing graph.`,
+    };
   }
   if (!footNodes.has(nodeId)) {
     return {

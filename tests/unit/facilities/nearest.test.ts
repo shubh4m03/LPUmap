@@ -94,12 +94,24 @@ describe('findNearest with a router', () => {
   it('orders by route distance, which may differ from straight-line order', () => {
     const router = fakeRouter({ a: 900, b: 250, c: 400 });
     const r = findNearest({ origin: ORIGIN, categoryId: 'food', directory, router });
-    expect(r.map((x) => [x.place.id, x.distanceM, x.distanceKind])).toEqual([
-      ['b', 250, 'route'],
-      ['c', 400, 'route'],
-      ['a', 900, 'route'],
+    expect(r.map((x) => [x.place.id, x.distanceKind])).toEqual([
+      ['b', 'route'],
+      ['a', 'route'],
+      ['c', 'straight-line'],
     ]);
+    expect(r[0]!.distanceM).toBe(250);
     expect(r[0]!.durationS).toBeCloseTo(250 / 1.3);
+  });
+
+  it('never routes a place without a validated graph node (no invented connection)', () => {
+    const router = fakeRouter({ a: 900, b: 250, c: 400 });
+    const r = findNearest({ origin: ORIGIN, categoryId: 'food', directory, router });
+    const routedIds = router.calls.map((call) => (call.to.kind === 'place' ? call.to.placeId : ''));
+    expect(routedIds).not.toContain('c');
+    const c = r.find((x) => x.place.id === 'c')!;
+    expect(c.distanceKind).toBe('straight-line');
+    expect(c.distanceM).toBeCloseTo(haversineM(ORIGIN, east(300)), 6);
+    expect(c.durationS).toBeUndefined();
   });
 
   it('sends a point origin and a place destination carrying the graph node id', () => {
@@ -125,21 +137,26 @@ describe('findNearest with a router', () => {
   });
 
   it('falls back to straight-line on failure and lists those after route results', () => {
-    const router = fakeRouter({ c: 5000, b: 'throw' });
+    const router = fakeRouter({ a: 5000, b: 'throw' });
     const r = findNearest({ origin: ORIGIN, categoryId: 'food', directory, router });
     expect(r.map((x) => [x.place.id, x.distanceKind])).toEqual([
-      ['c', 'route'],
-      ['a', 'straight-line'],
+      ['a', 'route'],
       ['b', 'straight-line'],
+      ['c', 'straight-line'],
     ]);
-    const a = r.find((x) => x.place.id === 'a')!;
-    expect(a.distanceM).toBeCloseTo(haversineM(ORIGIN, east(100)), 6);
-    expect(a.durationS).toBeUndefined();
+    const b = r.find((x) => x.place.id === 'b')!;
+    expect(b.distanceM).toBeCloseTo(haversineM(ORIGIN, east(200)), 6);
+    expect(b.durationS).toBeUndefined();
   });
 
   it('only routes the closest candidates by straight line, then applies the limit', () => {
     const many = Array.from({ length: 12 }, (_, i) =>
-      place({ id: `p${String(i).padStart(2, '0')}`, categoryId: 'food', location: east(100 * (i + 1)) }),
+      place({
+        id: `p${String(i).padStart(2, '0')}`,
+        categoryId: 'food',
+        location: east(100 * (i + 1)),
+        graphNodeId: i,
+      }),
     );
     const d = createFacilityDirectory(many, []);
     // Route distances reverse the straight-line order among the routed candidates.
@@ -168,8 +185,8 @@ describe('findNearest with a router', () => {
     const r = findNearest({ origin: ORIGIN, categoryId: 'food', directory, router });
     expect(r.map((x) => [x.place.id, x.distanceKind])).toEqual([
       ['b', 'route'],
-      ['c', 'route'],
       ['a', 'straight-line'],
+      ['c', 'straight-line'],
     ]);
     expect(r.every((x) => Number.isFinite(x.distanceM))).toBe(true);
   });

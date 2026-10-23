@@ -1,0 +1,8 @@
+# Test-only Wrangler config for tests/server/http + tests/server/auth (local D1, never deployed).
+name = "lpu-campus-atlas-http-test"
+compatibility_date = "2025-09-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "atlas-http-test"
+database_id = "00000000-0000-4000-8000-000000000001"
