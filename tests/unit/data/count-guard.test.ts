@@ -152,9 +152,10 @@ describe('resolveAcceptance', () => {
     expect(resolveAcceptance(base({}), null, '   ').acceptance).toBeNull();
   });
 
-  it('the committed acceptance file is valid and pinned to the committed v1 dataset', () => {
+  it('a committed acceptance file, when present, is valid and every entry is pinned to a dataset', () => {
+    // Acceptances are removed in the commit after the change lands, so the file is usually absent.
     const committed = readCountAcceptances(join(repo, 'data/curated'));
-    expect(committed?.acceptances.map((a) => a.baselineDatasetVersion)).toEqual(['b628c5855b1d']);
+    for (const a of committed?.acceptances ?? []) expect(a.baselineDatasetVersion).toMatch(/^[0-9a-f]{12}$/);
   });
 });
 
