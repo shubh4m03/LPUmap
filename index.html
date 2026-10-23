@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Static copy of APP_CONFIG.brand (src/config/index.ts); keep in step. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
+    />
+    <title>LPU Campus Atlas</title>
+    <meta
+      name="description"
+      content="Campus map, search and walking directions for Lovely Professional University, built from open, attributed data."
+    />
+    <!-- Brand colour until initTheme() swaps it for the active theme's surface colour. -->
+    <meta name="theme-color" content="#c2410c" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="application-name" content="Campus Atlas" />
+    <meta name="apple-mobile-web-app-title" content="Campus Atlas" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon-180.png" />
+  </head>
+  <body>
+    <noscript>
+      <p style="padding: 1rem; font-family: system-ui, sans-serif">
+        LPU Campus Atlas needs JavaScript to show the campus map, search and directions. Please enable
+        JavaScript, or visit the official university website at https://www.lpu.in/.
+      </p>
+    </noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
