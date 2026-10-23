@@ -3,6 +3,10 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { LiveRegion } from '../../../src/accessibility/index.ts';
 import { App } from '../../../src/app/App.tsx';
+// App loads the shell lazily. Importing it here as well makes the shell resolve to the
+// same module instances as this file, so the vi.mock()ed modules below (supportsWebGL)
+// are the ones the shell calls.
+import '../../../src/components/layout/AppShell.tsx';
 import { useAppStore } from '../../../src/app/store/index.ts';
 import { supportsWebGL } from '../../../src/buildings3d/index.ts';
 import { ToastProvider } from '../../../src/components/ui/index.ts';
@@ -16,6 +20,7 @@ import { syntheticCampus } from '../app/synthetic-campus.ts';
 const mapProps: { current: MapViewProps | null } = { current: null };
 const controller = {
   flyTo: vi.fn(),
+  follow: vi.fn(),
   fitCoordinates: vi.fn(),
   resetView: vi.fn(),
   zoomIn: vi.fn(),
@@ -180,13 +185,26 @@ describe('App shell', () => {
     expect(useAppStore.getState().activePanel).toBe('layers');
   });
 
-  it('activating a row that the details view replaces moves focus to the panel heading', async () => {
+  it('activating a row that the details view replaces moves focus to the place heading, without a ring', async () => {
+    const focusSpy = vi.spyOn(HTMLElement.prototype, 'focus');
     renderApp();
     await screen.findByTestId('mock-map');
     act(() => useAppStore.getState().openCategory('food'));
     await userEvent.click(await screen.findByRole('button', { name: /Synthetic Food Point/ }));
-    const heading = await screen.findByRole('heading', { name: 'Synthetic Food Point', level: 2 });
+    const heading = await screen.findByRole('heading', { name: 'Synthetic Food Point', level: 3 });
     await waitFor(() => expect(heading).toHaveFocus());
+    expect(heading).toHaveAttribute('tabindex', '-1');
+    // Programmatic focus on a heading asks the browser not to draw the focus ring.
+    const call = focusSpy.mock.calls.find((_, i) => focusSpy.mock.contexts[i] === heading);
+    expect(call?.[0]).toMatchObject({ focusVisible: false });
+    focusSpy.mockRestore();
+    // The place name appears once as a heading; the panel header names the panel kind,
+    // and the panel landmark's accessible name still says which place it is about.
+    expect(screen.getAllByRole('heading', { name: 'Synthetic Food Point' })).toHaveLength(1);
+    expect(screen.getByRole('heading', { name: 'Place details', level: 2 })).toBeInTheDocument();
+    expect(
+      screen.getByRole('complementary', { name: 'Synthetic Food Point, place details' }),
+    ).toBeInTheDocument();
     // Closing the panel with its own button leaves focus on the search field, not <body>.
     await userEvent.click(screen.getByRole('button', { name: 'Close panel' }));
     await userEvent.click(screen.getByRole('button', { name: 'Close panel' }));
@@ -224,5 +242,52 @@ describe('App shell', () => {
       'data-state',
       'problem',
     );
+  });
+
+  const sample = (lngLat: [number, number]) => ({
+    lngLat,
+    accuracyM: 8,
+    timestamp: Date.now(),
+    speedMps: null,
+    headingDeg: null,
+  });
+
+  it('first location fix inside the campus bounds centres the map on it', async () => {
+    renderApp();
+    await screen.findByTestId('mock-map');
+    act(() => useAppStore.setState({ geoStatus: 'requesting' }));
+    act(() => useAppStore.setState({ geoStatus: 'active', lastSample: sample([75.7032, 31.2533]) }));
+    expect(useAppStore.getState().focusRequest).toMatchObject({ kind: 'point', lngLat: [75.7032, 31.2533] });
+    await waitFor(() => expect(controller.flyTo).toHaveBeenCalledWith([75.7032, 31.2533], undefined), {
+      timeout: 3000,
+    });
+  });
+
+  it('first location fix outside the campus bounds keeps the map on campus and says why', async () => {
+    renderApp();
+    await screen.findByTestId('mock-map');
+    act(() => useAppStore.setState({ geoStatus: 'requesting' }));
+    // About 6 km east of campus, outside APP_CONFIG.map.maxBounds.
+    act(() => useAppStore.setState({ geoStatus: 'active', lastSample: sample([75.77, 31.2533]) }));
+    expect(await screen.findByText('You appear to be outside the campus area')).toBeInTheDocument();
+    expect(useAppStore.getState().focusRequest).toBeNull();
+    expect(controller.flyTo).not.toHaveBeenCalled();
+  });
+
+  it('while navigating the camera follows accepted fixes until the user pans; Follow resumes it', async () => {
+    renderApp();
+    await screen.findByTestId('mock-map');
+    act(() => useAppStore.setState({ navigationActive: true, followUser: true }));
+    act(() => useAppStore.setState({ lastSample: sample([75.7001, 31.25]) }));
+    await waitFor(() => expect(controller.follow).toHaveBeenCalledWith([75.7001, 31.25]));
+    // The user drags the map: following stops and later fixes leave the camera alone.
+    act(() => mapProps.current!.onUserPan?.());
+    expect(useAppStore.getState().followUser).toBe(false);
+    controller.follow.mockClear();
+    act(() => useAppStore.setState({ lastSample: sample([75.7002, 31.25]) }));
+    expect(controller.follow).not.toHaveBeenCalled();
+    act(() => useAppStore.getState().setFollowUser(true));
+    await waitFor(() => expect(controller.follow).toHaveBeenCalledWith([75.7002, 31.25]));
+    act(() => useAppStore.setState({ navigationActive: false, followUser: false, lastSample: null }));
   });
 });

@@ -339,3 +339,23 @@ describe('determinism', () => {
     expect(order.indexOf('f')).toBeLessThan(order.indexOf('e'));
   });
 });
+
+describe('short queries and subsequence matching', () => {
+  const idx = createSearchIndex([
+    doc('atm', 'ATM & bank', { kind: 'category' }),
+    doc('apt', 'Apartment Block 3'),
+    doc('pharm', 'Pharmacy'),
+  ]);
+
+  it("a 3-letter query does not fuzzy-highlight scattered letters ('atm' in 'Apartment')", () => {
+    const hits = idx.search('atm');
+    expect(ids(hits)).toEqual(['atm']);
+    expect(hits.some((h) => h.matchKind === 'fuzzy')).toBe(false);
+  });
+
+  it('subsequence matching still applies from 4 characters', () => {
+    const [hit] = idx.search('phrm');
+    expect(hit?.doc.id).toBe('pharm');
+    expect(hit?.matchKind).toBe('fuzzy');
+  });
+});

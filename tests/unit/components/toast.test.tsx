@@ -1,7 +1,7 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { useEffect } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ToastProvider, useToast, type ToastOptions } from '../../../src/components/ui/index.ts';
+import { Dialog, ToastProvider, useToast, type ToastOptions } from '../../../src/components/ui/index.ts';
 
 let api: ReturnType<typeof useToast> | null = null;
 
@@ -94,5 +94,41 @@ describe('Toast', () => {
   it('useToast throws outside the provider', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(() => render(<Grab />)).toThrow(/ToastProvider/);
+  });
+});
+
+describe('Toast placement', () => {
+  function WithDialog({ open }: { open: boolean }) {
+    return (
+      <ToastProvider>
+        <Grab />
+        <Dialog
+          open={open}
+          onClose={() => {}}
+          title="Clear all local data?"
+          footer={<button>Clear data</button>}
+        />
+      </ToastProvider>
+    );
+  }
+
+  it('sits at the bottom, lifted by --ds-toast-offset, and moves to the top while a modal dialog is open', () => {
+    const { rerender } = render(<WithDialog open={false} />);
+    const region = screen.getByRole('region', { name: 'Notifications' });
+    expect(region).toHaveAttribute('data-placement', 'bottom');
+    expect(region.className).toContain('bottom-(--ds-toast-offset)');
+    rerender(<WithDialog open />);
+    // Never over the dialog's footer actions (which sit at the bottom on phones).
+    expect(region).toHaveAttribute('data-placement', 'top');
+    expect(region.className).toContain('top-0');
+    expect(region.className).not.toContain('bottom-(--ds-toast-offset)');
+    rerender(<WithDialog open={false} />);
+    expect(region).toHaveAttribute('data-placement', 'bottom');
+  });
+
+  it('defines a zero default offset token', async () => {
+    const fs = await import('node:fs');
+    const css = fs.readFileSync('src/styles/tokens.css', 'utf8');
+    expect(css).toMatch(/--ds-toast-offset:\s*0px;/);
   });
 });

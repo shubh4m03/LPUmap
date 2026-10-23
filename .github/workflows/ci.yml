@@ -1,0 +1,122 @@
+# Continuous integration for LPU Campus Atlas.
+#
+# Job `verify` runs the same gates as `npm run check`, in the same order, plus
+# a data-sync guard: the generated dataset (public/data) and its quality report
+# are committed, so rebuilding them from the committed raw snapshot must not
+# change a byte. No secrets are used anywhere in this workflow.
+#
+# Job `audit` (npm audit --audit-level=high):
+#   - production dependencies (what ships to browsers): BLOCKING.
+#   - full tree incl. dev tooling: REPORT-ONLY (continue-on-error), because a
+#     new advisory in build/test tooling does not reach users and must not block
+#     unrelated changes; it is still visible as a failed-but-allowed step.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Lint, test, build, smoke, e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node (from .nvmrc)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prettier check
+        run: npm run -s format:check
+
+      - name: Lint
+        run: npm run -s lint
+
+      - name: Typecheck
+        run: npm run -s typecheck
+
+      - name: Unit and integration tests
+        run: npm run -s test
+
+      - name: Rebuild and validate data
+        run: npm run -s data:check
+
+      - name: Committed data is in sync with the pipeline
+        run: |
+          git diff --exit-code --stat public/data docs/DATA_QUALITY_REPORT.md || {
+            echo "::error::public/data or docs/DATA_QUALITY_REPORT.md changed after 'npm run data:check'. Run it locally and commit the result."
+            exit 1
+          }
+          untracked="$(git status --porcelain --untracked-files=all public/data docs/DATA_QUALITY_REPORT.md)"
+          if [ -n "$untracked" ]; then
+            echo "$untracked"
+            echo "::error::'npm run data:check' produced files that are not committed."
+            exit 1
+          fi
+
+      - name: Production build
+        run: npx vite build
+
+      - name: Smoke test the build
+        run: npm run -s smoke
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: End-to-end tests (all projects)
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+          retention-days: 14
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node (from .nvmrc)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Audit production dependencies (blocking)
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Audit all dependencies (report only)
+        continue-on-error: true
+        run: npm audit --audit-level=high

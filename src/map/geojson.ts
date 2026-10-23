@@ -4,7 +4,7 @@
  */
 import type { Feature, FeatureCollection, LineString, Point, Polygon } from 'geojson';
 import { getCategory } from '../config/categories.ts';
-import type { LngLat, Place } from '../data/schema.ts';
+import type { LngLat, Place, Relation } from '../data/schema.ts';
 import { destinationPoint, isValidLngLat } from '../distance/geodesic.ts';
 import type { MapRouteOverlay, MapUserLocation } from './types.ts';
 
@@ -34,16 +34,38 @@ export function emptyCollection<G extends Point | LineString | Polygon, P>(): Fe
 }
 
 /**
+ * Organisations (departments, schools, offices) that are located_in another
+ * place that exists in the dataset, mapped to that host place's id. They get no
+ * marker of their own: it would sit on the host's marker and repeat its label.
+ * They stay reachable through search and the host's related places.
+ */
+export function anchoredOrganizations(
+  places: readonly Place[],
+  relations: readonly Relation[],
+): Map<string, string> {
+  const orgs = new Set(places.filter((p) => p.kind === 'organization').map((p) => p.id));
+  const known = new Set(places.map((p) => p.id));
+  const out = new Map<string, string>();
+  for (const r of relations) {
+    if (r.type === 'located_in' && orgs.has(r.from) && known.has(r.to) && !out.has(r.from))
+      out.set(r.from, r.to);
+  }
+  return out;
+}
+
+/**
  * Point markers for every place with a dependable location, except buildings
- * that already render as footprints (they are selected via the footprint).
+ * that already render as footprints (they are selected via the footprint) and
+ * places drawn by their host instead (`hidden`, e.g. anchored organisations).
  */
 export function poiCollection(
   places: readonly Place[],
   footprintIds: ReadonlySet<string>,
+  hidden: ReadonlySet<string> | ReadonlyMap<string, string> = new Set<string>(),
 ): FeatureCollection<Point, PoiProps> {
   const features: Array<Feature<Point, PoiProps>> = [];
   for (const p of places) {
-    if (!p.location || !isValidLngLat(p.location) || footprintIds.has(p.id)) continue;
+    if (!p.location || !isValidLngLat(p.location) || footprintIds.has(p.id) || hidden.has(p.id)) continue;
     const cat = getCategory(p.categoryId);
     const props: PoiProps = {
       id: p.id,

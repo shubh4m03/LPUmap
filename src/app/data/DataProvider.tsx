@@ -1,13 +1,16 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { DatasetError, loadCampusData, type CampusData, type DatasetErrorCode } from '../../data/index.ts';
 import { AtlasContext } from './atlas-context.ts';
 import { DataErrorScreen } from './DataErrorScreen.tsx';
 import { LoadingScreen } from './LoadingScreen.tsx';
-import { buildServices } from './services.ts';
+import type { AtlasServices } from './services.ts';
+
+// Search index, router and directory code load in parallel with the dataset download.
+const loadServices = () => import('./services.ts');
 
 type LoadState =
   | { status: 'loading'; attempt: number }
-  | { status: 'ready'; data: CampusData }
+  | { status: 'ready'; data: CampusData; services: AtlasServices }
   | { status: 'error'; code: DatasetErrorCode | 'unknown'; attempt: number };
 
 /** Loads the dataset once, shows loading/error screens, and provides derived services. */
@@ -18,10 +21,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (attempt < 0) return;
     let cancelled = false;
-    loadCampusData().then(
-      (data) => {
+    Promise.all([loadCampusData(), loadServices()]).then(
+      ([data, { buildServices }]) => {
         if (cancelled) return;
-        setState({ status: 'ready', data });
+        setState({ status: 'ready', data, services: buildServices(data) });
       },
       (err: unknown) => {
         if (cancelled) return;
@@ -38,8 +41,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setState((s) => ({ status: 'loading', attempt: s.status === 'ready' ? 0 : s.attempt + 1 }));
   }, []);
 
-  const data = state.status === 'ready' ? state.data : null;
-  const services = useMemo(() => (data ? buildServices(data) : null), [data]);
+  const services = state.status === 'ready' ? state.services : null;
 
   if (state.status === 'error') {
     return <DataErrorScreen code={state.code} onRetry={retry} />;

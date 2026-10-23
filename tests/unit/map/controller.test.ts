@@ -35,6 +35,18 @@ function setup(opts: { reducedMotion?: boolean; mode3d?: boolean; zoom?: number 
 const P: LngLat = [75.701, 31.251];
 
 describe('createMapController', () => {
+  it('follow re-centres without changing zoom; jumps under reduced motion; ignores bad input', () => {
+    const a = setup();
+    a.ctrl.follow(P);
+    expect(a.map.easeTo).toHaveBeenCalledWith(expect.objectContaining({ center: P, essential: true }));
+    expect(a.map.easeTo.mock.calls[0]?.[0]).not.toHaveProperty('zoom');
+    const b = setup({ reducedMotion: true });
+    b.ctrl.follow(P);
+    expect(b.map.jumpTo).toHaveBeenCalledWith({ center: P });
+    b.ctrl.follow([NaN, 31] as LngLat);
+    expect(b.map.jumpTo).toHaveBeenCalledTimes(1);
+  });
+
   it('flyTo animates normally and jumps when reduced motion is requested', () => {
     const a = setup();
     a.ctrl.flyTo(P, 18);

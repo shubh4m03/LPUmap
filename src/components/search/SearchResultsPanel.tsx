@@ -20,7 +20,9 @@ export function SearchResultsPanel() {
         const place = getPlace(hit.doc.ref);
         if (!place) return [];
         const segments = highlightSegments(hit.doc.title, hit.highlights);
-        return [{ ...placeItem(place, hit.doc.id), title: hit.doc.title, segments, place }];
+        return [
+          { ...placeItem(place, hit.doc.id, hit.doc.qualifier), title: hit.doc.title, segments, place },
+        ];
       }),
     [searchIndex, getPlace, query],
   );

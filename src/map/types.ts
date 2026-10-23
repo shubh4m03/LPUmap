@@ -25,6 +25,8 @@ export interface MapPadding {
 
 export interface MapController {
   flyTo(lngLat: LngLat, zoom?: number): void;
+  /** Re-centres on a moving position (follow-me), keeping zoom, pitch and bearing. */
+  follow(lngLat: LngLat): void;
   fitCoordinates(coords: LngLat[], padding?: number): void;
   resetView(): void;
   zoomIn(): void;
@@ -58,6 +60,8 @@ export interface MapViewProps {
   userLocation: MapUserLocation | null;
   onSelectPlace(id: string | null): void;
   onMapClick?(lngLat: LngLat): void;
+  /** The user moved the map themselves (drag or arrow keys), e.g. to stop follow-me. */
+  onUserPan?(): void;
   onReady?(controller: MapController): void;
   onError?(message: string): void;
   className?: string;

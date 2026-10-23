@@ -11,7 +11,8 @@ function focusLost(): boolean {
  * replaced by the details view, or the panel's close button unmounts), focus
  * would fall back to <body> and keyboard / screen-reader users would restart
  * from the top of the page. This moves it to the new panel's heading, or to
- * the search field when no panel is left. Focus that is still somewhere
+ * the search field when no panel is left. The heading gets no visible focus
+ * ring (it is not a control), but screen readers start reading from it. Focus that is still somewhere
  * meaningful (the map, the palette's opener, …) is never moved, and nothing
  * happens on the first render (page load / deep link).
  */
@@ -23,10 +24,14 @@ export function usePanelFocusRescue(container: RefObject<HTMLElement | null>): v
     if (previous.current === key) return;
     previous.current = key;
     if (!focusLost()) return;
-    const heading = container.current?.querySelector<HTMLElement>('h2');
+    // The panel's most specific heading (a place's name) first, then the header.
+    const root = container.current;
+    const heading =
+      root?.querySelector<HTMLElement>('[data-panel-focus]') ?? root?.querySelector<HTMLElement>('h2');
     if (heading) {
       heading.tabIndex = -1;
-      heading.focus({ preventScroll: true });
+      // Programmatic focus on a non-interactive heading: no focus ring (see index.css).
+      heading.focus({ preventScroll: true, focusVisible: false });
       return;
     }
     document.querySelector<HTMLElement>('[data-search-trigger]')?.focus({ preventScroll: true });

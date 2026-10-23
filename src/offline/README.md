@@ -9,11 +9,11 @@ caching and no request to any third-party origin.
 
 `pwa-config.ts` configures `vite-plugin-pwa` (Workbox `generateSW`) to precache:
 
-| Glob (relative to `dist/`)                         | Contents                                         |
-| -------------------------------------------------- | ------------------------------------------------ |
-| `**/*.{js,css,html,svg,png,ico,webmanifest,woff2}` | App shell, icons, manifest                       |
-| `data/*.json`, `data/*.geojson`                    | Generated dataset from `public/data/`            |
-| `fonts/**/*.pbf`                                   | Self-hosted MapLibre glyphs from `public/fonts/` |
+| Glob (relative to `dist/`)                             | Contents                                                          |
+| ------------------------------------------------------ | ----------------------------------------------------------------- |
+| `**/*.{js,mjs,css,html,svg,png,ico,webmanifest,woff2}` | App shell (including the MapLibre worker `.mjs`), icons, manifest |
+| `data/*.json`, `data/*.geojson`                        | Generated dataset from `public/data/`                             |
+| `fonts/**/*.pbf`                                       | Self-hosted MapLibre glyphs from `public/fonts/`                  |
 
 `maximumFileSizeToCacheInBytes` is 8 MB. If a dataset file grows beyond that,
 the build fails loudly rather than shipping a service worker that silently
@@ -32,6 +32,10 @@ than the one it was built with.
 As a second guard, `loadCampusData()` reads `data/manifest.json` first and
 refuses a dataset whose `schemaVersion` differs from `DATA_SCHEMA_VERSION`
 (error code `schema-version`), showing an error instead of misreading data.
+
+The data loader requests dataset files as `file.json?v=<datasetVersion>`; the
+`v` parameter is listed in `ignoreURLParametersMatching`, so those requests
+are served from the precache (without it the app could not start offline).
 
 `cleanupOutdatedCaches` deletes precaches left by older Workbox versions.
 Deployment headers (`public/_headers`) serve `sw.js`, `index.html` and

@@ -7,6 +7,7 @@ export {
   looksLikeCode,
   PLACE_DOC_PREFIX,
   CATEGORY_DOC_PREFIX,
+  type PlaceDocOptions,
 } from './docs.ts';
 export { highlightSegments, type HighlightSegment } from './highlight.ts';
 export { normalize, tokenize, STOPWORDS, GENERIC_WORDS } from './normalize.ts';

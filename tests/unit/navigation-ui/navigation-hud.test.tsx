@@ -1,7 +1,8 @@
 import { act, cleanup, fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAppStore } from '../../../src/app/store/index.ts';
+import { preloadDeferredPanels } from '../../../src/components/layout/deferred-panels.ts';
 import { NavigationHud } from '../../../src/components/navigation/NavigationHud.tsx';
 import type { LngLat } from '../../../src/data/index.ts';
 import type { RouteEndpoint } from '../../../src/routing/index.ts';
@@ -36,6 +37,8 @@ const live = () => screen.getByTestId('live-region-assertive');
 
 describe('NavigationHud with scripted samples', () => {
   let storageBefore: string;
+  // The live cards load in their own chunk; once loaded they render synchronously.
+  beforeAll(preloadDeferredPanels);
   beforeEach(() => {
     resetAppStore();
     geo = createFakeGeolocation();
@@ -111,6 +114,60 @@ describe('NavigationHud with scripted samples', () => {
     expect(useAppStore.getState().navigationActive).toBe(false);
     expect(geo.clearWatch).toHaveBeenCalledTimes(1);
     expect(screen.queryByRole('region', { name: 'Navigation' })).not.toBeInTheDocument();
+  });
+
+  it('offers "Follow" after the user panned away, and turning it on recentres on the last fix', async () => {
+    const services = startNavigating();
+    renderWithAtlas(<NavigationHud />, services);
+    expect(useAppStore.getState().followUser).toBe(true);
+    expect(screen.queryByRole('button', { name: 'Follow my location' })).toBeNull();
+    at([75.7, 31.25], 0);
+    act(() => useAppStore.getState().setFollowUser(false)); // what a map pan does
+    await userEvent.click(screen.getByRole('button', { name: 'Follow my location' }));
+    expect(useAppStore.getState().followUser).toBe(true);
+    expect(useAppStore.getState().focusRequest).toMatchObject({ kind: 'point', lngLat: [75.7, 31.25] });
+    expect(screen.queryByRole('button', { name: 'Follow my location' })).toBeNull();
+    // Ending navigation turns following off; it cannot be switched on without navigation.
+    act(() => useAppStore.getState().stopNavigation());
+    expect(useAppStore.getState().followUser).toBe(false);
+    act(() => useAppStore.getState().setFollowUser(true));
+    expect(useAppStore.getState().followUser).toBe(false);
+  });
+
+  it('on phones reports the top card height for the map padding and clears it when navigation ends', () => {
+    const realMatchMedia = window.matchMedia;
+    window.matchMedia = ((query: string) => ({
+      matches: query.includes('max-width'),
+      media: query,
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    })) as typeof window.matchMedia;
+    const rect = vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      height: 164,
+      width: 300,
+      top: 72,
+      left: 12,
+      right: 312,
+      bottom: 236,
+      x: 12,
+      y: 72,
+      toJSON: () => ({}),
+    });
+    try {
+      const services = startNavigating();
+      renderWithAtlas(<NavigationHud />, services);
+      expect(screen.getByRole('region', { name: 'Navigation' })).toBeInTheDocument();
+      expect(useAppStore.getState().hudCoverPx).toBe(164);
+      act(() => useAppStore.getState().stopNavigation());
+      expect(useAppStore.getState().hudCoverPx).toBe(0);
+    } finally {
+      rect.mockRestore();
+      window.matchMedia = realMatchMedia;
+    }
   });
 
   it('a failed recalculation keeps the original route, clearly marked', async () => {

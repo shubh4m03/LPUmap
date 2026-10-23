@@ -4,6 +4,9 @@ import type { LngLat } from '../data/schema.ts';
 import { isValidLngLat } from '../distance/geodesic.ts';
 import type { MapCamera, MapControllerWithCamera, MapPadding } from './types.ts';
 
+/** Follow-me camera glide per accepted fix (fixes arrive about once a second). */
+export const FOLLOW_DURATION_MS = 600;
+
 /** Zoom used when focusing a single place and no zoom is given. */
 export const FOCUS_ZOOM = 17.5;
 export const FIT_MAX_ZOOM = 18;
@@ -67,6 +70,11 @@ export function createMapController(map: ControllerMap, state: ControllerState):
 
   return {
     flyTo,
+    follow(lngLat) {
+      if (!isValidLngLat(lngLat)) return;
+      if (animate()) map.easeTo({ center: lngLat, duration: FOLLOW_DURATION_MS, essential: true });
+      else map.jumpTo({ center: lngLat });
+    },
     fitCoordinates(coords, padding = DEFAULT_FIT_PADDING) {
       const valid = coords.filter((c) => isValidLngLat(c));
       const first = valid[0];

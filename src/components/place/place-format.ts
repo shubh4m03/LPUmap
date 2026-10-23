@@ -1,17 +1,10 @@
 /** Truthful wording for place facts. Unknown values are labelled as unknown, never guessed. */
 import { APP_CONFIG } from '../../config/index.ts';
 import type { CampusZone, Place, PlaceKind, Provenance, Wheelchair } from '../../data/index.ts';
+import { PLACE_KIND_LABELS } from '../../data/place-labels.ts';
 import { safeExternalUrl } from '../../utils/safe-url.ts';
 
-export const KIND_LABELS: Record<PlaceKind, string> = {
-  building: 'Building',
-  facility: 'Facility',
-  gate: 'Campus gate',
-  entrance: 'Building entrance',
-  landmark: 'Landmark',
-  area: 'Area',
-  organization: 'Department or office',
-};
+export const KIND_LABELS: Record<PlaceKind, string> = PLACE_KIND_LABELS;
 
 export const ZONE_LABELS: Record<CampusZone, string> = {
   'on-campus': 'On campus',

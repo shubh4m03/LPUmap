@@ -5,6 +5,12 @@ export interface SearchDoc {
   kind: SearchDocKind;
   title: string;
   subtitle?: string;
+  /**
+   * Set only when another doc has the same title: what tells them apart (kind and, when
+   * known, the place it is in), e.g. 'Department or office · in School of Design'.
+   * Already part of `subtitle`; UIs that build their own subtitle append it.
+   */
+  qualifier?: string;
   aliases: string[];
   codes: string[];
   keywords: string[];

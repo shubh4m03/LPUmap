@@ -52,6 +52,8 @@ export interface UiSlice {
   /** The map failed or was switched off; the list-based layout is used. */
   listMode: boolean;
   listModeReason: string | null;
+  /** Mobile: height in px of the live navigation/tracking card over the top of the map (0 = none). */
+  hudCoverPx: number;
   openPanel(panel: OpenPanelId): void;
   closePanel(): void;
   closeAllPanels(): void;
@@ -65,6 +67,7 @@ export interface UiSlice {
   openCategory(categoryId: string): void;
   showResults(query: string): void;
   enterListMode(reason: string): void;
+  setHudCoverPx(px: number): void;
 }
 
 export type FocusTarget =

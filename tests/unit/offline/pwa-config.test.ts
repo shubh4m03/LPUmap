@@ -2,7 +2,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { APP_CONFIG } from '../../../src/config/index.ts';
-import { MANIFEST_ICONS, SW_FILENAME, pwaOptions } from '../../../src/offline/pwa-config.ts';
+import { loadCampusData } from '../../../src/data/loader.ts';
+import { MANIFEST_ICONS, PRECACHE_GLOBS, SW_FILENAME, pwaOptions } from '../../../src/offline/pwa-config.ts';
 
 const publicDir = join(process.cwd(), 'public');
 
@@ -62,6 +63,39 @@ describe('pwaOptions', () => {
     expect(workbox?.maximumFileSizeToCacheInBytes).toBe(8 * 1024 * 1024);
     expect(workbox?.navigateFallback).toBe('index.html');
     expect(workbox?.cleanupOutdatedCaches).toBe(true);
+  });
+
+  it('serves the dataset from the precache although the loader adds a version query', async () => {
+    // Regression: data files were requested as `graph.json?v=<datasetVersion>`, which never
+    // matched the precached `data/graph.json`, so the app could not start offline.
+    const requested: string[] = [];
+    await loadCampusData({
+      baseUrl: 'https://atlas.test/data/',
+      fetchImpl: async (input) => {
+        const url = new URL(String(input));
+        requested.push(url.href);
+        const file = join(publicDir, 'data', url.pathname.replace(/^\/data\//, ''));
+        return new Response(readFileSync(file, 'utf8'), { headers: { 'content-type': 'application/json' } });
+      },
+    });
+    const ignored = workbox?.ignoreURLParametersMatching ?? [];
+    const paramNames = requested.flatMap((href) => [...new URL(href).searchParams.keys()]);
+    expect(paramNames).toContain('v');
+    for (const name of paramNames) expect(ignored.some((re) => re.test(name))).toBe(true);
+    // Only the cache-buster is ignored; the Workbox defaults stay.
+    expect(ignored.some((re) => re.test('utm_source'))).toBe(true);
+    expect(ignored.some((re) => re.test('place'))).toBe(false);
+  });
+
+  it('precaches every asset type the app loads by URL, including the MapLibre worker', () => {
+    // Regression: the worker is emitted as `.mjs`, which the shell glob did not cover, so
+    // offline the map failed with "Worker failed to load".
+    const shellGlob = PRECACHE_GLOBS[0];
+    const extensions = /\{([^}]+)\}/.exec(shellGlob)?.[1]?.split(',') ?? [];
+    const workerSource = readFileSync(join(process.cwd(), 'src', 'app', 'maplibre-worker.ts'), 'utf8');
+    const urlImports = [...workerSource.matchAll(/from '([^']+)\?url'/g)].map((m) => m[1]!);
+    expect(urlImports.length).toBeGreaterThan(0);
+    for (const spec of urlImports) expect(extensions).toContain(spec.split('.').pop());
   });
 
   it('does no runtime caching (so never caches third-party origins)', () => {

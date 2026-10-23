@@ -16,7 +16,13 @@ import {
 } from './apply.ts';
 import { createMapController } from './controller.ts';
 import { classifyMapError, MAP_MESSAGES } from './errors.ts';
-import { poiCollection, routeCollection, routeCoordinateCount, userLocationCollection } from './geojson.ts';
+import {
+  anchoredOrganizations,
+  poiCollection,
+  routeCollection,
+  routeCoordinateCount,
+  userLocationCollection,
+} from './geojson.ts';
 import { BUILDING_PICK_LAYER_IDS, POI_LAYER_IDS, SOURCE_IDS } from './ids.ts';
 import { pickPlaceId, renderedBuildingIds } from './picking.ts';
 import { buildMapStyle, glyphsUrl, OSM_ATTRIBUTION_HTML } from './style.ts';
@@ -51,13 +57,21 @@ export function MapView(props: MapViewProps) {
     () => new Set(data.buildings.features.map((f) => f.properties.id)),
     [data.buildings],
   );
-  const places = useMemo(() => poiCollection(data.places, footprintIds), [data.places, footprintIds]);
+  const anchored = useMemo(
+    () => anchoredOrganizations(data.places, data.relations),
+    [data.places, data.relations],
+  );
+  const places = useMemo(
+    () => poiCollection(data.places, footprintIds, anchored),
+    [data.places, footprintIds, anchored],
+  );
   const poiIds = useMemo(() => new Set(places.features.map((f) => f.properties.id)), [places]);
+  // Selecting a place without its own marker highlights the building / place it is in.
   const containingBuilding = useMemo(() => {
-    const m = new Map<string, string>();
+    const m = new Map<string, string>(anchored);
     for (const p of data.places) if (p.buildingId) m.set(p.id, p.buildingId);
     return m;
-  }, [data.places]);
+  }, [data.places, anchored]);
   const routeGeo = useMemo(() => routeCollection(route), [route]);
   const userGeo = useMemo(() => userLocationCollection(userLocation), [userLocation]);
   const groupKey = groupsKey(visibleGroups);
@@ -156,6 +170,12 @@ export function MapView(props: MapViewProps) {
       cb.onSelectPlace(null);
       cb.onMapClick?.([e.lngLat.lng, e.lngLat.lat]);
     });
+    // Only gestures carry an originalEvent; programmatic camera moves (follow-me) do not.
+    instance.on('dragstart', () => latest.current.props.onUserPan?.());
+    instance.on('movestart', (e: { originalEvent?: Event }) => {
+      const ev = e.originalEvent;
+      if (ev instanceof KeyboardEvent && ev.key.startsWith('Arrow')) latest.current.props.onUserPan?.();
+    });
     const canvas = instance.getCanvas();
     const pickable = [...POI_LAYER_IDS, ...BUILDING_PICK_LAYER_IDS];
     instance.on('mouseenter', pickable, () => {
@@ -186,6 +206,12 @@ export function MapView(props: MapViewProps) {
         isUserLocationShown: () => {
           const loc = latest.current.props.userLocation;
           return loc !== null && isValidLngLat(loc.lngLat);
+        },
+        projectToViewport: (lngLat) => {
+          if (!isValidLngLat(lngLat)) return null;
+          const point = instance.project(lngLat);
+          const rect = instance.getCanvas().getBoundingClientRect();
+          return { x: rect.left + point.x, y: rect.top + point.y };
         },
       });
       setMap(instance);

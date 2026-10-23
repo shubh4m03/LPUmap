@@ -4,7 +4,9 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { useAppStore } from '../../../src/app/store/index.ts';
 import { CommandPalette } from '../../../src/components/search/CommandPalette.tsx';
 import { useRecents } from '../../../src/favorites/index.ts';
+import { buildServices } from '../../../src/app/data/services.ts';
 import { renderWithAtlas, resetAppStore } from './render-helpers.tsx';
+import { NAMED, syntheticCampus } from './synthetic-campus.ts';
 
 function open(query = '') {
   act(() => useAppStore.getState().openPalette(query));
@@ -144,6 +146,44 @@ describe('CommandPalette', () => {
     await typeQuery('3D');
     await userEvent.keyboard('{Enter}');
     expect(useAppStore.getState().paletteOpen).toBe(false);
+  });
+
+  it('"Track my walk" starts the walk-tracking session', async () => {
+    renderWithAtlas(<CommandPalette />);
+    open();
+    await typeQuery('track my walk');
+    const option = screen.getAllByRole('option')[0]!;
+    expect(option).toHaveTextContent('Track my walk');
+    await userEvent.keyboard('{Enter}');
+    expect(useAppStore.getState()).toMatchObject({ paletteOpen: false, trackingActive: true });
+    expect(useAppStore.getState().trackingStartedAt).not.toBeNull();
+    act(() => useAppStore.getState().stopLocation());
+  });
+
+  it('tells two results with the same title apart by their subtitle', async () => {
+    const data = syntheticCampus();
+    const host = data.places.find((p) => p.id === NAMED.id)!;
+    data.places.push({ ...host, id: 'cur:synthetic-office', kind: 'organization' });
+    data.relations.push({
+      id: 'rel-org',
+      type: 'located_in',
+      from: 'cur:synthetic-office',
+      to: host.id,
+      inferred: false,
+      method: 'curated',
+      provenance: host.provenance,
+    });
+    renderWithAtlas(<CommandPalette />, buildServices(data));
+    open();
+    await typeQuery('Synthetic Food Point');
+    const rows = screen
+      .getAllByRole('option')
+      .filter((o) => o.textContent?.startsWith('Synthetic Food Point'))
+      .map((o) => o.textContent);
+    expect(rows).toHaveLength(2);
+    expect(new Set(rows).size).toBe(2);
+    expect(rows.some((t) => t?.includes('Facility'))).toBe(true);
+    expect(rows.some((t) => t?.includes('Department or office · in Synthetic Food Point'))).toBe(true);
   });
 
   it('lists recent places for an empty query', async () => {

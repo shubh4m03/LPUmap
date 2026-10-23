@@ -35,7 +35,11 @@ describe('PlaceDetails', () => {
   it('related places are labelled; nearby is explicitly not a physical connection', () => {
     renderWithAtlas(<PlaceDetails placeId="osm:node/1" />);
     const related = screen.getByRole('region', { name: 'Related places' });
-    expect(within(related).getByText(/Nearby \(not a physical connection\) · 15 m/)).toBeInTheDocument();
+    const nearby = within(related).getByText(/Nearby \(not a physical connection\) · 15 m/);
+    expect(nearby).toBeInTheDocument();
+    // Long relation labels wrap to a second line instead of being cut off with an ellipsis.
+    expect(nearby).toHaveClass('line-clamp-2');
+    expect(nearby).not.toHaveClass('truncate');
     expect(within(related).getByText(/Inside · inferred/)).toBeInTheDocument();
     expect(within(related).getByText(/come from map geometry/)).toBeInTheDocument();
   });

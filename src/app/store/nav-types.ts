@@ -38,6 +38,11 @@ export interface NavSlice {
   progress: ProgressState | null;
   /** Distance/time actually covered during this navigation (arrival summary). */
   navTrip: TrackingSnapshot | null;
+  /**
+   * While navigating, the camera follows accepted location fixes. Turned off when the
+   * user pans the map; turned back on with the "Follow" button. On by default per trip.
+   */
+  followUser: boolean;
 
   /** "Track my walk" session. */
   trackingActive: boolean;
@@ -60,6 +65,7 @@ export interface NavSlice {
   /** Follow the active route with live progress (starts location if needed). */
   startNavigation(): void;
   stopNavigation(): void;
+  setFollowUser(follow: boolean): void;
   /** Re-anchor progress on the current active route (after a reroute or option change). */
   rebaseNavigation(): void;
   startTracking(): void;

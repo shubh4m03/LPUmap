@@ -33,13 +33,14 @@ export function MapStage({ theme, reducedMotion, padding, onFatalError }: MapSta
       focusRequest: s.focusRequest,
     })),
   );
-  const { alternatives, activeAlternative, progress, navigationActive, lastSample } = useAppStore(
+  const { alternatives, activeAlternative, progress, navigationActive, lastSample, followUser } = useAppStore(
     useShallow((s) => ({
       alternatives: s.alternatives,
       activeAlternative: s.activeAlternative,
       progress: s.progress,
       navigationActive: s.navigationActive,
       lastSample: s.lastSample,
+      followUser: s.followUser,
     })),
   );
 
@@ -81,6 +82,12 @@ export function MapStage({ theme, reducedMotion, padding, onFatalError }: MapSta
     s.setPickingOnMap(null);
   }, []);
 
+  // Panning while navigating stops follow-me; the navigation card offers "Follow" again.
+  const onUserPan = useCallback(() => {
+    const s = useAppStore.getState();
+    if (s.navigationActive && s.followUser) s.setFollowUser(false);
+  }, []);
+
   const onReady = useCallback((c: MapController) => {
     setMapController(c);
     setController(c);
@@ -111,6 +118,12 @@ export function MapStage({ theme, reducedMotion, padding, onFatalError }: MapSta
     }
   }, [controller, focusRequest, getPlace]);
 
+  // Follow-me: each accepted fix (lastSample only changes on accepted samples) re-centres
+  // the camera while navigating, until the user pans.
+  useEffect(() => {
+    if (controller && navigationActive && followUser && lastSample) controller.follow(lastSample.lngLat);
+  }, [controller, navigationActive, followUser, lastSample]);
+
   // Frame a newly planned route (not while navigating: the user is following it).
   const activeCoords = alternatives[activeAlternative]?.coordinates;
   useEffect(() => {
@@ -133,6 +146,7 @@ export function MapStage({ theme, reducedMotion, padding, onFatalError }: MapSta
         userLocation={userLocation}
         onSelectPlace={onSelectPlace}
         onMapClick={onMapClick}
+        onUserPan={onUserPan}
         onReady={onReady}
         onError={onError}
       />

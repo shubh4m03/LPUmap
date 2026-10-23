@@ -12,6 +12,7 @@ export type CommandId =
   | 'reset-view'
   | 'show-layers'
   | 'locate'
+  | 'track-walk'
   | 'about'
   | 'settings'
   | 'report'
@@ -59,6 +60,12 @@ export const COMMANDS: readonly CommandDef[] = [
     title: 'Show my location',
     icon: 'locate',
     keywords: ['gps', 'location', 'locate', 'where am i', 'me'],
+  },
+  {
+    id: 'track-walk',
+    title: 'Track my walk',
+    icon: 'history',
+    keywords: ['track', 'walk', 'record', 'distance', 'time', 'tracking'],
   },
   {
     id: 'favorites',

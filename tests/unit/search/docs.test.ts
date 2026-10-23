@@ -9,6 +9,39 @@ import {
 import { place } from './helpers.ts';
 
 describe('docsFromPlaces', () => {
+  it('tells identical titles apart by kind and host in the subtitle', () => {
+    const docs = docsFromPlaces(
+      [
+        place('osm:way/9', {
+          name: 'School of Design',
+          displayName: 'School of Design',
+          kind: 'facility',
+          categoryId: 'academic',
+        }),
+        place('cur:design', {
+          name: 'School of Design',
+          displayName: 'School of Design',
+          kind: 'organization',
+          categoryId: 'academic',
+        }),
+        place('osm:way/10', { name: 'Central Library', categoryId: 'library' }),
+      ],
+      { hostName: (id) => (id === 'cur:design' ? 'School of Design' : undefined) },
+    );
+    const academic = getCategory('academic').label;
+    expect(docs.map((d) => d.subtitle)).toEqual([
+      `${academic} · Facility`,
+      `${academic} · Department or office · in School of Design`,
+      getCategory('library').label,
+    ]);
+    expect(new Set(docs.map((d) => d.subtitle)).size).toBe(docs.length);
+    expect(docs.map((d) => d.qualifier)).toEqual([
+      'Facility',
+      'Department or office · in School of Design',
+      undefined,
+    ]);
+  });
+
   it('excludes unnamed places without aliases and keeps named or aliased ones', () => {
     const docs = docsFromPlaces([
       place('osm:way/1'),

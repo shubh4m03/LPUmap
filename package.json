@@ -15,6 +15,7 @@
     "test:unit": "vitest run tests/unit",
     "test:integration": "vitest run tests/integration",
     "test:e2e": "playwright test",
+    "test:a11y": "playwright test tests/e2e --grep @a11y",
     "data:fetch": "node scripts/fetch-osm.ts",
     "data:fetch-public": "node scripts/fetch-public-data.ts",
     "data:build": "node scripts/build-data.ts",
@@ -59,7 +60,8 @@
     "typescript-eslint": "8.72.0",
     "vite": "8.3.5",
     "vite-plugin-pwa": "2.0.0",
-    "vitest": "5.0.5"
+    "vitest": "5.0.5",
+    "wrangler": "4.152.0"
   },
   "private": true,
   "engines": {

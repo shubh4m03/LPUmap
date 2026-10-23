@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useFocusTrap } from '../../accessibility/useFocusTrap.ts';
 import { IconButton } from './IconButton.tsx';
 import { cx } from './cx.ts';
+import { useModalPresence } from './modal-presence.ts';
 import { useScrollLock } from './scroll-lock.ts';
 
 export interface DialogProps {
@@ -50,6 +51,7 @@ function DialogInner({
   const descId = useId();
   useFocusTrap(panelRef, true, initialFocus ? { initialFocus } : {});
   useScrollLock(true);
+  useModalPresence(true);
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Escape' && !e.defaultPrevented) {

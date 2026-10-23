@@ -1,10 +1,8 @@
 import { useRef, useState } from 'react';
-import { useTheme } from '../../accessibility/index.ts';
 import { useFavorites, useRecents } from '../../favorites/index.ts';
 import { usePrivacySettings } from '../../privacy/index.ts';
 import { Button, Dialog, useToast } from '../ui/index.ts';
 import { PanelSection } from './PanelSection.tsx';
-import { useSheetYield } from './sheet-yield.ts';
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
@@ -15,24 +13,14 @@ export function ClearDataSection() {
   const favoriteCount = useFavorites((s) => s.ids.length);
   const recentCount = useRecents((s) => s.ids.length);
   const clearAllLocalData = usePrivacySettings((s) => s.clearAllLocalData);
-  const { setPreference } = useTheme();
   const toast = useToast();
-  const { yieldSheet, restoreSheet } = useSheetYield();
 
-  const open = () => {
-    yieldSheet();
-    setConfirming(true);
-  };
-  const close = () => {
-    setConfirming(false);
-    restoreSheet();
-  };
+  const open = () => setConfirming(true);
+  const close = () => setConfirming(false);
 
   const confirm = () => {
+    // Every in-memory store (favourites, recents, drafts, theme) resets via registerLocalDataReset.
     clearAllLocalData();
-    // The theme store keeps its preference in memory; 'system' removes the stored key
-    // instead of writing a new one, so storage stays empty.
-    setPreference('system');
     close();
     toast.show({
       message:

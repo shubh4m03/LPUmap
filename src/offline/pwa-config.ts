@@ -19,7 +19,9 @@ export const SW_FILENAME = 'sw.js';
 
 /** Paths are relative to the build output (dist/), which mirrors public/. */
 export const PRECACHE_GLOBS = [
-  '**/*.{js,css,html,svg,png,ico,webmanifest,woff2}',
+  // `mjs`: the MapLibre worker is emitted as an .mjs asset (src/app/maplibre-worker.ts);
+  // without it the map cannot render offline.
+  '**/*.{js,mjs,css,html,svg,png,ico,webmanifest,woff2}',
   'data/*.json',
   'data/*.geojson',
   'fonts/**/*.pbf',
@@ -63,6 +65,13 @@ export const pwaOptions: Partial<VitePWAOptions> = {
     // Generated data/fonts are never HTML navigations.
     navigateFallbackDenylist: [/^\/data\//, /^\/fonts\//],
     cleanupOutdatedCaches: true,
+    // The data loader appends `?v=<datasetVersion>` to every dataset file (an HTTP
+    // cache-buster). The precache stores those files without a query string, so `v`
+    // must be ignored when matching — otherwise every data request misses the cache
+    // and the app cannot start offline. The precached copy always belongs to this
+    // worker's build, so it is the dataset version the cached app expects.
+    // Workbox's defaults (utm_*, fbclid) are kept.
+    ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^v$/],
     cacheId: APP_CONFIG.storage.prefix,
     // No runtime caching: the app makes no third-party requests, and everything
     // first-party is already in the versioned precache.

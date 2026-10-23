@@ -1,0 +1,49 @@
+MIT License
+
+Copyright (c) 2026 LPU Campus Atlas contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-------------------------------------------------------------------------------
+Scope of this licence: third-party data and fonts are NOT covered by it
+-------------------------------------------------------------------------------
+
+The MIT licence above applies to the source code of LPU Campus Atlas only.
+
+Map data
+  The campus data in data/raw/osm/ and the derived database in public/data/
+  are based on OpenStreetMap: (c) OpenStreetMap contributors, available under
+  the Open Database License 1.0 (ODbL),
+  https://opendatacommons.org/licenses/odbl/1-0/ and
+  https://www.openstreetmap.org/copyright.
+  Any public use must keep the attribution "(c) OpenStreetMap contributors",
+  and a publicly distributed derived database must be offered under the ODbL
+  (share-alike).
+
+Lovely Professional University content
+  Names of schools and facilities, page titles and URLs cited from
+  https://www.lpu.in/ are factual identifiers used with attribution. All LPU
+  website content, including text, images and logos, remains the property of
+  Lovely Professional University or its licensors and is not licensed by this
+  project. This project is independent and is not endorsed by LPU.
+
+Map glyphs
+  The SDF glyph files in public/fonts/ are generated from Noto Sans, licensed
+  under the SIL Open Font License 1.1 (see public/fonts/LICENSE.txt and
+  public/fonts/SOURCE.md).

@@ -7,8 +7,9 @@ import { BottomSheet } from '../ui/index.ts';
 import { useSheetCoverPx, useViewportHeight } from './map-padding.ts';
 import { MoreMenu } from './MoreMenu.tsx';
 import { PanelBackButton, PanelBody } from './PanelContent.tsx';
-import { usePanelTitle } from './panel-titles.ts';
+import { usePanelLabel, usePanelTitle } from './panel-titles.ts';
 import { QuickActions } from './QuickActions.tsx';
+import { useMobileToastOffset } from './toast-offset.ts';
 import { usePanelFocusRescue } from './usePanelFocusRescue.ts';
 
 /** < 768px: map with a top search pill, compact controls, quick actions bar and a bottom sheet. */
@@ -18,15 +19,15 @@ export function MobileLayout({ map }: { map: ReactNode }) {
   const setSnap = useAppStore((s) => s.setSheetSnap);
   const closePanel = useAppStore((s) => s.closePanel);
   const title = usePanelTitle(activePanel);
+  const label = usePanelLabel(activePanel);
   const sheetRef = useRef<HTMLDivElement>(null);
   usePanelFocusRescue(sheetRef);
-  // A dialog over a full-height (modal) sheet would fight its focus trap: drop the sheet to half.
-  const overlayOpen = useAppStore((s) => s.paletteOpen || s.menuOpen || s.reportTarget !== null);
-  const sheetSnap = overlayOpen && snap === 'full' ? 'half' : snap;
   // Lift the map attribution above the sheet so it is never covered. `!` is required:
   // Tailwind utilities live in a cascade layer, and MapLibre's unlayered stylesheet
   // (`.maplibregl-ctrl-bottom-right { bottom: 0 }`) would otherwise always win.
-  const coverPx = useSheetCoverPx(useViewportHeight());
+  const viewportH = useViewportHeight();
+  const coverPx = useSheetCoverPx(viewportH);
+  useMobileToastOffset(viewportH);
   const mainStyle = { '--atlas-attrib-offset': `${coverPx}px` } as CSSProperties;
 
   return (
@@ -57,7 +58,8 @@ export function MobileLayout({ map }: { map: ReactNode }) {
           open={activePanel !== 'none'}
           onClose={closePanel}
           title={title}
-          snap={sheetSnap}
+          label={label}
+          snap={snap}
           onSnapChange={setSnap}
           headerActions={<PanelBackButton />}
         >

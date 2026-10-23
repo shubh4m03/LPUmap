@@ -76,8 +76,9 @@ export function selectionTarget(
   if (!placeId) return null;
   if (idx.footprintIds.has(placeId)) return { source: SOURCE_IDS.buildings, id: placeId };
   if (idx.poiIds.has(placeId)) return { source: SOURCE_IDS.places, id: placeId };
-  const building = idx.containingBuilding.get(placeId);
-  if (building && idx.footprintIds.has(building)) return { source: SOURCE_IDS.buildings, id: building };
+  const host = idx.containingBuilding.get(placeId);
+  if (host && idx.footprintIds.has(host)) return { source: SOURCE_IDS.buildings, id: host };
+  if (host && idx.poiIds.has(host)) return { source: SOURCE_IDS.places, id: host };
   return null;
 }
 

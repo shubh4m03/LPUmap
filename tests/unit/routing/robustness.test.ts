@@ -3,6 +3,7 @@ import { APP_CONFIG } from '../../../src/config/index.ts';
 import type { GraphFile, LngLat } from '../../../src/data/schema.ts';
 import { haversineM } from '../../../src/distance/geodesic.ts';
 import { createRouter } from '../../../src/routing/index.ts';
+import { medianTime } from '../perf-timing.ts';
 import { at, caveatCodes, expectOk, gridGraph, makeGraph, polylineLength, pt } from './helpers.ts';
 
 const R = APP_CONFIG.routing;
@@ -178,11 +179,18 @@ describe('step-free caveat wording', () => {
 
 describe('cold routing budget', () => {
   it(`first cross-grid route on a fresh 120 × 120 router (lazy setup included) is under ${APP_CONFIG.performance.routeBudgetMs} ms`, () => {
-    const router = createRouter(gridGraph(120, 120, 10));
-    const t0 = performance.now();
-    const r = router.route({ from: pt(0, 0), to: pt(1190, 1190), profile: 'walk', preference: 'fastest' });
-    const elapsed = performance.now() - t0;
-    expect(r.ok).toBe(true);
+    const request = { from: pt(0, 0), to: pt(1190, 1190), profile: 'walk', preference: 'fastest' } as const;
+    // Untimed warm-up on its own router, so the measurement is not dominated by JIT compilation.
+    expect(createRouter(gridGraph(120, 120, 10)).route(request).ok).toBe(true);
+    // Every timed route runs on a brand-new graph and router, so each one is cold (lazy
+    // setup included); the median of 7 ignores one-off stalls from parallel test workers.
+    const elapsed = medianTime(
+      7,
+      () => createRouter(gridGraph(120, 120, 10)),
+      (router) => {
+        expect(router.route(request).ok).toBe(true);
+      },
+    );
     expect(elapsed).toBeLessThan(APP_CONFIG.performance.routeBudgetMs);
   });
 });

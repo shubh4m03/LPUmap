@@ -32,6 +32,7 @@ const fake = vi.hoisted(() => {
     removeFeatureState = vi.fn();
     setLayerZoomRange = vi.fn();
     queryRenderedFeatures = vi.fn((): unknown[] => []);
+    project = vi.fn(([lng, lat]: [number, number]) => ({ x: (lng - 75.7) * 1e4, y: (31.26 - lat) * 1e4 }));
     easeTo = vi.fn();
     jumpTo = vi.fn();
     flyTo = vi.fn();
@@ -362,6 +363,12 @@ describe('MapView', () => {
     expect(api.isUserLocationShown()).toBe(true);
     expect(api.getLayerVisibility(LAYER_IDS.labelBuilding)).toBe('visible');
     expect(api.getLayerVisibility('no-such-layer')).toBeNull();
+    // Ground point → viewport pixels (canvas offset added); invalid input → null.
+    vi.spyOn(map.canvas, 'getBoundingClientRect').mockReturnValue(new DOMRect(10, 20, 800, 600));
+    const projected = api.projectToViewport([75.701, 31.25]);
+    expect(projected!.x).toBeCloseTo(20);
+    expect(projected!.y).toBeCloseTo(120);
+    expect(api.projectToViewport([999, 0])).toBeNull();
     unmount();
     expect(window.__ATLAS_MAP__).toBeUndefined();
   });

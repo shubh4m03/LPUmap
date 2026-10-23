@@ -8,11 +8,13 @@
  *   window.__ATLAS_MAP__.queryRenderedBuildingIds()  → sorted ids of buildings on screen
  *   window.__ATLAS_MAP__.getLayerVisibility(id)      → 'visible' | 'none' | null (no such layer)
  *   window.__ATLAS_MAP__.isUserLocationShown()       → boolean
+ *   window.__ATLAS_MAP__.projectToViewport(lngLat)   → { x, y } viewport CSS px of a ground point, or null
  *
  * Privacy: it deliberately exposes no user coordinates or accuracy — only
  * whether a location marker is shown. The camera centre is the map view, not
  * the user's position.
  */
+import type { LngLat } from '../data/schema.ts';
 import type { MapCamera } from './types.ts';
 
 export interface AtlasMapTestHooks {
@@ -23,6 +25,8 @@ export interface AtlasMapTestHooks {
   queryRenderedBuildingIds(): string[];
   getLayerVisibility(id: string): 'visible' | 'none' | null;
   isUserLocationShown(): boolean;
+  /** Where a caller-supplied ground coordinate is drawn (viewport CSS px), so a test can click it. */
+  projectToViewport(lngLat: LngLat): { x: number; y: number } | null;
 }
 
 declare global {

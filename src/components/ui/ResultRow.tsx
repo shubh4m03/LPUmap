@@ -15,6 +15,8 @@ export interface ResultRowProps {
   /** Custom segment renderer; defaults to <mark> for matches. */
   renderSegment?: (segment: TitleSegment, index: number) => ReactNode;
   subtitle?: ReactNode;
+  /** Lines the subtitle may use before it is cut off (default 1). */
+  subtitleLines?: 1 | 2;
   /** Trailing meta such as distance or a badge. */
   meta?: ReactNode;
   icon?: IconName;
@@ -44,6 +46,7 @@ export function ResultRow({
   segments,
   renderSegment = defaultSegment,
   subtitle,
+  subtitleLines = 1,
   meta,
   icon,
   iconColor,
@@ -81,7 +84,17 @@ export function ResultRow({
             title
           )}
         </span>
-        {subtitle ? <span className="truncate text-sm text-muted">{subtitle}</span> : null}
+        {subtitle ? (
+          <span
+            data-lines={subtitleLines}
+            className={cx(
+              'text-sm text-muted',
+              subtitleLines === 2 ? 'line-clamp-2 break-words' : 'truncate',
+            )}
+          >
+            {subtitle}
+          </span>
+        ) : null}
       </span>
       {meta ? <span className="shrink-0 self-center text-xs text-subtle">{meta}</span> : null}
     </>

@@ -109,6 +109,15 @@
     outline: none;
   }
 
+  /*
+   * Headings (and marked targets) given tabindex=-1 only ever receive programmatic focus,
+   * e.g. when a panel opens. They are not controls, so they never draw the focus ring;
+   * Chrome would otherwise treat focus() after a key press as :focus-visible.
+   */
+  :is(h1, h2, h3, h4, h5, h6, [data-panel-focus])[tabindex='-1']:focus {
+    outline: none;
+  }
+
   ::selection {
     background-color: var(--ds-highlight);
     color: var(--ds-text);

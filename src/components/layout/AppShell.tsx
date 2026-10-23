@@ -9,10 +9,10 @@ import { useAppStore } from '../../app/store/index.ts';
 import { supportsWebGL } from '../../buildings3d/index.ts';
 // Direct file import (not the map index) so MapLibre stays out of the initial chunk.
 import { MAP_MESSAGES } from '../../map/errors.ts';
-import { ReportDialog } from '../report/ReportDialog.tsx';
 import { Spinner } from '../ui/index.ts';
 import { CommandPalette } from '../search/CommandPalette.tsx';
 import { DesktopLayout } from './DesktopLayout.tsx';
+import { LazyReportDialog, usePrefetchDeferredPanels } from './deferred-panels.ts';
 import { ListLayout } from './ListLayout.tsx';
 import { useDesktopPadding, useMobilePadding, useViewportHeight } from './map-padding.ts';
 import { MobileLayout } from './MobileLayout.tsx';
@@ -27,11 +27,13 @@ export function AppShell() {
   useHistoryLayers();
   useGlobalShortcuts();
   useGeoFeedback();
+  usePrefetchDeferredPanels();
 
   const isMobile = useIsMobile();
   const reducedMotion = useReducedMotion();
   const { resolved } = useTheme();
   const listMode = useAppStore((s) => s.listMode);
+  const reportOpen = useAppStore((s) => s.reportTarget !== null);
   const enterListMode = useAppStore((s) => s.enterListMode);
   const viewportH = useViewportHeight();
   const desktopPadding = useDesktopPadding();
@@ -70,7 +72,22 @@ export function AppShell() {
     <>
       {body}
       <CommandPalette />
-      <ReportDialog />
+      {reportOpen ? (
+        <Suspense fallback={<LoadingOverlay label="Loading the correction form…" />}>
+          <LazyReportDialog />
+        </Suspense>
+      ) : null}
     </>
+  );
+}
+
+/** Fallback while a lazily loaded dialog downloads: a labelled status over a scrim. */
+function LoadingOverlay({ label }: { label: string }) {
+  return (
+    <div className="fixed inset-0 z-(--ds-z-dialog) flex items-center justify-center bg-overlay">
+      <div className="rounded-lg bg-surface-raised p-4 shadow-3">
+        <Spinner label={label} />
+      </div>
+    </div>
   );
 }

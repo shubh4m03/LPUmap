@@ -9,14 +9,15 @@
  * same top slot carries the "choose on map" prompt, which the bottom sheet
  * would otherwise cover.
  */
+import { Suspense, useEffect, useRef, type RefObject } from 'react';
 import { useIsMobile } from '../../accessibility/index.ts';
 import { useAppStore } from '../../app/store/index.ts';
 import { cx } from '../ui/index.ts';
 import { useBackgroundPause, useNavAnnouncements } from './hooks.ts';
 import { MapPickPrompt } from './MapPickPrompt.tsx';
-import { NavCard } from './NavCard.tsx';
-import { TrackingCard } from './TrackingCard.tsx';
-import { TrackingSummaryDialog } from './TrackingSummaryDialog.tsx';
+// The live cards and the summary load on demand (they are only needed once a trip starts).
+import { LazyNavCard, LazyTrackingCard, LazyTrackingSummaryDialog } from '../layout/deferred-panels.ts';
+import { PanelSuspense } from '../layout/PanelSuspense.tsx';
 
 const CARD =
   'pointer-events-auto w-full rounded-xl border border-border bg-surface-raised p-3 text-text shadow-3';
@@ -28,10 +29,14 @@ export function NavigationHud({ placement = 'overlay' }: { placement?: 'overlay'
   const navigating = useAppStore((s) => s.navigationActive);
   const tracking = useAppStore((s) => s.trackingActive);
   const picking = useAppStore((s) => s.pickingOnMap !== null);
+  const summaryOpen = useAppStore((s) => s.trackingSummary !== null);
   const panelOpen = useAppStore((s) => s.activePanel !== 'none' && !s.panelCollapsed);
   const isMobile = useIsMobile();
   const backgroundPaused = useBackgroundPause();
   useNavAnnouncements();
+  const mobileTopRef = useRef<HTMLDivElement>(null);
+  const covering = placement === 'overlay' && isMobile && (navigating || tracking || picking);
+  useHudCoverReport(mobileTopRef, covering);
 
   const card =
     navigating || tracking ? (
@@ -43,11 +48,13 @@ export function NavigationHud({ placement = 'overlay' }: { placement?: 'overlay'
             (isMobile ? 'max-h-[45dvh] overflow-y-auto overscroll-contain' : 'max-w-md'),
         )}
       >
-        {navigating ? (
-          <NavCard backgroundPaused={backgroundPaused} />
-        ) : (
-          <TrackingCard backgroundPaused={backgroundPaused} />
-        )}
+        <PanelSuspense label={navigating ? 'Loading navigation…' : 'Loading walk tracking…'}>
+          {navigating ? (
+            <LazyNavCard backgroundPaused={backgroundPaused} />
+          ) : (
+            <LazyTrackingCard backgroundPaused={backgroundPaused} />
+          )}
+        </PanelSuspense>
       </section>
     ) : null;
 
@@ -56,7 +63,7 @@ export function NavigationHud({ placement = 'overlay' }: { placement?: 'overlay'
     if (isMobile) {
       positioned =
         card || picking ? (
-          <div className={cx(MOBILE_TOP, 'flex flex-col gap-2')}>
+          <div ref={mobileTopRef} className={cx(MOBILE_TOP, 'flex flex-col gap-2')}>
             {card}
             {picking ? <MapPickPrompt /> : null}
           </div>
@@ -79,7 +86,34 @@ export function NavigationHud({ placement = 'overlay' }: { placement?: 'overlay'
   return (
     <>
       {positioned}
-      <TrackingSummaryDialog />
+      {summaryOpen ? (
+        <Suspense fallback={null}>
+          <LazyTrackingSummaryDialog />
+        </Suspense>
+      ) : null}
     </>
   );
+}
+
+/**
+ * Reports the height of the mobile top card to the store, so the map padding keeps
+ * the user's position (and a focused place) out from under it. Resets to 0 when gone.
+ */
+function useHudCoverReport(ref: RefObject<HTMLDivElement | null>, active: boolean): void {
+  useEffect(() => {
+    const set = useAppStore.getState().setHudCoverPx;
+    const el = ref.current;
+    if (!active || !el) {
+      set(0);
+      return;
+    }
+    const measure = () => set(el.getBoundingClientRect().height);
+    measure();
+    const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(measure) : null;
+    ro?.observe(el);
+    return () => {
+      ro?.disconnect();
+      set(0);
+    };
+  }, [ref, active]);
 }

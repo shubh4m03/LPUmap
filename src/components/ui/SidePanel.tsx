@@ -4,6 +4,8 @@ import { cx } from './cx.ts';
 
 export interface SidePanelProps {
   title: ReactNode;
+  /** Accessible name when it should say more than the visible title (default: the title). */
+  label?: string;
   children?: ReactNode;
   /** Renders a close button when provided. */
   onClose?: () => void;
@@ -17,6 +19,7 @@ export interface SidePanelProps {
 /** Desktop side panel: a labelled complementary landmark with a scrolling body. */
 export function SidePanel({
   title,
+  label,
   children,
   onClose,
   closeLabel = 'Close panel',
@@ -28,7 +31,8 @@ export function SidePanel({
   const titleId = useId();
   return (
     <aside
-      aria-labelledby={titleId}
+      aria-labelledby={label ? undefined : titleId}
+      aria-label={label}
       className={cx(
         'flex h-full w-full max-w-sm flex-col bg-surface-raised text-text shadow-2',
         side === 'left' ? 'border-r border-border' : 'border-l border-border',

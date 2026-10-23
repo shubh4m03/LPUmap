@@ -73,14 +73,27 @@ describe('SettingsPanel', () => {
     expect(await screen.findByText(/Cleared: saved places, recent places/)).toBeInTheDocument();
   });
 
-  it('opening the confirmation from a full mobile sheet drops it to half and restores it', async () => {
+  it('opening the confirmation leaves a full mobile sheet alone (nested focus traps cooperate)', async () => {
     const user = userEvent.setup();
     useAppStore.getState().setSheetSnap('full');
     renderWithAtlas(<SettingsPanel />);
-    await user.click(screen.getByRole('button', { name: 'Clear all local data' }));
-    expect(useAppStore.getState().sheetSnap).toBe('half');
-    await user.keyboard('{Escape}');
+    const opener = screen.getByRole('button', { name: 'Clear all local data' });
+    await user.click(opener);
     expect(useAppStore.getState().sheetSnap).toBe('full');
+    expect(screen.getByRole('button', { name: 'Cancel' })).toHaveFocus();
+    await user.keyboard('{Escape}');
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(opener).toHaveFocus();
+    expect(useAppStore.getState().sheetSnap).toBe('full');
+  });
+
+  it('the privacy facts use the Settings switch label for history', () => {
+    renderWithAtlas(<SettingsPanel />);
+    const label = screen.getByRole('switch', { name: /Save search history/ });
+    expect(label).toBeInTheDocument();
+    const recents = PRIVACY_FACTS.find((f) => f.id === 'stored-recents')!;
+    expect(recents.detail).toContain('“Save search history”');
+    expect(PRIVACY_FACTS.some((f) => /“Save history”/.test(f.detail))).toBe(false);
   });
 
   it('renders every privacy fact and the app and dataset versions', () => {

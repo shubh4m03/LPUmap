@@ -15,6 +15,7 @@ export { buildMapStyle, buildLayers, glyphsUrl, OSM_ATTRIBUTION_HTML } from './s
 export { groupFilter, labelVisibility, LABEL_SORT_KEY } from './overlay-layers.ts';
 export {
   accuracyCircle,
+  anchoredOrganizations,
   poiCollection,
   routeCollection,
   routeCoordinateCount,

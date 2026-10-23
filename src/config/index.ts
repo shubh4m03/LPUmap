@@ -100,6 +100,25 @@ export const APP_CONFIG = {
     /** Hours after which cached opening hours show a freshness warning. */
     hoursFreshnessDays: 180,
   },
+  contributions: {
+    /**
+     * Where suggestions and owner locations may be placed: inside
+     * APP_CONFIG.map.maxBounds (campus plus the nearby Law Gate area). The
+     * on/off-campus zone is still computed from the real boundary polygon.
+     */
+    area: 'campus-or-nearby',
+    /** Existing places within this radius with a similar name are flagged as possible duplicates. */
+    duplicateRadiusM: 60,
+    /** Normalised name similarity (0–1) at or above which two names are "similar". */
+    nameSimilarityThreshold: 0.8,
+    /** Public submissions per hashed client per window. */
+    rateLimit: { perWindow: 5, windowMinutes: 10, perDay: 20, globalPerDay: 500 },
+    /** Owner login attempts per hashed client per window (password mode). */
+    loginRateLimit: { perWindow: 5, windowMinutes: 15 },
+    sessionHours: 8,
+    /** Pending suggestions older than this are flagged in the admin quality view. */
+    pendingStaleDays: 14,
+  },
 } as const;
 
 const positive = z.number().positive();

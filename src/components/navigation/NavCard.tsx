@@ -10,21 +10,28 @@ import { TrackingLine } from './TrackingCard.tsx';
 
 /** Live route-following card: remaining distance/time, progress, GPS, off-route and arrival. */
 export function NavCard({ backgroundPaused }: { backgroundPaused: boolean }) {
-  const { progress, destination, geoStatus, rerouteError, route, trackingActive, hasFix } = useAppStore(
-    useShallow((s) => ({
-      progress: s.progress,
-      destination: s.destination,
-      geoStatus: s.geoStatus,
-      rerouteError: s.rerouteError,
-      route: s.alternatives[s.activeAlternative] ?? null,
-      trackingActive: s.trackingActive,
-      hasFix: s.lastSample !== null,
-    })),
-  );
+  const { progress, destination, geoStatus, rerouteError, route, trackingActive, hasFix, following } =
+    useAppStore(
+      useShallow((s) => ({
+        following: s.followUser,
+        progress: s.progress,
+        destination: s.destination,
+        geoStatus: s.geoStatus,
+        rerouteError: s.rerouteError,
+        route: s.alternatives[s.activeAlternative] ?? null,
+        trackingActive: s.trackingActive,
+        hasFix: s.lastSample !== null,
+      })),
+    );
   const recalculate = useReroute();
   const stop = () => useAppStore.getState().stopNavigation();
   const recenter = () => {
     const s = useAppStore.getState();
+    if (s.lastSample) s.requestFocus({ kind: 'point', lngLat: s.lastSample.lngLat });
+  };
+  const follow = () => {
+    const s = useAppStore.getState();
+    s.setFollowUser(true);
     if (s.lastSample) s.requestFocus({ kind: 'point', lngLat: s.lastSample.lngLat });
   };
   const destLabel = destination?.label ?? 'your destination';
@@ -43,6 +50,18 @@ export function NavCard({ backgroundPaused }: { backgroundPaused: boolean }) {
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
         <h2 className="min-w-0 flex-1 truncate text-sm font-semibold">To {destLabel}</h2>
+        {following ? null : (
+          // Shown after the user panned away: the camera stopped following them.
+          <Button
+            size="sm"
+            variant="secondary"
+            icon="locate"
+            aria-label="Follow my location"
+            onClick={follow}
+          >
+            Follow
+          </Button>
+        )}
         <IconButton
           icon="locate"
           label={hasFix ? 'Centre the map on me' : 'Centre the map on me (waiting for a location fix)'}

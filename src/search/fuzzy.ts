@@ -71,6 +71,14 @@ export interface SubsequenceMatch {
 }
 
 /**
+ * Shortest query for which subsequence matching runs. Shorter queries ('atm') would
+ * otherwise light up scattered letters in unrelated names ('Apartment'); they still
+ * get exact, prefix, word and code matches. (Typo tolerance has its own budget: none
+ * below 4 characters, see maxTypos.)
+ */
+export const MIN_SUBSEQUENCE_QUERY = 4;
+
+/**
  * In-order subsequence match ('lbry' in 'library'). The first query character
  * must start a word of the target (word starts given as offsets) to avoid
  * matching random letters; the matched span may be at most 3× the query length.
@@ -80,7 +88,7 @@ export function subsequenceMatch(
   target: string,
   wordStarts: readonly number[],
 ): SubsequenceMatch | null {
-  if (query.length < 3 || query.length > target.length) return null;
+  if (query.length < MIN_SUBSEQUENCE_QUERY || query.length > target.length) return null;
   let best: SubsequenceMatch | null = null;
   for (const startAt of wordStarts) {
     if (target[startAt] !== query[0]) continue;

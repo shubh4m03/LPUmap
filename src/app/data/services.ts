@@ -3,7 +3,7 @@
  * index, router and lookups. Every count comes from the data itself.
  */
 import { CATEGORIES } from '../../config/categories.ts';
-import type { CampusData, Place } from '../../data/index.ts';
+import type { CampusData, Place, Relation } from '../../data/index.ts';
 import { createFacilityDirectory, type FacilityDirectory } from '../../facilities/index.ts';
 import { createRouter, type Router } from '../../routing/index.ts';
 import {
@@ -44,10 +44,25 @@ export function categorySubtitle(total: number, located: number): string | undef
   return `${located} mapped · ${missing} without a verified map position`;
 }
 
+/** Display name of the place each place is located_in (first stated relation wins). */
+export function hostNames(
+  places: Place[],
+  relations: readonly Relation[],
+): (id: string) => string | undefined {
+  const names = new Map(places.map((p) => [p.id, p.displayName]));
+  const hosts = new Map<string, string>();
+  for (const r of relations) {
+    const name = names.get(r.to);
+    if (r.type === 'located_in' && name && !hosts.has(r.from)) hosts.set(r.from, name);
+  }
+  return (id) => hosts.get(id);
+}
+
 export function buildSearchDocs(
   places: Place[],
   categoryCounts: Record<string, number>,
   locatedCounts: Record<string, number>,
+  relations: readonly Relation[] = [],
 ): SearchDoc[] {
   // Every registered category gets a count; absent from the data means 0 ("None mapped yet").
   const counts = Object.fromEntries(CATEGORIES.map((c) => [c.id, categoryCounts[c.id] ?? 0]));
@@ -55,14 +70,21 @@ export function buildSearchDocs(
     const subtitle = categorySubtitle(categoryCounts[d.ref] ?? 0, locatedCounts[d.ref] ?? 0);
     return { ...d, ...(subtitle ? { subtitle } : {}), boost: CATEGORY_DOC_BOOST };
   });
-  return [...categories, ...docsFromPlaces(places), ...layerDocs(locatedCounts), ...commandDocs()];
+  return [
+    ...categories,
+    ...docsFromPlaces(places, { hostName: hostNames(places, relations) }),
+    ...layerDocs(locatedCounts),
+    ...commandDocs(),
+  ];
 }
 
 export function buildServices(data: CampusData): AtlasServices {
   const directory = createFacilityDirectory(data.places, data.relations);
   const categoryCounts = directory.countsByCategory();
   const locatedCounts = directory.countsByCategory({ located: true });
-  const searchIndex = createSearchIndex(buildSearchDocs(directory.all, categoryCounts, locatedCounts));
+  const searchIndex = createSearchIndex(
+    buildSearchDocs(directory.all, categoryCounts, locatedCounts, data.relations),
+  );
   const router = createRouter(data.graph);
   const sources = new Map(data.manifest.sources.map((s) => [s.id, s]));
   return {

@@ -3,6 +3,7 @@ import { Icon } from '../icons/Icon.tsx';
 import type { IconName } from '../icons/icon-paths.ts';
 import { IconButton } from './IconButton.tsx';
 import { cx, FOCUS_RING } from './cx.ts';
+import { useAnyModalOpen } from './modal-presence.ts';
 import {
   DEFAULT_ACTION_TOAST_MS,
   DEFAULT_TOAST_MS,
@@ -31,6 +32,10 @@ const TONE_CLASS: Record<ToastTone, string> = {
 /**
  * Provides `useToast()` and renders the toast stack inside a polite live region that
  * exists from first render, so new toasts are announced by screen readers.
+ *
+ * Placement: bottom, lifted by `--ds-toast-offset` (set by the layout so the map
+ * attribution and the mobile sheet's peek stay uncovered). While a modal dialog is
+ * open the stack moves to the top edge, so it never covers the dialog's actions.
  */
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastRecord[]>([]);
@@ -43,13 +48,18 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     return id;
   }, []);
   const api = useMemo<ToastApi>(() => ({ show, dismiss }), [show, dismiss]);
+  const modalOpen = useAnyModalOpen();
 
   return (
     <ToastContext value={api}>
       {children}
       <section
         aria-label="Notifications"
-        className="pointer-events-none fixed inset-x-0 bottom-0 z-(--ds-z-toast) flex justify-center px-4 pb-safe sm:justify-end"
+        data-placement={modalOpen ? 'top' : 'bottom'}
+        className={cx(
+          'pointer-events-none fixed inset-x-0 z-(--ds-z-toast) flex justify-center px-4 sm:justify-end',
+          modalOpen ? 'top-0 pt-[max(0.5rem,var(--ds-safe-top))]' : 'bottom-(--ds-toast-offset) pb-safe',
+        )}
       >
         <ol aria-live="polite" aria-relevant="additions text" className="flex w-full max-w-sm flex-col gap-2">
           {toasts.map((t) => (

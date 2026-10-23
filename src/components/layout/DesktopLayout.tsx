@@ -5,9 +5,10 @@ import { NavigationHud } from '../navigation/NavigationHud.tsx';
 import { SearchTrigger } from '../search/SearchTrigger.tsx';
 import { Button, IconButton, SidePanel } from '../ui/index.ts';
 import { PanelBackButton, PanelBody } from './PanelContent.tsx';
-import { usePanelTitle } from './panel-titles.ts';
+import { usePanelLabel, usePanelTitle } from './panel-titles.ts';
 import { MoreMenu } from './MoreMenu.tsx';
 import { PickingBanner } from './PickingBanner.tsx';
+import { ATTRIBUTION_CLEARANCE_PX, useToastOffset } from './toast-offset.ts';
 import { usePanelFocusRescue } from './usePanelFocusRescue.ts';
 
 /** ≥ 768px: full-bleed map, floating search, left side panel, right control stack. */
@@ -17,8 +18,11 @@ export function DesktopLayout({ map }: { map: ReactNode }) {
   const setCollapsed = useAppStore((s) => s.setPanelCollapsed);
   const closePanel = useAppStore((s) => s.closePanel);
   const title = usePanelTitle(activePanel);
+  const label = usePanelLabel(activePanel);
   const panelRef = useRef<HTMLDivElement>(null);
   usePanelFocusRescue(panelRef);
+  // Toasts sit bottom-right, directly above the map attribution.
+  useToastOffset(ATTRIBUTION_CLEARANCE_PX);
 
   return (
     <div className="relative h-full w-full overflow-hidden">
@@ -38,7 +42,7 @@ export function DesktopLayout({ map }: { map: ReactNode }) {
             className="pointer-events-auto self-start shadow-2"
             onClick={() => setCollapsed(false)}
           >
-            Show panel: {title}
+            Show panel: {label}
           </Button>
         ) : null}
       </div>
@@ -49,6 +53,7 @@ export function DesktopLayout({ map }: { map: ReactNode }) {
         >
           <SidePanel
             title={title}
+            label={label}
             onClose={closePanel}
             className="max-w-none rounded-xl border border-border"
             headerActions={

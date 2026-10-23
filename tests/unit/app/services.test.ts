@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildServices, categorySubtitle } from '../../../src/app/data/services.ts';
+import { buildServices, categorySubtitle, hostNames } from '../../../src/app/data/services.ts';
 import { syntheticCampus } from './synthetic-campus.ts';
 
 describe('buildServices', () => {
@@ -40,5 +40,24 @@ describe('buildServices', () => {
     expect(s.sourceName('missing')).toBe('missing');
     expect(s.getPlace('osm:node/1')?.name).toBe('Synthetic Food Point');
     expect(s.router.nodeCount).toBe(3);
+  });
+});
+
+describe('hostNames', () => {
+  it('names the place a place is located_in, from located_in relations only', () => {
+    const data = syntheticCampus();
+    const [a, b] = data.places;
+    const rel = (type: 'located_in' | 'nearby', from: string, to: string) => ({
+      id: `${type}:${from}->${to}`,
+      type,
+      from,
+      to,
+      inferred: false,
+      method: 'curated' as const,
+      provenance: a!.provenance,
+    });
+    const host = hostNames(data.places, [rel('located_in', a!.id, b!.id), rel('nearby', b!.id, a!.id)]);
+    expect(host(a!.id)).toBe(b!.displayName);
+    expect(host(b!.id)).toBeUndefined();
   });
 });

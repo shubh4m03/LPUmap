@@ -17,6 +17,8 @@ export interface BottomSheetProps {
   onClose: () => void;
   /** Visible heading; also the accessible name of the sheet. */
   title: ReactNode;
+  /** Accessible name when it should say more than the visible title (default: the title). */
+  label?: string;
   children?: ReactNode;
   /** Controlled snap point. Omit to let the sheet manage it (starting at `defaultSnap`). */
   snap?: SheetSnap;
@@ -52,6 +54,7 @@ export function BottomSheet(props: BottomSheetProps) {
 function BottomSheetInner({
   onClose,
   title,
+  label,
   children,
   snap: controlledSnap,
   defaultSnap = 'half',
@@ -147,7 +150,8 @@ function BottomSheetInner({
       ref={sheetRef}
       role={modal ? 'dialog' : 'region'}
       aria-modal={modal || undefined}
-      aria-labelledby={titleId}
+      aria-labelledby={label ? undefined : titleId}
+      aria-label={label}
       tabIndex={-1}
       onKeyDown={onKeyDown}
       data-snap={snap}
@@ -161,7 +165,7 @@ function BottomSheetInner({
     >
       <button
         type="button"
-        aria-label={`Resize ${typeof title === 'string' ? title : 'panel'}: ${SNAP_LABEL[snap]}`}
+        aria-label={`Resize ${label ?? (typeof title === 'string' ? title : 'panel')}: ${SNAP_LABEL[snap]}`}
         aria-describedby={hintId}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}

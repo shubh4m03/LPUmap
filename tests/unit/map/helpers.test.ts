@@ -182,6 +182,9 @@ describe('apply helpers', () => {
     expect(selectionTarget('cur:orphan', idx)).toBeNull();
     expect(selectionTarget('cur:unknown', idx)).toBeNull();
     expect(selectionTarget(null, idx)).toBeNull();
+    // An anchored organisation without its own marker highlights its host marker.
+    const anchored = { ...idx, containingBuilding: new Map([['cur:school', 'osm:node/2']]) };
+    expect(selectionTarget('cur:school', anchored)).toEqual({ source: 'places', id: 'osm:node/2' });
   });
 
   it('groupsKey ignores insertion order', () => {
@@ -205,6 +208,7 @@ describe('e2e test hooks', () => {
     queryRenderedBuildingIds: () => [],
     getLayerVisibility: () => null,
     isUserLocationShown: () => false,
+    projectToViewport: () => null,
   };
   afterEach(() => {
     delete window.__ATLAS_MAP__;
@@ -232,6 +236,7 @@ describe('e2e test hooks', () => {
         'getSelectedId',
         'isStyleLoaded',
         'isUserLocationShown',
+        'projectToViewport',
         'queryRenderedBuildingIds',
       ].sort(),
     );

@@ -9,7 +9,7 @@ import { SearchTrigger } from '../search/SearchTrigger.tsx';
 import { IconButton, ResultRow, iconForCategory } from '../ui/index.ts';
 import { MoreMenu } from './MoreMenu.tsx';
 import { PanelBackButton, PanelBody } from './PanelContent.tsx';
-import { usePanelTitle } from './panel-titles.ts';
+import { usePanelLabel, usePanelTitle } from './panel-titles.ts';
 import { usePanelFocusRescue } from './usePanelFocusRescue.ts';
 
 /** Map-free mode (no WebGL or a fatal map error): search, details and categories as lists. */
@@ -18,6 +18,7 @@ export function ListLayout() {
   const activePanel = useAppStore((s) => s.activePanel);
   const closePanel = useAppStore((s) => s.closePanel);
   const title = usePanelTitle(activePanel);
+  const label = usePanelLabel(activePanel);
   const isMobile = useIsMobile();
   const mainRef = useRef<HTMLElement>(null);
   usePanelFocusRescue(mainRef);
@@ -39,7 +40,7 @@ export function ListLayout() {
         {activePanel === 'none' ? (
           <CategoryHome />
         ) : (
-          <section aria-labelledby="list-panel-title">
+          <section aria-label={label}>
             <div className="flex items-center gap-2 border-b border-border px-4 py-3">
               <PanelBackButton />
               <h2 id="list-panel-title" className="min-w-0 flex-1 truncate text-base font-semibold">

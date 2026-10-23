@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { APP_CONFIG } from '../../../src/config/index.ts';
 import { createSearchIndex, type SearchDoc } from '../../../src/search/index.ts';
+import { medianTime, percentile } from '../perf-timing.ts';
 
 // Synthetic vocabulary — invented strings used only to load the engine.
 const WORDS = [
@@ -112,20 +113,33 @@ function largeVocabDocs(n: number): { docs: SearchDoc[]; vocab: string[] } {
   return { docs, vocab };
 }
 
+/** Each query is timed this many times; its median is its latency. */
+const REPETITIONS = 5;
+
+/**
+ * p95 over the per-query median latencies, after one untimed warm-up pass over every
+ * query (JIT and lazily built per-word match codes). A single slow sample caused by
+ * another test worker cannot fail the budget; a genuinely slow query is slow in every
+ * repetition and still does.
+ */
 function p95Of(
   index: ReturnType<typeof createSearchIndex>,
   queries: string[],
 ): { p95: number; hits: number } {
-  for (const q of queries.slice(0, 10)) index.search(q);
-  const timings: number[] = [];
+  for (const q of queries) index.search(q);
+  const latencies: number[] = [];
   let hits = 0;
   for (const q of queries) {
-    const t0 = performance.now();
     hits += index.search(q).length;
-    timings.push(performance.now() - t0);
+    latencies.push(
+      medianTime(
+        REPETITIONS,
+        () => q,
+        (query) => index.search(query),
+      ),
+    );
   }
-  timings.sort((a, b) => a - b);
-  return { p95: timings[Math.floor(timings.length * 0.95)]!, hits };
+  return { p95: percentile(latencies, 0.95), hits };
 }
 
 describe('search performance', () => {

@@ -31,6 +31,14 @@ export function useCommandRunner(): (id: CommandId) => void {
         case 'locate':
           s.startLocation();
           return;
+        case 'track-walk':
+          // Same session as the "Track my walk" buttons; location starts from this gesture.
+          if (s.trackingActive) announce('Walk tracking is already on');
+          else {
+            s.startTracking();
+            announce('Tracking your walk');
+          }
+          return;
         case 'favorites':
           s.openPanel('favorites');
           return;

@@ -11,3 +11,7 @@ test-results
 .DS_Store
 .cache
 data/.cache
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.wrangler

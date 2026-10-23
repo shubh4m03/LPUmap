@@ -1,15 +1,18 @@
 import type { ReactNode } from 'react';
 import { useAppStore, type PanelId } from '../../app/store/index.ts';
-import { AboutPanel } from '../about/AboutPanel.tsx';
 import { CategoryPanel } from '../categories/CategoryPanel.tsx';
-import { DirectionsPanel } from '../directions/DirectionsPanel.tsx';
-import { FavoritesPanel } from '../favorites/FavoritesPanel.tsx';
-import { CampusInfoPanel } from '../info/CampusInfoPanel.tsx';
 import { LayersPanel } from '../layers/LayersPanel.tsx';
 import { PlaceDetails } from '../place/PlaceDetails.tsx';
 import { SearchResultsPanel } from '../search/SearchResultsPanel.tsx';
-import { SettingsPanel } from '../settings/SettingsPanel.tsx';
 import { IconButton } from '../ui/index.ts';
+import {
+  LazyAboutPanel,
+  LazyCampusInfoPanel,
+  LazyDirectionsPanel,
+  LazyFavoritesPanel,
+  LazySettingsPanel,
+} from './deferred-panels.ts';
+import { PanelSuspense } from './PanelSuspense.tsx';
 import { STATIC_TITLES } from './panel-titles.ts';
 
 export function PanelBody({ panel }: { panel: PanelId }): ReactNode {
@@ -20,17 +23,37 @@ export function PanelBody({ panel }: { panel: PanelId }): ReactNode {
     case 'results':
       return <SearchResultsPanel />;
     case 'directions':
-      return <DirectionsPanel />;
+      return (
+        <PanelSuspense label="Loading directions…">
+          <LazyDirectionsPanel />
+        </PanelSuspense>
+      );
     case 'layers':
       return <LayersPanel />;
     case 'favorites':
-      return <FavoritesPanel />;
+      return (
+        <PanelSuspense label="Loading saved places…">
+          <LazyFavoritesPanel />
+        </PanelSuspense>
+      );
     case 'settings':
-      return <SettingsPanel />;
+      return (
+        <PanelSuspense label="Loading settings…">
+          <LazySettingsPanel />
+        </PanelSuspense>
+      );
     case 'about':
-      return <AboutPanel />;
+      return (
+        <PanelSuspense label="Loading data sources…">
+          <LazyAboutPanel />
+        </PanelSuspense>
+      );
     case 'info':
-      return <CampusInfoPanel />;
+      return (
+        <PanelSuspense label="Loading campus information…">
+          <LazyCampusInfoPanel />
+        </PanelSuspense>
+      );
     case 'category':
       return <CategoryPanel />;
     case 'none':

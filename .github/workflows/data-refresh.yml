@@ -1,0 +1,72 @@
+# Manual OpenStreetMap refresh. Downloads a fresh snapshot, rebuilds and
+# validates the dataset, and uploads the resulting diff for a human to review.
+# It never commits or pushes and needs no secrets. Set the repository variable
+# DATA_FETCH_CONTACT (an e-mail or URL) so OSM operators can identify the
+# client, as their usage policy asks.
+name: Data refresh
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: data-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Fetch, build and validate data
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DATA_FETCH_CONTACT: ${{ vars.DATA_FETCH_CONTACT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node (from .nvmrc)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch OSM snapshot (forced)
+        run: npm run -s data:fetch -- --force
+
+      - name: Build dataset
+        run: npm run -s data:build
+
+      - name: Validate dataset
+        run: npm run -s data:validate
+
+      - name: Collect diff
+        if: always()
+        run: |
+          mkdir -p data-refresh
+          # Mark new files so they appear in the diff; this only touches the runner's index.
+          git add --intent-to-add --all data/raw public/data docs/DATA_QUALITY_REPORT.md
+          git diff --stat -- data/raw public/data docs/DATA_QUALITY_REPORT.md > data-refresh/diff-stat.txt
+          git diff -- data/raw public/data docs/DATA_QUALITY_REPORT.md > data-refresh/data.diff
+          {
+            echo '## Data refresh'
+            echo
+            echo '```'
+            cat data-refresh/diff-stat.txt
+            echo '```'
+            echo
+            echo 'Download the `data-refresh` artifact, review docs/DATA_QUALITY_REPORT.md changes, and commit locally if correct.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload diff
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: data-refresh
+          path: data-refresh
+          if-no-files-found: warn
+          retention-days: 30

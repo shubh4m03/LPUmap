@@ -1,5 +1,6 @@
 /** Builds search docs from dataset records. Only data that exists in the records is used. */
 import { getCategory, type CategoryDef } from '../config/categories.ts';
+import { PLACE_KIND_LABELS } from '../data/place-labels.ts';
 import type { Place } from '../data/schema.ts';
 import type { SearchDoc } from './types.ts';
 
@@ -41,8 +42,39 @@ function uniqueNonEmpty(values: string[]): string[] {
  * map. When a nameless place has a sourced alias, that alias becomes the title
  * — no name is ever invented.
  */
-export function docsFromPlaces(places: Place[]): SearchDoc[] {
+export interface PlaceDocOptions {
+  /** Display name of the place another place is located in (from located_in relations). */
+  hostName?: (placeId: string) => string | undefined;
+}
+
+/**
+ * Two docs with the same title (e.g. an OpenStreetMap facility "School of Design"
+ * and the university's department of that name, located in it) must be told apart
+ * by their subtitle: append the kind and, when known, where it is located.
+ */
+function disambiguate(docs: SearchDoc[], byId: Map<string, Place>, opts: PlaceDocOptions): void {
+  const groups = new Map<string, SearchDoc[]>();
+  for (const d of docs) {
+    const key = d.title.toLocaleLowerCase();
+    groups.set(key, [...(groups.get(key) ?? []), d]);
+  }
+  for (const group of groups.values()) {
+    if (group.length < 2) continue;
+    for (const d of group) {
+      const place = byId.get(d.ref);
+      if (!place) continue;
+      const parts = [PLACE_KIND_LABELS[place.kind]];
+      const host = opts.hostName?.(place.id);
+      if (host) parts.push(`in ${host}`);
+      d.qualifier = parts.join(' · ');
+      d.subtitle = [d.subtitle, d.qualifier].filter(Boolean).join(' · ');
+    }
+  }
+}
+
+export function docsFromPlaces(places: Place[], opts: PlaceDocOptions = {}): SearchDoc[] {
   const docs: SearchDoc[] = [];
+  const byId = new Map<string, Place>();
   for (const place of places) {
     const aliases = uniqueNonEmpty(place.aliases ?? []);
     const name = place.name?.trim() ? place.name.trim() : null;
@@ -55,6 +87,7 @@ export function docsFromPlaces(places: Place[]): SearchDoc[] {
       ...category.synonyms,
       ...(place.subcategory ? [place.subcategory] : []),
     ]);
+    byId.set(place.id, place);
     docs.push({
       id: `${PLACE_DOC_PREFIX}${place.id}`,
       kind: 'place',
@@ -68,6 +101,7 @@ export function docsFromPlaces(places: Place[]): SearchDoc[] {
       hasLocation: place.location !== null,
     });
   }
+  disambiguate(docs, byId, opts);
   return docs;
 }
 

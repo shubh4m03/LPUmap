@@ -133,6 +133,7 @@ export const createNavSlice =
       navStartedAt: null,
       progress: null,
       navTrip: null,
+      followUser: false,
       trackingActive: false,
       trackingStartedAt: null,
       tracking: null,
@@ -177,6 +178,7 @@ export const createNavSlice =
           navTrip: fresh ? navTrip.addSample(last, now) : navTrip.snapshot(now),
           rerouteError: null,
           pickingOnMap: null,
+          followUser: true,
         });
         get().startLocation('navigation');
       },
@@ -191,8 +193,14 @@ export const createNavSlice =
           progress: null,
           navTrip: null,
           rerouteError: null,
+          followUser: false,
         });
         releaseIfUnused();
+      },
+
+      setFollowUser(follow) {
+        const next = follow && get().navigationActive;
+        if (next !== get().followUser) set({ followUser: next });
       },
 
       rebaseNavigation() {

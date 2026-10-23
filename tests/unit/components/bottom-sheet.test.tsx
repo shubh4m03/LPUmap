@@ -6,11 +6,13 @@ import {
   BottomSheet,
   Button,
   closestSnap,
+  Dialog,
   nextSnap,
   SHEET_PEEK_PX,
   snapHeightsPx,
   type SheetSnap,
 } from '../../../src/components/ui/index.ts';
+import { activeTrapCount } from '../../../src/accessibility/useFocusTrap.ts';
 
 afterEach(cleanup);
 
@@ -180,5 +182,68 @@ describe('snap geometry', () => {
     expect(closestSnap(700, 800)).toBe('full');
     expect(closestSnap(SHEET_PEEK_PX * 0.6 - 1, 800)).toBe('close');
     expect(closestSnap(SHEET_PEEK_PX * 0.6, 800)).toBe('peek');
+  });
+});
+
+describe('BottomSheet with a nested modal dialog', () => {
+  function Nested() {
+    const [confirming, setConfirming] = useState(false);
+    return (
+      <BottomSheet open defaultSnap="full" title="Settings" onClose={() => {}}>
+        <Button onClick={() => setConfirming(true)}>Clear data</Button>
+        <Dialog
+          open={confirming}
+          onClose={() => setConfirming(false)}
+          title="Clear all local data?"
+          footer={
+            <>
+              <Button onClick={() => setConfirming(false)}>Cancel</Button>
+              <Button>Confirm</Button>
+            </>
+          }
+        />
+      </BottomSheet>
+    );
+  }
+
+  it('the full-height sheet yields to the dialog: no focus ping-pong, Tab stays in the dialog', async () => {
+    const user = userEvent.setup();
+    render(<Nested />);
+    const sheet = screen.getByRole('dialog', { name: 'Settings' });
+    expect(sheet).toHaveAttribute('aria-modal', 'true');
+    const opener = screen.getByRole('button', { name: 'Clear data' });
+    await user.click(opener);
+
+    const focusins: EventTarget[] = [];
+    const record = (e: FocusEvent) => focusins.push(e.target!);
+    document.addEventListener('focusin', record);
+    const dialog = screen.getByRole('dialog', { name: 'Clear all local data?' });
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    expect(activeTrapCount()).toBe(2);
+
+    for (let i = 0; i < 4; i++) {
+      await user.tab();
+      expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    }
+    await user.tab({ shift: true });
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    // One focus move per key press: the sheet's trap never pulled focus back.
+    expect(focusins).toHaveLength(5);
+    expect(focusins.every((t) => dialog.contains(t as Node))).toBe(true);
+
+    // Focus that lands in the sheet while the dialog is open is pulled back by the dialog only.
+    focusins.length = 0;
+    opener.focus();
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    expect(focusins).toHaveLength(2);
+    document.removeEventListener('focusin', record);
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+    expect(screen.queryByRole('dialog', { name: 'Clear all local data?' })).toBeNull();
+    expect(activeTrapCount()).toBe(1);
+    expect(opener).toHaveFocus();
+    // The sheet's own trap works again.
+    await user.tab();
+    expect(sheet).toContainElement(document.activeElement as HTMLElement);
   });
 });

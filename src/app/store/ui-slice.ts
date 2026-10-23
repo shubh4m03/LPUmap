@@ -24,6 +24,7 @@ export const createUiSlice: SliceCreator<UiSlice> = (set, get) => ({
   resultsQuery: '',
   listMode: false,
   listModeReason: null,
+  hudCoverPx: 0,
 
   openPanel(panel) {
     const stack = pushPanel(get().panelStack, panel);
@@ -56,6 +57,10 @@ export const createUiSlice: SliceCreator<UiSlice> = (set, get) => ({
   openPalette: (initialQuery = '') => set({ paletteOpen: true, paletteInitialQuery: initialQuery }),
   closePalette: () => set({ paletteOpen: false, paletteInitialQuery: '' }),
   setMenuOpen: (menuOpen) => set({ menuOpen }),
+  setHudCoverPx(px) {
+    const next = Number.isFinite(px) && px > 0 ? Math.round(px) : 0;
+    if (next !== get().hudCoverPx) set({ hudCoverPx: next });
+  },
   openReport: (target) => set({ reportTarget: { ...target }, paletteOpen: false }),
   closeReport: () => set({ reportTarget: null }),
 

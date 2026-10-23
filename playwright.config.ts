@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 // Viewports required by docs/QA_STRATEGY.md. The suite runs against the
 // production build (vite preview) so the service worker and data files are
-// exercised exactly as deployed.
+// exercised exactly as deployed: run `npx vite build` first.
 const PORT = 4173;
 
 export default defineConfig({
@@ -10,11 +10,17 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
+  // WebGL runs on the CPU (SwiftShader) in headless Chromium; cap parallel maps.
+  workers: process.env.CI ? 2 : 6,
+  timeout: 60_000,
+  expect: { timeout: 10_000 },
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
+    // Camera moves jump instead of flying, so map state settles deterministically.
+    contextOptions: { reducedMotion: 'reduce' },
   },
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } },

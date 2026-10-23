@@ -32,7 +32,7 @@ export const PRIVACY_FACTS: readonly PrivacyFact[] = [
     id: 'stored-recents',
     title: 'Recent places are saved locally (optional)',
     detail:
-      'Recently opened places are saved in local storage so you can return to them. Turn off “Save history” to stop this and delete the existing list.',
+      'Recently opened places are saved in local storage so you can return to them. Turn off “Save search history” to stop this and delete the existing list.',
   },
   {
     id: 'stored-settings',

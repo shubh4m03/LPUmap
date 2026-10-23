@@ -49,16 +49,18 @@ function layerIcon(groupId: string): IconName {
   return first ? iconForCategory(first.icon) : 'layers';
 }
 
-export function placeItem(place: Place, key: string): PaletteItem {
+/** `qualifier` tells same-named places apart (SearchDoc.qualifier), e.g. 'Facility'. */
+export function placeItem(place: Place, key: string, qualifier?: string): PaletteItem {
   const category = getCategory(place.categoryId);
   const zone = place.campusZone === 'off-campus-nearby' ? ' · Off campus (nearby)' : '';
+  const base =
+    place.location === null ? `${category.label} · No verified map position` : `${category.label}${zone}`;
   return {
     key,
     kind: 'place',
     ref: place.id,
     title: place.displayName,
-    subtitle:
-      place.location === null ? `${category.label} · No verified map position` : `${category.label}${zone}`,
+    subtitle: qualifier ? `${base} · ${qualifier}` : base,
     icon: iconForCategory(category.icon),
     iconColor: category.color,
     noLocation: place.location === null,
@@ -72,7 +74,7 @@ function hitItem(hit: SearchHit, getPlace: (id: string) => Place | undefined): P
   if (doc.kind === 'place') {
     const place = getPlace(doc.ref);
     if (!place) return null;
-    return { ...placeItem(place, doc.id), title: doc.title, segments };
+    return { ...placeItem(place, doc.id, doc.qualifier), title: doc.title, segments };
   }
   if (doc.kind === 'category') {
     const c = getCategory(doc.ref);

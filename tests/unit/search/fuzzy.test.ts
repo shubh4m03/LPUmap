@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   boundedDamerauLevenshtein,
   maxTypos,
+  MIN_SUBSEQUENCE_QUERY,
   subsequenceMatch,
   typoDistance,
 } from '../../../src/search/fuzzy.ts';
@@ -61,14 +62,22 @@ describe('subsequenceMatch', () => {
   });
 
   it('prefers contiguous matches', () => {
-    const tight = subsequenceMatch('lib', 'library', [0])!;
-    const loose = subsequenceMatch('lby', 'library', [0])!;
+    const tight = subsequenceMatch('libr', 'library', [0])!;
+    const loose = subsequenceMatch('lbry', 'library', [0])!;
     expect(tight.quality).toBeGreaterThan(loose.quality);
   });
 
-  it('requires a word-start anchor, a bounded span and at least 3 chars', () => {
-    expect(subsequenceMatch('ibr', 'library', [0])).toBeNull();
+  it('requires a word-start anchor, a bounded span and at least 4 chars', () => {
+    expect(subsequenceMatch('ibra', 'library', [0])).toBeNull();
     expect(subsequenceMatch('az', 'abcz', [0])).toBeNull();
-    expect(subsequenceMatch('abz', 'abcdefghijklmnopqrstuvwxyz', [0])).toBeNull();
+    expect(subsequenceMatch('abcz', 'abcdefghijklmnopqrstuvwxyz', [0])).toBeNull();
+  });
+
+  it('never matches queries shorter than 4 characters (no scattered-letter highlights)', () => {
+    expect(MIN_SUBSEQUENCE_QUERY).toBe(4);
+    // 'atm' would otherwise match a·t·m inside 'apartment'.
+    expect(subsequenceMatch('atm', 'apartment', [0])).toBeNull();
+    expect(subsequenceMatch('lby', 'library', [0])).toBeNull();
+    expect(subsequenceMatch('atmt', 'apartment', [0])).not.toBeNull();
   });
 });

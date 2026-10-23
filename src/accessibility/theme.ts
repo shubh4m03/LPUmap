@@ -4,6 +4,7 @@
  * blocked site data make localStorage throw.
  */
 import { APP_CONFIG } from '../config/index.ts';
+import { registerLocalDataReset } from '../privacy/privacy-store.ts';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 export type ResolvedTheme = 'light' | 'dark';
@@ -131,6 +132,10 @@ export function applyTheme(resolved: ResolvedTheme, doc: Document = document): v
 }
 
 export const defaultThemeStore: ThemeStore = createThemeStore();
+
+// "Clear all local data" also resets the in-memory preference. 'system' removes the
+// stored key rather than writing one, so storage stays empty.
+registerLocalDataReset(() => defaultThemeStore.setPreference('system'));
 
 /** Call once before the first render (e.g. in main.tsx) to avoid a theme flash. */
 export function initTheme(store: ThemeStore = defaultThemeStore): ResolvedTheme {

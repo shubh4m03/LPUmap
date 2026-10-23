@@ -28,7 +28,9 @@ export function PlaceSummary({ place }: { place: Place }) {
           <Icon name={iconForCategory(category.icon)} size={22} />
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="text-lg leading-tight font-semibold break-words">{place.displayName}</h3>
+          <h3 data-panel-focus className="text-lg leading-tight font-semibold break-words">
+            {place.displayName}
+          </h3>
           <div className="mt-1.5 flex flex-wrap gap-1.5">
             <Badge tone="accent" icon={iconForCategory(category.icon)}>
               {category.label}

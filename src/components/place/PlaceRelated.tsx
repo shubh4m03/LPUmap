@@ -40,6 +40,7 @@ export function PlaceRelated({ placeId }: { placeId: string }) {
               <ResultRow
                 title={place.displayName}
                 subtitle={[verb, ...extras].join(' · ')}
+                subtitleLines={2}
                 icon={iconForCategory(category.icon)}
                 iconColor={category.color}
                 onSelect={() => selectPlace(place.id)}

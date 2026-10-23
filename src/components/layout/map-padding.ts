@@ -30,8 +30,27 @@ export function useSheetCoverPx(viewportH: number): number {
   return open && snap !== 'full' ? Math.max(0, snapHeightsPx(viewportH)[snap] - QUICKBAR_PX) : 0;
 }
 
-/** Bottom padding follows the sheet's snap height so the selection stays visible above it. */
+/** Map area under the search pill (and above the navigation card). */
+export const MOBILE_TOP_PX = 72;
+/** Gap kept below the navigation card and the smallest map height padding may leave. */
+const HUD_GAP_PX = 8;
+const MIN_VISIBLE_PX = 48;
+
+/**
+ * Mobile map padding. Bottom follows the sheet's snap height; top grows by the live
+ * navigation card so the user's dot (follow-me, recentre) is never under the card.
+ * The top is capped so some map height always remains between the two.
+ */
+export function mobilePadding(viewportH: number, sheetCoverPx: number, hudCoverPx: number): MapPadding {
+  const bottom = sheetCoverPx + 16;
+  const wanted = hudCoverPx > 0 ? MOBILE_TOP_PX + hudCoverPx + HUD_GAP_PX : MOBILE_TOP_PX;
+  const mapH = viewportH - QUICKBAR_PX;
+  const top = Math.max(MOBILE_TOP_PX, Math.min(wanted, mapH - bottom - MIN_VISIBLE_PX));
+  return { top, right: 60, bottom, left: 16 };
+}
+
 export function useMobilePadding(viewportH: number): MapPadding {
   const covered = useSheetCoverPx(viewportH);
-  return useMemo(() => ({ top: 72, right: 60, bottom: covered + 16, left: 16 }), [covered]);
+  const hud = useAppStore((s) => s.hudCoverPx);
+  return useMemo(() => mobilePadding(viewportH, covered, hud), [viewportH, covered, hud]);
 }

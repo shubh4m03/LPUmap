@@ -14,14 +14,29 @@ export const STATIC_TITLES: Record<OpenPanelId, string> = {
   category: 'Category',
 };
 
-/** Title of a panel as shown in its header (place / category names when known). */
+/**
+ * Visible header text of a panel. The details panel shows its kind ("Place details"):
+ * the place name is the panel's own first heading, so repeating it in the header
+ * would show the same name twice.
+ */
 export function usePanelTitle(panel: PanelId): string {
-  const { getPlace } = useAtlas();
-  const selectedPlaceId = useAppStore((s) => s.selectedPlaceId);
   const categoryId = useAppStore((s) => s.categoryId);
   if (panel === 'none') return '';
-  if (panel === 'details' && selectedPlaceId)
-    return getPlace(selectedPlaceId)?.displayName ?? STATIC_TITLES.details;
   if (panel === 'category' && categoryId) return getCategory(categoryId).label;
   return STATIC_TITLES[panel];
+}
+
+/**
+ * Accessible name of the panel landmark / sheet: the place name for details (so
+ * screen-reader users hear which place the region is about), else the header text.
+ */
+export function usePanelLabel(panel: PanelId): string {
+  const { getPlace } = useAtlas();
+  const selectedPlaceId = useAppStore((s) => s.selectedPlaceId);
+  const title = usePanelTitle(panel);
+  if (panel === 'details' && selectedPlaceId) {
+    const name = getPlace(selectedPlaceId)?.displayName;
+    if (name) return `${name}, ${STATIC_TITLES.details.toLowerCase()}`;
+  }
+  return title;
 }

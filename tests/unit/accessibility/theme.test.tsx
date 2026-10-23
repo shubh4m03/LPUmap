@@ -182,3 +182,15 @@ describe('useTheme', () => {
     expect(document.documentElement.dataset['theme']).toBe('dark');
   });
 });
+
+describe('clearing local data', () => {
+  it('resets the in-memory theme preference of the default store', async () => {
+    const { defaultThemeStore } = await import('../../../src/accessibility/theme.ts');
+    const { usePrivacySettings } = await import('../../../src/privacy/index.ts');
+    defaultThemeStore.setPreference('dark');
+    expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');
+    usePrivacySettings.getState().clearAllLocalData();
+    expect(defaultThemeStore.getPreference()).toBe('system');
+    expect(localStorage.getItem(THEME_STORAGE_KEY)).toBeNull();
+  });
+});

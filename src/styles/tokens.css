@@ -192,6 +192,9 @@
   /* Bottom sheet geometry (mirrored by SHEET_PEEK_PX / SHEET_TOP_GAP_PX in sheet-snap.ts) */
   --ds-sheet-peek: 8rem;
   --ds-sheet-top-gap: 2.5rem;
+
+  /* Bottom offset of the toast stack; layouts raise it above the attribution / sheet peek. */
+  --ds-toast-offset: 0px;
 }
 
 @media (prefers-reduced-motion: reduce) {
