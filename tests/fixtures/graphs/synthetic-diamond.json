@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "nodes": [
+    [75.7032, 31.2533],
+    [75.7027792072477, 31.25374966018186],
+    [75.70362079275229, 31.25374966018186],
+    [75.7032, 31.254199320363725]
+  ],
+  "edges": [
+    {
+      "id": 0,
+      "from": 0,
+      "to": 1,
+      "lengthM": 64.03,
+      "highway": "footway",
+      "foot": true,
+      "bicycle": "push",
+      "steps": false,
+      "wheelchair": "unknown",
+      "onewayBicycle": false,
+      "onewayFoot": false,
+      "indoor": false,
+      "surface": null,
+      "name": null,
+      "source": "osm",
+      "osmWayId": null
+    },
+    {
+      "id": 1,
+      "from": 0,
+      "to": 2,
+      "lengthM": 64.03,
+      "highway": "footway",
+      "foot": true,
+      "bicycle": "push",
+      "steps": false,
+      "wheelchair": "unknown",
+      "onewayBicycle": false,
+      "onewayFoot": false,
+      "indoor": false,
+      "surface": null,
+      "name": null,
+      "source": "osm",
+      "osmWayId": null
+    },
+    {
+      "id": 2,
+      "from": 1,
+      "to": 3,
+      "lengthM": 64.03,
+      "highway": "footway",
+      "foot": true,
+      "bicycle": "push",
+      "steps": false,
+      "wheelchair": "unknown",
+      "onewayBicycle": false,
+      "onewayFoot": false,
+      "indoor": false,
+      "surface": null,
+      "name": null,
+      "source": "osm",
+      "osmWayId": null
+    },
+    {
+      "id": 3,
+      "from": 2,
+      "to": 3,
+      "lengthM": 64.03,
+      "highway": "footway",
+      "foot": true,
+      "bicycle": "push",
+      "steps": false,
+      "wheelchair": "unknown",
+      "onewayBicycle": false,
+      "onewayFoot": false,
+      "indoor": false,
+      "surface": null,
+      "name": null,
+      "source": "osm",
+      "osmWayId": null
+    }
+  ]
+}

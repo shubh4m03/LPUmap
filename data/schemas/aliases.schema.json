@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$comment": {
+      "type": "string"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "pattern": "^(osm:(node|way|relation)\\/\\d+|cur:[a-z0-9][a-z0-9-]*)$"
+          },
+          "aliases": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "source": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "retrievedAt": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+Z)?$"
+              }
+            },
+            "required": ["name", "url", "retrievedAt"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["target", "aliases", "source"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["aliases"],
+  "additionalProperties": false
+}

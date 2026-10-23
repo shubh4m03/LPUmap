@@ -1,0 +1,559 @@
+{
+  "builtFrom": "2026-10-23T09:39:00Z",
+  "totals": {
+    "places": 855,
+    "buildings": 535,
+    "relations": 760,
+    "onCampusPlaces": 233,
+    "offCampusPlaces": 622
+  },
+  "unnamedBuildings": {
+    "total": 499,
+    "onCampus": 134,
+    "largestOnCampus": [
+      {
+        "id": "osm:way/422823431",
+        "displayName": "Unnamed building · 4 floors",
+        "areaM2": 12793
+      },
+      {
+        "id": "osm:way/422737297",
+        "displayName": "Unnamed building",
+        "areaM2": 10171
+      },
+      {
+        "id": "osm:way/422823421",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 8200
+      },
+      {
+        "id": "osm:way/422556249",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 5927
+      },
+      {
+        "id": "osm:way/422548297",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 5505
+      },
+      {
+        "id": "osm:way/422823420",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 5311
+      },
+      {
+        "id": "osm:way/422823430",
+        "displayName": "Unnamed building · 4 floors",
+        "areaM2": 4479
+      },
+      {
+        "id": "osm:way/422548300",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 3957
+      },
+      {
+        "id": "osm:way/422548298",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 3419
+      },
+      {
+        "id": "osm:way/422437885",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 3386
+      },
+      {
+        "id": "osm:way/422547443",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 2972
+      },
+      {
+        "id": "osm:way/422437898",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 2844
+      },
+      {
+        "id": "osm:way/422437897",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 2323
+      },
+      {
+        "id": "osm:way/422437887",
+        "displayName": "Unnamed building · 11 floors",
+        "areaM2": 1818
+      },
+      {
+        "id": "osm:way/422823423",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 1584
+      },
+      {
+        "id": "osm:way/422437902",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 1494
+      },
+      {
+        "id": "osm:way/422437890",
+        "displayName": "Unnamed building · 6 floors",
+        "areaM2": 1466
+      },
+      {
+        "id": "osm:way/675395630",
+        "displayName": "Unnamed building",
+        "areaM2": 1466
+      },
+      {
+        "id": "osm:way/422547452",
+        "displayName": "Unnamed building · 9 floors",
+        "areaM2": 1449
+      },
+      {
+        "id": "osm:way/422547450",
+        "displayName": "Unnamed building · 9 floors",
+        "areaM2": 1439
+      },
+      {
+        "id": "osm:way/422547448",
+        "displayName": "Unnamed building · 9 floors",
+        "areaM2": 1421
+      },
+      {
+        "id": "osm:relation/7099162",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 1409
+      },
+      {
+        "id": "osm:way/1550425052",
+        "displayName": "Unnamed building",
+        "areaM2": 1402
+      },
+      {
+        "id": "osm:way/422437900",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 1342
+      },
+      {
+        "id": "osm:way/422323508",
+        "displayName": "Unnamed building · 10 floors",
+        "areaM2": 1310
+      }
+    ]
+  },
+  "placesWithoutLocation": [
+    {
+      "id": "cur:central-library",
+      "displayName": "Central Library"
+    },
+    {
+      "id": "cur:department-of-sports",
+      "displayName": "Department of Sports"
+    },
+    {
+      "id": "cur:school-agriculture",
+      "displayName": "School of Agriculture"
+    },
+    {
+      "id": "cur:school-animation-and-multimedia",
+      "displayName": "Animation and Multimedia"
+    },
+    {
+      "id": "cur:school-architecture-design",
+      "displayName": "Architecture and Design"
+    },
+    {
+      "id": "cur:school-bioengineering-and-biosciences",
+      "displayName": "School of Bioengineering & Biosciences"
+    },
+    {
+      "id": "cur:school-business",
+      "displayName": "Mittal School of Business"
+    },
+    {
+      "id": "cur:school-civil-engineering",
+      "displayName": "School of Civil Engineering"
+    },
+    {
+      "id": "cur:school-computer-applications",
+      "displayName": "School of Computer Applications"
+    },
+    {
+      "id": "cur:school-computer-science-engineering",
+      "displayName": "Computer Science and Engineering"
+    },
+    {
+      "id": "cur:school-education",
+      "displayName": "School of Education"
+    },
+    {
+      "id": "cur:school-electronics-electrical-engineering",
+      "displayName": "School of Electronics and Electrical Engineering"
+    },
+    {
+      "id": "cur:school-fashion",
+      "displayName": "Fashion Design"
+    },
+    {
+      "id": "cur:school-film-tv-production",
+      "displayName": "Film and Television"
+    },
+    {
+      "id": "cur:school-fine-arts",
+      "displayName": "School of Fine Arts"
+    },
+    {
+      "id": "cur:school-hotel-management-and-tourism",
+      "displayName": "School of Hotel Management & Tourism"
+    },
+    {
+      "id": "cur:school-interior-and-furniture",
+      "displayName": "Interior & Furniture Design, Product & Industrial Design, User Experience"
+    },
+    {
+      "id": "cur:school-journalism-film-production",
+      "displayName": "Journalism, Films and Creative Arts"
+    },
+    {
+      "id": "cur:school-law",
+      "displayName": "School of Law"
+    },
+    {
+      "id": "cur:school-management-and-commerce",
+      "displayName": "Commerce and Economics"
+    },
+    {
+      "id": "cur:school-mechanical-engineering",
+      "displayName": "School of Mechanical Engineering"
+    },
+    {
+      "id": "cur:school-of-liberal-and-creative-arts",
+      "displayName": "School of Liberal and Creative Arts"
+    },
+    {
+      "id": "cur:school-performing-arts",
+      "displayName": "Theatre & Music"
+    },
+    {
+      "id": "cur:school-pharmaceutical-sciences",
+      "displayName": "School of Pharmaceutical Sciences"
+    },
+    {
+      "id": "cur:school-physical-education",
+      "displayName": "Physical Education"
+    },
+    {
+      "id": "cur:school-physical-sciences",
+      "displayName": "Chemical Engineering and Physical Sciences"
+    },
+    {
+      "id": "cur:school-physiotherapy-and-paramedical-sciences",
+      "displayName": "Physiotherapy and Paramedical Sciences"
+    },
+    {
+      "id": "cur:school-planning",
+      "displayName": "Planning"
+    },
+    {
+      "id": "cur:school-polytechnic",
+      "displayName": "School of Polytechnic"
+    },
+    {
+      "id": "cur:school-social-sciences",
+      "displayName": "Social Sciences and Languages"
+    },
+    {
+      "id": "cur:uni-health-centre",
+      "displayName": "Uni Health Centre"
+    }
+  ],
+  "placesNotConnectedToGraph": [
+    {
+      "id": "osm:node/1406003115",
+      "displayName": "LPU",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/1566888548",
+      "displayName": "Unnamed building · 5 floors",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/1566888553",
+      "displayName": "Unnamed building",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/1566888554",
+      "displayName": "Unnamed area · Parking",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422547454",
+      "displayName": "Unnamed building · 5 floors",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422548307",
+      "displayName": "Unnamed building · 10 floors",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422548314",
+      "displayName": "Unnamed building · 10 floors",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422551903",
+      "displayName": "Unnamed area · Park & green space",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422551904",
+      "displayName": "Unnamed area · Park & green space",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422551913",
+      "displayName": "Unnamed area · Sports & fitness",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422551915",
+      "displayName": "Unnamed area · Sports & fitness",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422551916",
+      "displayName": "Unnamed area · Sports & fitness",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422551917",
+      "displayName": "voll",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422551918",
+      "displayName": "Unnamed area · Sports & fitness",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422551919",
+      "displayName": "Unnamed area · Sports & fitness",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422551922",
+      "displayName": "Unnamed area · Sports & fitness",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422553585",
+      "displayName": "LPU Ground",
+      "campusZone": "off-campus-nearby"
+    },
+    {
+      "id": "osm:way/422555755",
+      "displayName": "Unnamed area · Sports & fitness",
+      "campusZone": "off-campus-nearby"
+    },
+    {
+      "id": "osm:way/422555756",
+      "displayName": "Unnamed area · Sports & fitness",
+      "campusZone": "off-campus-nearby"
+    },
+    {
+      "id": "osm:way/422555757",
+      "displayName": "Unnamed area · Sports & fitness",
+      "campusZone": "off-campus-nearby"
+    },
+    {
+      "id": "osm:way/422555758",
+      "displayName": "Unnamed area · University campus",
+      "campusZone": "off-campus-nearby"
+    },
+    {
+      "id": "osm:way/422555759",
+      "displayName": "Unnamed area · University campus",
+      "campusZone": "off-campus-nearby"
+    },
+    {
+      "id": "osm:way/422577269",
+      "displayName": "Unnamed area · Sports & fitness",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422738866",
+      "displayName": "Unnamed area · Park & green space",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422738871",
+      "displayName": "Unnamed building · 2 floors",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422820542",
+      "displayName": "Unnamed area · Park & green space",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422820545",
+      "displayName": "Unnamed building · 3 floors",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422886532",
+      "displayName": "Unnamed building · 1 floor",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422886533",
+      "displayName": "Unnamed building · 1 floor",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422886546",
+      "displayName": "Unnamed building · 1 floor",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422886547",
+      "displayName": "Unnamed building · 1 floor",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/422903347",
+      "displayName": "Unnamed area · Park & green space",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/425716257",
+      "displayName": "Unnamed building · 10 floors",
+      "campusZone": "on-campus"
+    },
+    {
+      "id": "osm:way/425717558",
+      "displayName": "Unnamed building",
+      "campusZone": "on-campus"
+    }
+  ],
+  "entrances": {
+    "total": 0,
+    "attached": 0,
+    "unattached": []
+  },
+  "duplicates": {
+    "ids": [],
+    "locations": []
+  },
+  "importantCategories": [
+    {
+      "id": "water",
+      "label": "Drinking water",
+      "total": 0,
+      "onCampus": 0,
+      "status": "empty"
+    },
+    {
+      "id": "washroom",
+      "label": "Washroom",
+      "total": 0,
+      "onCampus": 0,
+      "status": "empty"
+    },
+    {
+      "id": "health",
+      "label": "Health & emergency",
+      "total": 2,
+      "onCampus": 1,
+      "status": "sparse"
+    },
+    {
+      "id": "finance",
+      "label": "ATM & bank",
+      "total": 2,
+      "onCampus": 0,
+      "status": "sparse"
+    },
+    {
+      "id": "printing",
+      "label": "Printing & stationery",
+      "total": 0,
+      "onCampus": 0,
+      "status": "empty"
+    },
+    {
+      "id": "library",
+      "label": "Library & study",
+      "total": 1,
+      "onCampus": 1,
+      "status": "sparse"
+    },
+    {
+      "id": "gate",
+      "label": "Gate & entrance",
+      "total": 1,
+      "onCampus": 0,
+      "status": "sparse"
+    },
+    {
+      "id": "hostel",
+      "label": "Hostel",
+      "total": 3,
+      "onCampus": 0,
+      "status": "sparse"
+    }
+  ],
+  "verification": {
+    "byStatus": {
+      "imported": 855
+    },
+    "withoutLastVerifiedAt": 855
+  },
+  "graph": {
+    "nodes": 1636,
+    "edges": 1770,
+    "components": 9,
+    "componentSizes": [
+      1508,
+      55,
+      34,
+      13,
+      8,
+      6,
+      4,
+      4,
+      4
+    ],
+    "largestComponentShare": 0.922,
+    "footEdges": 1770,
+    "stats": {
+      "routableWays": 263,
+      "duplicateEdgesDropped": 0,
+      "zeroLengthSegmentsMerged": 0,
+      "segmentsOutsideBounds": 105,
+      "segmentsWithMissingNodes": 0,
+      "directionConflicts": 0
+    }
+  },
+  "heightSources": {
+    "fallback": 398,
+    "osm-levels-estimate": 137
+  },
+  "skippedFeatures": [],
+  "minHeightIgnored": [],
+  "curated": {
+    "filesPresent": [
+      "aliases.json",
+      "overrides.json",
+      "organizations.json"
+    ],
+    "aliases": 0,
+    "overrides": 0,
+    "organizations": 32,
+    "anchoredOrganizations": 1
+  },
+  "notes": [
+    "osm:way/752027029 (Law gate): “Law gate” is mapped in OpenStreetMap as landuse=residential, not as a gate, barrier or entrance. It is a place name, not a campus entrance.",
+    "The walking graph has 9 disconnected components; no synthetic links were added. Routes between components are reported as \"no path\" until the missing OSM connections are mapped."
+  ]
+}

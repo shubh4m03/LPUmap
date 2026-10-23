@@ -1,0 +1,104 @@
+/** Builds search docs from dataset records. Only data that exists in the records is used. */
+import { getCategory, type CategoryDef } from '../config/categories.ts';
+import type { Place } from '../data/schema.ts';
+import type { SearchDoc } from './types.ts';
+
+export const PLACE_DOC_PREFIX = 'place:';
+export const CATEGORY_DOC_PREFIX = 'category:';
+export const OFF_CAMPUS_LABEL = 'Off campus (nearby)';
+
+/**
+ * A code-like alias: short alphanumerics ('B34', 'BH-4') containing a digit,
+ * or an all-caps abbreviation of at most 5 letters ('LIM').
+ */
+export function looksLikeCode(alias: string): boolean {
+  const trimmed = alias.trim();
+  const compact = trimmed.replace(/[-\s.]/g, '');
+  if (!/^[A-Za-z0-9]+$/.test(compact) || compact.length > 6) return false;
+  if (/\d/.test(compact)) return true;
+  return compact.length >= 2 && compact.length <= 5 && compact === compact.toUpperCase();
+}
+
+function uniqueNonEmpty(values: string[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const v of values) {
+    const t = v.trim();
+    if (t === '' || seen.has(t.toLowerCase())) continue;
+    seen.add(t.toLowerCase());
+    out.push(t);
+  }
+  return out;
+}
+
+/**
+ * One doc per place that has a real source name or at least one alias.
+ *
+ * Places with `name === null` and no aliases are deliberately EXCLUDED: the
+ * dataset holds hundreds of truthfully labelled "Unnamed building" records,
+ * and indexing their generated display labels would flood every generic query
+ * ('building', 'block') with indistinguishable rows. They stay reachable on the
+ * map. When a nameless place has a sourced alias, that alias becomes the title
+ * — no name is ever invented.
+ */
+export function docsFromPlaces(places: Place[]): SearchDoc[] {
+  const docs: SearchDoc[] = [];
+  for (const place of places) {
+    const aliases = uniqueNonEmpty(place.aliases ?? []);
+    const name = place.name?.trim() ? place.name.trim() : null;
+    const title = name ?? aliases[0];
+    if (title === undefined) continue;
+    const category = getCategory(place.categoryId);
+    const subtitleParts = [category.label];
+    if (place.campusZone === 'off-campus-nearby') subtitleParts.push(OFF_CAMPUS_LABEL);
+    const keywords = uniqueNonEmpty([
+      ...category.synonyms,
+      ...(place.subcategory ? [place.subcategory] : []),
+    ]);
+    docs.push({
+      id: `${PLACE_DOC_PREFIX}${place.id}`,
+      kind: 'place',
+      title,
+      subtitle: subtitleParts.join(' · '),
+      aliases: aliases.filter((a) => a !== title),
+      codes: aliases.filter(looksLikeCode),
+      keywords,
+      categoryId: place.categoryId,
+      ref: place.id,
+      hasLocation: place.location !== null,
+    });
+  }
+  return docs;
+}
+
+function mappedLabel(count: number | undefined): string | undefined {
+  if (count === undefined || !Number.isFinite(count) || count < 0) return undefined;
+  return count === 0 ? 'None mapped yet' : `${Math.floor(count)} mapped`;
+}
+
+/**
+ * One doc per category so 'atm', 'water' or 'xerox' surface the category
+ * action. The subtitle uses only the counts passed in; a category missing from
+ * `counts` gets no count rather than a guessed one.
+ */
+export function docsFromCategories(
+  categories: readonly CategoryDef[],
+  counts: Record<string, number>,
+): SearchDoc[] {
+  return categories.map((c) => {
+    const subtitle = mappedLabel(counts[c.id]);
+    const doc: SearchDoc = {
+      id: `${CATEGORY_DOC_PREFIX}${c.id}`,
+      kind: 'category',
+      title: c.label,
+      aliases: uniqueNonEmpty([c.noun]).filter((a) => a.toLowerCase() !== c.label.toLowerCase()),
+      codes: [],
+      keywords: uniqueNonEmpty(c.synonyms),
+      categoryId: c.id,
+      ref: c.id,
+      hasLocation: false,
+    };
+    if (subtitle !== undefined) doc.subtitle = subtitle;
+    return doc;
+  });
+}

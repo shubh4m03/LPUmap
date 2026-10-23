@@ -59,11 +59,7 @@ export interface RouteOk {
 }
 
 export type RouteFailureReason =
-  | 'invalid-input'
-  | 'same-point'
-  | 'origin-unsnappable'
-  | 'destination-unsnappable'
-  | 'no-path';
+  'invalid-input' | 'same-point' | 'origin-unsnappable' | 'destination-unsnappable' | 'no-path';
 
 export interface RouteFailure {
   ok: false;

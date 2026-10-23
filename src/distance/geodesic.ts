@@ -35,8 +35,7 @@ export function isValidLngLat(p: unknown): p is LngLat {
 export function haversineM(a: LngLat, b: LngLat): number {
   const dLat = toRad(b[1] - a[1]);
   const dLon = toRad(b[0] - a[0]);
-  const s =
-    Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a[1])) * Math.cos(toRad(b[1])) * Math.sin(dLon / 2) ** 2;
+  const s = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a[1])) * Math.cos(toRad(b[1])) * Math.sin(dLon / 2) ** 2;
   return 2 * EARTH_RADIUS_M * Math.asin(Math.min(1, Math.sqrt(s)));
 }
 
@@ -57,7 +56,8 @@ export function destinationPoint(origin: LngLat, bearing: number, distanceM: num
   const φ1 = toRad(origin[1]);
   const λ1 = toRad(origin[0]);
   const φ2 = Math.asin(Math.sin(φ1) * Math.cos(δ) + Math.cos(φ1) * Math.sin(δ) * Math.cos(θ));
-  const λ2 = λ1 + Math.atan2(Math.sin(θ) * Math.sin(δ) * Math.cos(φ1), Math.cos(δ) - Math.sin(φ1) * Math.sin(φ2));
+  const λ2 =
+    λ1 + Math.atan2(Math.sin(θ) * Math.sin(δ) * Math.cos(φ1), Math.cos(δ) - Math.sin(φ1) * Math.sin(φ2));
   return [((toDeg(λ2) + 540) % 360) - 180, toDeg(φ2)];
 }
 

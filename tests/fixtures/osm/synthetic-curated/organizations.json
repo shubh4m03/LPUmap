@@ -1,0 +1,34 @@
+{
+  "$comment": "SYNTHETIC curated fixture for pipeline tests.",
+  "records": [
+    {
+      "id": "cur:synthetic-department",
+      "name": "Synthetic Department",
+      "aliases": ["SD"],
+      "categoryId": "academic",
+      "kind": "organization",
+      "website": "https://example.org/dept",
+      "anchor": { "target": "osm:way/200" },
+      "source": {
+        "name": "Synthetic directory",
+        "url": "https://example.org/directory",
+        "retrievedAt": "2026-01-05"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:synthetic-office",
+      "name": "Synthetic Office",
+      "aliases": [],
+      "categoryId": "other",
+      "kind": "organization",
+      "website": "not a url",
+      "source": {
+        "name": "Synthetic directory",
+        "url": "https://example.org/directory",
+        "retrievedAt": "2026-01-05"
+      },
+      "verificationStatus": "unverified"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "sourceId": "osm",
+  "name": "OpenStreetMap",
+  "url": "https://api.openstreetmap.org/api/0.6/map?bbox=75.695,31.243,75.715,31.262",
+  "license": "ODbL 1.0",
+  "attribution": "© OpenStreetMap contributors",
+  "retrievedAt": "2026-10-23T09:39:00Z",
+  "method": "osm-api-map",
+  "bbox": [75.695, 31.243, 75.715, 31.262],
+  "files": ["boundary-relation-21599790.osm", "campus-bbox.osm"],
+  "notes": "campus-bbox.osm is the OSM API 0.6 /map response for bbox; boundary-relation-21599790.osm is /relation/21599790/full (campus multipolygon). Overpass was unreachable from the retrieving machine."
+}

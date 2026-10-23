@@ -1,0 +1,172 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+/*
+ * Map design tokens onto Tailwind utilities (`bg-surface`, `text-muted`, `border-strong`,
+ * `rounded-lg`, `shadow-2`, `font-sans` ...). `inline` makes utilities reference the
+ * --ds-* variables directly, so a theme switch needs no rebuild.
+ */
+@theme inline {
+  --color-surface: var(--ds-surface);
+  --color-surface-raised: var(--ds-surface-raised);
+  --color-surface-sunken: var(--ds-surface-sunken);
+  --color-surface-hover: var(--ds-surface-hover);
+  --color-border: var(--ds-border);
+  --color-border-strong: var(--ds-border-strong);
+  --color-text: var(--ds-text);
+  --color-muted: var(--ds-text-muted);
+  --color-subtle: var(--ds-text-subtle);
+  --color-accent: var(--ds-accent);
+  --color-accent-hover: var(--ds-accent-hover);
+  --color-accent-contrast: var(--ds-accent-contrast);
+  --color-accent-soft: var(--ds-accent-soft);
+  --color-accent-text: var(--ds-accent-text);
+  --color-highlight: var(--ds-highlight);
+  --color-focus: var(--ds-focus-ring);
+  --color-success: var(--ds-success);
+  --color-success-soft: var(--ds-success-soft);
+  --color-warning: var(--ds-warning);
+  --color-warning-soft: var(--ds-warning-soft);
+  --color-danger: var(--ds-danger);
+  --color-danger-soft: var(--ds-danger-soft);
+  --color-info: var(--ds-info);
+  --color-info-soft: var(--ds-info-soft);
+  --color-overlay: var(--ds-overlay);
+
+  --font-sans: var(--ds-font-sans);
+  --font-mono: var(--ds-font-mono);
+
+  --radius-sm: var(--ds-radius-sm);
+  --radius-md: var(--ds-radius-md);
+  --radius-lg: var(--ds-radius-lg);
+  --radius-xl: var(--ds-radius-xl);
+
+  --shadow-1: var(--ds-shadow-1);
+  --shadow-2: var(--ds-shadow-2);
+  --shadow-3: var(--ds-shadow-3);
+
+  --ease-standard: var(--ds-ease);
+}
+
+@theme {
+  --breakpoint-md: 48rem;
+}
+
+/* Safe-area padding helpers: keep content clear of notches and the home indicator. */
+@utility pt-safe {
+  padding-top: max(var(--ds-space-3), var(--ds-safe-top));
+}
+@utility pb-safe {
+  padding-bottom: max(var(--ds-space-3), var(--ds-safe-bottom));
+}
+@utility pl-safe {
+  padding-left: max(var(--ds-space-3), var(--ds-safe-left));
+}
+@utility pr-safe {
+  padding-right: max(var(--ds-space-3), var(--ds-safe-right));
+}
+
+@utility duration-fast {
+  transition-duration: var(--ds-duration-fast);
+}
+@utility duration-base {
+  transition-duration: var(--ds-duration-base);
+}
+@utility duration-slow {
+  transition-duration: var(--ds-duration-slow);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  html {
+    font-family: var(--ds-font-sans);
+    font-size: 100%;
+    line-height: var(--ds-leading-normal);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--ds-surface);
+    color: var(--ds-text);
+    overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ds-focus-ring);
+    outline-offset: 2px;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  ::selection {
+    background-color: var(--ds-highlight);
+    color: var(--ds-text);
+  }
+
+  /* SearchInput renders its own labelled clear button. */
+  input[type='search']::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
+  mark {
+    background-color: var(--ds-highlight);
+    color: inherit;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* MapLibre attribution and controls follow the active theme. */
+.maplibregl-ctrl-attrib,
+.maplibregl-ctrl-attrib.maplibregl-compact {
+  background-color: color-mix(in srgb, var(--ds-surface-raised) 88%, transparent);
+  color: var(--ds-text-muted);
+  font-family: var(--ds-font-sans);
+  font-size: var(--ds-text-xs);
+}
+
+.maplibregl-ctrl-attrib a {
+  color: var(--ds-text-muted);
+  text-decoration: underline;
+}
+
+.maplibregl-ctrl-attrib-button {
+  background-color: var(--ds-surface-raised);
+  border-radius: var(--ds-radius-full);
+}
+
+:root[data-theme='dark'] .maplibregl-ctrl-attrib-button {
+  filter: invert(1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .maplibregl-ctrl-attrib-button {
+    filter: invert(1);
+  }
+}
+
+.maplibregl-canvas:focus-visible {
+  outline: 2px solid var(--ds-focus-ring);
+  outline-offset: -2px;
+}

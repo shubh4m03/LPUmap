@@ -105,7 +105,9 @@ export const APP_CONFIG = {
 const positive = z.number().positive();
 
 const configSchema = z.object({
-  brand: z.object({ name: z.string().min(1), shortName: z.string().min(1), themeColor: z.string().regex(/^#/) }).loose(),
+  brand: z
+    .object({ name: z.string().min(1), shortName: z.string().min(1), themeColor: z.string().regex(/^#/) })
+    .loose(),
   map: z
     .object({
       center: z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)]),
@@ -135,7 +137,9 @@ const configSchema = z.object({
       maxPlaceConnectorM: positive,
     })
     .loose(),
-  geolocation: z.object({ timeoutMs: positive, maxAcceptedAccuracyM: positive, staleAfterMs: positive }).loose(),
+  geolocation: z
+    .object({ timeoutMs: positive, maxAcceptedAccuracyM: positive, staleAfterMs: positive })
+    .loose(),
   tracking: z
     .object({
       maxPlausibleSpeedMps: positive,

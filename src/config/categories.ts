@@ -66,7 +66,10 @@ export const CATEGORIES: readonly CategoryDef[] = [
     color: '#c2410c',
     icon: 'school',
     synonyms: ['block', 'department', 'school', 'institute', 'faculty', 'classroom', 'lecture'],
-    osm: [{ key: 'building', values: ['university', 'college', 'school'] }],
+    osm: [
+      { key: 'building', values: ['university', 'college', 'school'] },
+      { key: 'office', values: ['educational_institution'] },
+    ],
   },
   {
     id: 'hostel',
@@ -125,7 +128,17 @@ export const CATEGORIES: readonly CategoryDef[] = [
     group: 'health',
     color: '#be123c',
     icon: 'cross',
-    synonyms: ['hospital', 'clinic', 'doctor', 'medical', 'pharmacy', 'chemist', 'health', 'first aid', 'emergency'],
+    synonyms: [
+      'hospital',
+      'clinic',
+      'doctor',
+      'medical',
+      'pharmacy',
+      'chemist',
+      'health',
+      'first aid',
+      'emergency',
+    ],
     osm: [
       { key: 'amenity', values: ['hospital', 'clinic', 'doctors', 'pharmacy', 'dentist'] },
       { key: 'healthcare' },
@@ -198,8 +211,24 @@ export const CATEGORIES: readonly CategoryDef[] = [
     group: 'sports',
     color: '#65a30d',
     icon: 'ball',
-    synonyms: ['sports', 'ground', 'gym', 'fitness', 'court', 'stadium', 'pitch', 'pool', 'cricket', 'football'],
-    osm: [{ key: 'leisure', values: ['pitch', 'sports_centre', 'stadium', 'fitness_centre', 'swimming_pool', 'track'] }],
+    synonyms: [
+      'sports',
+      'ground',
+      'gym',
+      'fitness',
+      'court',
+      'stadium',
+      'pitch',
+      'pool',
+      'cricket',
+      'football',
+    ],
+    osm: [
+      {
+        key: 'leisure',
+        values: ['pitch', 'sports_centre', 'stadium', 'fitness_centre', 'swimming_pool', 'track'],
+      },
+    ],
   },
   {
     id: 'park',
@@ -243,10 +272,7 @@ export const CATEGORIES: readonly CategoryDef[] = [
     color: '#9a3412',
     icon: 'gate',
     synonyms: ['gate', 'entrance', 'exit', 'entry', 'main gate'],
-    osm: [
-      { key: 'barrier', values: ['gate', 'lift_gate', 'entrance'] },
-      { key: 'entrance' },
-    ],
+    osm: [{ key: 'barrier', values: ['gate', 'lift_gate', 'entrance'] }, { key: 'entrance' }],
     nearestAction: true,
   },
   {

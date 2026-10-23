@@ -1,0 +1,4 @@
+{
+  "$comment": "Sourced alternative names for existing places. Each entry: {target: 'osm:way/123' | 'cur:slug', aliases: [..], source: {name, url, retrievedAt}}. Only add an alias when a cited public source ties that name to that exact mapped feature. Do NOT add guessed block numbers or names from memory. See data/README.md.",
+  "aliases": []
+}

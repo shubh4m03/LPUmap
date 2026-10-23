@@ -5,7 +5,9 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist', 'dev-dist', 'coverage', 'playwright-report', 'test-results', 'public/data', 'data/raw'] },
+  {
+    ignores: ['dist', 'dev-dist', 'coverage', 'playwright-report', 'test-results', 'public/data', 'data/raw'],
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx,js,mjs}'],
@@ -18,7 +20,10 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-imports': 'error',
       'no-restricted-syntax': [
         'error',
-        { selector: "JSXAttribute[name.name='dangerouslySetInnerHTML']", message: 'Never inject HTML; render text.' },
+        {
+          selector: "JSXAttribute[name.name='dangerouslySetInnerHTML']",
+          message: 'Never inject HTML; render text.',
+        },
       ],
     },
   },

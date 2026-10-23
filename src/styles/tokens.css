@@ -1,0 +1,203 @@
+/*
+ * LPU Campus Atlas design tokens.
+ *
+ * Theming: colour and elevation tokens are declared in three blocks:
+ *   1. light  — `:root` (default) and html[data-theme='light'];
+ *   2. dark   — html[data-theme='dark'] (set by src/accessibility/useTheme.ts / initTheme);
+ *   3. system — the same dark values under prefers-color-scheme: dark when no light theme
+ *               is pinned, so the page is correct before JavaScript runs.
+ * Plain per-block values are used instead of light-dark() so colours also work on
+ * browsers that support Tailwind 4 but predate light-dark() (e.g. Safari 16.4–17.4,
+ * the newest iOS available to some older iPhones). tests/unit/accessibility/contrast.test.ts
+ * parses these blocks, asserts blocks 2 and 3 are identical, and checks every pair in
+ * CONTRAST_PAIRS (src/styles/contrast.ts) against WCAG 2.2 AA. Text colours must stay
+ * plain #rrggbb so that test can read them.
+ *
+ * Breakpoints (mirrors Tailwind defaults, see index.css):
+ *   sm 640px · md 768px (mobile/desktop split, useIsMobile) · lg 1024px · xl 1280px
+ */
+
+/* 1. Light theme (default) */
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  /* Surfaces */
+  --ds-surface: #ffffff;
+  --ds-surface-raised: #ffffff;
+  --ds-surface-sunken: #f3f3f1;
+  --ds-surface-hover: #ebebe8;
+
+  /* Borders: `border` is decorative; `border-strong` bounds interactive controls (3:1). */
+  --ds-border: #dcdcd7;
+  --ds-border-strong: #7c7c76;
+
+  /* Text */
+  --ds-text: #17181a;
+  --ds-text-muted: #45484d;
+  --ds-text-subtle: #5f636a;
+
+  /* Accent: brand #c2410c family, adjusted per theme for contrast. */
+  --ds-accent: #c2410c;
+  --ds-accent-hover: #9a3412;
+  --ds-accent-contrast: #ffffff;
+  --ds-accent-soft: #fdf1ea;
+  --ds-accent-text: #9a3412;
+  --ds-highlight: #fde7d6;
+
+  --ds-focus-ring: #9a3412;
+
+  /* Status (text-on-surface and text-on-soft both pass 4.5:1) */
+  --ds-success: #15803d;
+  --ds-success-soft: #ecf7ef;
+  --ds-warning: #8a5300;
+  --ds-warning-soft: #fdf5e2;
+  --ds-danger: #b91c1c;
+  --ds-danger-soft: #fdeeee;
+  --ds-info: #1d4ed8;
+  --ds-info-soft: #eef3fe;
+
+  /* Scrim behind dialogs/sheets (alpha is intentional, not a text pair). */
+  --ds-overlay: rgb(15 18 22 / 0.45);
+
+  /* Elevation: restrained, three levels */
+  --ds-shadow-1: 0 1px 2px rgb(16 18 22 / 0.08), 0 1px 1px rgb(16 18 22 / 0.04);
+  --ds-shadow-2: 0 4px 12px rgb(16 18 22 / 0.1), 0 1px 3px rgb(16 18 22 / 0.06);
+  --ds-shadow-3: 0 12px 32px rgb(16 18 22 / 0.16), 0 2px 6px rgb(16 18 22 / 0.08);
+}
+
+/* 2. Dark theme (pinned) */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --ds-surface: #0b0f14;
+  --ds-surface-raised: #161b22;
+  --ds-surface-sunken: #06090d;
+  --ds-surface-hover: #1f252e;
+  --ds-border: #2a313b;
+  --ds-border-strong: #747d8a;
+  --ds-text: #eef0f3;
+  --ds-text-muted: #b6bcc5;
+  --ds-text-subtle: #959daa;
+  --ds-accent: #fb923c;
+  --ds-accent-hover: #fdba74;
+  --ds-accent-contrast: #1c0a02;
+  --ds-accent-soft: #2a1609;
+  --ds-accent-text: #fdba74;
+  --ds-highlight: #4a250c;
+  --ds-focus-ring: #fdba74;
+  --ds-success: #4ade80;
+  --ds-success-soft: #0c2416;
+  --ds-warning: #facc15;
+  --ds-warning-soft: #2a2105;
+  --ds-danger: #f87171;
+  --ds-danger-soft: #2c1010;
+  --ds-info: #8ab4ff;
+  --ds-info-soft: #0f1a33;
+  --ds-overlay: rgb(0 0 0 / 0.6);
+  --ds-shadow-1: 0 1px 2px rgb(0 0 0 / 0.5);
+  --ds-shadow-2: 0 4px 12px rgb(0 0 0 / 0.5), 0 1px 3px rgb(0 0 0 / 0.4);
+  --ds-shadow-3: 0 12px 32px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.4);
+}
+
+/* 3. Dark theme following the OS. Keep identical to block 2 (asserted by contrast.test.ts). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --ds-surface: #0b0f14;
+    --ds-surface-raised: #161b22;
+    --ds-surface-sunken: #06090d;
+    --ds-surface-hover: #1f252e;
+    --ds-border: #2a313b;
+    --ds-border-strong: #747d8a;
+    --ds-text: #eef0f3;
+    --ds-text-muted: #b6bcc5;
+    --ds-text-subtle: #959daa;
+    --ds-accent: #fb923c;
+    --ds-accent-hover: #fdba74;
+    --ds-accent-contrast: #1c0a02;
+    --ds-accent-soft: #2a1609;
+    --ds-accent-text: #fdba74;
+    --ds-highlight: #4a250c;
+    --ds-focus-ring: #fdba74;
+    --ds-success: #4ade80;
+    --ds-success-soft: #0c2416;
+    --ds-warning: #facc15;
+    --ds-warning-soft: #2a2105;
+    --ds-danger: #f87171;
+    --ds-danger-soft: #2c1010;
+    --ds-info: #8ab4ff;
+    --ds-info-soft: #0f1a33;
+    --ds-overlay: rgb(0 0 0 / 0.6);
+    --ds-shadow-1: 0 1px 2px rgb(0 0 0 / 0.5);
+    --ds-shadow-2: 0 4px 12px rgb(0 0 0 / 0.5), 0 1px 3px rgb(0 0 0 / 0.4);
+    --ds-shadow-3: 0 12px 32px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.4);
+  }
+}
+
+/* Theme-independent tokens */
+:root {
+  /* Typography */
+  --ds-font-sans:
+    system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Helvetica Neue', Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji';
+  --ds-font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Menlo, Consolas, monospace;
+  --ds-text-xs: 0.75rem;
+  --ds-text-sm: 0.875rem;
+  --ds-text-base: 1rem;
+  --ds-text-lg: 1.125rem;
+  --ds-text-xl: 1.25rem;
+  --ds-text-2xl: 1.5rem;
+  --ds-leading-tight: 1.25;
+  --ds-leading-normal: 1.5;
+
+  /* Spacing (4px grid) */
+  --ds-space-1: 0.25rem;
+  --ds-space-2: 0.5rem;
+  --ds-space-3: 0.75rem;
+  --ds-space-4: 1rem;
+  --ds-space-5: 1.25rem;
+  --ds-space-6: 1.5rem;
+  --ds-space-8: 2rem;
+
+  /* Radii */
+  --ds-radius-sm: 0.375rem;
+  --ds-radius-md: 0.5rem;
+  --ds-radius-lg: 0.75rem;
+  --ds-radius-xl: 1rem;
+  --ds-radius-full: 9999px;
+
+  /* Motion */
+  --ds-duration-fast: 120ms;
+  --ds-duration-base: 200ms;
+  --ds-duration-slow: 320ms;
+  --ds-ease: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Z-index layers */
+  --ds-z-map: 0;
+  --ds-z-controls: 10;
+  --ds-z-panels: 20;
+  --ds-z-sheet: 30;
+  --ds-z-dialog: 50;
+  --ds-z-toast: 60;
+  --ds-z-skip-link: 70;
+
+  /* Safe-area insets (notches, home indicator) */
+  --ds-safe-top: env(safe-area-inset-top, 0px);
+  --ds-safe-right: env(safe-area-inset-right, 0px);
+  --ds-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --ds-safe-left: env(safe-area-inset-left, 0px);
+
+  /* Bottom sheet geometry (mirrored by SHEET_PEEK_PX / SHEET_TOP_GAP_PX in sheet-snap.ts) */
+  --ds-sheet-peek: 8rem;
+  --ds-sheet-top-gap: 2.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ds-duration-fast: 0ms;
+    --ds-duration-base: 0ms;
+    --ds-duration-slow: 0ms;
+  }
+}

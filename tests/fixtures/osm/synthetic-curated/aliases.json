@@ -1,0 +1,14 @@
+{
+  "$comment": "SYNTHETIC curated fixture for pipeline tests.",
+  "aliases": [
+    {
+      "target": "osm:way/200",
+      "aliases": ["SLB", "Synthetic Library Block"],
+      "source": {
+        "name": "Synthetic signage register",
+        "url": "https://example.org/signage",
+        "retrievedAt": "2026-01-02"
+      }
+    }
+  ]
+}

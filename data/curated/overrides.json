@@ -1,0 +1,4 @@
+{
+  "$comment": "Sourced corrections to imported places. Each entry: {target, set: {name?, categoryId?, description?, openingHours?, wheelchair?}, source: {name, url?}, check: 'physical-survey' | 'official-publication' | 'unverified-report', lastVerifiedAt: 'YYYY-MM-DD', verifiedBy?}. Only physical-survey and official-publication mark a record verified. Never invent hours, names or accessibility. See data/README.md.",
+  "overrides": []
+}

@@ -96,7 +96,13 @@ export const placesFileSchema = z.object({
   places: z.array(placeSchema),
 });
 
-export const relationTypeSchema = z.enum(['located_in', 'accessed_via', 'connected_by_path', 'nearby', 'part_of']);
+export const relationTypeSchema = z.enum([
+  'located_in',
+  'accessed_via',
+  'connected_by_path',
+  'nearby',
+  'part_of',
+]);
 
 export const relationSchema = z.object({
   id: z.string().min(1),

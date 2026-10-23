@@ -1,0 +1,12 @@
+{
+  "sourceId": "osm",
+  "name": "Synthetic test fixture (not OpenStreetMap data)",
+  "url": "https://example.org/synthetic-fixture",
+  "license": "ODbL 1.0",
+  "attribution": "© OpenStreetMap contributors",
+  "retrievedAt": "2026-01-01T00:00:00Z",
+  "method": "osm-api-map",
+  "bbox": [75.687, 31.237, 75.695, 31.243],
+  "files": ["synthetic-campus.osm"],
+  "notes": "Invented geometry for pipeline tests. Licence/attribution fields are present only because SOURCE.json requires them."
+}

@@ -1,0 +1,302 @@
+{
+  "retrievedAt": "2026-10-23",
+  "robots": "not re-checked (--offline)",
+  "pages": [
+    {
+      "url": "https://www.lpu.in/schools/",
+      "title": "LPU Schools and Department List",
+      "bytes": 263694,
+      "sha256": "0927e59557947ab93c7735cf1b2eb9f70689696661e3f26f72f8e9adb9c8f37a"
+    },
+    {
+      "url": "https://www.lpu.in/schools/agriculture/",
+      "title": "Best Agriculture College in Punjab, India - LPU",
+      "bytes": 417981,
+      "sha256": "8a7579cc6445c457d4181c329d4bc7608f0b7f9fe3a1c5e5e416370c7e38de46"
+    },
+    {
+      "url": "https://www.lpu.in/schools/bioengineering-and-biosciences/",
+      "title": "Best Bioengineering & Biosciences College in Punjab, India - LPU",
+      "bytes": 399764,
+      "sha256": "5b83b5636c346cf2b0fdd427e2b2791c6bfb205db75b13dd9a2320613697e521"
+    },
+    {
+      "url": "https://www.lpu.in/schools/business/",
+      "title": "Top Business & Management College in Punjab, India - LPU",
+      "bytes": 401047,
+      "sha256": "5503efc10c176c99362f06fa82e258bcbeb052ba370046899a6c3875563b1ea0"
+    },
+    {
+      "url": "https://www.lpu.in/schools/computer-applications/",
+      "title": "Top Computer Application College in Punjab, India - LPU",
+      "bytes": 390938,
+      "sha256": "4f1ce3178f08bf68bfcda647cf663134058af6b8032fb7c802420b0281d78b26"
+    },
+    {
+      "url": "https://www.lpu.in/schools/civil-engineering/",
+      "title": "Top Civil Engineering College in Punjab, India - LPU",
+      "bytes": 387288,
+      "sha256": "46b969f38f2e76519930d26e814fb04cd1038e74bc032c40ebff809aa57ed904"
+    },
+    {
+      "url": "https://www.lpu.in/schools/computer-science-engineering/",
+      "title": "Top CSE Computer Science Engineering College in Punjab,India - LPU",
+      "bytes": 414304,
+      "sha256": "3dd4d4a591debf27d39bab18c376869a74e48a8fc23e9b284d2bb6d21873de57"
+    },
+    {
+      "url": "https://www.lpu.in/schools/electronics-electrical-engineering/",
+      "title": "Best Electrical Engineering (EEE) College in Punjab, India - LPU",
+      "bytes": 394725,
+      "sha256": "896ae91df17edf8cb59bf510275a98430da991b2a2e48333e984c665aa8fdc78"
+    },
+    {
+      "url": "https://www.lpu.in/schools/hotel-management-and-tourism/",
+      "title": "Top Hotel Management & Tourism College in Punjab, India - LPU",
+      "bytes": 386226,
+      "sha256": "85b313dac6393362be4141584a88849d9fa0a321cdc685193149a05798261142"
+    },
+    {
+      "url": "https://www.lpu.in/schools/journalism-film-production/",
+      "title": "Top Journalism, Mass Communication College in Punjab, India - LPU",
+      "bytes": 341660,
+      "sha256": "1872faa438b2154f1e8b52281dd27134a42bf0aa520a3b270a1765229af1207a"
+    },
+    {
+      "url": "https://www.lpu.in/schools/law/",
+      "title": "Top & Best Law College in Punjab, India - LPU",
+      "bytes": 388967,
+      "sha256": "0cb7f4208f4985a690b89bfae0b5f4c457ffc6017e70de16203be032c0a363dd"
+    },
+    {
+      "url": "https://www.lpu.in/schools/social-sciences/",
+      "title": "Best Social Sciences & Languages College in Punjab, India - LPU",
+      "bytes": 347680,
+      "sha256": "63b7ad38c380da3ed517df9969b6b2321a8d765d276f5e6c61294a9b56b00b6a"
+    },
+    {
+      "url": "https://www.lpu.in/schools/education/",
+      "title": "Top B.Ed & Education College in Punjab, India - LPU",
+      "bytes": 407172,
+      "sha256": "6ed8869c3364e3f5c390da0e576ef9e0944bf8f3edb1b6ef92be6fd1d1ae74bd"
+    },
+    {
+      "url": "https://www.lpu.in/schools/architecture-design/",
+      "title": "Top Architecture College in Punjab, India | Apply Now - LPU",
+      "bytes": 387058,
+      "sha256": "7a0ee503ab48cdffea42423d1d1ebff45e277ee49d1f9549e58552749151536f"
+    },
+    {
+      "url": "https://www.lpu.in/schools/mechanical-engineering/",
+      "title": "Top Mechanical Engineering College in Punjab, India - LPU",
+      "bytes": 393069,
+      "sha256": "48c96dde5c5a16ed466079cfe98542777bf27321b1dc90ac1ae16984b67755cc"
+    },
+    {
+      "url": "https://www.lpu.in/schools/physical-sciences/",
+      "title": "Best Chemical Engineering & Physical Sciences College in Punjab, India - LPU",
+      "bytes": 390391,
+      "sha256": "badaf52b84fecb66c90b3b48280542e259c3031df3cfc972dff7dc96d866ec7a"
+    },
+    {
+      "url": "https://www.lpu.in/schools/pharmaceutical-sciences/",
+      "title": "Best Pharmaceutical Sciences College in Punjab, India - LPU",
+      "bytes": 398061,
+      "sha256": "76308bf678e730f7300f4970a2027c9501704f479c1c279c286ca8b8aac628d4"
+    },
+    {
+      "url": "https://www.lpu.in/schools/polytechnic/",
+      "title": "Best Polytechnic Diploma Engineering College in Punjab, India - LPU",
+      "bytes": 385214,
+      "sha256": "79e1e80e3c07913a2a9cbf08adda19fb71ed474815bc1e22dca200e3fc0c40e4"
+    },
+    {
+      "url": "https://www.lpu.in/schools/physical-education/",
+      "title": "Top Physical Education & Sports College in Punjab, India - LPU",
+      "bytes": 366081,
+      "sha256": "378a2285d7e02318b617dcdde59265fd7112465627837d1711c215f6c800f28c"
+    },
+    {
+      "url": "https://www.lpu.in/schools/physiotherapy-and-paramedical-sciences/",
+      "title": "Top Medical Lab & Physiotherapy College in Punjab, India - LPU",
+      "bytes": 349021,
+      "sha256": "5ddb6081c58196312128717c692ae3d0955b592d1758c6963ef0649a0d06bedf"
+    },
+    {
+      "url": "https://www.lpu.in/schools/interior-and-furniture/",
+      "title": "Best Interior, Furniture & UX Design College in Punjab, India - LPU",
+      "bytes": 377477,
+      "sha256": "faa3c2856f897d2dfd6585cb6dcdfb60df9164451a075c9124fac3a705a6d148"
+    },
+    {
+      "url": "https://www.lpu.in/schools/fashion/",
+      "title": "Top Fashion Design College in Punjab, India - LPU",
+      "bytes": 340687,
+      "sha256": "df0d74a45f25b584ea5813ae9bc0fa37195b413fc6e92bc89e959ff5325c1230"
+    },
+    {
+      "url": "https://www.lpu.in/schools/animation-and-multimedia/",
+      "title": "Best Multimedia, Animation, Gaming & UI/UX College in Punjab, India - LPU",
+      "bytes": 379678,
+      "sha256": "62b00dc2b2090dce8ead6404601133ead696ce9797e4ac15ef040afa3188c083"
+    },
+    {
+      "url": "https://www.lpu.in/schools/film-tv-production/",
+      "title": "Top Film & Television College in Punjab, India - LPU",
+      "bytes": 382705,
+      "sha256": "bcc2ace64c59c1d08c7aeb4957b4b8d903d2c6bee4ccba0a53bbd0b4ef0283cb"
+    },
+    {
+      "url": "https://www.lpu.in/schools/management-and-commerce/",
+      "title": "Best Commerce & Economics College in Punjab, India - LPU",
+      "bytes": 378735,
+      "sha256": "9bb134144234c775579e9d68f180c47ab01be8d94a400244ebe62519bdd71054"
+    },
+    {
+      "url": "https://www.lpu.in/schools/performing-arts/",
+      "title": "Top & Best Theatre & Music College in Punjab, India - LPU",
+      "bytes": 336455,
+      "sha256": "4e94fc6bf53aea8a5a8732e4c469f99b31d97511328b96d52978325735ae93b5"
+    },
+    {
+      "url": "https://www.lpu.in/schools/fine-arts/",
+      "title": "Top & Best Fine Arts College in Punjab, India - LPU",
+      "bytes": 384604,
+      "sha256": "c4de052d41a238bde888d0c6ebfa3ebf30a61ef2ec24c25fc484045c5814879d"
+    },
+    {
+      "url": "https://www.lpu.in/schools/planning/",
+      "title": "Top Planning & Urban Design College in Punjab, India | Apply Now - LPU",
+      "bytes": 382371,
+      "sha256": "2e0bf196f8ee21c649c1de18008c62a4726092139476f7017235cbcf9c6bb4d6"
+    },
+    {
+      "url": "https://www.lpu.in/academics/libraries.php",
+      "title": "LPU Libraries | World‑Class Campus Libraries & Resources",
+      "bytes": 304865,
+      "sha256": "1548720a095a52f90703357dc41800e4e452c150fbc6c4a3dbe0c48df5032d3c"
+    },
+    {
+      "url": "https://www.lpu.in/student-services/healthcare.php",
+      "title": "Student Health Care Services at LPU",
+      "bytes": 257537,
+      "sha256": "81b25035e14dc8ab97426f8953013c0311ee797d0020cacce29f366e3386aec9"
+    },
+    {
+      "url": "https://www.lpu.in/campus-life/sports.php",
+      "title": "LPU Sports Facilities and Initiatives",
+      "bytes": 303092,
+      "sha256": "5e4aa810c95f22cdb1e763db581ce1b18d618c0d1695919c2bae12809040b718"
+    }
+  ],
+  "schoolCards": [
+    {
+      "label": "Agriculture",
+      "url": "https://www.lpu.in/schools/agriculture/"
+    },
+    {
+      "label": "Bioengineering and Biosciences",
+      "url": "https://www.lpu.in/schools/bioengineering-and-biosciences/"
+    },
+    {
+      "label": "Business",
+      "url": "https://www.lpu.in/schools/business/"
+    },
+    {
+      "label": "Computer Applications",
+      "url": "https://www.lpu.in/schools/computer-applications/"
+    },
+    {
+      "label": "Civil Engineering",
+      "url": "https://www.lpu.in/schools/civil-engineering/"
+    },
+    {
+      "label": "Computer Science and Engineering",
+      "url": "https://www.lpu.in/schools/computer-science-engineering/"
+    },
+    {
+      "label": "Electronics & Electrical Engineering",
+      "url": "https://www.lpu.in/schools/electronics-electrical-engineering/"
+    },
+    {
+      "label": "Hotel Management and Tourism",
+      "url": "https://www.lpu.in/schools/hotel-management-and-tourism/"
+    },
+    {
+      "label": "Journalism, Films and Creative Arts",
+      "url": "https://www.lpu.in/schools/journalism-film-production/"
+    },
+    {
+      "label": "Law",
+      "url": "https://www.lpu.in/schools/law/"
+    },
+    {
+      "label": "Social Sciences and Languages",
+      "url": "https://www.lpu.in/schools/social-sciences/"
+    },
+    {
+      "label": "Education",
+      "url": "https://www.lpu.in/schools/education/"
+    },
+    {
+      "label": "Architecture and Design",
+      "url": "https://www.lpu.in/schools/architecture-design/"
+    },
+    {
+      "label": "Mechanical Engineering",
+      "url": "https://www.lpu.in/schools/mechanical-engineering/"
+    },
+    {
+      "label": "Chemical Engineering and Physical Sciences",
+      "url": "https://www.lpu.in/schools/physical-sciences/"
+    },
+    {
+      "label": "Pharmaceutical Sciences",
+      "url": "https://www.lpu.in/schools/pharmaceutical-sciences/"
+    },
+    {
+      "label": "Polytechnic",
+      "url": "https://www.lpu.in/schools/polytechnic/"
+    },
+    {
+      "label": "Physical Education",
+      "url": "https://www.lpu.in/schools/physical-education/"
+    },
+    {
+      "label": "Physiotherapy and Paramedical Sciences",
+      "url": "https://www.lpu.in/schools/physiotherapy-and-paramedical-sciences/"
+    },
+    {
+      "label": "Interior & Furniture Design, Product & Industrial Design, User Experience",
+      "url": "https://www.lpu.in/schools/interior-and-furniture/"
+    },
+    {
+      "label": "Fashion Design",
+      "url": "https://www.lpu.in/schools/fashion/"
+    },
+    {
+      "label": "Animation and Multimedia",
+      "url": "https://www.lpu.in/schools/animation-and-multimedia/"
+    },
+    {
+      "label": "Film and Television",
+      "url": "https://www.lpu.in/schools/film-tv-production/"
+    },
+    {
+      "label": "Commerce and Economics",
+      "url": "https://www.lpu.in/schools/management-and-commerce/"
+    },
+    {
+      "label": "Theatre & Music",
+      "url": "https://www.lpu.in/schools/performing-arts/"
+    },
+    {
+      "label": "Fine Arts",
+      "url": "https://www.lpu.in/schools/fine-arts/"
+    },
+    {
+      "label": "Planning",
+      "url": "https://www.lpu.in/schools/planning/"
+    }
+  ]
+}

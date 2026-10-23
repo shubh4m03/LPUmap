@@ -14,22 +14,22 @@ Assessed 2026-10-23.
 
 ## Toolchain found
 
-| Tool | Version |
-|---|---|
-| Node.js | 24.19.0 (native TypeScript type-stripping used for `scripts/*.ts`) |
-| npm | 11.17.0 |
-| git | 2.55.0 |
-| Playwright Chromium | installed (chromium-1248) |
-| OS | Windows 11 (CI targets ubuntu-latest) |
+| Tool                | Version                                                            |
+| ------------------- | ------------------------------------------------------------------ |
+| Node.js             | 24.19.0 (native TypeScript type-stripping used for `scripts/*.ts`) |
+| npm                 | 11.17.0                                                            |
+| git                 | 2.55.0                                                             |
+| Playwright Chromium | installed (chromium-1248)                                          |
+| OS                  | Windows 11 (CI targets ubuntu-latest)                              |
 
 ## Data-source reachability (tested from this machine)
 
-| Source | Result |
-|---|---|
-| `overpass-api.de`, `overpass.kumi.systems` | **Unreachable** (connection failed). The fetcher tries Overpass first, then falls back to the OSM API. |
-| `api.openstreetmap.org/api/0.6/map` (bbox) | Reachable. Snapshot saved to `data/raw/osm/campus-bbox.osm` (2.4 MB). |
+| Source                                                 | Result                                                                                                                                                                         |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `overpass-api.de`, `overpass.kumi.systems`             | **Unreachable** (connection failed). The fetcher tries Overpass first, then falls back to the OSM API.                                                                         |
+| `api.openstreetmap.org/api/0.6/map` (bbox)             | Reachable. Snapshot saved to `data/raw/osm/campus-bbox.osm` (2.4 MB).                                                                                                          |
 | OSM relation 21599790 "Lovely Professional University" | Reachable. Multipolygon campus boundary, 2 outer ways, 123 nodes; extent lat 31.24575–31.26079, lon 75.69735–75.70913. Saved to `data/raw/osm/boundary-relation-21599790.osm`. |
-| `www.lpu.in` | Reachable (HTTP 200). Investigated for public directory data; see `docs/DATA_SOURCES.md`. |
+| `www.lpu.in`                                           | Reachable (HTTP 200). Investigated for public directory data; see `docs/DATA_SOURCES.md`.                                                                                      |
 
 ## What OpenStreetMap actually contains for LPU (snapshot profile)
 

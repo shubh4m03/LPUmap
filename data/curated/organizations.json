@@ -1,0 +1,488 @@
+{
+  "$comment": "Official LPU schools/disciplines and named facilities, extracted by scripts/fetch-public-data.ts from www.lpu.in (see docs/research/LPU_PUBLIC_SOURCES.md). Names are as printed on the cited page; descriptions are our own. None has a published map position, so records are unlocated unless a manual anchor links an OSM feature with the same name. Anchors are curated by hand and preserved on refresh.",
+  "records": [
+    {
+      "id": "cur:central-library",
+      "name": "Central Library",
+      "aliases": [],
+      "categoryId": "library",
+      "kind": "organization",
+      "description": "The official page places it in Block-37; that block has no verified map position yet.",
+      "website": "https://www.lpu.in/academics/libraries.php",
+      "source": {
+        "name": "Lovely Professional University — LPU Libraries | World‑Class Campus Libraries & Resources",
+        "url": "https://www.lpu.in/academics/libraries.php",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:department-of-sports",
+      "name": "Department of Sports",
+      "aliases": [],
+      "categoryId": "sports",
+      "kind": "organization",
+      "description": "Named on LPU’s official website; no map position is published.",
+      "website": "https://www.lpu.in/campus-life/sports.php",
+      "source": {
+        "name": "Lovely Professional University — LPU Sports Facilities and Initiatives",
+        "url": "https://www.lpu.in/campus-life/sports.php",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-agriculture",
+      "name": "School of Agriculture",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Agriculture” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/agriculture/",
+      "source": {
+        "name": "Lovely Professional University — Best Agriculture College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/agriculture/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-animation-and-multimedia",
+      "name": "Animation and Multimedia",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Animation and Multimedia” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/animation-and-multimedia/",
+      "source": {
+        "name": "Lovely Professional University — Best Multimedia, Animation, Gaming & UI/UX College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/animation-and-multimedia/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-architecture-design",
+      "name": "Architecture and Design",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Architecture and Design” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/architecture-design/",
+      "source": {
+        "name": "Lovely Professional University — Top Architecture College in Punjab, India | Apply Now - LPU",
+        "url": "https://www.lpu.in/schools/architecture-design/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-bioengineering-and-biosciences",
+      "name": "School of Bioengineering & Biosciences",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Bioengineering and Biosciences” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/bioengineering-and-biosciences/",
+      "source": {
+        "name": "Lovely Professional University — Best Bioengineering & Biosciences College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/bioengineering-and-biosciences/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-business",
+      "name": "Mittal School of Business",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Business” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/business/",
+      "source": {
+        "name": "Lovely Professional University — Top Business & Management College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/business/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-civil-engineering",
+      "name": "School of Civil Engineering",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Civil Engineering” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/civil-engineering/",
+      "source": {
+        "name": "Lovely Professional University — Top Civil Engineering College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/civil-engineering/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-computer-applications",
+      "name": "School of Computer Applications",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Computer Applications” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/computer-applications/",
+      "source": {
+        "name": "Lovely Professional University — Top Computer Application College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/computer-applications/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-computer-science-engineering",
+      "name": "Computer Science and Engineering",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Computer Science and Engineering” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/computer-science-engineering/",
+      "source": {
+        "name": "Lovely Professional University — Top CSE Computer Science Engineering College in Punjab,India - LPU",
+        "url": "https://www.lpu.in/schools/computer-science-engineering/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-education",
+      "name": "School of Education",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Education” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/education/",
+      "source": {
+        "name": "Lovely Professional University — Top B.Ed & Education College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/education/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-electronics-electrical-engineering",
+      "name": "School of Electronics and Electrical Engineering",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Electronics & Electrical Engineering” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/electronics-electrical-engineering/",
+      "source": {
+        "name": "Lovely Professional University — Best Electrical Engineering (EEE) College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/electronics-electrical-engineering/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-fashion",
+      "name": "Fashion Design",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Fashion Design” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/fashion/",
+      "source": {
+        "name": "Lovely Professional University — Top Fashion Design College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/fashion/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-film-tv-production",
+      "name": "Film and Television",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Film and Television” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/film-tv-production/",
+      "source": {
+        "name": "Lovely Professional University — Top Film & Television College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/film-tv-production/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-fine-arts",
+      "name": "School of Fine Arts",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Fine Arts” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/fine-arts/",
+      "source": {
+        "name": "Lovely Professional University — Top & Best Fine Arts College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/fine-arts/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-hotel-management-and-tourism",
+      "name": "School of Hotel Management & Tourism",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Hotel Management and Tourism” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/hotel-management-and-tourism/",
+      "source": {
+        "name": "Lovely Professional University — Top Hotel Management & Tourism College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/hotel-management-and-tourism/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-interior-and-furniture",
+      "name": "Interior & Furniture Design, Product & Industrial Design, User Experience",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Interior & Furniture Design, Product & Industrial Design, User Experience” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/interior-and-furniture/",
+      "source": {
+        "name": "Lovely Professional University — Best Interior, Furniture & UX Design College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/interior-and-furniture/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-journalism-film-production",
+      "name": "Journalism, Films and Creative Arts",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Journalism, Films and Creative Arts” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/journalism-film-production/",
+      "source": {
+        "name": "Lovely Professional University — Top Journalism, Mass Communication College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/journalism-film-production/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-law",
+      "name": "School of Law",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Law” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/law/",
+      "source": {
+        "name": "Lovely Professional University — Top & Best Law College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/law/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-management-and-commerce",
+      "name": "Commerce and Economics",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Commerce and Economics” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/management-and-commerce/",
+      "source": {
+        "name": "Lovely Professional University — Best Commerce & Economics College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/management-and-commerce/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-mechanical-engineering",
+      "name": "School of Mechanical Engineering",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Mechanical Engineering” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/mechanical-engineering/",
+      "source": {
+        "name": "Lovely Professional University — Top Mechanical Engineering College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/mechanical-engineering/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-of-design",
+      "name": "School of Design",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Name used on LPU’s official fashion, interior/product and multimedia design pages.",
+      "website": "https://www.lpu.in/schools/fashion/",
+      "anchor": {
+        "target": "osm:way/425717552"
+      },
+      "source": {
+        "name": "Lovely Professional University — Top Fashion Design College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/fashion/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-of-liberal-and-creative-arts",
+      "name": "School of Liberal and Creative Arts",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Name used on LPU’s official journalism and theatre & music pages.",
+      "website": "https://www.lpu.in/schools/journalism-film-production/",
+      "source": {
+        "name": "Lovely Professional University — Top Journalism, Mass Communication College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/journalism-film-production/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-performing-arts",
+      "name": "Theatre & Music",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Theatre & Music” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/performing-arts/",
+      "source": {
+        "name": "Lovely Professional University — Top & Best Theatre & Music College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/performing-arts/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-pharmaceutical-sciences",
+      "name": "School of Pharmaceutical Sciences",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Pharmaceutical Sciences” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/pharmaceutical-sciences/",
+      "source": {
+        "name": "Lovely Professional University — Best Pharmaceutical Sciences College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/pharmaceutical-sciences/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-physical-education",
+      "name": "Physical Education",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Physical Education” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/physical-education/",
+      "source": {
+        "name": "Lovely Professional University — Top Physical Education & Sports College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/physical-education/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-physical-sciences",
+      "name": "Chemical Engineering and Physical Sciences",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Chemical Engineering and Physical Sciences” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/physical-sciences/",
+      "source": {
+        "name": "Lovely Professional University — Best Chemical Engineering & Physical Sciences College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/physical-sciences/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-physiotherapy-and-paramedical-sciences",
+      "name": "Physiotherapy and Paramedical Sciences",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Physiotherapy and Paramedical Sciences” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/physiotherapy-and-paramedical-sciences/",
+      "source": {
+        "name": "Lovely Professional University — Top Medical Lab & Physiotherapy College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/physiotherapy-and-paramedical-sciences/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-planning",
+      "name": "Planning",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Planning” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/planning/",
+      "source": {
+        "name": "Lovely Professional University — Top Planning & Urban Design College in Punjab, India | Apply Now - LPU",
+        "url": "https://www.lpu.in/schools/planning/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-polytechnic",
+      "name": "School of Polytechnic",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Polytechnic” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/polytechnic/",
+      "source": {
+        "name": "Lovely Professional University — Best Polytechnic Diploma Engineering College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/polytechnic/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:school-social-sciences",
+      "name": "Social Sciences and Languages",
+      "aliases": [],
+      "categoryId": "academic",
+      "kind": "organization",
+      "description": "Listed as “Social Sciences and Languages” on LPU’s official schools and departments index; no map position is published.",
+      "website": "https://www.lpu.in/schools/social-sciences/",
+      "source": {
+        "name": "Lovely Professional University — Best Social Sciences & Languages College in Punjab, India - LPU",
+        "url": "https://www.lpu.in/schools/social-sciences/",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    },
+    {
+      "id": "cur:uni-health-centre",
+      "name": "Uni Health Centre",
+      "aliases": [],
+      "categoryId": "health",
+      "kind": "organization",
+      "description": "Named on LPU’s official website; no map position is published.",
+      "website": "https://www.lpu.in/student-services/healthcare.php",
+      "source": {
+        "name": "Lovely Professional University — Student Health Care Services at LPU",
+        "url": "https://www.lpu.in/student-services/healthcare.php",
+        "retrievedAt": "2026-10-23"
+      },
+      "verificationStatus": "imported"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Campus Atlas</title>
+  <rect width="64" height="64" rx="14" fill="#0b0f14"/>
+  <path d="M32 55C32 55 16 39.5 16 27a16 16 0 0 1 32 0C48 39.5 32 55 32 55Z" fill="#c2410c"/>
+  <circle cx="32" cy="27" r="10.5" fill="#0b0f14"/>
+  <path d="M32 17.5 38.2 32.5 32 29.4 25.8 32.5Z" fill="#fff7ed"/>
+</svg>

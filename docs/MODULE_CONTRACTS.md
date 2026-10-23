@@ -44,10 +44,17 @@ building place id.
 ```ts
 export * from './schema.ts';
 export interface CampusData {
-  manifest: Manifest; boundary: BoundaryFile; buildings: BuildingsFile;
-  basemap: BasemapFile; places: Place[]; relations: Relation[]; graph: GraphFile;
+  manifest: Manifest;
+  boundary: BoundaryFile;
+  buildings: BuildingsFile;
+  basemap: BasemapFile;
+  places: Place[];
+  relations: Relation[];
+  graph: GraphFile;
 }
-export class DatasetError extends Error { code: 'network' | 'schema-version' | 'invalid'; }
+export class DatasetError extends Error {
+  code: 'network' | 'schema-version' | 'invalid';
+}
 // Fetches manifest first; rejects with code 'schema-version' if
 // manifest.schemaVersion !== DATA_SCHEMA_VERSION; validates every file with Zod.
 export function loadCampusData(opts?: { baseUrl?: string; fetchImpl?: typeof fetch }): Promise<CampusData>;
@@ -82,28 +89,59 @@ export type RoutePreference = 'shortest' | 'fastest';
 export type RouteEndpoint =
   | { kind: 'place'; placeId: string; label: string; location: LngLat; nodeId?: number }
   | { kind: 'point'; label: string; location: LngLat };
-export interface RouteRequest { from: RouteEndpoint; to: RouteEndpoint; profile: RouteProfileId; preference?: RoutePreference }
-export type RouteStepKind = 'path' | 'road' | 'steps' | 'connector' | 'push-bike';
-export interface RouteStep { kind: RouteStepKind; name: string | null; distanceM: number; durationS: number; instruction: string; startIndex: number }
-export type RouteCaveatCode = 'accessibility-unverified' | 'contains-steps' | 'push-bike' | 'start-connector' | 'end-connector' | 'unnamed-paths';
-export interface RouteCaveat { code: RouteCaveatCode; message: string }
-export interface RouteOk {
-  ok: true; profile: RouteProfileId; preference: RoutePreference;
-  coordinates: LngLat[];        // includes the off-network connector legs
-  distanceM: number;            // == polylineLengthM(coordinates)
-  durationS: number;            // from documented speeds in APP_CONFIG.routing
-  edgeIds: number[]; steps: RouteStep[]; caveats: RouteCaveat[];
-  snap: { fromM: number; toM: number };   // straight connector lengths
+export interface RouteRequest {
+  from: RouteEndpoint;
+  to: RouteEndpoint;
+  profile: RouteProfileId;
+  preference?: RoutePreference;
 }
-export type RouteFailureReason = 'invalid-input' | 'same-point' | 'origin-unsnappable' | 'destination-unsnappable' | 'no-path';
-export interface RouteFailure { ok: false; reason: RouteFailureReason; message: string }
+export type RouteStepKind = 'path' | 'road' | 'steps' | 'connector' | 'push-bike';
+export interface RouteStep {
+  kind: RouteStepKind;
+  name: string | null;
+  distanceM: number;
+  durationS: number;
+  instruction: string;
+  startIndex: number;
+}
+export type RouteCaveatCode =
+  | 'accessibility-unverified'
+  | 'contains-steps'
+  | 'push-bike'
+  | 'start-connector'
+  | 'end-connector'
+  | 'unnamed-paths';
+export interface RouteCaveat {
+  code: RouteCaveatCode;
+  message: string;
+}
+export interface RouteOk {
+  ok: true;
+  profile: RouteProfileId;
+  preference: RoutePreference;
+  coordinates: LngLat[]; // includes the off-network connector legs
+  distanceM: number; // == polylineLengthM(coordinates)
+  durationS: number; // from documented speeds in APP_CONFIG.routing
+  edgeIds: number[];
+  steps: RouteStep[];
+  caveats: RouteCaveat[];
+  snap: { fromM: number; toM: number }; // straight connector lengths
+}
+export type RouteFailureReason =
+  'invalid-input' | 'same-point' | 'origin-unsnappable' | 'destination-unsnappable' | 'no-path';
+export interface RouteFailure {
+  ok: false;
+  reason: RouteFailureReason;
+  message: string;
+}
 export type RouteResult = RouteOk | RouteFailure;
 export interface Router {
   route(req: RouteRequest): RouteResult;
   /** Best route first; extra entries only if they differ by ≥ alternativeMinDifference. */
   alternatives(req: RouteRequest): RouteResult[];
   snap(p: LngLat, profile: RouteProfileId): { nodeId: number; distanceM: number } | null;
-  readonly nodeCount: number; readonly edgeCount: number;
+  readonly nodeCount: number;
+  readonly edgeCount: number;
 }
 export function createRouter(graph: GraphFile): Router;
 export const ROUTE_PROFILES: Record<RouteProfileId, { id; label; description; speedMps: number }>;
@@ -118,17 +156,39 @@ never invent connections between disconnected components; step-free excludes
 ## src/geolocation — owner: geo
 
 ```ts
-export interface GeoSample { lngLat: LngLat; accuracyM: number; timestamp: number; speedMps: number | null; headingDeg: number | null }
-export type GeoStatus = 'idle' | 'requesting' | 'active' | 'denied' | 'unavailable' | 'timeout' | 'unsupported' | 'error';
+export interface GeoSample {
+  lngLat: LngLat;
+  accuracyM: number;
+  timestamp: number;
+  speedMps: number | null;
+  headingDeg: number | null;
+}
+export type GeoStatus =
+  'idle' | 'requesting' | 'active' | 'denied' | 'unavailable' | 'timeout' | 'unsupported' | 'error';
 export type SampleRejection = 'invalid' | 'low-accuracy' | 'stale' | 'out-of-order' | 'implausible-jump';
-export function classifySample(sample: GeoSample, prev: GeoSample | null, now: number): { accepted: true } | { accepted: false; reason: SampleRejection };
-export interface GeolocationWatcher { start(): void; stop(): void; readonly status: GeoStatus; readonly active: boolean }
+export function classifySample(
+  sample: GeoSample,
+  prev: GeoSample | null,
+  now: number,
+): { accepted: true } | { accepted: false; reason: SampleRejection };
+export interface GeolocationWatcher {
+  start(): void;
+  stop(): void;
+  readonly status: GeoStatus;
+  readonly active: boolean;
+}
 export function createGeolocationWatcher(opts: {
-  geolocation?: Geolocation;               // injectable for tests; defaults to navigator.geolocation
+  geolocation?: Geolocation; // injectable for tests; defaults to navigator.geolocation
   onSample(s: GeoSample): void;
   onStatus(s: GeoStatus, message?: string): void;
 }): GeolocationWatcher;
-export function useGeolocation(): { status; lastSample: GeoSample | null; start(): void; stop(): void; message?: string }; // React hook
+export function useGeolocation(): {
+  status;
+  lastSample: GeoSample | null;
+  start(): void;
+  stop(): void;
+  message?: string;
+}; // React hook
 ```
 
 `start()` is only ever called from a user gesture. `stop()` must clear the
@@ -138,20 +198,37 @@ browser watch id. Nothing in this module persists or transmits samples.
 
 ```ts
 export interface ProgressState {
-  distanceAlongM: number; remainingM: number; remainingS: number;
-  plannedDistanceM: number; straightLineToDestinationM: number;
-  snappedPoint: LngLat | null; distanceFromRouteM: number | null;
-  offRoute: boolean;           // only after `offRouteConsecutive` accepted samples
-  arrived: boolean;            // only after `arrivalConsecutive` accepted samples
-  completedCoords: LngLat[]; remainingCoords: LngLat[];
-  lastSampleAccepted: boolean; rejection?: SampleRejection;
+  distanceAlongM: number;
+  remainingM: number;
+  remainingS: number;
+  plannedDistanceM: number;
+  straightLineToDestinationM: number;
+  snappedPoint: LngLat | null;
+  distanceFromRouteM: number | null;
+  offRoute: boolean; // only after `offRouteConsecutive` accepted samples
+  arrived: boolean; // only after `arrivalConsecutive` accepted samples
+  completedCoords: LngLat[];
+  remainingCoords: LngLat[];
+  lastSampleAccepted: boolean;
+  rejection?: SampleRejection;
 }
 export function createRouteProgress(route: { coordinates: LngLat[]; distanceM: number; durationS: number }): {
-  update(sample: GeoSample, now?: number): ProgressState; readonly state: ProgressState | null;
+  update(sample: GeoSample, now?: number): ProgressState;
+  readonly state: ProgressState | null;
 };
-export interface TrackingSnapshot { travelledM: number; elapsedS: number; averageSpeedMps: number | null; movement: 'moving' | 'stationary' | 'unknown'; acceptedSamples: number; rejectedSamples: number; path: LngLat[] }
+export interface TrackingSnapshot {
+  travelledM: number;
+  elapsedS: number;
+  averageSpeedMps: number | null;
+  movement: 'moving' | 'stationary' | 'unknown';
+  acceptedSamples: number;
+  rejectedSamples: number;
+  path: LngLat[];
+}
 export function createTrackingSession(startedAt: number): {
-  addSample(s: GeoSample, now?: number): TrackingSnapshot; snapshot(now?: number): TrackingSnapshot; stop(now?: number): TrackingSnapshot & { endedAt: number };
+  addSample(s: GeoSample, now?: number): TrackingSnapshot;
+  snapshot(now?: number): TrackingSnapshot;
+  stop(now?: number): TrackingSnapshot & { endedAt: number };
 };
 ```
 
@@ -162,14 +239,40 @@ Travelled distance sums only accepted, de-jittered movement (see
 
 ```ts
 export type SearchDocKind = 'place' | 'category' | 'layer' | 'command';
-export interface SearchDoc { id: string; kind: SearchDocKind; title: string; subtitle?: string; aliases: string[]; codes: string[]; keywords: string[]; categoryId?: string; ref: string; boost?: number; hasLocation: boolean }
+export interface SearchDoc {
+  id: string;
+  kind: SearchDocKind;
+  title: string;
+  subtitle?: string;
+  aliases: string[];
+  codes: string[];
+  keywords: string[];
+  categoryId?: string;
+  ref: string;
+  boost?: number;
+  hasLocation: boolean;
+}
 export type MatchKind = 'exact' | 'alias' | 'code' | 'prefix' | 'word' | 'multiword' | 'synonym' | 'fuzzy';
-export interface SearchHit { doc: SearchDoc; score: number; matchKind: MatchKind; highlights: Array<[number, number]> }
-export interface SearchIndex { search(query: string, opts?: { limit?: number; kinds?: SearchDocKind[] }): SearchHit[]; readonly size: number }
+export interface SearchHit {
+  doc: SearchDoc;
+  score: number;
+  matchKind: MatchKind;
+  highlights: Array<[number, number]>;
+}
+export interface SearchIndex {
+  search(query: string, opts?: { limit?: number; kinds?: SearchDocKind[] }): SearchHit[];
+  readonly size: number;
+}
 export function createSearchIndex(docs: SearchDoc[]): SearchIndex;
 export function docsFromPlaces(places: Place[]): SearchDoc[];
-export function docsFromCategories(categories: readonly CategoryDef[], counts: Record<string, number>): SearchDoc[];
-export function highlightSegments(text: string, ranges: Array<[number, number]>): Array<{ text: string; match: boolean }>;
+export function docsFromCategories(
+  categories: readonly CategoryDef[],
+  counts: Record<string, number>,
+): SearchDoc[];
+export function highlightSegments(
+  text: string,
+  ranges: Array<[number, number]>,
+): Array<{ text: string; match: boolean }>;
 export function normalize(s: string): string;
 ```
 
@@ -183,48 +286,101 @@ buildings must not flood generic queries (rank them below named matches).
 ```ts
 // hours.ts — conservative OSM opening_hours subset
 export type HoursState = 'open' | 'closed' | 'unknown' | 'stale';
-export interface HoursEvaluation { state: HoursState; label: string; nextChange?: Date; reason?: string }
+export interface HoursEvaluation {
+  state: HoursState;
+  label: string;
+  nextChange?: Date;
+  reason?: string;
+}
 export function parseOpeningHours(raw: string): ParsedHours | null; // null = unsupported → unknown
-export function evaluateHours(raw: string | undefined, now: Date, opts?: { retrievedAt?: string; freshnessDays?: number }): HoursEvaluation;
+export function evaluateHours(
+  raw: string | undefined,
+  now: Date,
+  opts?: { retrievedAt?: string; freshnessDays?: number },
+): HoursEvaluation;
 // directory.ts
 export interface FacilityDirectory {
-  all: Place[]; get(id: string): Place | undefined; byCategory(categoryId: string): Place[];
-  countsByCategory(): Record<string, number>;           // derived from data only
+  all: Place[];
+  get(id: string): Place | undefined;
+  byCategory(categoryId: string): Place[];
+  countsByCategory(): Record<string, number>; // derived from data only
   related(id: string): Array<{ relation: Relation; place: Place }>;
-  isRoutable(place: Place): boolean;                    // has location and graphNodeId
+  isRoutable(place: Place): boolean; // has location and graphNodeId
 }
 export function createFacilityDirectory(places: Place[], relations: Relation[]): FacilityDirectory;
 // nearest.ts
-export interface NearestResult { place: Place; distanceM: number; distanceKind: 'route' | 'straight-line'; durationS?: number }
-export function findNearest(args: { origin: LngLat; categoryId: string; directory: FacilityDirectory; router?: Router; profile?: RouteProfileId; limit?: number }): NearestResult[];
+export interface NearestResult {
+  place: Place;
+  distanceM: number;
+  distanceKind: 'route' | 'straight-line';
+  durationS?: number;
+}
+export function findNearest(args: {
+  origin: LngLat;
+  categoryId: string;
+  directory: FacilityDirectory;
+  router?: Router;
+  profile?: RouteProfileId;
+  limit?: number;
+}): NearestResult[];
 // relations.ts
-export function validateRelations(places: Place[], relations: Relation[]): Array<{ level: 'error' | 'warning'; code: string; message: string; ids: string[] }>;
+export function validateRelations(
+  places: Place[],
+  relations: Relation[],
+): Array<{ level: 'error' | 'warning'; code: string; message: string; ids: string[] }>;
 ```
 
-## src/utils — owner: facilities
+## src/utils — no barrel file; import the specific file
 
 ```ts
+// src/utils/safe-url.ts — owner: facilities
 export function safeExternalUrl(raw: string | undefined): string | null; // http(s) only
 export function telHref(phone: string): string | null;
 export function mailHref(email: string): string | null;
-export function createStorage<T>(key: string, schema: ZodType<T>, fallback: T): { get(): T; set(v: T): void; clear(): void }; // versioned, validated, try/catch
+// src/utils/storage.ts — owner: platform
+export function createStorage<T>(
+  key: string,
+  schema: ZodType<T>,
+  fallback: T,
+): { get(): T; set(v: T): void; clear(): void }; // versioned, validated, try/catch
 ```
 
 ## src/map and src/buildings3d — owner: map
 
 ```ts
-export interface MapRouteOverlay { coordinates: LngLat[]; completed?: LngLat[]; alternatives?: LngLat[][] }
-export interface MapUserLocation { lngLat: LngLat; accuracyM: number; stale: boolean }
+export interface MapRouteOverlay {
+  coordinates: LngLat[];
+  completed?: LngLat[];
+  alternatives?: LngLat[][];
+}
+export interface MapUserLocation {
+  lngLat: LngLat;
+  accuracyM: number;
+  stale: boolean;
+}
 export interface MapViewProps {
-  data: CampusData; theme: 'light' | 'dark'; mode3d: boolean; reducedMotion: boolean;
-  visibleGroups: ReadonlySet<LayerGroupId>; showLabels: boolean;
-  selectedPlaceId: string | null; route: MapRouteOverlay | null; userLocation: MapUserLocation | null;
-  onSelectPlace(id: string | null): void; onMapClick?(lngLat: LngLat): void;
-  onReady?(controller: MapController): void; onError?(message: string): void;
+  data: CampusData;
+  theme: 'light' | 'dark';
+  mode3d: boolean;
+  reducedMotion: boolean;
+  visibleGroups: ReadonlySet<LayerGroupId>;
+  showLabels: boolean;
+  selectedPlaceId: string | null;
+  route: MapRouteOverlay | null;
+  userLocation: MapUserLocation | null;
+  onSelectPlace(id: string | null): void;
+  onMapClick?(lngLat: LngLat): void;
+  onReady?(controller: MapController): void;
+  onError?(message: string): void;
 }
 export interface MapController {
-  flyTo(lngLat: LngLat, zoom?: number): void; fitCoordinates(coords: LngLat[], padding?: number): void;
-  resetView(): void; zoomIn(): void; zoomOut(): void; resetNorth(): void; setPadding(p: { top; right; bottom; left }): void;
+  flyTo(lngLat: LngLat, zoom?: number): void;
+  fitCoordinates(coords: LngLat[], padding?: number): void;
+  resetView(): void;
+  zoomIn(): void;
+  zoomOut(): void;
+  resetNorth(): void;
+  setPadding(p: { top; right; bottom; left }): void;
 }
 export function MapView(props: MapViewProps): JSX.Element;
 // buildings3d
@@ -251,15 +407,40 @@ Reusable primitives: `Button`, `IconButton`, `TextInput`, `Dialog`,
 export function useFavorites(): { ids: string[]; isFavorite(id): boolean; toggle(id): void; clear(): void };
 export function useRecents(): { ids: string[]; push(id): void; clear(): void }; // respects privacy.saveHistory
 // privacy
-export function usePrivacySettings(): { saveHistory: boolean; setSaveHistory(v: boolean): void; clearAllLocalData(): void };
+export function usePrivacySettings(): {
+  saveHistory: boolean;
+  setSaveHistory(v: boolean): void;
+  clearAllLocalData(): void;
+};
 // feedback
-export type CorrectionKind = 'missing-facility' | 'wrong-name' | 'wrong-hours' | 'wrong-entrance' | 'closed' | 'accessibility' | 'geometry' | 'other';
-export interface CorrectionDraft { kind: CorrectionKind; placeId?: string; placeName?: string; details: string; sourceUrl?: string }
-export function validateCorrection(d: unknown): { ok: true; value: CorrectionDraft } | { ok: false; errors: string[] };
+export type CorrectionKind =
+  | 'missing-facility'
+  | 'wrong-name'
+  | 'wrong-hours'
+  | 'wrong-entrance'
+  | 'closed'
+  | 'accessibility'
+  | 'geometry'
+  | 'other';
+export interface CorrectionDraft {
+  kind: CorrectionKind;
+  placeId?: string;
+  placeName?: string;
+  details: string;
+  sourceUrl?: string;
+}
+export function validateCorrection(
+  d: unknown,
+): { ok: true; value: CorrectionDraft } | { ok: false; errors: string[] };
 export function correctionToText(d: CorrectionDraft, datasetVersion: string): string;
 export function correctionIssueUrl(d: CorrectionDraft, datasetVersion: string): string | null; // null when VITE_CORRECTIONS_URL unset
 // offline
 export const pwaOptions: Partial<VitePWAOptions>;
 export function useOnlineStatus(): boolean;
-export function useServiceWorkerUpdate(): { updateAvailable: boolean; offlineReady: boolean; applyUpdate(): void; dismiss(): void };
+export function useServiceWorkerUpdate(): {
+  updateAvailable: boolean;
+  offlineReady: boolean;
+  applyUpdate(): void;
+  dismiss(): void;
+};
 ```

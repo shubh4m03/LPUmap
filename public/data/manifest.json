@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "datasetVersion": "b628c5855b1d",
+  "builtFrom": "2026-10-23T09:39:00Z",
+  "sources": [
+    {
+      "id": "osm",
+      "name": "OpenStreetMap",
+      "url": "https://api.openstreetmap.org/api/0.6/map?bbox=75.695,31.243,75.715,31.262",
+      "license": "ODbL 1.0",
+      "attribution": "© OpenStreetMap contributors",
+      "retrievedAt": "2026-10-23T09:39:00Z",
+      "notes": "Retrieved via osm-api-map; bbox 75.695, 31.243, 75.715, 31.262. Derived database under ODbL 1.0."
+    },
+    {
+      "id": "curated:lpu-in-academics-libraries",
+      "name": "Lovely Professional University — LPU Libraries | World‑Class Campus Libraries & Resources",
+      "url": "https://www.lpu.in/academics/libraries.php",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-campus-life-sports",
+      "name": "Lovely Professional University — LPU Sports Facilities and Initiatives",
+      "url": "https://www.lpu.in/campus-life/sports.php",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-agriculture",
+      "name": "Lovely Professional University — Best Agriculture College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/agriculture/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-animation-and-multimedia",
+      "name": "Lovely Professional University — Best Multimedia, Animation, Gaming & UI/UX College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/animation-and-multimedia/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-architecture-design",
+      "name": "Lovely Professional University — Top Architecture College in Punjab, India | Apply Now - LPU",
+      "url": "https://www.lpu.in/schools/architecture-design/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-bioengineering-and-biosciences",
+      "name": "Lovely Professional University — Best Bioengineering & Biosciences College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/bioengineering-and-biosciences/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-business",
+      "name": "Lovely Professional University — Top Business & Management College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/business/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-civil-engineering",
+      "name": "Lovely Professional University — Top Civil Engineering College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/civil-engineering/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-computer-applications",
+      "name": "Lovely Professional University — Top Computer Application College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/computer-applications/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-computer-science-engineering",
+      "name": "Lovely Professional University — Top CSE Computer Science Engineering College in Punjab,India - LPU",
+      "url": "https://www.lpu.in/schools/computer-science-engineering/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-education",
+      "name": "Lovely Professional University — Top B.Ed & Education College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/education/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-electronics-electrical-engineering",
+      "name": "Lovely Professional University — Best Electrical Engineering (EEE) College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/electronics-electrical-engineering/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-fashion",
+      "name": "Lovely Professional University — Top Fashion Design College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/fashion/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-film-tv-production",
+      "name": "Lovely Professional University — Top Film & Television College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/film-tv-production/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-fine-arts",
+      "name": "Lovely Professional University — Top & Best Fine Arts College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/fine-arts/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-hotel-management-and-tourism",
+      "name": "Lovely Professional University — Top Hotel Management & Tourism College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/hotel-management-and-tourism/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-interior-and-furniture",
+      "name": "Lovely Professional University — Best Interior, Furniture & UX Design College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/interior-and-furniture/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-journalism-film-production",
+      "name": "Lovely Professional University — Top Journalism, Mass Communication College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/journalism-film-production/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-law",
+      "name": "Lovely Professional University — Top & Best Law College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/law/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-management-and-commerce",
+      "name": "Lovely Professional University — Best Commerce & Economics College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/management-and-commerce/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-mechanical-engineering",
+      "name": "Lovely Professional University — Top Mechanical Engineering College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/mechanical-engineering/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-performing-arts",
+      "name": "Lovely Professional University — Top & Best Theatre & Music College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/performing-arts/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-pharmaceutical-sciences",
+      "name": "Lovely Professional University — Best Pharmaceutical Sciences College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/pharmaceutical-sciences/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-physical-education",
+      "name": "Lovely Professional University — Top Physical Education & Sports College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/physical-education/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-physical-sciences",
+      "name": "Lovely Professional University — Best Chemical Engineering & Physical Sciences College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/physical-sciences/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-physiotherapy-and-paramedical-sciences",
+      "name": "Lovely Professional University — Top Medical Lab & Physiotherapy College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/physiotherapy-and-paramedical-sciences/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-planning",
+      "name": "Lovely Professional University — Top Planning & Urban Design College in Punjab, India | Apply Now - LPU",
+      "url": "https://www.lpu.in/schools/planning/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-polytechnic",
+      "name": "Lovely Professional University — Best Polytechnic Diploma Engineering College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/polytechnic/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-schools-social-sciences",
+      "name": "Lovely Professional University — Best Social Sciences & Languages College in Punjab, India - LPU",
+      "url": "https://www.lpu.in/schools/social-sciences/",
+      "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "curated:lpu-in-student-services-healthcare",
+      "name": "Lovely Professional University — Student Health Care Services at LPU",
+      "url": "https://www.lpu.in/student-services/healthcare.php",
+      "retrievedAt": "2026-10-23"
+    }
+  ],
+  "files": {
+    "basemap": {
+      "path": "basemap.geojson",
+      "bytes": 142362,
+      "sha256": "81c570fb701fac35f067ac95f04a4b4d048aef03fe4edd906e8bf2a0816be658"
+    },
+    "boundary": {
+      "path": "boundary.geojson",
+      "bytes": 3166,
+      "sha256": "8ccfd770e1d848835a4add9f2960b8dcf78a3985096279b77f7cb122a7a1e920"
+    },
+    "buildings": {
+      "path": "buildings.geojson",
+      "bytes": 239339,
+      "sha256": "13007495c96b2742fbc940f956e066bec795d6a86bd96d9fa8d1e1342aed3f7b"
+    },
+    "graph": {
+      "path": "graph.json",
+      "bytes": 495453,
+      "sha256": "99065fae75a7552c1b27c55fd8e5065990bd4692b6996e1c0cb6832e487cb97a"
+    },
+    "places": {
+      "path": "places.json",
+      "bytes": 401563,
+      "sha256": "6e3db9a62a3987a166b7d42085adec820fe2c76561b0d451aa2d8bde8fbd226f"
+    },
+    "quality": {
+      "path": "quality-report.json",
+      "bytes": 13990,
+      "sha256": "d63afa7d38e4e0a77ded20273873793141226eb5a4eedbd328607028461f3377"
+    },
+    "relations": {
+      "path": "relations.json",
+      "bytes": 265663,
+      "sha256": "874a29efa058b0463a0b81f9d9d3c83116d4ff51c774c376adabc0fd92882995"
+    }
+  },
+  "counts": {
+    "basemapFeatures": 389,
+    "buildings": 535,
+    "buildings:unnamed": 499,
+    "category:academic": 30,
+    "category:building": 494,
+    "category:finance": 2,
+    "category:food": 18,
+    "category:gate": 1,
+    "category:health": 2,
+    "category:hostel": 3,
+    "category:laundry": 0,
+    "category:library": 1,
+    "category:other": 3,
+    "category:park": 40,
+    "category:parking": 8,
+    "category:printing": 0,
+    "category:residential": 213,
+    "category:shop": 5,
+    "category:sports": 28,
+    "category:transport": 1,
+    "category:university": 6,
+    "category:washroom": 0,
+    "category:water": 0,
+    "category:worship": 0,
+    "graph:components": 9,
+    "graph:edges": 1770,
+    "graph:largestComponentNodes": 1508,
+    "graph:nodes": 1636,
+    "heightSource:fallback": 398,
+    "heightSource:osm-height": 0,
+    "heightSource:osm-levels-estimate": 137,
+    "kind:area": 73,
+    "kind:building": 535,
+    "kind:entrance": 0,
+    "kind:facility": 213,
+    "kind:gate": 1,
+    "kind:landmark": 1,
+    "kind:organization": 32,
+    "places": 855,
+    "places:notConnected": 34,
+    "places:withoutLocation": 31,
+    "relation:accessed_via": 0,
+    "relation:connected_by_path": 0,
+    "relation:located_in": 167,
+    "relation:nearby": 393,
+    "relation:part_of": 200,
+    "relations": 760,
+    "zone:off-campus-nearby": 622,
+    "zone:on-campus": 233
+  },
+  "bbox": [
+    75.6973474,
+    31.2457534,
+    75.7091258,
+    31.2607949
+  ]
+}
