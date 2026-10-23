@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import type {
   BuildingsFile,
+  DetectionsFile,
   GraphFile,
   Manifest,
   Place,
@@ -106,9 +107,30 @@ describe('validateDataset', () => {
     ['location outside maxBounds', (j) => (place(j, 'osm:node/41').location = [75.0, 31.0]), 'out-of-bounds'],
     ['unknown category', (j) => (first(j.places).categoryId = 'made-up'), 'category'],
     [
+      // v2: way/205 (the off-campus cafe) moved to context-places.json, so a campus place is used here.
       'non-http website',
-      (j) => (place(j, 'osm:way/205').contact!.website = 'ftp://example.org/x'),
+      (j) => (place(j, 'osm:way/200').contact = { website: 'ftp://example.org/x' }),
       'website',
+    ],
+    [
+      'off-campus place in the campus file',
+      (j) => (first(j.places).campusZone = 'off-campus-nearby'),
+      'schema',
+    ],
+    [
+      'place count differs from the manifest',
+      (j) => j.places.push({ ...first(j.places), id: 'osm:node/999' }),
+      'count-derived',
+    ],
+    [
+      'footprint without its building place',
+      (j) => (j.places = j.places.filter((p) => p.id !== 'osm:way/202')),
+      'building-place',
+    ],
+    [
+      'building place label out of sync with its footprint',
+      (j) => (place(j, 'osm:way/202').displayName = 'Renamed only in places'),
+      'building-place',
     ],
     ['missing graph node', (j) => (place(j, 'osm:way/200').graphNodeId = 9999), 'graph-node'],
     ['dangling buildingId', (j) => (place(j, 'osm:node/40').buildingId = 'osm:way/1'), 'building-ref'],
@@ -172,7 +194,8 @@ describe('validateDataset', () => {
     const manifest = JSON.parse(readFileSync(path, 'utf8')) as Manifest;
     delete manifest.files.graph;
     writeFileSync(path, JSON.stringify(manifest));
-    expect((await codes(dir)).errors).toContain('manifest-files');
+    // v2: manifestSchema itself requires every REQUIRED_MANIFEST_FILE_KEYS entry (v1 reported 'manifest-files').
+    expect((await codes(dir)).errors).toContain('schema');
   });
 
   it('checks building rings', async () => {
@@ -186,12 +209,32 @@ describe('validateDataset', () => {
     expect((await codes(bowtie)).errors).toContain('ring');
   });
 
+  it('fails on a large count drop unless accepted, and warns on moderate changes', async () => {
+    const manifest = JSON.parse(readFileSync(join(built, 'manifest.json'), 'utf8')) as Manifest;
+    const places = manifest.counts.places!;
+    const big = { ...manifest, counts: { ...manifest.counts, places: places + 100 } };
+    const failed = await codes(built, { previousManifest: big });
+    expect(failed.errors).toEqual(['count-change']);
+    expect(failed.r.errors[0]!.message).toMatch(/"places" changed \d+ → \d+ .*above the 40 % limit/);
+    const accepted = await codes(built, { previousManifest: big, acceptCountChanges: true });
+    expect(accepted.errors).toEqual([]);
+    expect(accepted.warnings).toContain('count-change');
+    // Proportionate: a change of fewer than 5 records is never a regression signal.
+    const small = { ...manifest, counts: { ...manifest.counts, places: places + 4 } };
+    expect((await codes(built, { previousManifest: small })).warnings).not.toContain('count-change');
+    // 15–40 %: warning only.
+    const moderate = { ...manifest, counts: { ...manifest.counts, 'graph:edges': 20 } };
+    const m = await codes(built, { previousManifest: moderate });
+    expect(m.errors).toEqual([]);
+    expect(m.warnings).toContain('count-change');
+  });
+
   it('warns on unparseable opening hours, suspicious count changes and broken links', async () => {
     const parseHours = (raw: string) => (raw === '24/7' ? {} : null);
     const manifest = JSON.parse(readFileSync(join(built, 'manifest.json'), 'utf8')) as Manifest;
     const previous = {
       ...manifest,
-      counts: { ...manifest.counts, places: 100, 'graph:edges': manifest.counts['graph:edges']!, gone: 3 },
+      counts: { ...manifest.counts, places: manifest.counts.places! + 6, gone: 3 },
     };
     const fetchImpl = vi.fn(
       async (url: string) =>
@@ -206,7 +249,7 @@ describe('validateDataset', () => {
     expect(warnings).toContain('opening-hours');
     expect(r.warnings.find((w) => w.code === 'opening-hours')!.message).toMatch(/Mo-Fr 09:00-17:00/);
     expect(r.warnings.filter((w) => w.code === 'count-change').map((w) => w.message)).toEqual([
-      expect.stringMatching(/"places" changed 100 → \d+/),
+      expect.stringMatching(/"places" changed \d+ → \d+/),
     ]);
     expect(warnings).toContain('count-missing');
     expect(r.warnings.find((w) => w.code === 'link')!.message).toMatch(/cafe answered HTTP 404/);
@@ -214,5 +257,111 @@ describe('validateDataset', () => {
       'https://example.org/cafe',
       expect.objectContaining({ method: 'HEAD' }),
     );
+  });
+});
+
+describe('validateDataset — v2 regression guards (owner decisions 1–3)', () => {
+  type Feature = BuildingsFile['features'][number];
+  const feature = (j: BuildingsFile, id: string): Feature => {
+    const f = j.features.find((x) => x.properties.id === id);
+    if (!f) throw new Error(`fixture lacks ${id}`);
+    return f;
+  };
+
+  it('rejects an outside footprint at schema level and an uncertain one as campus-status', async () => {
+    const outside = corrupt<BuildingsFile>('buildings.geojson', (j) => {
+      feature(j, 'osm:way/202').properties.campusStatus = 'outside';
+    });
+    expect((await codes(outside)).errors).toContain('schema');
+    const uncertain = corrupt<BuildingsFile>('buildings.geojson', (j) => {
+      Object.assign(feature(j, 'osm:way/202').properties, {
+        campusStatus: 'uncertain',
+        inCampusInventory: false,
+        membershipReasonCode: 'crossing-minority',
+      });
+    });
+    expect((await codes(uncertain)).errors).toContain('campus-status');
+  });
+
+  it('re-checks the stored inside fraction with the boundary service', async () => {
+    const dir = corrupt<BuildingsFile>('buildings.geojson', (j) => {
+      feature(j, 'osm:way/202').properties.insideFraction = 0.6;
+    });
+    expect((await codes(dir)).errors).toContain('membership');
+  });
+
+  it('rejects an unresolved duplicate footprint and a repeated map key', async () => {
+    const dup = corrupt<BuildingsFile>('buildings.geojson', (j) => {
+      const f = feature(j, 'osm:way/202');
+      j.features.push({ ...f, properties: { ...f.properties, id: 'osm:way/999202' } });
+    });
+    expect((await codes(dup)).errors).toContain('duplicate-footprint');
+    const keys = corrupt<BuildingsFile>('buildings.geojson', (j) => {
+      for (const id of ['osm:way/200', 'osm:way/202'])
+        Object.assign(feature(j, id).properties, { directoryKey: 'A1-01', directoryCell: 'A1' });
+    });
+    expect((await codes(keys)).errors).toContain('directory-key');
+  });
+
+  it('keeps context places off campus and never as buildings', async () => {
+    const inside = corrupt<PlacesFile>('context-places.json', (j) => {
+      first(j.places).location = [75.69, 31.24];
+    });
+    expect((await codes(inside)).errors).toContain('context-inside');
+    const building = corrupt<PlacesFile>('context-places.json', (j) => {
+      first(j.places).kind = 'building';
+    });
+    expect((await codes(building)).errors).toContain('schema');
+  });
+
+  it('rejects a detection that duplicates a campus building', async () => {
+    const dir = corrupt<DetectionsFile>('detections.geojson', (j) => {
+      const buildings = JSON.parse(readFileSync(join(built, 'buildings.geojson'), 'utf8')) as BuildingsFile;
+      j.features.push({
+        type: 'Feature',
+        geometry: feature(buildings, 'osm:way/202')
+          .geometry as DetectionsFile['features'][number]['geometry'],
+        properties: {
+          id: 'det:microsoft-ml:0123456789abcdef',
+          source: 'microsoft-ml',
+          geometryKind: 'footprint',
+          sourceRef: 'synthetic',
+          areaM2: 100,
+          confidence: null,
+          matchedOsmId: null,
+          matchIoU: null,
+          confirmedBy: [],
+          campusStatus: 'inside',
+          insideFraction: 1,
+          reviewSectionId: null,
+          reviewStatus: 'unreviewed',
+        },
+      });
+    });
+    const { errors } = await codes(dir);
+    expect(errors).toContain('detection-matched');
+    expect(errors).toContain('detection-source'); // and its source has no licensed manifest record
+  });
+
+  it('requires the v2 campus flag on every graph edge', async () => {
+    const dir = corrupt<GraphFile>('graph.json', (j) => {
+      delete first(j.edges).campus;
+    });
+    expect((await codes(dir)).errors).toContain('graph-campus-flag');
+  });
+
+  it('fails when a required landmark disappears', async () => {
+    const landmarks = {
+      landmarks: [
+        { id: 'osm:way/200', in: ['buildings' as const, 'places' as const], why: 'named synthetic library' },
+        { id: 'osm:relation/900001', in: ['boundary' as const], why: 'synthetic boundary' },
+      ],
+    };
+    expect((await codes(built, { landmarks })).errors).toEqual([]);
+    const gone = {
+      landmarks: [...landmarks.landmarks, { id: 'osm:way/1', in: ['buildings' as const], why: 'gone' }],
+    };
+    const r = await codes(built, { landmarks: gone });
+    expect(r.errors).toEqual(['landmark-missing']);
   });
 });

@@ -22,7 +22,7 @@ const readJson = <T>(file: string): T => JSON.parse(readFileSync(DATA_DIR + file
 
 interface BuildingFeature {
   geometry: { type: string; coordinates: unknown };
-  properties: { id: string; heightM: number };
+  properties: { id: string; renderHeightM: number };
 }
 
 export const PLACES: readonly Place[] = readJson<{ places: Place[] }>('places.json').places;
@@ -67,7 +67,8 @@ function required<T>(value: T | undefined, what: string): T {
 /** Workflow A / B target: the tallest named on-campus building (easiest to hit when extruded). */
 export const CAMPUS_BUILDING: LocatedPlace = required(
   [...CAMPUS_BUILDINGS].sort(
-    (a, b) => (footprintOf(b.id)?.properties.heightM ?? 0) - (footprintOf(a.id)?.properties.heightM ?? 0),
+    (a, b) =>
+      (footprintOf(b.id)?.properties.renderHeightM ?? 0) - (footprintOf(a.id)?.properties.renderHeightM ?? 0),
   )[0],
   'named on-campus building with a footprint and graph node',
 );
@@ -113,18 +114,24 @@ function pickRoutablePair(): { from: LocatedPlace; to: LocatedPlace; route: Rout
 
 export const ROUTE_PAIR = pickRoutablePair();
 
-/** Workflow E: a quick-action category that has a named, located place to open. */
-function pickFacility(): { categoryLabel: string; place: LocatedPlace } {
+/**
+ * Workflow E: a quick-action category that has a named, located place to open,
+ * or null when the dataset has none (the campus-only v2 data has no named,
+ * routable food/finance/water/washroom/gate place). Callers skip with a reason.
+ */
+function pickFacility(): { categoryLabel: string; place: LocatedPlace } | null {
   for (const c of CATEGORIES.filter((cat) => cat.nearestAction)) {
     const place = PLACES.filter(
       (p): p is LocatedPlace => isRoutable(p) && p.categoryId === c.id && p.kind !== 'organization',
     ).sort((a, b) => a.name.localeCompare(b.name))[0];
     if (place) return { categoryLabel: c.label, place };
   }
-  throw new Error('The dataset has no quick-action category with a named, located place.');
+  return null;
 }
 
 export const FACILITY = pickFacility();
+export const NO_FACILITY_REASON =
+  'The dataset has no quick-action category with a named, routable place (campus-only data); needs synthetic e2e data.';
 
 /** Interior point of a building footprint: the vertex average, nudged inside if needed. */
 export function footprintCentre(id: string): LngLat {

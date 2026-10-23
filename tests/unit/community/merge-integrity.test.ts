@@ -10,7 +10,13 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { routeBlockReason } from '../../../src/app/place-actions.ts';
-import { checkAccessNode, footNodeSet, insideContributionArea } from '../../../src/community/geo.ts';
+import {
+  boundaryPolygons,
+  campusZoneFor,
+  checkAccessNode,
+  footNodeSet,
+  insideContributionArea,
+} from '../../../src/community/geo.ts';
 import { mergePublication } from '../../../src/community/merge.ts';
 import {
   EMPTY_PUBLICATION,
@@ -61,8 +67,20 @@ const sha256 = (s: string | Buffer) => createHash('sha256').update(s).digest('he
 describe('merge integrity on the real dataset', () => {
   let base: CampusData;
   let foot: Set<number>;
-  /** Named OSM building with footprint, relations and at least one place inside it. */
+  /**
+   * An OSM building with a footprint, relations and at least one place inside it, chosen from what the
+   * dataset contains (a named one first). The v2 campus-only data has no NAMED host building — the only
+   * host is an unnamed footprint with a map key — so the search assertions use the building's sourced
+   * name or, failing that, its map key (Decision D6), the way campus search finds unnamed buildings.
+   */
   let building: Place;
+  /** Search term that finds `building` in the base index: its name, else its map key. */
+  let term: string;
+  /** Map-key lookup over a dataset's buildings.geojson, as the app passes it to docsFromPlaces. */
+  const mapKeys = (d: CampusData) => {
+    const keys = new Map(d.buildings.features.map((f) => [f.properties.id, f.properties.directoryKey]));
+    return (id: string) => keys.get(id);
+  };
   /** A routable base facility that is not inside `building`. */
   let routable: Place;
   /** A walkable node inside the contribution area. */
@@ -76,15 +94,31 @@ describe('merge integrity on the real dataset', () => {
     const hosts = new Set(
       base.places.filter((p) => p.buildingId && p.buildingId !== p.id).map((p) => p.buildingId),
     );
-    building = base.places.find(
-      (p) => p.kind === 'building' && p.name && footprints.has(p.id) && related.has(p.id) && hosts.has(p.id),
-    )!;
+    const keyOf = mapKeys(base);
+    building = base.places
+      .filter((p) => p.kind === 'building' && footprints.has(p.id) && related.has(p.id) && hosts.has(p.id))
+      .filter((p) => p.name || keyOf(p.id))
+      .sort((a, b) => Number(!a.name) - Number(!b.name) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))[0]!;
     expect(building).toBeDefined();
+    term = building.name ?? keyOf(building.id)!;
     routable = base.places.find(
       (p) => p.graphNodeId !== undefined && p.kind === 'facility' && p.name && p.buildingId !== building.id,
     )!;
     expect(routable).toBeDefined();
-    nodeId = [...foot].sort((a, b) => a - b).find((n) => insideContributionArea(base.graph.nodes[n]!))!;
+    // v2: the graph also carries off-campus context paths, and a published location off campus is
+    // (correctly) an 'Outside campus' place hidden from campus search, so pick a node whose test
+    // locations (up to ~22 m north of it) stay on campus.
+    const polygons = boundaryPolygons(base.boundary);
+    nodeId = [...foot]
+      .sort((a, b) => a - b)
+      .find((n) => {
+        const [lon, lat] = base.graph.nodes[n]!;
+        return (
+          insideContributionArea([lon, lat]) &&
+          [0, 0.0001, 0.0002].every((d) => campusZoneFor([lon, lat + d], polygons) === 'on-campus')
+        );
+      })!;
+    expect(nodeId).toBeDefined();
   });
 
   it('a hidden building vanishes from search, the facility directory, related places and counts', () => {
@@ -93,13 +127,13 @@ describe('merge integrity on the real dataset', () => {
     expect(children.length).toBeGreaterThan(0);
 
     // Search: present in the base index, absent from the merged one.
-    const baseHits = createSearchIndex(docsFromPlaces(base.places)).search(building.name!);
+    const baseHits = createSearchIndex(docsFromPlaces(base.places, { mapKey: mapKeys(base) })).search(term);
     expect(baseHits.some((h) => h.doc.ref === building.id)).toBe(true);
-    const docs = docsFromPlaces(data.places);
+    const docs = docsFromPlaces(data.places, { mapKey: mapKeys(data) });
     expect(docs.some((d) => d.ref === building.id)).toBe(false);
     expect(
       createSearchIndex(docs)
-        .search(building.name!)
+        .search(term)
         .some((h) => h.doc.ref === building.id),
     ).toBe(false);
 
@@ -252,7 +286,10 @@ describe('merge integrity on the real dataset', () => {
   });
 
   it('survives a simulated OSM rebuild: present targets keep overrides, vanished ones become orphans', () => {
-    const named = base.places.filter((p) => p.name && p.kind === 'facility' && p.id !== routable.id);
+    // v2 campus data holds a single named facility (the routable subject), so the three subjects are
+    // named non-building places (organizations, landmarks, areas) in id order.
+    const named = base.places.filter((p) => p.name && p.kind !== 'building' && p.id !== routable.id);
+    expect(named.length).toBeGreaterThanOrEqual(3);
     const removed = named[0]!;
     const renamed = named[1]!;
     const hiddenOne = named[2]!;

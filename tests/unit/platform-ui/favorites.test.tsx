@@ -5,7 +5,9 @@ import { useAppStore } from '../../../src/app/store/index.ts';
 import { FavoritesPanel } from '../../../src/components/favorites/FavoritesPanel.tsx';
 import { useFavorites, useRecents } from '../../../src/favorites/index.ts';
 import { usePrivacySettings } from '../../../src/privacy/index.ts';
+import { buildServices } from '../../../src/app/data/services.ts';
 import { renderWithAtlas } from '../app/render-helpers.tsx';
+import { withOffCampusNamed } from '../app/synthetic-campus.ts';
 import { resetPlatformState } from './helpers.ts';
 
 const favorite = (...ids: string[]) => {
@@ -45,7 +47,8 @@ describe('FavoritesPanel', () => {
   it('selecting a row opens the place; directions only for routable places', async () => {
     const user = userEvent.setup();
     favorite('osm:node/1', 'cur:synthetic-library');
-    renderWithAtlas(<FavoritesPanel />);
+    // A saved off-campus place (from the opt-in nearby layer) keeps its zone label.
+    renderWithAtlas(<FavoritesPanel />, buildServices(withOffCampusNamed()));
     expect(screen.getByText('Library & study · No verified map position')).toBeInTheDocument();
     expect(screen.getByText(/Off campus \(nearby\)/)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Directions to Synthetic Library' })).not.toBeInTheDocument();

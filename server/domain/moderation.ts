@@ -163,6 +163,7 @@ export async function markDuplicate(db: SqlDatabase, id: string, body: unknown, 
       }
       const exists =
         ctx.base.places.has(target) ||
+        ctx.base.contextPlaces.has(target) ||
         (await getLocationRow(db, target)) ||
         (await getSuggestionRow(db, target));
       if (!exists) {

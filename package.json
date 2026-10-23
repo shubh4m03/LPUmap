@@ -18,6 +18,8 @@
     "test:a11y": "playwright test tests/e2e --grep @a11y",
     "data:fetch": "node scripts/fetch-osm.ts",
     "data:fetch-public": "node scripts/fetch-public-data.ts",
+    "data:fetch-footprints": "node scripts/fetch-footprints.ts",
+    "data:keys": "node scripts/assign-directory-keys.ts",
     "data:build": "node scripts/build-data.ts",
     "data:validate": "node scripts/validate-data.ts",
     "data:check": "npm run data:build && npm run data:validate",

@@ -4,7 +4,8 @@
  * obviously fictional test labels.
  */
 import type { CampusData } from '../../../src/data/campus-data.ts';
-import type { Place } from '../../../src/data/schema.ts';
+import { DATA_SCHEMA_VERSION, type Place } from '../../../src/data/schema.ts';
+import { syntheticBuildingProps } from '../../fixtures/synthetic-building-props.ts';
 
 const provenance = { sourceId: 'synthetic', verificationStatus: 'unverified' as const };
 
@@ -36,7 +37,7 @@ function place(over: Partial<Place> & Pick<Place, 'id' | 'categoryId' | 'kind'>)
 export function syntheticCampusData(): CampusData {
   return {
     manifest: {
-      schemaVersion: 1,
+      schemaVersion: DATA_SCHEMA_VERSION,
       datasetVersion: 'synthetic-0001',
       builtFrom: '2026-01-01T00:00:00Z',
       sources: [{ id: 'synthetic', name: 'Synthetic test fixture' }],
@@ -60,47 +61,30 @@ export function syntheticCampusData(): CampusData {
         {
           type: 'Feature',
           geometry: { type: 'Polygon', coordinates: square(75.7, 31.25) },
-          properties: {
+          properties: syntheticBuildingProps({
             id: 'osm:way/10',
             name: 'Test Hall Alpha',
             displayName: 'Test Hall Alpha',
-            levels: null,
-            heightM: 21,
-            minHeightM: 0,
-            heightSource: 'osm-height',
+            renderHeightM: 21,
+            renderHeightSource: 'osm-height',
             categoryId: 'academic',
-            campusZone: 'on-campus',
-          },
+          }),
         },
         {
           type: 'Feature',
           geometry: { type: 'Polygon', coordinates: square(75.701, 31.25) },
-          properties: {
+          properties: syntheticBuildingProps({
             id: 'osm:way/11',
-            name: null,
             displayName: 'Unnamed building · 4 floors',
             levels: 4,
-            heightM: 12.8,
-            minHeightM: 0,
-            heightSource: 'osm-levels-estimate',
-            categoryId: 'building',
-            campusZone: 'on-campus',
-          },
+            renderHeightM: 12.8,
+            renderHeightSource: 'osm-levels-estimate',
+          }),
         },
         {
           type: 'Feature',
           geometry: { type: 'Polygon', coordinates: square(75.702, 31.25) },
-          properties: {
-            id: 'osm:way/12',
-            name: null,
-            displayName: 'Unnamed building',
-            levels: null,
-            heightM: 6,
-            minHeightM: 0,
-            heightSource: 'fallback',
-            categoryId: 'building',
-            campusZone: 'on-campus',
-          },
+          properties: syntheticBuildingProps({ id: 'osm:way/12' }),
         },
       ],
     },
@@ -171,6 +155,6 @@ export function syntheticCampusData(): CampusData {
       }),
     ],
     relations: [],
-    graph: { schemaVersion: 1, nodes: [], edges: [] },
+    graph: { schemaVersion: DATA_SCHEMA_VERSION, nodes: [], edges: [] },
   };
 }

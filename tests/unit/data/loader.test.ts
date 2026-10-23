@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
+  DATA_FILES,
   DATA_SCHEMA_VERSION,
   DatasetError,
+  REQUIRED_MANIFEST_FILE_KEYS,
   defaultDataBaseUrl,
   loadCampusData,
 } from '../../../src/data/index.ts';
@@ -12,7 +14,9 @@ const manifest = {
   datasetVersion: 'abc123def456',
   builtFrom: '2026-10-23T09:39:00Z',
   sources: [{ id: 'osm', name: 'OpenStreetMap' }],
-  files: {},
+  files: Object.fromEntries(
+    REQUIRED_MANIFEST_FILE_KEYS.map((k) => [k, { path: DATA_FILES[k], bytes: 0, sha256: '0' }]),
+  ),
   counts: { places: 1 },
   bbox: [75.69, 31.24, 75.71, 31.26],
 };

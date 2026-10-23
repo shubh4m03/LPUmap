@@ -2,7 +2,13 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { expect } from 'vitest';
 import { APP_CONFIG } from '../../../src/config/index.ts';
-import { graphFileSchema, type GraphEdge, type GraphFile, type LngLat } from '../../../src/data/schema.ts';
+import {
+  DATA_SCHEMA_VERSION,
+  graphFileSchema,
+  type GraphEdge,
+  type GraphFile,
+  type LngLat,
+} from '../../../src/data/schema.ts';
 import { createLocalProjection, haversineM } from '../../../src/distance/geodesic.ts';
 import type { RouteEndpoint, RouteOk, RouteResult } from '../../../src/routing/index.ts';
 
@@ -47,7 +53,7 @@ export function makeGraph(xy: Array<[number, number]>, specs: EdgeSpec[]): Graph
     osmWayId: null,
     ...o,
   }));
-  return { schemaVersion: 1, nodes, edges };
+  return { schemaVersion: DATA_SCHEMA_VERSION, nodes, edges };
 }
 
 /** cols × rows grid with `spacing` metres between neighbours; node id = row * cols + col. */

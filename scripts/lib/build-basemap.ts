@@ -86,11 +86,37 @@ function polygonGeometry(mp: MultiPolygon): Feature['geometry'] {
 const validMultiPolygon = (mp: MultiPolygon) =>
   mp.length > 0 && mp.every((poly) => poly.every((ring) => ringProblems(ring).length === 0));
 
+/**
+ * Area layers that may extend beyond the campus as orientation context (owner
+ * decision 2: roads, paths, greens and water). Every other area layer
+ * (landuse, pitch, parking) is kept only when it is mostly on campus.
+ */
+export const CONTEXT_AREA_LAYERS: ReadonlySet<BasemapLayer> = new Set(['green', 'water']);
+
+export interface BasemapOptions {
+  /**
+   * Share (0–1) of an area feature inside the campus boundary, or null when it
+   * cannot be measured (invalid polygon: the feature is then kept only if its
+   * representative point is on campus, which the callback decides). Omit to
+   * keep every area (v1 behaviour, used by unit tests).
+   */
+  campusShare?: (mp: MultiPolygon) => number;
+  /** Features dropped because they are off-campus land use (reported, never silent). */
+  dropped?: string[];
+}
+
 export function buildBasemap(
   osm: OsmData,
   maxBounds: readonly [number, number, number, number],
+  opts: BasemapOptions = {},
 ): BasemapFile {
   const features: Feature[] = [];
+  const keepArea = (id: string, layer: BasemapLayer, mp: MultiPolygon) => {
+    if (!opts.campusShare || CONTEXT_AREA_LAYERS.has(layer)) return true;
+    if (opts.campusShare(mp) >= 0.5) return true;
+    opts.dropped?.push(id);
+    return false;
+  };
   const keep = (coords: LngLat[]) => {
     const bb = bboxOfCoords(coords);
     return bb !== null && bboxIntersects(bb, maxBounds);
@@ -114,6 +140,7 @@ export function buildBasemap(
     if (!area || way.tags.building) continue;
     const poly = wayPolygon(osm, way);
     if (!poly || !validMultiPolygon([poly]) || !keep(poly.flat())) continue;
+    if (!keepArea(props.id, area.layer, [poly])) continue;
     features.push({ type: 'Feature', geometry: polygonGeometry([poly]), properties: { ...props, ...area } });
   }
   for (const rel of sortedValues(osm.relations)) {
@@ -122,6 +149,7 @@ export function buildBasemap(
     if (!area) continue;
     const geom = relationGeometry(osm, rel);
     if (!validMultiPolygon(geom.multiPolygon) || !keep(multiPolygonCoords(geom.multiPolygon))) continue;
+    if (!keepArea(`osm:relation/${rel.id}`, area.layer, geom.multiPolygon)) continue;
     features.push({
       type: 'Feature',
       geometry: polygonGeometry(geom.multiPolygon),

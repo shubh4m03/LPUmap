@@ -1,0 +1,21 @@
+{
+  "sourceId": "microsoft-ml-buildings",
+  "name": "Synthetic Microsoft footprints (test fixture)",
+  "url": "https://example.org/ms",
+  "license": "CDLA-Permissive-2.0",
+  "licenseUrl": "https://example.org/cdla",
+  "attribution": "Synthetic fixture",
+  "datasetLinksUrl": "https://example.org/links.csv",
+  "tileUrl": "https://example.org/2026-01-01/tile.csv.gz",
+  "quadkey": "123",
+  "release": "2026-01-01",
+  "retrievedAt": "2026-01-01T00:00:00Z",
+  "tileSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "tileBytes": 1,
+  "featuresInTile": 3,
+  "featuresInSnapshot": 3,
+  "filterBBox": [75.685, 31.236, 75.722, 31.27],
+  "licenseTextUrl": "https://example.org/cdla",
+  "licenseTextRetrievedAt": "2026-01-01T00:00:00Z",
+  "notes": "SYNTHETIC test fixture: invented geometry, not Microsoft data."
+}

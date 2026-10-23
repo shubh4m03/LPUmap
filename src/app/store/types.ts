@@ -10,6 +10,7 @@ import type { LngLat } from '../../data/schema.ts';
 import type { CorrectionKind } from '../../feedback/index.ts';
 import type { NavSlice } from './nav-types.ts';
 import type { RouteSlice } from './route-types.ts';
+import type { MapViewMode, ViewMode, ViewModeChangeReason } from '../view-mode.ts';
 
 export type PanelId =
   | 'none'
@@ -95,10 +96,27 @@ export interface SelectionSlice {
 }
 
 export interface MapSlice {
+  /** Current view mode (Decision D7). */
+  viewMode: ViewMode;
+  /** The map mode to return to (e.g. when live navigation starts from the overview). */
+  lastMapMode: MapViewMode;
+  /** Why the last change happened; null before any change. */
+  viewModeReason: ViewModeChangeReason | null;
+  /**
+   * Derived, kept in sync by the slice: true iff viewMode === 'realistic3d'.
+   * Kept for existing callers; new code reads viewMode.
+   */
   mode3d: boolean;
   showLabels: boolean;
   visibleGroups: ReadonlySet<LayerGroupId>;
+  /**
+   * Switches mode. Returns false (and changes nothing) when the mode is not
+   * allowed now: 'isometric' while live navigation is active.
+   */
+  setViewMode(mode: ViewMode, opts?: { reason?: ViewModeChangeReason }): boolean;
+  /** Back-compat: true → realistic3d, false → standard2d. */
   setMode3d(on: boolean): void;
+  /** Back-compat: realistic3d ↔ standard2d (from the overview, goes to realistic3d). */
   toggleMode3d(): void;
   setShowLabels(on: boolean): void;
   setGroupVisible(id: LayerGroupId, visible: boolean): void;

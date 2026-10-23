@@ -192,9 +192,13 @@ Rebuilding `public/data` (`npm run data:check`) never touches D1. After
 deploying a new dataset:
 
 1. `GET /api/admin/quality` → **orphan overrides**: their target id vanished
-   (the message names the dataset version they were made on). They are not
-   applied to any other feature. Re-create the correction on the new id if
-   needed, then `DELETE` the orphan.
+   (the message names the dataset version they were made on and an
+   `orphanReason`: `context-layer`, `boundary-review` or `not-in-dataset`).
+   They are not applied to any other feature. Re-create the correction on the
+   new id if needed. Keep `context-layer` and `boundary-review` orphans while a
+   rollback is still possible: they apply again after a rollback or a boundary
+   decision, and a delete is not undone by reverting code. Delete an orphan
+   only when you are sure it is obsolete; see [DATA_ROLLBACK.md](DATA_ROLLBACK.md).
 2. **override-access-invalid / location-not-routable**: the graph changed
    and an access node no longer validates; those places are shown map-only
    until you set a new access point.

@@ -65,7 +65,7 @@ export function containingBuilding(
   let best: BuildingRecord | null = null;
   for (const b of buildings) {
     if (!inBBox(p, b.bbox) || !pointInMultiPolygon(p, b.multiPolygon)) continue;
-    if (!best || b.areaM2 < best.areaM2) best = b;
+    if (!best || (b.areaM2 ?? Infinity) < (best.areaM2 ?? Infinity)) best = b;
   }
   return best;
 }

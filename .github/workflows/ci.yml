@@ -1,9 +1,13 @@
 # Continuous integration for LPU Campus Atlas.
 #
 # Job `verify` runs the same gates as `npm run check`, in the same order, plus
-# a data-sync guard: the generated dataset (public/data) and its quality report
-# are committed, so rebuilding them from the committed raw snapshot must not
-# change a byte. No secrets are used anywhere in this workflow.
+# a data-sync guard: the generated dataset (public/data), its generated reports
+# (docs/DATA_QUALITY_REPORT.md, docs/CAMPUS_BUILDING_COVERAGE.md) and the
+# curated JSON Schemas are committed, so rebuilding them from the committed raw
+# snapshots must not change a byte; the map-key lock (data/curated/directory-keys.json)
+# must be up to date. data:check fails on any validation error, including the
+# count-change guard against the dataset committed at HEAD. No secrets are used
+# anywhere in this workflow.
 #
 # Job `audit` (npm audit --audit-level=high):
 #   - production dependencies (what ships to browsers): BLOCKING.
@@ -31,6 +35,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Full history: the count-change guard and the v1 compat/rollback suites read the committed baseline.
+          fetch-depth: 0
 
       - name: Set up Node (from .nvmrc)
         uses: actions/setup-node@v4
@@ -56,13 +63,20 @@ jobs:
       - name: Rebuild and validate data
         run: npm run -s data:check
 
+      - name: Map-key lock is up to date
+        run: npm run -s data:keys -- --check
+
       - name: Committed data is in sync with the pipeline
+        env:
+          GENERATED: public/data docs/DATA_QUALITY_REPORT.md docs/CAMPUS_BUILDING_COVERAGE.md data/schemas data/curated/directory-keys.json
         run: |
-          git diff --exit-code --stat public/data docs/DATA_QUALITY_REPORT.md || {
-            echo "::error::public/data or docs/DATA_QUALITY_REPORT.md changed after 'npm run data:check'. Run it locally and commit the result."
+          # shellcheck disable=SC2086
+          git diff --exit-code --stat $GENERATED || {
+            echo "::error::Generated data or reports changed after 'npm run data:check'. Run it locally and commit the result."
             exit 1
           }
-          untracked="$(git status --porcelain --untracked-files=all public/data docs/DATA_QUALITY_REPORT.md)"
+          # shellcheck disable=SC2086
+          untracked="$(git status --porcelain --untracked-files=all $GENERATED)"
           if [ -n "$untracked" ]; then
             echo "$untracked"
             echo "::error::'npm run data:check' produced files that are not committed."

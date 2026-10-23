@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { APP_CONFIG } from '../../../src/config/index.ts';
-import type { GraphFile, LngLat } from '../../../src/data/schema.ts';
+import { DATA_SCHEMA_VERSION, type GraphFile, type LngLat } from '../../../src/data/schema.ts';
 import { haversineM } from '../../../src/distance/geodesic.ts';
 import { createRouter, ROUTE_PROFILES, type RouteRequest } from '../../../src/routing/index.ts';
 import {
@@ -70,7 +70,7 @@ describe('createRouter basics', () => {
   });
 
   it('handles an empty graph with truthful unsnappable failures', () => {
-    const router = createRouter({ schemaVersion: 1, nodes: [], edges: [] });
+    const router = createRouter({ schemaVersion: DATA_SCHEMA_VERSION, nodes: [], edges: [] });
     expect(router.snap(at(0, 0), 'walk')).toBeNull();
     expectFailure(router.route({ from: pt(0, 0), to: pt(100, 0), profile: 'walk' }), 'origin-unsnappable');
   });

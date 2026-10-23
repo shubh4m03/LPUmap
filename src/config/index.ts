@@ -96,7 +96,7 @@ export const APP_CONFIG = {
   },
   cache: {
     /** Service-worker data cache name; bump with DATA_SCHEMA_VERSION. */
-    dataCache: 'lpu-atlas-data-v1',
+    dataCache: 'lpu-atlas-data-v2',
     /** Hours after which cached opening hours show a freshness warning. */
     hoursFreshnessDays: 180,
   },
@@ -119,6 +119,39 @@ export const APP_CONFIG = {
     /** Pending suggestions older than this are flagged in the admin quality view. */
     pendingStaleDays: 14,
   },
+  /** Campus membership (src/geo/boundary.ts; rules in docs/MODULE_CONTRACTS.md "v2 geographic contract"). */
+  geo: {
+    membership: {
+      /** insideFraction at or above this → 'inside'. */
+      insideMinFraction: 0.995,
+      /** insideFraction at or below this → 'outside'. */
+      outsideMaxFraction: 0.005,
+      /** A crossing footprint joins the inventory only at or above this (and with no conflicting evidence). */
+      crossingInventoryMinFraction: 0.5,
+    },
+  },
+  /** Opt-in layers that are never part of the campus inventory. Both are off by default. */
+  optionalLayers: {
+    nearbyOutsideCampus: {
+      defaultVisible: false,
+      label: 'Nearby, outside campus',
+      /** Badge shown on every place from this layer. */
+      badge: 'Outside campus',
+    },
+    detectedFootprints: {
+      defaultVisible: false,
+      label: 'Unverified detected footprints',
+    },
+  },
+  /** Building directory and map keys (docs/ISOMETRIC_AND_3D_DESIGN.md §7.3). */
+  directory: {
+    /** Fixed grid origin [lon, lat] (north-west corner). Never derived at build time. */
+    gridOrigin: [75.6975, 31.261] as [number, number],
+    cellM: 200,
+    /** Footprints smaller than this get no map key unless named or with a facility. */
+    minKeyAreaM2: 20,
+  },
+  isometric: { elevationDeg: 30, maxPxPerMetre: 8, dprCap: 2 },
 } as const;
 
 const positive = z.number().positive();
@@ -169,6 +202,21 @@ const configSchema = z.object({
       arrivalConsecutive: z.number().int().positive(),
     })
     .loose(),
+  geo: z.object({
+    membership: z
+      .object({
+        insideMinFraction: z.number().gt(0.5).lte(1),
+        outsideMaxFraction: z.number().gte(0).lt(0.5),
+        crossingInventoryMinFraction: z.number().gt(0).lt(1),
+      })
+      .refine(
+        (m) =>
+          m.outsideMaxFraction < m.crossingInventoryMinFraction &&
+          m.crossingInventoryMinFraction < m.insideMinFraction,
+        'membership thresholds must satisfy outsideMax < crossingInventoryMin < insideMin',
+      ),
+  }),
+  directory: z.object({ cellM: positive, minKeyAreaM2: z.number().nonnegative() }).loose(),
 });
 
 export type AppConfig = typeof APP_CONFIG;

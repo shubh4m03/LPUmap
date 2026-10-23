@@ -26,7 +26,15 @@ export interface PlaceRecord {
 
 export interface PlacesContext {
   boundary: CampusBoundary;
+  /** Campus-inventory footprints (status inside or crossing): become `kind: 'building'` places. */
   buildings: readonly BuildingRecord[];
+  /**
+   * Footprints classified 'outside'. Owner decision 2: no off-campus building
+   * is ever shipped, so a named or use-tagged one (a restaurant, a PG, a bank)
+   * becomes a point-only context place without footprint; the rest are dropped
+   * (and listed in the coverage report).
+   */
+  outsideBuildings?: readonly BuildingRecord[];
   maxBounds: readonly [number, number, number, number];
   retrievedAt: string;
 }
@@ -177,7 +185,7 @@ function toRecord(c: Candidate, ctx: PlacesContext): PlaceRecord | null {
 
 function buildingRecord(b: BuildingRecord, retrievedAt: string): PlaceRecord {
   const sub = subcategory(b.tags) ?? (b.tags.building !== 'yes' ? b.tags.building : undefined);
-  const levels = b.height.levels;
+  const levels = b.height.levelsSuspicious ? null : b.height.levels;
   const place: Place = {
     id: b.id,
     name: b.name,
@@ -188,7 +196,12 @@ function buildingRecord(b: BuildingRecord, retrievedAt: string): PlaceRecord {
     kind: 'building',
     location: b.location,
     buildingId: b.id,
-    campusZone: b.campusZone,
+    campusZone: 'on-campus',
+    ...(b.height.levelsSuspicious
+      ? {
+          description: `Levels tagged ${b.height.levels} in OpenStreetMap (suspicious: below 1 storey); drawn with the placeholder height.`,
+        }
+      : {}),
     ...commonPlaceFields(b.tags),
     ...(levels !== null && Number.isInteger(levels) ? { levels } : {}),
     heightM: b.height.heightM,
@@ -231,6 +244,22 @@ export function collectPlaces(osm: OsmData, ctx: PlacesContext): PlaceRecord[] {
     if (rec) records.push(rec);
   };
   for (const b of ctx.buildings) records.push(buildingRecord(b, ctx.retrievedAt));
+  for (const b of ctx.outsideBuildings ?? []) {
+    if (!inBBox(b.location, ctx.maxBounds)) continue;
+    const rec = toRecord(
+      { type: b.osmType, id: b.osmId, tags: b.tags, location: b.location, geometry: 'point' },
+      ctx,
+    );
+    if (!rec || (rec.place.name === null && rec.place.categoryId === 'building')) continue;
+    rec.place.campusZone = 'off-campus-nearby';
+    rec.place.description = [
+      rec.place.description,
+      'Mapped in OpenStreetMap as a building outside the campus boundary; shown as a point only (off-campus buildings are not drawn).',
+    ]
+      .filter(Boolean)
+      .join(' ');
+    records.push(rec);
+  }
 
   for (const node of sortedValues(osm.nodes)) {
     if (Object.keys(node.tags).length === 0) continue;

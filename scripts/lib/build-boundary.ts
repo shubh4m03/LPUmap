@@ -61,9 +61,9 @@ export function buildBoundary(osm: OsmData, relationId: number = CAMPUS_RELATION
 }
 
 export function boundaryFeatureCollection(b: CampusBoundary): BoundaryFile {
-  const geometry =
+  const geometry: BoundaryFile['features'][number]['geometry'] =
     b.multiPolygon.length === 1
-      ? { type: 'Polygon', coordinates: b.multiPolygon[0] }
+      ? { type: 'Polygon', coordinates: b.multiPolygon[0]! }
       : { type: 'MultiPolygon', coordinates: b.multiPolygon };
   return {
     type: 'FeatureCollection',

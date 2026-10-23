@@ -64,16 +64,21 @@ describe('docsFromPlaces', () => {
   });
 
   it('builds subtitle, keywords, ids and location flags from the record only', () => {
-    const [onCampus, offCampus, noLocation] = docsFromPlaces([
-      place('osm:node/1', { name: 'Campus Pharmacy', categoryId: 'health', subcategory: 'pharmacy' }),
-      place('osm:node/2', { name: 'Hotel X', categoryId: 'residential', campusZone: 'off-campus-nearby' }),
-      place('cur:registrar', {
-        name: 'Registrar Office',
-        categoryId: 'other',
-        kind: 'organization',
-        location: null,
-      }),
-    ]);
+    // v2: an off-campus place is indexed only when the "Nearby, outside campus" layer is enabled
+    // (includeContext); its subtitle then carries the layer badge. v1 indexed it by default.
+    const [onCampus, offCampus, noLocation] = docsFromPlaces(
+      [
+        place('osm:node/1', { name: 'Campus Pharmacy', categoryId: 'health', subcategory: 'pharmacy' }),
+        place('osm:node/2', { name: 'Hotel X', categoryId: 'residential', campusZone: 'off-campus-nearby' }),
+        place('cur:registrar', {
+          name: 'Registrar Office',
+          categoryId: 'other',
+          kind: 'organization',
+          location: null,
+        }),
+      ],
+      { includeContext: true },
+    );
     expect(onCampus).toMatchObject({
       id: 'place:osm:node/1',
       kind: 'place',
@@ -84,8 +89,56 @@ describe('docsFromPlaces', () => {
     });
     expect(onCampus?.keywords).toEqual(expect.arrayContaining(getCategory('health').synonyms));
     expect(onCampus?.keywords.filter((k) => k === 'pharmacy')).toHaveLength(1);
-    expect(offCampus?.subtitle).toBe('Residence / PG / apartment · Off campus (nearby)');
+    expect(offCampus?.subtitle).toBe('Residence / PG / apartment · Outside campus');
     expect(noLocation?.hasLocation).toBe(false);
+  });
+
+  it('excludes off-campus places from campus search unless the context layer is enabled', () => {
+    const records = [
+      place('osm:node/1', { name: 'Campus Pharmacy', categoryId: 'health' }),
+      place('osm:node/2', {
+        name: 'Law Gate Pharmacy',
+        categoryId: 'health',
+        campusZone: 'off-campus-nearby',
+      }),
+    ];
+    expect(docsFromPlaces(records).map((d) => d.ref)).toEqual(['osm:node/1']);
+    expect(docsFromPlaces(records, { includeContext: false }).map((d) => d.ref)).toEqual(['osm:node/1']);
+    expect(docsFromPlaces(records, { includeContext: true }).map((d) => d.ref)).toEqual([
+      'osm:node/1',
+      'osm:node/2',
+    ]);
+  });
+
+  it('makes a keyed building findable by its map key without inventing a name', () => {
+    const keys = new Map([
+      ['osm:way/1', 'C4-07'],
+      ['osm:way/2', 'D5-01'],
+    ]);
+    const docs = docsFromPlaces(
+      [
+        place('osm:way/1', { kind: 'building', displayName: 'Unnamed building · 10 floors' }),
+        place('osm:way/2', { kind: 'building', name: 'Admin Block' }),
+        place('osm:way/3', { kind: 'building' }),
+      ],
+      { mapKey: (id) => keys.get(id) },
+    );
+    expect(docs.map((d) => d.ref)).toEqual(['osm:way/1', 'osm:way/2']); // unkeyed unnamed: still not indexed
+    const [unnamed, named] = docs;
+    expect(unnamed).toMatchObject({
+      title: 'Map key C4-07',
+      subtitle: 'Unnamed building · 10 floors',
+      keywords: [],
+    });
+    expect(unnamed?.codes).toContain('C4-07');
+    expect(named).toMatchObject({ title: 'Admin Block' });
+    expect(named?.codes).toContain('D5-01');
+    expect(createSearchIndex(docs).search('C4-07')[0]?.doc.ref).toBe('osm:way/1');
+    expect(
+      createSearchIndex(docs)
+        .search('building')
+        .map((h) => h.doc.ref),
+    ).not.toContain('osm:way/1');
   });
 
   it('falls back to the "other" category for unknown category ids', () => {

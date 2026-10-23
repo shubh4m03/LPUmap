@@ -1,0 +1,26 @@
+{
+  "sourceId": "google-open-buildings",
+  "name": "Google Open Buildings",
+  "url": "https://sites.research.google/gr/open-buildings/",
+  "license": "ODbL 1.0",
+  "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "attribution": "Google Open Buildings (v3), used under the Open Database License 1.0",
+  "version": "v3",
+  "tileUrl": "https://storage.googleapis.com/open-buildings-data/v3/points_s2_level_6_gzip_no_header/391b_buildings.csv.gz",
+  "s2Token": "391b",
+  "retrievedAt": "2026-10-23T21:50:45Z",
+  "tileSha256": "f1ee89451680fc05c3e0d52cc5449320c2e76919d4effb73967d086f92acfb1c",
+  "tileBytes": 173746469,
+  "rowsInTile": 6844414,
+  "rowsInSnapshot": 4917,
+  "filterBBox": [
+    75.685,
+    31.236,
+    75.722,
+    31.27
+  ],
+  "confidenceThreshold": 0.875,
+  "confidenceThresholdSource": "90 % precision threshold for S2 level-4 cell 391 in Google score_thresholds_s2_level_4.csv (0.801 / 0.839 / 0.875 for 80 / 85 / 90 %), recorded in docs/GEODATA_SOURCES_AND_LICENSES.md section 3",
+  "minAreaM2": 50,
+  "notes": "Rows exactly as published: latitude,longitude,area_in_meters,confidence,full_plus_code. Points only (the polygon file was not downloaded), so Google-only detections are point features. Machine-detected, unverified."
+}

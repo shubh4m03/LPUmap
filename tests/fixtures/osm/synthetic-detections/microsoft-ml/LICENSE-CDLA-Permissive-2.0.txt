@@ -1,0 +1,1 @@
+SYNTHETIC test fixture: stands in for the CDLA Permissive 2.0 text shipped with real Microsoft data.

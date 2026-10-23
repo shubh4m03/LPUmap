@@ -1,0 +1,25 @@
+{
+  "$comment": "Named or verified campus features that must never silently disappear. A build whose output lacks one of these ids in the listed files fails validation and does not replace public/data. To add a landmark: append {id, in, why} with the stable feature id (osm:way/…, osm:relation/…, cur:…) of a feature that exists in the current build, the files that must contain it (buildings, places, boundary) and what makes it a landmark (its OSM name tag, a survey, …). Never add a guessed id. Removing one on purpose means editing this file in the same change. Schema: scripts/lib/landmarks.ts.",
+  "landmarks": [
+    {
+      "id": "osm:relation/21599790",
+      "in": ["boundary", "places"],
+      "why": "Campus boundary relation (OSM name 'Lovely Professional University'); the boundary every membership rule depends on."
+    },
+    {
+      "id": "osm:way/354743583",
+      "in": ["buildings", "places"],
+      "why": "Named campus building: OSM name 'Lovely Institute Of Management'."
+    },
+    {
+      "id": "osm:way/354755644",
+      "in": ["buildings", "places"],
+      "why": "Named campus building: OSM name 'Lovely Institute of Technology'."
+    },
+    {
+      "id": "osm:way/354830243",
+      "in": ["buildings", "places"],
+      "why": "Named campus building: OSM name 'Lovely Institute of Pharmacy'."
+    }
+  ]
+}

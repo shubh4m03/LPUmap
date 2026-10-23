@@ -4,6 +4,7 @@
  * surfaces orphaned overrides and access nodes that no longer validate).
  */
 import { APP_CONFIG } from '../../src/config/index.ts';
+import { describeOrphan, orphanReasonFor, type OrphanReason } from '../base-data.ts';
 import { findPossibleDuplicates } from '../../src/community/duplicates.ts';
 import { checkAccessNode, pointInPolygons } from '../../src/community/geo.ts';
 import { countAuditSince } from '../db/audit.ts';
@@ -31,6 +32,8 @@ export interface QualityWarning {
   id: string;
   message: string;
   relatedId?: string;
+  /** 'orphan-override' only: why the target is not a campus place (v2). */
+  orphanReason?: OrphanReason;
 }
 
 const DAY_MS = 86_400_000;
@@ -57,7 +60,9 @@ export async function getQualityWarnings(
         kind: 'orphan-override',
         entityType: 'override',
         id: o.targetId,
-        message: `Override target is not in the current dataset (${base.datasetVersion}); it was made on ${o.baseDatasetVersion} and is not applied.`,
+        orphanReason: orphanReasonFor(base, o.targetId) ?? 'not-in-dataset',
+        message:
+          `Override target is not in the current dataset (${base.datasetVersion}); it was made on ${o.baseDatasetVersion} and is not applied. ${describeOrphan(base, o.targetId)}`.trim(),
       });
       continue;
     }

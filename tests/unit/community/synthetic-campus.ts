@@ -6,6 +6,8 @@
  * footNodes = {0, 1, 2}; node 3 only touches a non-walkable edge; node 4 has no edges.
  */
 import type { CampusData } from '../../../src/data/campus-data.ts';
+import { DATA_SCHEMA_VERSION } from '../../../src/data/schema.ts';
+import { syntheticBuildingProps } from '../../fixtures/synthetic-building-props.ts';
 import type {
   BoundaryFile,
   BuildingsFile,
@@ -45,7 +47,7 @@ const edge = (id: number, from: number, to: number, foot: boolean): GraphEdge =>
 });
 
 export const GRAPH: GraphFile = {
-  schemaVersion: 1,
+  schemaVersion: DATA_SCHEMA_VERSION,
   nodes: NODES,
   edges: [edge(0, 0, 1, true), edge(1, 1, 2, true), edge(2, 2, 3, false)],
 };
@@ -141,17 +143,12 @@ const footprint = (p: Place, ring: LngLat[]): BuildingsFile['features'][number] 
   type: 'Feature',
   id: p.id,
   geometry: { type: 'Polygon', coordinates: [ring] },
-  properties: {
+  properties: syntheticBuildingProps({
     id: p.id,
     name: p.name,
     displayName: p.displayName,
-    levels: null,
-    heightM: 6,
-    minHeightM: 0,
-    heightSource: 'fallback',
     categoryId: p.categoryId,
-    campusZone: p.campusZone,
-  },
+  }),
 });
 
 export const BUILDINGS: BuildingsFile = {
@@ -194,7 +191,7 @@ export const DATASET_VERSION = 'synthetic-v1';
 
 export function syntheticCampus(overrides: Partial<CampusData> = {}): CampusData {
   const manifest: Manifest = {
-    schemaVersion: 1,
+    schemaVersion: DATA_SCHEMA_VERSION,
     datasetVersion: DATASET_VERSION,
     builtFrom: '2026-01-01T00:00:00Z',
     sources: [{ id: 'osm', name: 'OpenStreetMap' }],

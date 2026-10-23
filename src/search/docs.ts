@@ -1,12 +1,14 @@
 /** Builds search docs from dataset records. Only data that exists in the records is used. */
 import { getCategory, type CategoryDef } from '../config/categories.ts';
+import { APP_CONFIG } from '../config/index.ts';
 import { PLACE_KIND_LABELS } from '../data/place-labels.ts';
 import type { Place } from '../data/schema.ts';
 import type { SearchDoc } from './types.ts';
 
 export const PLACE_DOC_PREFIX = 'place:';
 export const CATEGORY_DOC_PREFIX = 'category:';
-export const OFF_CAMPUS_LABEL = 'Off campus (nearby)';
+/** Badge of the opt-in "Nearby, outside campus" layer (owner decision 2). */
+export const OFF_CAMPUS_LABEL: string = APP_CONFIG.optionalLayers.nearbyOutsideCampus.badge;
 
 /**
  * A code-like alias: short alphanumerics ('B34', 'BH-4') containing a digit,
@@ -45,7 +47,22 @@ function uniqueNonEmpty(values: string[]): string[] {
 export interface PlaceDocOptions {
   /** Display name of the place another place is located in (from located_in relations). */
   hostName?: (placeId: string) => string | undefined;
+  /**
+   * v2, owner decision 2: off-campus places (context-places.json) are excluded
+   * from campus search unless the "Nearby, outside campus" layer is enabled
+   * and the caller passes true. Their subtitle then says "Outside campus".
+   */
+  includeContext?: boolean;
+  /**
+   * Map key (Decision D6, e.g. 'C4-07') of a campus building, from
+   * buildings.geojson `directoryKey`. A keyed building becomes findable by its
+   * key; an unnamed one gets the key as its title ("Map key C4-07"), never an
+   * invented name, and no category synonyms (so generic queries are not flooded).
+   */
+  mapKey?: (placeId: string) => string | null | undefined;
 }
+
+export const MAP_KEY_TITLE_PREFIX = 'Map key';
 
 /**
  * Two docs with the same title (e.g. an OpenStreetMap facility "School of Design"
@@ -76,17 +93,21 @@ export function docsFromPlaces(places: Place[], opts: PlaceDocOptions = {}): Sea
   const docs: SearchDoc[] = [];
   const byId = new Map<string, Place>();
   for (const place of places) {
-    const aliases = uniqueNonEmpty(place.aliases ?? []);
+    const offCampus = place.campusZone === 'off-campus-nearby';
+    if (offCampus && !opts.includeContext) continue;
+    const key = place.kind === 'building' && !offCampus ? (opts.mapKey?.(place.id) ?? null) : null;
+    const aliases = uniqueNonEmpty([...(place.aliases ?? []), ...(key ? [key] : [])]);
     const name = place.name?.trim() ? place.name.trim() : null;
-    const title = name ?? aliases[0];
+    const sourcedTitle = name ?? uniqueNonEmpty(place.aliases ?? [])[0];
+    const title = sourcedTitle ?? (key ? `${MAP_KEY_TITLE_PREFIX} ${key}` : undefined);
     if (title === undefined) continue;
     const category = getCategory(place.categoryId);
-    const subtitleParts = [category.label];
-    if (place.campusZone === 'off-campus-nearby') subtitleParts.push(OFF_CAMPUS_LABEL);
-    const keywords = uniqueNonEmpty([
-      ...category.synonyms,
-      ...(place.subcategory ? [place.subcategory] : []),
-    ]);
+    const subtitleParts = sourcedTitle === undefined ? [place.displayName] : [category.label];
+    if (offCampus) subtitleParts.push(OFF_CAMPUS_LABEL);
+    const keywords =
+      sourcedTitle === undefined
+        ? []
+        : uniqueNonEmpty([...category.synonyms, ...(place.subcategory ? [place.subcategory] : [])]);
     byId.set(place.id, place);
     docs.push({
       id: `${PLACE_DOC_PREFIX}${place.id}`,
@@ -94,7 +115,7 @@ export function docsFromPlaces(places: Place[], opts: PlaceDocOptions = {}): Sea
       title,
       subtitle: subtitleParts.join(' · '),
       aliases: aliases.filter((a) => a !== title),
-      codes: aliases.filter(looksLikeCode),
+      codes: uniqueNonEmpty([...aliases.filter(looksLikeCode), ...(key ? [key] : [])]),
       keywords,
       categoryId: place.categoryId,
       ref: place.id,

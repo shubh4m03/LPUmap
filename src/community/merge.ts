@@ -221,8 +221,10 @@ function recount(base: Manifest, places: Place[], buildings: BuildingsFile, rela
   const c: Record<string, number> = { ...base.counts };
   const count = (pred: (p: Place) => boolean) => places.filter(pred).length;
   c.places = places.length;
-  c.buildings = buildings.features.length;
-  c['buildings:unnamed'] = buildings.features.filter((f) => f.properties.name === null).length;
+  // v2: 'buildings' counts the campus inventory only (inside + crossing); review items are counted apart.
+  const inventory = buildings.features.filter((f) => f.properties.inCampusInventory);
+  c.buildings = inventory.length;
+  c['buildings:unnamed'] = inventory.filter((f) => f.properties.name === null).length;
   c.relations = relations.length;
   c['places:withoutLocation'] = count((p) => p.location === null);
   c['places:notConnected'] = count((p) => p.location !== null && p.graphNodeId === undefined);
@@ -231,7 +233,7 @@ function recount(base: Manifest, places: Place[], buildings: BuildingsFile, rela
   for (const cat of CATEGORIES) c[`category:${cat.id}`] = count((p) => p.categoryId === cat.id);
   for (const k of placeKindSchema.options) c[`kind:${k}`] = count((p) => p.kind === k);
   for (const h of ['osm-height', 'osm-levels-estimate', 'fallback'])
-    c[`heightSource:${h}`] = buildings.features.filter((f) => f.properties.heightSource === h).length;
+    c[`heightSource:${h}`] = inventory.filter((f) => f.properties.renderHeightSource === h).length;
   for (const t of relationTypeSchema.options)
     c[`relation:${t}`] = relations.filter((r) => r.type === t).length;
   return Object.fromEntries(Object.entries(c).sort(([a], [b]) => byString(a, b)));

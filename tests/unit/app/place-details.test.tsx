@@ -3,14 +3,17 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { useAppStore } from '../../../src/app/store/index.ts';
 import { PlaceDetails } from '../../../src/components/place/PlaceDetails.tsx';
+import { buildServices } from '../../../src/app/data/services.ts';
 import { renderWithAtlas, resetAppStore } from './render-helpers.tsx';
+import { withOffCampusNamed } from './synthetic-campus.ts';
 
 describe('PlaceDetails', () => {
   beforeEach(resetAppStore);
   afterEach(cleanup);
 
   it('named place: category, zone, published hours, safe contact links, provenance', () => {
-    renderWithAtlas(<PlaceDetails placeId="osm:node/1" />);
+    // Shown as the opt-in "Nearby, outside campus" layer would show it, so the zone label is exercised.
+    renderWithAtlas(<PlaceDetails placeId="osm:node/1" />, buildServices(withOffCampusNamed()));
     expect(screen.getByRole('heading', { name: 'Synthetic Food Point' })).toBeInTheDocument();
     expect(screen.getByText('Food & drink')).toBeInTheDocument();
     expect(screen.getByText('Off campus (nearby)')).toBeInTheDocument();

@@ -25,7 +25,7 @@ import type { OverrideRecord } from '../db/records.ts';
 import { GUARD_AFTER_CHANGE, changes } from '../db/sql.ts';
 import type { SqlDatabase, SqlStatement } from '../db/types.ts';
 import { conflict, fail, notFound, parseOrThrow, unprocessable } from '../errors.ts';
-import type { BaseData } from '../base-data.ts';
+import { orphanReasonFor, type BaseData, type OrphanReason } from '../base-data.ts';
 import { audited } from './audited.ts';
 import { isoNow, type DomainContext } from './context.ts';
 import {
@@ -114,12 +114,19 @@ function requireBasePlace(base: BaseData, targetId: string): Place {
 export interface OverrideView extends OverrideRecord {
   /** Target no longer exists in the current base dataset (not applied publicly). */
   orphan: boolean;
+  /** v2: why the target is not a campus place (null when not an orphan). The D1 row is never deleted for this. */
+  orphanReason: OrphanReason | null;
   baseName: string | null;
 }
 
 const view = (o: OverrideRecord, base: BaseData): OverrideView => {
   const p = base.places.get(o.targetId);
-  return { ...o, orphan: !p, baseName: p ? p.displayName : null };
+  return {
+    ...o,
+    orphan: !p,
+    orphanReason: orphanReasonFor(base, o.targetId),
+    baseName: p ? p.displayName : null,
+  };
 };
 
 export async function listOverrides(db: SqlDatabase, ctx: Pick<DomainContext, 'base'>) {

@@ -32,7 +32,7 @@ export interface BuildingLayerOptions {
 
 const SELECTED: ExpressionSpecification = ['boolean', ['feature-state', 'selected'], false];
 
-/** Extrusion colour per heightSource, so placeholder heights are visibly different from data. */
+/** Extrusion colour per renderHeightSource (v2 render-only prop), so placeholder heights are visibly different from data. */
 export function extrusionColorExpression(c: MapThemeColors): ExpressionSpecification {
   return [
     'case',
@@ -40,7 +40,7 @@ export function extrusionColorExpression(c: MapThemeColors): ExpressionSpecifica
     c.selected,
     [
       'match',
-      ['get', 'heightSource'],
+      ['get', 'renderHeightSource'],
       'osm-height',
       c.extrusionMeasured,
       'osm-levels-estimate',
@@ -61,11 +61,13 @@ export function buildingExtrusionLayers(
       type: 'fill-extrusion',
       source: opts.sourceId ?? BUILDINGS_SOURCE_ID,
       minzoom: opts.minzoom ?? APP_CONFIG.map.extrusionMinZoom,
+      // v2: only campus-inventory footprints are extruded; 'uncertain' review items never are.
+      filter: ['==', ['get', 'inCampusInventory'], true],
       layout: { visibility: opts.mode3d ? 'visible' : 'none' },
       paint: {
         'fill-extrusion-color': extrusionColorExpression(c),
-        'fill-extrusion-height': ['get', 'heightM'],
-        'fill-extrusion-base': ['get', 'minHeightM'],
+        'fill-extrusion-height': ['get', 'renderHeightM'],
+        'fill-extrusion-base': ['get', 'renderMinHeightM'],
         'fill-extrusion-opacity': 0.92,
         'fill-extrusion-vertical-gradient': true,
       },

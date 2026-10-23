@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "datasetVersion": "b628c5855b1d",
+  "schemaVersion": 2,
+  "datasetVersion": "62e807e6d444",
   "builtFrom": "2026-10-23T09:39:00Z",
   "sources": [
     {
@@ -191,95 +191,145 @@
       "name": "Lovely Professional University — Student Health Care Services at LPU",
       "url": "https://www.lpu.in/student-services/healthcare.php",
       "retrievedAt": "2026-10-23"
+    },
+    {
+      "id": "microsoft-ml-buildings",
+      "name": "Microsoft Global ML Building Footprints",
+      "url": "https://github.com/microsoft/GlobalMLBuildingFootprints",
+      "license": "CDLA-Permissive-2.0",
+      "licenseUrl": "https://cdla.dev/permissive-2-0/",
+      "licenseTextPath": "data/licenses/CDLA-Permissive-2.0.txt",
+      "attribution": "Building footprints © Microsoft (Global ML Building Footprints), CDLA Permissive 2.0",
+      "retrievedAt": "2026-10-23T21:50:45Z",
+      "notes": "Tile quadkey 123121013, release 2026-08-13 (https://bfppub.z5.web.core.windows.net/2026-08-13/global-buildings.geojsonl/RegionName=India/quadkey=123121013/part-00048-110f5303-ff85-4c71-a2bf-c6070024fec8.c000.csv.gz). Unverified machine detections shown only as a flat review layer; geometry kept exactly as published (the ~5.6 m offset to OSM is documented, not corrected)."
+    },
+    {
+      "id": "google-open-buildings",
+      "name": "Google Open Buildings",
+      "url": "https://sites.research.google/gr/open-buildings/",
+      "license": "ODbL 1.0",
+      "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "attribution": "Google Open Buildings (v3), used under the Open Database License 1.0",
+      "retrievedAt": "2026-10-23T21:50:45Z",
+      "notes": "Open Buildings v3 points, S2 cell 391b (https://storage.googleapis.com/open-buildings-data/v3/points_s2_level_6_gzip_no_header/391b_buildings.csv.gz). Dual-licensed CC BY 4.0 or ODbL 1.0; used under ODbL 1.0. Confidence threshold 0.875 (90 % precision threshold for S2 level-4 cell 391 in Google score_thresholds_s2_level_4.csv (0.801 / 0.839 / 0.875 for 80 / 85 / 90 %), recorded in docs/GEODATA_SOURCES_AND_LICENSES.md section 3)."
     }
   ],
   "files": {
     "basemap": {
       "path": "basemap.geojson",
-      "bytes": 142362,
-      "sha256": "81c570fb701fac35f067ac95f04a4b4d048aef03fe4edd906e8bf2a0816be658"
+      "bytes": 127121,
+      "sha256": "9064368d5fa275f66659dbfd87e3b15e1d7354c9072dac33f6400c0883e89f8f"
     },
     "boundary": {
       "path": "boundary.geojson",
       "bytes": 3166,
       "sha256": "8ccfd770e1d848835a4add9f2960b8dcf78a3985096279b77f7cb122a7a1e920"
     },
+    "boundaryReview": {
+      "path": "boundary-review.json",
+      "bytes": 16544,
+      "sha256": "085e1353faad390209cd251de512ed1544b817564ee812345fc8d9d9f919f6bc"
+    },
     "buildings": {
       "path": "buildings.geojson",
-      "bytes": 239339,
-      "sha256": "13007495c96b2742fbc940f956e066bec795d6a86bd96d9fa8d1e1342aed3f7b"
+      "bytes": 206464,
+      "sha256": "a5ee6d00f4fe7b4c037bf4c7f85946213d35164f1d7bf817e27636aa7404954a"
+    },
+    "contextPlaces": {
+      "path": "context-places.json",
+      "bytes": 119943,
+      "sha256": "ff2866e61612b3ff460716061ba2fb4c1cf2473126263c90e58e2fccf92e6d57"
+    },
+    "detections": {
+      "path": "detections.geojson",
+      "bytes": 81622,
+      "sha256": "dcc445f3bb35c827de8f4cf8c4820db2f0c7d1300b0cc9ee3299f0da38026aff"
     },
     "graph": {
       "path": "graph.json",
-      "bytes": 495453,
-      "sha256": "99065fae75a7552c1b27c55fd8e5065990bd4692b6996e1c0cb6832e487cb97a"
+      "bytes": 521247,
+      "sha256": "78485bd6a50e69a7e6a52764bc6f61d4c3b32157f18cb7bbb2f1a84e06c47a8a"
     },
     "places": {
       "path": "places.json",
-      "bytes": 401563,
-      "sha256": "6e3db9a62a3987a166b7d42085adec820fe2c76561b0d451aa2d8bde8fbd226f"
+      "bytes": 110020,
+      "sha256": "b268d47f117788aea4092f1104b767fbbe845416d63caa79303af6a79d2cc346"
     },
     "quality": {
       "path": "quality-report.json",
-      "bytes": 13990,
-      "sha256": "d63afa7d38e4e0a77ded20273873793141226eb5a4eedbd328607028461f3377"
+      "bytes": 251130,
+      "sha256": "c17dd72c8720261b135d5f3621ad17cbec10df033605e65ca012863f0a271b14"
     },
     "relations": {
       "path": "relations.json",
-      "bytes": 265663,
-      "sha256": "874a29efa058b0463a0b81f9d9d3c83116d4ff51c774c376adabc0fd92882995"
+      "bytes": 63189,
+      "sha256": "fa5b4aebc38b22cff038b992064a3d7d4cd857b7323d9485b3d28d733f9a4738"
     }
   },
   "counts": {
-    "basemapFeatures": 389,
-    "buildings": 535,
-    "buildings:unnamed": 499,
+    "basemapFeatures": 349,
+    "boundaryReview:items": 25,
+    "buildings": 131,
+    "buildings:crossing": 3,
+    "buildings:duplicatesRemoved": 1,
+    "buildings:inside": 128,
+    "buildings:inSnapshot": 535,
+    "buildings:outsideExcluded": 390,
+    "buildings:uncertain": 13,
+    "buildings:unnamed": 128,
     "category:academic": 30,
-    "category:building": 494,
-    "category:finance": 2,
-    "category:food": 18,
-    "category:gate": 1,
-    "category:health": 2,
-    "category:hostel": 3,
+    "category:building": 130,
+    "category:finance": 0,
+    "category:food": 1,
+    "category:gate": 0,
+    "category:health": 1,
+    "category:hostel": 0,
     "category:laundry": 0,
     "category:library": 1,
-    "category:other": 3,
+    "category:other": 0,
     "category:park": 40,
-    "category:parking": 8,
+    "category:parking": 6,
     "category:printing": 0,
-    "category:residential": 213,
-    "category:shop": 5,
-    "category:sports": 28,
-    "category:transport": 1,
-    "category:university": 6,
+    "category:residential": 0,
+    "category:shop": 0,
+    "category:sports": 15,
+    "category:transport": 0,
+    "category:university": 3,
     "category:washroom": 0,
     "category:water": 0,
     "category:worship": 0,
+    "contextPlaces": 261,
+    "detections": 123,
+    "detections:google-open-buildings": 11,
+    "detections:microsoft-ml": 112,
+    "directory:eligible": 110,
+    "directory:keyed": 110,
+    "graph:campusEdges": 756,
     "graph:components": 9,
     "graph:edges": 1770,
     "graph:largestComponentNodes": 1508,
     "graph:nodes": 1636,
-    "heightSource:fallback": 398,
+    "heightSource:fallback": 9,
     "heightSource:osm-height": 0,
-    "heightSource:osm-levels-estimate": 137,
-    "kind:area": 73,
-    "kind:building": 535,
+    "heightSource:osm-levels-estimate": 122,
+    "kind:area": 62,
+    "kind:building": 131,
     "kind:entrance": 0,
-    "kind:facility": 213,
-    "kind:gate": 1,
+    "kind:facility": 1,
+    "kind:gate": 0,
     "kind:landmark": 1,
     "kind:organization": 32,
-    "places": 855,
-    "places:notConnected": 34,
+    "places": 227,
+    "places:notConnected": 28,
     "places:withoutLocation": 31,
     "relation:accessed_via": 0,
     "relation:connected_by_path": 0,
-    "relation:located_in": 167,
-    "relation:nearby": 393,
-    "relation:part_of": 200,
-    "relations": 760,
-    "zone:off-campus-nearby": 622,
-    "zone:on-campus": 233
+    "relation:located_in": 2,
+    "relation:nearby": 0,
+    "relation:part_of": 194,
+    "relations": 196,
+    "zone:off-campus-nearby": 0,
+    "zone:on-campus": 227
   },
   "bbox": [
     75.6973474,

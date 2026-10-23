@@ -1,10 +1,8 @@
 /** Workflow E — phone usability: search pill, bottom sheet, route action, layers, theme, layout fit. */
 import type { Locator, Page } from '@playwright/test';
-import { FACILITY } from './fixtures/data.ts';
+import { FACILITY, NO_FACILITY_REASON } from './fixtures/data.ts';
 import type { Atlas } from './fixtures/atlas.ts';
 import { expect, test } from './fixtures/test.ts';
-
-const { place, categoryLabel } = FACILITY;
 
 interface Box {
   x: number;
@@ -92,6 +90,8 @@ test.describe('E · mobile usability', () => {
     atlas,
     page,
   }) => {
+    test.skip(FACILITY === null, NO_FACILITY_REASON);
+    const { place, categoryLabel } = FACILITY!;
     await atlas.open();
     await atlas.searchAndChoose(place.name);
     const sheet = page.locator('[data-snap]');

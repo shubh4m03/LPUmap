@@ -17,6 +17,8 @@ const repo = fileURLToPath(new URL('../..', import.meta.url));
 let tmp: string;
 let result: BuildResult;
 let places: Map<string, Place>;
+/** v2: off-campus POIs live in context-places.json (opt-in layer), never in places.json. */
+let context: Map<string, Place>;
 
 beforeAll(() => {
   tmp = mkdtempSync(join(tmpdir(), 'pipeline-real-'));
@@ -29,6 +31,10 @@ beforeAll(() => {
   const list = (JSON.parse(readFileSync(join(tmp, 'out', 'places.json'), 'utf8')) as { places: Place[] })
     .places;
   places = new Map(list.map((p) => [p.id, p]));
+  const ctx = (
+    JSON.parse(readFileSync(join(tmp, 'out', 'context-places.json'), 'utf8')) as { places: Place[] }
+  ).places;
+  context = new Map(ctx.map((p) => [p.id, p]));
 });
 afterAll(() => rmSync(tmp, { recursive: true, force: true }));
 
@@ -48,14 +54,17 @@ describe('real LPU snapshot', () => {
   });
 
   it('does not present the "Law gate" neighbourhood as a gate or campus entrance', () => {
-    const law = places.get('osm:way/752027029')!;
+    // v2: it lies outside the boundary, so it is a context place only (v1 listed it among campus places).
+    expect(places.has('osm:way/752027029')).toBe(false);
+    const law = context.get('osm:way/752027029')!;
     expect(law.kind).not.toBe('gate');
     expect(law.categoryId).not.toBe('gate');
     expect(law.description).toMatch(/not a campus entrance/);
   });
 
   it('labels the ceremonial "Green valley main gate" without claiming it is open', () => {
-    const g = places.get('osm:node/12031088561')!;
+    expect(places.has('osm:node/12031088561')).toBe(false);
+    const g = context.get('osm:node/12031088561')!;
     expect(g).toMatchObject({ kind: 'gate', campusZone: 'off-campus-nearby' });
     expect(g.description).toMatch(/ceremonial gate.*not recorded/);
   });
@@ -73,7 +82,21 @@ describe('real LPU snapshot', () => {
   });
 
   it('marks every OSM record imported, never verified', () => {
-    for (const p of places.values()) expect(p.provenance.verificationStatus).toBe('imported');
+    for (const p of [...places.values(), ...context.values()])
+      expect(p.provenance.verificationStatus).toBe('imported');
+  });
+
+  it('ships campus places only in places.json and no building in the context layer', () => {
+    for (const p of places.values()) expect(p.campusZone).toBe('on-campus');
+    for (const p of context.values()) {
+      expect(p.campusZone).toBe('off-campus-nearby');
+      expect(p.kind).not.toBe('building');
+      expect(p.buildingId).toBeUndefined();
+    }
+    expect(result.manifest.counts.buildings).toBe(result.quality.membership.inventory.total);
+    expect(
+      result.quality.membership.outside.length + result.quality.membership.uncertain.length,
+    ).toBeGreaterThan(0);
   });
 
   it('reports the graph structure without synthetic links', () => {

@@ -1,0 +1,89 @@
+{
+  "$comment": "Curated boundary review (owner decision 3). SECTIONS mark stretches of the OSM campus boundary (relation 21599790 v1) whose position is not trusted: while a section is open, every footprint touching its geometry or within bufferM of it is classified uncertain, excluded from the campus inventory and listed for review (rule R3, src/geo/boundary.ts). Geometry is copied from OSM node positions named in evidence; nothing is drawn by hand. DECISIONS resolve one footprint: {featureId, status: inside|crossing|outside, decidedAt: YYYY-MM-DD, decidedBy, source: {kind: owner-confirmation|official-publication|physical-survey|osm-boundary-fix, ref}, note?}. Add a decision only with a real, dated source; none is pre-filled. Resolve a whole section by setting status resolved plus resolution (e.g. after an OSM boundary fix). Schema: scripts/lib/boundary-review.ts. See data/README.md.",
+  "sections": [
+    {
+      "id": "ne-bay",
+      "title": "North-east bay between the boundary arms",
+      "status": "open",
+      "reason": "Footprints from the 2016 campus mapping lie 3-27 m outside the north-east edge, inside a bay that the boundary relation (drawn 2026-10-09 by one mapper) leaves out. Nobody has compared the relation with an official site plan, so whether the bay is campus land is unknown.",
+      "evidence": [
+        "docs/CAMPUS_GEOGRAPHY_AUDIT.md section 2, leads on boundary completeness: way/422439516 (3.6 m outside), way/422547035 (6.0 m), way/422823981 (3.1 m), way/422823980 (27 m)",
+        "Polygon vertices: OSM nodes 14268926774, 14268926773, 4226096879, 14268926771, 14268926770, 14268926769, 14268926767, 14268926766, 14268926765, 14268926764, 14268926763, 14268926762, 14268926761 of way/1566901467 (member of relation/21599790), closed through the corner formed by the longitude of node 4221802215 and the latitude of node 14268926761",
+        "OSM relation/21599790 version 1 (changeset 190271129, 2026-10-09)"
+      ],
+      "bufferM": 0,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.7091108, 31.2590505],
+            [75.7091049, 31.2591488],
+            [75.7090967, 31.2592269],
+            [75.7086913, 31.259096],
+            [75.708665, 31.258979],
+            [75.7079953, 31.2589207],
+            [75.7079677, 31.2586506],
+            [75.7073266, 31.2586334],
+            [75.7072867, 31.2586564],
+            [75.7072564, 31.2586866],
+            [75.7072978, 31.2600585],
+            [75.7075047, 31.2600682],
+            [75.7075449, 31.2603836],
+            [75.7091258, 31.2603836],
+            [75.7091108, 31.2590505]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "east-lpu-ground",
+      "title": "LPU Ground, east of the boundary",
+      "status": "open",
+      "reason": "An area tagged amenity=university and named LPU Ground lies east of the boundary relation, with a sports-centre building on it. It may be campus land that the relation omits; only survey or official confirmation can decide.",
+      "evidence": [
+        "OSM way/422553585 (amenity=university, name=LPU Ground); polygon = its nodes 4223095396, 4223095397, 4223095398, 4223095399, 4223095400, 4223095401, 4223095402, 4223095403, 4223095396",
+        "OSM way/422555764 (building=yes, leisure=sports_centre), 208 m outside the boundary",
+        "docs/CAMPUS_GEOGRAPHY_AUDIT.md section 2 and Evidence still needed item 1"
+      ],
+      "bufferM": 0,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.7092131, 31.2570633],
+            [75.7102843, 31.2570826],
+            [75.7102725, 31.2575603],
+            [75.7114462, 31.2575815],
+            [75.7115346, 31.2539969],
+            [75.7104397, 31.2539772],
+            [75.7104053, 31.2553723],
+            [75.7092553, 31.2553516],
+            [75.7092131, 31.2570633]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "centre-indent-blocks",
+      "title": "Indented edge through three large blocks near 75.7047 E, 31.2566 N",
+      "status": "open",
+      "reason": "The boundary edge cuts through three large 2016-era blocks, leaving about 20 % of each outside (way/422437899, way/422437900, way/422437901). Either the edge or the footprints are misaligned; imagery or survey must decide.",
+      "evidence": [
+        "docs/CAMPUS_GEOGRAPHY_AUDIT.md section 3, straddling footprints (fractions 0.78-0.80)",
+        "Line vertices: OSM nodes 4221796128, 4221796129, 4221796130, 4221796131, 4221796132 of way/422435593 (member of relation/21599790). The audit attributed this edge to way/1566901467; the node ids show it belongs to way/422435593."
+      ],
+      "bufferM": 0,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [75.7038488, 31.2572093],
+          [75.7045221, 31.2572069],
+          [75.7045086, 31.2564205],
+          [75.7038059, 31.2564343],
+          [75.7038113, 31.2556088]
+        ]
+      }
+    }
+  ],
+  "decisions": []
+}

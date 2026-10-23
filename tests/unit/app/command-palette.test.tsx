@@ -6,7 +6,7 @@ import { CommandPalette } from '../../../src/components/search/CommandPalette.ts
 import { useRecents } from '../../../src/favorites/index.ts';
 import { buildServices } from '../../../src/app/data/services.ts';
 import { renderWithAtlas, resetAppStore } from './render-helpers.tsx';
-import { NAMED, syntheticCampus } from './synthetic-campus.ts';
+import { NAMED, syntheticCampus, withOffCampusNamed } from './synthetic-campus.ts';
 
 function open(query = '') {
   act(() => useAppStore.getState().openPalette(query));
@@ -184,6 +184,15 @@ describe('CommandPalette', () => {
     expect(new Set(rows).size).toBe(2);
     expect(rows.some((t) => t?.includes('Facility'))).toBe(true);
     expect(rows.some((t) => t?.includes('Department or office · in Synthetic Food Point'))).toBe(true);
+  });
+
+  it('campus search does not offer an off-campus place (the "Nearby, outside campus" layer is opt-in)', async () => {
+    renderWithAtlas(<CommandPalette />, buildServices(withOffCampusNamed()));
+    open();
+    await typeQuery('Synthetic Food Point');
+    expect(
+      screen.queryAllByRole('option').some((o) => o.textContent?.startsWith('Synthetic Food Point')),
+    ).toBe(false);
   });
 
   it('lists recent places for an empty query', async () => {

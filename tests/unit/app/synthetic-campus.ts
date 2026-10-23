@@ -1,5 +1,5 @@
 /** Invented (synthetic) campus data for app-shell tests. Not real LPU records. */
-import type { CampusData, GraphEdge, Place } from '../../../src/data/index.ts';
+import { DATA_SCHEMA_VERSION, type CampusData, type GraphEdge, type Place } from '../../../src/data/index.ts';
 
 const prov = (over: Partial<Place['provenance']> = {}): Place['provenance'] => ({
   sourceId: 'osm',
@@ -28,7 +28,8 @@ export const NAMED = place({
   displayName: 'Synthetic Food Point',
   categoryId: 'food',
   kind: 'facility',
-  campusZone: 'off-campus-nearby',
+  // v2: campus places only in the campus data (it is located_in the on-campus UNNAMED building). The
+  // off-campus label is exercised through withOffCampusNamed() below.
   openingHours: 'Mo-Su 00:00-24:00',
   graphNodeId: 0,
   contact: { phone: '+91 1824 517000', website: 'https://example.org/food' },
@@ -66,6 +67,10 @@ export const STALE = place({
   kind: 'facility',
   openingHours: 'Mo-Fr 08:00-18:00',
   location: [75.702, 31.25],
+  // Sits on graph node 2 and is connected to it, so it is routable (findNearest only routes places with a
+  // validated graphNodeId since commit 7075dfc; the fixture previously relied on the router snapping it).
+  graphNodeId: 2,
+  connectorLengthM: 0,
   provenance: prov({ sourceRef: 'node/4', retrievedAt: '2019-01-01T00:00:00Z' }),
 });
 
@@ -115,7 +120,7 @@ const empty = { type: 'FeatureCollection' as const, features: [] };
 export function syntheticCampus(): CampusData {
   return {
     manifest: {
-      schemaVersion: 1,
+      schemaVersion: DATA_SCHEMA_VERSION,
       datasetVersion: 'synthetic-001',
       builtFrom: '2026-10-01T00:00:00Z',
       sources: [
@@ -152,7 +157,7 @@ export function syntheticCampus(): CampusData {
       },
     ],
     graph: {
-      schemaVersion: 1,
+      schemaVersion: DATA_SCHEMA_VERSION,
       nodes: [
         [75.7, 31.25],
         [75.701, 31.25],
@@ -160,5 +165,20 @@ export function syntheticCampus(): CampusData {
       ],
       edges: [edge(0, 0, 1), edge(1, 1, 2)],
     },
+  };
+}
+
+/**
+ * The same data with NAMED as an off-campus place, as the opt-in "Nearby, outside campus" layer would
+ * show it (owner decision 2). Used to check its 'Off campus (nearby)' labelling and that campus search
+ * does not offer it.
+ */
+export function withOffCampusNamed(): CampusData {
+  const data = syntheticCampus();
+  return {
+    ...data,
+    places: data.places.map((p) =>
+      p.id === NAMED.id ? { ...p, campusZone: 'off-campus-nearby' as const } : p,
+    ),
   };
 }

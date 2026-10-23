@@ -8,7 +8,12 @@
 import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { GraphEdge, GraphFile, LngLat } from '../../../src/data/schema.ts';
+import {
+  DATA_SCHEMA_VERSION,
+  type GraphEdge,
+  type GraphFile,
+  type LngLat,
+} from '../../../src/data/schema.ts';
 import { APP_CONFIG } from '../../../src/config/index.ts';
 import { createLocalProjection, haversineM } from '../../../src/distance/geodesic.ts';
 
@@ -42,7 +47,7 @@ function graph(xy: Array<[number, number]>, specs: EdgeSpec[]): GraphFile {
       ...o,
     };
   });
-  return { schemaVersion: 1, nodes, edges };
+  return { schemaVersion: DATA_SCHEMA_VERSION, nodes, edges };
 }
 
 const road = { highway: 'residential', bicycle: 'ride' } as const;

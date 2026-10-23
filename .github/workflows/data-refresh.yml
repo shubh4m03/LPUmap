@@ -1,12 +1,22 @@
-# Manual OpenStreetMap refresh. Downloads a fresh snapshot, rebuilds and
-# validates the dataset, and uploads the resulting diff for a human to review.
-# It never commits or pushes and needs no secrets. Set the repository variable
+# Manual OpenStreetMap refresh. Downloads a fresh snapshot (and, on request,
+# fresh detection snapshots), rebuilds and validates the dataset, and uploads
+# the resulting diff for a human to review. The job FAILS on any validation
+# error — including the count-change guard against the dataset committed at
+# HEAD (> 40 % change or a missing landmark); the guarded build then leaves
+# public/data untouched. It never commits or pushes (read-only token) and needs
+# no secrets. An intentional large change is acknowledged by a human in
+# data/curated/count-change-acceptance.json in the commit that lands it. Set the repository variable
 # DATA_FETCH_CONTACT (an e-mail or URL) so OSM operators can identify the
 # client, as their usage policy asks.
 name: Data refresh
 
 on:
   workflow_dispatch:
+    inputs:
+      refresh_detections:
+        description: 'Also re-download the Microsoft/Google detection snapshots (large downloads)'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -38,20 +48,32 @@ jobs:
       - name: Fetch OSM snapshot (forced)
         run: npm run -s data:fetch -- --force
 
-      - name: Build dataset
+      - name: Fetch detection snapshots (forced)
+        if: ${{ inputs.refresh_detections }}
+        run: npm run -s data:fetch-footprints -- --force
+
+      - name: Build dataset (guarded; fails on validation errors)
         run: npm run -s data:build
 
       - name: Validate dataset
         run: npm run -s data:validate
+
+      - name: Map-key lock (report only; new buildings stay unkeyed until 'npm run data:keys' is committed)
+        continue-on-error: true
+        run: npm run -s data:keys -- --check
 
       - name: Collect diff
         if: always()
         run: |
           mkdir -p data-refresh
           # Mark new files so they appear in the diff; this only touches the runner's index.
-          git add --intent-to-add --all data/raw public/data docs/DATA_QUALITY_REPORT.md
-          git diff --stat -- data/raw public/data docs/DATA_QUALITY_REPORT.md > data-refresh/diff-stat.txt
-          git diff -- data/raw public/data docs/DATA_QUALITY_REPORT.md > data-refresh/data.diff
+          paths="data/raw public/data docs/DATA_QUALITY_REPORT.md docs/CAMPUS_BUILDING_COVERAGE.md data/curated/directory-keys.json"
+          # shellcheck disable=SC2086
+          git add --intent-to-add --all $paths
+          # shellcheck disable=SC2086
+          git diff --stat -- $paths > data-refresh/diff-stat.txt
+          # shellcheck disable=SC2086
+          git diff -- $paths > data-refresh/data.diff
           {
             echo '## Data refresh'
             echo
@@ -59,7 +81,7 @@ jobs:
             cat data-refresh/diff-stat.txt
             echo '```'
             echo
-            echo 'Download the `data-refresh` artifact, review docs/DATA_QUALITY_REPORT.md changes, and commit locally if correct.'
+            echo 'Download the `data-refresh` artifact, review the docs/DATA_QUALITY_REPORT.md and docs/CAMPUS_BUILDING_COVERAGE.md changes (count-change guard, before/after), and commit locally if correct. Nothing is committed by this workflow.'
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload diff

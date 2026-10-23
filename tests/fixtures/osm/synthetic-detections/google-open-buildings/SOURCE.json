@@ -1,0 +1,21 @@
+{
+  "sourceId": "google-open-buildings",
+  "name": "Synthetic Google points (test fixture)",
+  "url": "https://example.org/gob",
+  "license": "ODbL 1.0",
+  "licenseUrl": "https://example.org/odbl",
+  "attribution": "Synthetic fixture",
+  "version": "v3",
+  "tileUrl": "https://example.org/points.csv.gz",
+  "s2Token": "0000",
+  "retrievedAt": "2026-01-01T00:00:00Z",
+  "tileSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "tileBytes": 1,
+  "rowsInTile": 5,
+  "rowsInSnapshot": 5,
+  "filterBBox": [75.685, 31.236, 75.722, 31.27],
+  "confidenceThreshold": 0.875,
+  "confidenceThresholdSource": "synthetic fixture",
+  "minAreaM2": 50,
+  "notes": "SYNTHETIC test fixture: invented points, not Google data."
+}

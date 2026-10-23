@@ -1,0 +1,26 @@
+{
+  "sourceId": "microsoft-ml-buildings",
+  "name": "Microsoft Global ML Building Footprints",
+  "url": "https://github.com/microsoft/GlobalMLBuildingFootprints",
+  "license": "CDLA-Permissive-2.0",
+  "licenseUrl": "https://cdla.dev/permissive-2-0/",
+  "attribution": "Building footprints © Microsoft (Global ML Building Footprints), CDLA Permissive 2.0",
+  "datasetLinksUrl": "https://bfppub.blob.core.windows.net/%24web/2026-08-13/dataset-links.csv",
+  "tileUrl": "https://bfppub.z5.web.core.windows.net/2026-08-13/global-buildings.geojsonl/RegionName=India/quadkey=123121013/part-00048-110f5303-ff85-4c71-a2bf-c6070024fec8.c000.csv.gz",
+  "quadkey": "123121013",
+  "release": "2026-08-13",
+  "retrievedAt": "2026-10-23T21:50:45Z",
+  "tileSha256": "841da1d37a8ea19cf2a618c064046d1324ca81cf68fbce0128bfd66e2966564d",
+  "tileBytes": 67236682,
+  "featuresInTile": 667588,
+  "featuresInSnapshot": 1982,
+  "filterBBox": [
+    75.685,
+    31.236,
+    75.722,
+    31.27
+  ],
+  "licenseTextUrl": "https://cdla.dev/permissive-2-0/",
+  "licenseTextRetrievedAt": "2026-10-23T21:50:45Z",
+  "notes": "Each line is a source feature exactly as published (GeoJSON, height and confidence -1 = not provided), kept when any vertex lies in the map extent. Machine-detected, unverified; never shifted (the ~5.6 m offset to OSM is documented in docs/CAMPUS_GEOGRAPHY_AUDIT.md section 5.1, not corrected)."
+}

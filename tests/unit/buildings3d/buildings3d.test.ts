@@ -23,13 +23,13 @@ describe('buildingExtrusionLayers', () => {
     expect(ext.type).toBe('fill-extrusion');
     expect(ext.source).toBe('buildings');
     expect(ext.minzoom).toBe(APP_CONFIG.map.extrusionMinZoom);
-    expect(ext.paint?.['fill-extrusion-height']).toEqual(['get', 'heightM']);
-    expect(ext.paint?.['fill-extrusion-base']).toEqual(['get', 'minHeightM']);
+    expect(ext.paint?.['fill-extrusion-height']).toEqual(['get', 'renderHeightM']);
+    expect(ext.paint?.['fill-extrusion-base']).toEqual(['get', 'renderMinHeightM']);
     expect(ext.paint?.['fill-extrusion-vertical-gradient']).toBe(true);
   });
 
   it('evaluates height and base per feature', () => {
-    const props = { heightM: 12.8, minHeightM: 3 };
+    const props = { renderHeightM: 12.8, renderMinHeightM: 3 };
     expect(
       evalProperty(ext, 'paint', 'fill-extrusion-height', { properties: props, geometryType: 'Polygon' }),
     ).toBe(12.8);
@@ -46,7 +46,7 @@ describe('buildingExtrusionLayers', () => {
       const colour = (heightSource: HeightSource, selected = false) =>
         toHex(
           evalProperty(layer!, 'paint', 'fill-extrusion-color', {
-            properties: { heightSource },
+            properties: { renderHeightSource: heightSource },
             state: { selected },
             geometryType: 'Polygon',
           }),

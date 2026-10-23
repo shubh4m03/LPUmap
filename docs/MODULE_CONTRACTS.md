@@ -31,9 +31,11 @@ public entry point; other modules import from it, never from internals.
 
 ## Generated dataset (public/data/) — owner: data pipeline
 
-Validated by schemas in `src/data/schema.ts`. Files: `manifest.json`,
-`boundary.geojson`, `buildings.geojson`, `basemap.geojson`, `places.json`,
-`relations.json`, `graph.json`, `quality-report.json`.
+Validated by schemas in `src/data/schema.ts` (**schema version 2**; see
+[v2 geographic contract](#v2-geographic-contract-data_schema_version-2)). Startup files:
+`manifest.json`, `boundary.geojson`, `buildings.geojson`, `basemap.geojson`,
+`places.json`, `relations.json`, `graph.json`; also `quality-report.json`. Lazy
+(v2): `context-places.json`, `detections.geojson`, `boundary-review.json`.
 
 Place ids: `osm:node/<id>`, `osm:way/<id>`, `osm:relation/<id>`,
 `cur:<slug>` for curated records. Building feature `properties.id` equals the
@@ -444,3 +446,178 @@ export function useServiceWorkerUpdate(): {
   dismiss(): void;
 };
 ```
+
+## v2 geographic contract (DATA_SCHEMA_VERSION 2)
+
+**Owner:** integration lead (single writer). **Status:** frozen at Gate 2 on 2026-10-24. Other
+agents propose changes to the lead; nothing in this section changes without a schema review.
+
+Code: `src/data/schema.ts`, `src/data/loader.ts`, `src/geo/boundary.ts`,
+`src/directory/{types,directory}.ts`, `src/app/view-mode.ts`, `src/app/store/map-slice.ts`,
+`src/config/index.ts` (`geo`, `optionalLayers`, `directory`, `isometric`, `cache.dataCache`).
+Tests: `tests/unit/geo/boundary.test.ts`, `tests/unit/data/schema-v2.test.ts`,
+`tests/unit/app/view-mode.test.ts`, `tests/unit/directory/directory.test.ts`.
+
+### Owner decisions as enforced invariants
+
+| Decision                                                                                                                                                                    | Enforced by                                                                                                                                                                                                                                                                                                                                             |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. Machine-detected footprints appear only in a flat, dashed "Unverified detected footprints" layer: never extruded, searched, routed, keyed or counted as campus buildings | They live only in `detections.geojson` (`detectionsFileSchema`), never in `buildings.geojson` (whose `geometrySource` is `osm` or `curated` only). Loaded lazily (`createOptionalLoaders().detections()`), off by default (`APP_CONFIG.optionalLayers.detectedFootprints`). The loader refuses detections whose source has no licensed manifest record. |
+| 1a. The ~5.6 m Microsoft–OSM offset is never "corrected"                                                                                                                    | Detections keep their source geometry; the id hashes that geometry. The offset is documented in docs/CAMPUS_GEOGRAPHY_AUDIT.md §5.1.                                                                                                                                                                                                                    |
+| 2. No off-campus buildings anywhere                                                                                                                                         | `buildingPropsSchema` rejects `campusStatus: 'outside'`; detections reject `'outside'`; `context-places.json` rejects `kind: 'building'` and any `buildingId`.                                                                                                                                                                                          |
+| 2a. Off-campus POIs only in the opt-in "Nearby, outside campus" layer                                                                                                       | `places.json` must be all `on-campus`; `context-places.json` all `off-campus-nearby` (lazy, `createOptionalLoaders().contextPlaces()`, off by default, badge "Outside campus").                                                                                                                                                                         |
+| 3. Uncertain boundary sections hold nearby buildings out of the inventory for review                                                                                        | `data/curated/boundary-review.json` (`curatedBoundaryReviewSchema`) feeds rule R3. Results are `campusStatus: 'uncertain'`, `inCampusInventory: false`, listed in `boundary-review.json` `items` for docs and admin data quality.                                                                                                                       |
+
+Hostel, Agriculture Block, canteen and auxiliary candidates, and the Behance index, are **review
+leads**: never facilities, names or block numbers. `officialBlockLabel` requires
+`officialBlockSourceId` (schema-enforced) from a cited curated alias for that exact footprint.
+
+### Files
+
+| File                   | When loaded                | Schema                     | Content                                                                                                       |
+| ---------------------- | -------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `manifest.json`        | first, `cache: 'no-cache'` | `manifestSchema`           | lists every key in `REQUIRED_MANIFEST_FILE_KEYS`; unique source ids; `osm` source required                    |
+| `buildings.geojson`    | startup                    | `buildingsFileSchema`      | BuildingPropsV2; `inside` and `crossing` (inventory) and `uncertain` (review) only; Polygon/MultiPolygon only |
+| `places.json`          | startup                    | `placesFileSchema`         | campus places only (`on-campus`)                                                                              |
+| `context-places.json`  | lazy (layer enabled)       | `contextPlacesFileSchema`  | off-campus POIs, point kinds only                                                                             |
+| `detections.geojson`   | lazy (layer enabled)       | `detectionsFileSchema`     | `det:<source>:<hash>` footprints with `reviewStatus` (the pipeline emits `unreviewed`)                        |
+| `boundary-review.json` | lazy (admin, docs)         | `boundaryReviewFileSchema` | thresholds used, sections with `affectedIds`, curated decisions, every `uncertain` and `crossing` item        |
+| other files            | startup, unchanged shapes  | as before                  | `schemaVersion: 2`                                                                                            |
+
+Manifest sources for the v2 inputs: `osm` (ODbL 1.0); `microsoft-ml-buildings`
+(CDLA-Permissive-2.0: set `licenseUrl` and ship the licence text at `licenseTextPath`);
+`google-open-buildings` (ODbL 1.0, as chosen by the owner). Detection `source` maps to these ids
+through `DETECTION_MANIFEST_SOURCE_IDS`.
+
+### BuildingPropsV2 (flat and primitive, so MapLibre reads them directly)
+
+- **Facts, identity and provenance:** `id` (= place id), `name|null`, `displayName`, `categoryId`,
+  `geometrySource` (`osm`|`curated`), `sourceId`, `sourceRef`, `retrievedAt|null`,
+  `verificationStatus`, `lastVerifiedAt|null`.
+- **Facts, membership:** `campusStatus`, `inCampusInventory` (= status is inside or crossing),
+  `insideFraction|null` (4 decimals), `distanceToBoundaryM|null`, `membershipMethod`
+  (`polygon-clip`|`curated-decision`|`none`), `membershipReasonCode`, `membershipReason` (text),
+  `membershipDecision` (`auto`|`curated`), `membershipDecisionSource|null`, `reviewSectionId|null`,
+  `pointAreaDisagreement`.
+- **Facts, geometry:** `areaM2|null`, `anchorLon`/`anchorLat` (point-on-surface; vertex mean for
+  invalid geometry via `vertexMeanAnchor`), `isBuildingPart`.
+- **Facts, tag pass-throughs (null when untagged, never inferred):** `levels`, `levelsSource`,
+  `minLevel`, `osmHeightM`, `osmMinHeightM`, `roofShape`, `roofMaterial`, `roofColour`,
+  `roofLevels`, `buildingMaterial`, `buildingColour`.
+- **Fidelity:** `fidelityLevel` 0 (outline, placeholder height), 1 (levels estimate), 2 (tagged
+  height), 3 (verified survey); `fidelityReason`. Levels 0–2 must match `renderHeightSource`.
+- **Directory:** `directoryKey|null` (`DIRECTORY_KEY_RE`, inventory only), `directoryCell|null`,
+  `officialBlockLabel|null` with `officialBlockSourceId|null` (both or neither).
+- **Render only, not facts:** `renderHeightM`, `renderMinHeightM`, `renderHeightSource`
+  (`osm-height` needs `osmHeightM`; `osm-levels-estimate` needs `levels`).
+
+`buildingPropsProblems()` lists the cross-field invariants; the pipeline's validator should call it.
+`Place` is unchanged from v1 (its optional `heightM`/`heightSource` remain for building places).
+
+### Campus membership rules (`classifyFootprint`, src/geo/boundary.ts)
+
+Area is measured in local metres. The area of footprint ∩ boundary is exact: edges are classified
+by Green's theorem, which is valid for concave boundaries, holes and MultiPolygons (no convex-hull
+clipping). Tests cross-check it against 0.25 m grid sampling (absolute difference ≤ 0.005). The
+fraction is rounded to 4 decimals **before** the thresholds apply. Thresholds:
+`APP_CONFIG.geo.membership`.
+
+| Rule | Condition (first match wins)                                                       | Result                                                                 |
+| ---- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| R1   | invalid polygon (`geometryProblems`)                                               | `uncertain`, `invalid-geometry`; never dropped                         |
+| R2   | a curated decision exists for the id                                               | its status, `curated-decision`, with the source label                  |
+| R3   | touches, or is within `bufferM` of, an **open** review section                     | `uncertain`, `review-section`, with the section id                     |
+| R4   | f ≥ 0.995                                                                          | `inside`, `interior`                                                   |
+| R5   | f ≤ 0.005                                                                          | `outside`, `exterior`                                                  |
+| R6   | otherwise, f ≥ 0.5 and no conflicting evidence (`FootprintInput.conflicts`)        | `crossing`, `crossing-majority` (in the inventory)                     |
+| R6   | otherwise, f ≥ 0.5 with conflicting evidence (for example a non-campus `operator`) | `uncertain`, `crossing-conflict`                                       |
+| R6   | otherwise, f < 0.5                                                                 | `uncertain`, `crossing-minority`                                       |
+| R7   | the point-on-surface or area-centroid test disagrees with f ≥ 0.5                  | `pointAreaDisagreement: true` and the reason says so; status unchanged |
+
+Area fraction is evidence, not the sole criterion: R1–R3 and the R6 conflict test come first.
+Nothing is clipped, discarded or repositioned: a crossing footprint keeps its full geometry.
+
+Points (contributions, admin locations): `validatePointLocation(p, boundary, contextArea)` returns
+`inside`, `outside-in-context-area` (eligible only for the context layer) or `outside-area`. The
+default context area is `APP_CONFIG.map.maxBounds` (unchanged).
+
+```ts
+// src/geo
+createBoundary(geoms: PolygonalGeometry | PolygonalGeometry[]): CampusBoundary; // throws InvalidGeometryError
+boundaryFromFeatureCollection(fc): CampusBoundary;
+interface CampusBoundary {
+  polygons; bbox; origin; projection; areaM2;
+  containsPoint(p): boolean;
+  distanceToBoundaryM(p): number;
+  footprintDistanceToBoundaryM(g): number;
+  areaOf(g): number;
+  intersectionAreaM2(g): number;
+  insideFraction(g): number;
+}
+classifyFootprint({ id, geometry, conflicts? }, boundary, reviewSections?, curatedDecisions?, thresholds?): MembershipResult;
+geometryProblems(g): string[];
+polygonAreaM2(g): number;
+pointOnSurface(g): LngLat | null;
+vertexMeanAnchor(g): LngLat | null;
+distanceToReviewGeometryM(g, sectionGeometry, projection): number;
+validatePointLocation(p, boundary, contextArea?): 'inside' | 'outside-in-context-area' | 'outside-area';
+```
+
+Checked against the current dataset (`datasetVersion` b628c5855b1d): `classifyFootprint` gives 130
+inside, 7 crossing, 1 uncertain (`osm:way/422738892`, 0.4056) and 397 outside, with the same
+inside areas as docs/CAMPUS_GEOGRAPHY_AUDIT.md §3. That run used no review sections.
+
+### Counts (manifest `counts`, all derived from the processed files)
+
+`buildings` counts inventory features only (inside and crossing). Also `buildings:inside`,
+`buildings:crossing`, `buildings:uncertain`, `detections`, `detections:<source>`, `contextPlaces`
+and `boundaryReview:items`. The existing place, relation and graph keys count `places.json` only
+(campus). `heightSource:*` counts inventory buildings by `renderHeightSource`.
+`src/community/merge.ts` `recount` follows these definitions.
+
+### Loader
+
+```ts
+loadCampusData(opts?): Promise<CampusData>; // startup files only; rejects v1 with code 'schema-version'
+checkSchemaVersion(rawManifest): void;
+createOptionalLoaders(manifest, opts?): {
+  contextPlaces(): Promise<Place[]>;
+  detections(): Promise<DetectionsFile>;
+  boundaryReview(): Promise<BoundaryReviewFile>;
+}; // fetched on first call with ?v=<datasetVersion>, memoised, retried after a failure
+```
+
+### Directory (`src/directory`)
+
+`createDirectory({ buildings, places, relations })` returns
+`{ entries, byKey, byId, search(q), filter(categoryIds) }`. Entries are the buildings with
+`inCampusInventory` only. `title` = name ?? `Building <key>` ?? displayName. `subtitle` is the
+pipeline label for unnamed buildings, or the key wording. Facilities and organizations come from
+incoming `located_in`/`part_of` relations. Each entry has `routable`, `routableReason` and a
+user-facing `routableNote`. Provenance comes from the place record, else from the feature. The lock
+file type and schema: `directoryKeysLockSchema`.
+
+### View modes (`src/app/view-mode.ts`, map slice)
+
+`viewMode: 'realistic3d' | 'isometric' | 'standard2d'`, with `lastMapMode` and `viewModeReason`.
+`mode3d` is kept in sync (true only in realistic3d) for existing callers, and `setMode3d` and
+`toggleMode3d` map onto `setViewMode`. `setViewMode(mode, { reason })` returns false and changes
+nothing for `isometric` during live navigation. `?view=3d|iso|2d` is handled by `parseViewParam`
+and `buildViewUrl`; unknown values are ignored. The capability matrix with user-facing reasons is
+`VIEW_MODE_SUPPORT` / `supports(mode, cap)`.
+
+### Compatibility, migration and rollback
+
+- **Ids are unchanged** (`osm:way/…`, `cur:…`) and so is `Place`. Favourites, deep links and the
+  D1 overrides and hidden records keyed by base place ids keep working. An override whose target
+  moved to `context-places.json` (off campus) shows up as an orphan in `mergePublication`'s report
+  until the community merge also consults context places. It is reported, never silently dropped.
+- **Migration:** the pipeline regenerates the data (`npm run data:build`); nothing is converted in
+  place. App and data ship together in one Workbox precache, and `APP_CONFIG.cache.dataCache` is
+  `lpu-atlas-data-v2`. A v2 app given v1 data, or the reverse, fails fast with `schema-version` and
+  asks for a reload.
+- **Rollback:** redeploy the previous commit, with the v1 app **and** its v1 `public/data`
+  together. The v1 service worker's precache replaces the v2 one. The D1 database needs no change,
+  because overrides are keyed by ids that exist in both versions. Never deploy v1 data under a v2
+  app, or the reverse. `tests/unit/data/schema-v2.test.ts` tests this in isolation (v1 rejection,
+  unchanged Place shape, cache name).

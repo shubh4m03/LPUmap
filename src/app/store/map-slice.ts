@@ -1,4 +1,5 @@
 import { LAYER_GROUPS, type LayerGroupId } from '../../config/categories.ts';
+import { isMapViewMode, mode3dFor, type MapViewMode, type ViewMode } from '../view-mode.ts';
 import type { MapSlice, SliceCreator } from './types.ts';
 
 export const DEFAULT_VISIBLE_GROUPS: ReadonlySet<LayerGroupId> = new Set(LAYER_GROUPS.map((g) => g.id));
@@ -13,20 +14,45 @@ export function defaultMode3d(): boolean {
   }
 }
 
+/** Device default view mode (unchanged behaviour: 3D at ≥ 768 px, otherwise 2D). */
+export function defaultViewMode(): MapViewMode {
+  return defaultMode3d() ? 'realistic3d' : 'standard2d';
+}
+
 export interface MapDefaults {
-  mode3d: boolean;
+  viewMode: ViewMode;
   showLabels: boolean;
 }
 
 export const createMapSlice =
   (defaults: MapDefaults): SliceCreator<MapSlice> =>
   (set, get) => ({
-    mode3d: defaults.mode3d,
+    viewMode: defaults.viewMode,
+    lastMapMode: isMapViewMode(defaults.viewMode) ? defaults.viewMode : 'realistic3d',
+    viewModeReason: null,
+    mode3d: mode3dFor(defaults.viewMode),
     showLabels: defaults.showLabels,
     visibleGroups: DEFAULT_VISIBLE_GROUPS,
 
-    setMode3d: (mode3d) => set({ mode3d }),
-    toggleMode3d: () => set({ mode3d: !get().mode3d }),
+    setViewMode(mode, opts = {}) {
+      const s = get();
+      // The overview has no live GPS: refuse it while navigating (the switcher shows why).
+      if (mode === 'isometric' && s.navigationActive) return false;
+      if (s.viewMode === mode && s.mode3d === mode3dFor(mode)) return true;
+      set({
+        viewMode: mode,
+        mode3d: mode3dFor(mode),
+        viewModeReason: opts.reason ?? 'user',
+        ...(isMapViewMode(mode) ? { lastMapMode: mode } : {}),
+      });
+      return true;
+    },
+    setMode3d: (on) => {
+      get().setViewMode(on ? 'realistic3d' : 'standard2d');
+    },
+    toggleMode3d: () => {
+      get().setViewMode(get().mode3d ? 'standard2d' : 'realistic3d');
+    },
     setShowLabels: (showLabels) => set({ showLabels }),
 
     setGroupVisible(id, visible) {

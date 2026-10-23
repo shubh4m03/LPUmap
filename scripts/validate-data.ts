@@ -1,52 +1,37 @@
 /**
- * Validates public/data/* (schemas + invariants). Exit code 1 on any error.
+ * Validates public/data/* (schemas + invariants + v2 regression guards). Exit code 1 on any error.
  *
- *   node scripts/validate-data.ts [--dir public/data] [--previous data/.cache/previous-manifest.json]
- *                                 [--check-links]
+ *   node scripts/validate-data.ts [--dir public/data] [--previous <manifest.json>]
+ *                                 [--curated data/curated] [--check-links]
+ *                                 [--accept-count-changes "<why this large change is intended>"]
  *
+ * Count-change baseline (scripts/lib/baseline.ts): --previous when given (any
+ * schema version); otherwise, for the default --dir, the manifest committed at
+ * git HEAD, then a valid current-schema data/.cache/previous-manifest.json.
+ * Acknowledgements: data/curated/count-change-acceptance.json (pinned to the
+ * baseline datasetVersion) or --accept-count-changes with a reason.
  * --check-links sends HEAD requests to every website (network; off by default).
+ * Landmarks come from <curated>/landmarks.json (default data/curated).
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
-import { manifestSchema } from '../src/data/schema.ts';
-import type { Manifest } from '../src/data/schema.ts';
+import { fileURLToPath } from 'node:url';
 import { parseArgs } from './lib/args.ts';
+import { looseBaseline, resolveBaseline } from './lib/baseline.ts';
+import { readLandmarks } from './lib/landmarks.ts';
+import { loadHoursParser } from './lib/publish.ts';
 import { validateDataset } from './lib/validate.ts';
 import type { Issue } from './lib/validate.ts';
+import { readCountAcceptances, resolveAcceptance } from './lib/validate-changes.ts';
+import type { CountBaseline } from './lib/validate-changes.ts';
 
 const root = resolve(fileURLToPath(import.meta.url), '../..');
 
-/** The facilities module is optional at pipeline time; skip the hours check when it is absent. */
-async function loadHoursParser(): Promise<{ parse: ((raw: string) => unknown) | null; note: string | null }> {
-  const path = resolve(root, 'src/facilities/hours.ts');
-  if (!existsSync(path))
-    return { parse: null, note: 'opening-hours check skipped: src/facilities/hours.ts not found' };
-  try {
-    const mod = (await import(pathToFileURL(path).href)) as { parseOpeningHours?: (raw: string) => unknown };
-    if (typeof mod.parseOpeningHours !== 'function') {
-      return { parse: null, note: 'opening-hours check skipped: parseOpeningHours is not exported' };
-    }
-    return { parse: mod.parseOpeningHours, note: null };
-  } catch (e) {
-    return {
-      parse: null,
-      note: `opening-hours check skipped: could not load hours.ts (${(e as Error).message})`,
-    };
-  }
-}
-
-function readPrevious(path: string | undefined, explicit: boolean): Manifest | null {
-  if (!path || !existsSync(path)) {
-    if (explicit) throw new Error(`--previous ${path} does not exist`);
-    return null;
-  }
-  const parsed = manifestSchema.safeParse(JSON.parse(readFileSync(path, 'utf8')));
-  if (!parsed.success) {
-    console.warn(`warning: previous manifest ${path} is not a valid manifest; change detection skipped`);
-    return null;
-  }
-  return parsed.data;
+function explicitBaseline(path: string): CountBaseline {
+  if (!existsSync(path)) throw new Error(`--previous ${path} does not exist`);
+  const b = looseBaseline(JSON.parse(readFileSync(path, 'utf8')), 'explicit', path);
+  if (!b) throw new Error(`--previous ${path} is not a manifest (needs datasetVersion and counts)`);
+  return b;
 }
 
 function summarise(kind: string, issues: Issue[]): void {
@@ -57,24 +42,49 @@ function summarise(kind: string, issues: Issue[]): void {
 }
 
 async function main(): Promise<number> {
-  const { values, flags } = parseArgs(process.argv.slice(2), ['dir', 'previous'], ['check-links']);
+  const { values, flags } = parseArgs(
+    process.argv.slice(2),
+    ['dir', 'previous', 'curated', 'accept-count-changes'],
+    ['check-links'],
+  );
+  const defaultDir = values.dir === undefined;
   const dir = resolve(values.dir ?? resolve(root, 'public/data'));
-  // The cached previous manifest belongs to the default output; custom --dir needs an explicit --previous.
-  const previousPath = values.previous
-    ? resolve(values.previous)
-    : values.dir === undefined
-      ? resolve(root, 'data/.cache/previous-manifest.json')
-      : undefined;
-  const previousManifest = readPrevious(previousPath, values.previous !== undefined);
-  const hours = await loadHoursParser();
+  // The committed/cached baseline belongs to the default output; a custom --dir needs an explicit --previous.
+  const baseline = values.previous
+    ? explicitBaseline(resolve(values.previous))
+    : defaultDir
+      ? resolveBaseline({ repoRoot: root, outDir: dir, cacheDir: resolve(root, 'data/.cache') })
+      : null;
+  const hours = await loadHoursParser(root);
+  // Landmarks and acceptances belong to the default dataset; a custom --dir needs an explicit --curated.
+  const curatedDir =
+    values.curated !== undefined
+      ? resolve(values.curated)
+      : defaultDir
+        ? resolve(root, 'data/curated')
+        : null;
+  const { acceptance, stale } = resolveAcceptance(
+    baseline,
+    readCountAcceptances(curatedDir),
+    values['accept-count-changes'] ?? null,
+  );
   const result = await validateDataset({
     dir,
-    previousManifest,
+    baseline,
+    acceptance,
+    staleAcceptances: stale,
     parseHours: hours.parse,
     checkLinks: flags.has('check-links') ? { fetchImpl: fetch } : null,
+    landmarks: curatedDir ? readLandmarks(curatedDir) : null,
   });
   const notes = hours.note ? [hours.note] : [];
-  if (!previousManifest) notes.push('suspicious-change detection skipped: no previous manifest');
+  if (!baseline) notes.push('count-change detection skipped: no baseline manifest');
+  else
+    console.log(
+      `count-change baseline: ${baseline.datasetVersion} (schema ${baseline.schemaVersion ?? '?'}) from ${baseline.ref}`,
+    );
+  if (acceptance)
+    console.log(`large count changes acknowledged (${acceptance.origin}): ${acceptance.reason}`);
   for (const w of result.warnings) console.warn(`warning [${w.code}] ${w.message}`);
   for (const n of notes) console.warn(`warning [skipped] ${n}`);
   for (const e of result.errors) console.error(`error [${e.code}] ${e.message}`);
