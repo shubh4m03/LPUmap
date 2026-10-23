@@ -1,0 +1,777 @@
+{
+  "$comment": "REVIEW ITEMS FOR THE OWNER, not applied data. Each confirmation ties a block NUMBER to an ENTITY using official LPU wording only. None of them places a block on the map or identifies an OSM footprint. The Behance comparisons are context only; the Behance illustration was not used as evidence. Quotes are short factual phrases (20 words or fewer) kept for citation; no other site content was copied.",
+  "generatedAt": "2026-10-24",
+  "method": {
+    "userAgent": "LPU-Campus-Atlas-research/0.1",
+    "robots": "Python RobotFileParser checked robots.txt for www.lpu.in, happenings.lpu.in and library.lpu.in before any fetch. library.lpu.in disallowed this User-Agent, so it was not fetched.",
+    "politeness": "One request at a time, at least 3 s apart. 58 page requests were logged (including robots.txt, sitemap.xml and 8 site-search queries), plus one robots.txt check per host in each batch.",
+    "officialDomainsOnly": ["www.lpu.in", "happenings.lpu.in"],
+    "rawHtmlKept": "In the session scratchpad only, never in the repo."
+  },
+  "confirmations": [
+    {
+      "block": "37",
+      "entity": "Central Library (largest of 12 library branches)",
+      "url": "https://www.lpu.in/academics/libraries.php",
+      "quote": "Total number of 12 branches with the biggest Central Library located in Block-37.",
+      "retrievedAt": "2026-10-23T22:24:40Z",
+      "termUsed": "Block-37",
+      "strength": "explicit",
+      "alsoSeenEarlier": "Same sentence in the repo cache fetched 2026-10-23T10:03:30Z; already cited in docs/research/LPU_PUBLIC_SOURCES.md",
+      "behanceLeadComparison": "Agrees with the Behance block vignette (37 = CENTRAL LIBRARY). Contradicts the Behance overview index (37 = RESEARCH).",
+      "confirmsFootprintPosition": false
+    },
+    {
+      "block": "35",
+      "entity": "Shanti Devi Mittal Auditorium",
+      "url": "https://www.lpu.in/events/freshmeninduction/minute-to-minute-schedule.php",
+      "quote": "Shanti Devi Mittal Auditorium (Block No. 35)",
+      "retrievedAt": "2026-10-23T22:15:38Z",
+      "termUsed": "Block No. 35",
+      "strength": "explicit (venue column, repeated about 15 times)",
+      "pageDateCaveat": "The page heading says the 2026 schedule 'will be updated soon', so the table shown may be from an earlier induction year.",
+      "behanceLeadComparison": "Agrees with the Behance vignette and the overview index (35 = SHANTI DEVI MITTAL AUDITORIUM).",
+      "confirmsFootprintPosition": false
+    },
+    {
+      "block": "13",
+      "entity": "Student Welfare Wing (free training for student clubs and societies)",
+      "url": "https://www.lpu.in/campus-life/art-and-culture.php",
+      "quote": "Join us at Block 13, Student Welfare Wing, and train in various societies free of cost",
+      "retrievedAt": "2026-10-23T22:17:55Z",
+      "termUsed": "Block 13",
+      "strength": "explicit",
+      "behanceLeadComparison": "Agrees with the Behance vignette ('DIVISION OF STUDENT WELFARE') and the index ADMINISTRATIVE list ('STUDENT WELFARE 13'). Contradicts the index EDUCATION list ('BUSINESS 13').",
+      "confirmsFootprintPosition": false
+    },
+    {
+      "block": "32",
+      "entity": "Department of Records (document verification), Room No. 101, Window No. 2",
+      "url": "https://www.lpu.in/esanad/",
+      "quote": "Department of Records at Building No. 32, Room No. 101 (Window No. 2)",
+      "retrievedAt": "2026-10-23T22:17:22Z",
+      "termUsed": "Building No. 32",
+      "strength": "explicit, but the page says 'Building No.', not 'Block'",
+      "terminologyCaveat": "The page does not say that 'Building No. 32' uses the same numbering as 'Block 32'. That is likely, but the owner should confirm it.",
+      "behanceLeadComparison": "Neither confirms nor contradicts Behance. The vignette has 32 = OFFICE OF VICE CHANCELLORY / ADMINISTRATION-III and the index has 32 = ADMISSION. The official page names only the Department of Records.",
+      "confirmsFootprintPosition": false
+    }
+  ],
+  "implicitLeads": [
+    {
+      "block": "32",
+      "entity": "Conference Hall (venue of an international-student induction session)",
+      "url": "https://www.lpu.in/events/freshmeninduction/minute-to-minute-schedule.php",
+      "quote": "Venue: Conference Hall, 32-213",
+      "retrievedAt": "2026-10-23T22:15:38Z",
+      "whyNotConfirmed": "This is a room code only. Reading '32-213' as Block 32, Room 213 is an inference the page does not state. The page dates the session 26-July-2023."
+    }
+  ],
+  "notFound": [
+    {
+      "entity": "Uni Health Centre / uni-hospital",
+      "pagesSearched": [
+        "https://www.lpu.in/student-services/healthcare.php",
+        "https://www.lpu.in/campus-life/on-campus-jobs.php"
+      ],
+      "note": "Named on these pages ('Uni Health Centre', and 'uni-hospital' on the jobs page), but no block or building number is given."
+    },
+    {
+      "entity": "Hostels / residences (boys and girls)",
+      "pagesSearched": [
+        "https://www.lpu.in/student-services/residence.php",
+        "https://www.lpu.in/international/accommodation.php",
+        "https://www.lpu.in/events/freshmeninduction/where-to-stay.php"
+      ],
+      "note": "No hostel block numbers. Only 'BH4 Playgrounds' appears, as a venue on the induction schedule. BH4 is a hostel label, not a block number."
+    },
+    {
+      "entity": "Division of Admissions / admissions office",
+      "pagesSearched": [
+        "https://www.lpu.in/admission/admissions.php",
+        "https://www.lpu.in/admission/reporting-schedule.php",
+        "https://www.lpu.in/events/freshmeninduction/reporting-process.php",
+        "https://www.lpu.in/contact-us/contact-us.php"
+      ],
+      "note": "These pages give only the postal address (Jalandhar-Delhi G.T. Road, Phagwara) and refer to an unnamed 'reporting venue'. No block number."
+    },
+    {
+      "entity": "Any of the 27 schools (school pages)",
+      "pagesSearched": ["https://www.lpu.in/schools/ and its 27 /schools/<slug>/ pages (repo cache)"],
+      "note": "No school page prints a block number or a campus address line."
+    },
+    {
+      "entity": "Baldev Raj Mittal Unipolis",
+      "pagesSearched": ["https://www.lpu.in/events/freshmeninduction/minute-to-minute-schedule.php"],
+      "note": "Named as a venue (main stage, yoga session, groups 1-3), but no block number is given. Do not treat it as the Behance BLOCK-2 'BALDEV RAJ AUDITORIUM'."
+    },
+    {
+      "entity": "Uni-Mall (Unicentre) / shopping and food court",
+      "pagesSearched": [
+        "https://www.lpu.in/student-services/shopping-dining.php",
+        "https://www.lpu.in/events/freshmeninduction/minute-to-minute-schedule.php"
+      ],
+      "note": "Only 'Pick-up from Uni-Mall (Unicentre)'. No block number."
+    },
+    {
+      "entity": "Department of Sports / sports facilities",
+      "pagesSearched": ["https://www.lpu.in/campus-life/sports.php"],
+      "note": "No block number."
+    },
+    {
+      "entity": "Banks, ATMs, post office",
+      "pagesSearched": ["https://www.lpu.in/student-services/banking-postal-services.php"],
+      "note": "No block number."
+    },
+    {
+      "entity": "Chancellor, Pro-Chancellor and Vice-Chancellor offices; administration blocks (Behance 29-32)",
+      "pagesSearched": [
+        "https://www.lpu.in/about-lpu/organization-structure.php",
+        "https://www.lpu.in/rti/",
+        "https://www.lpu.in/tenders/",
+        "https://www.lpu.in/student-grievance-redressal.php",
+        "https://www.lpu.in/anti-ragging.php",
+        "https://www.lpu.in/caste-based-discrimination.php"
+      ],
+      "note": "No block number for any office."
+    },
+    {
+      "entity": "International student services / Division of International Affairs",
+      "pagesSearched": [
+        "https://www.lpu.in/international/contact-us.php",
+        "https://www.lpu.in/international/international-student-services.php",
+        "https://www.lpu.in/international/reporting-schedule-pickup-services.php"
+      ],
+      "note": "Postal address only. No block number."
+    },
+    {
+      "entity": "The other 11 library branches (departmental libraries)",
+      "pagesSearched": ["https://www.lpu.in/academics/libraries.php"],
+      "note": "Only the Central Library has a block number."
+    },
+    {
+      "entity": "Entrepreneurship / incubation centre, laboratories, research",
+      "pagesSearched": [
+        "https://www.lpu.in/campus-life/entrepreneurship.php",
+        "https://www.lpu.in/academics/laboratories.php",
+        "https://www.lpu.in/academics/research.php"
+      ],
+      "note": "No block numbers."
+    },
+    {
+      "entity": "Official campus map, or a how-to-reach page with the block layout",
+      "pagesSearched": [
+        "https://www.lpu.in/sitemap.xml (1,267 URLs filtered for map/reach/campus/location)",
+        "https://www.lpu.in/events/freshmeninduction/local-attractions.php",
+        "https://www.lpu.in/events/freshmeninduction/airport-cab-service.php"
+      ],
+      "note": "No campus map or block-layout page in the sitemap or on these pages."
+    }
+  ],
+  "secondarySourcesNotUsed": [],
+  "secondarySourcesNote": "No non-official source (blogs, Quora, Google Maps, Justdial, Wikipedia) was consulted for this cross-check.",
+  "pagesChecked": [
+    {
+      "url": "https://www.lpu.in/contact-us/contact-us.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:19Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/international/contact-us.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:22Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/international/accommodation.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:25Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/international/reporting-schedule-pickup-services.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:28Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/international/international-student-services.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:31Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/events/freshmeninduction/reporting-process.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:35Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/events/freshmeninduction/minute-to-minute-schedule.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:38Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "HIT: Block No. 35 (Shanti Devi Mittal Auditorium); also room code 32-213 (implicit only)"
+    },
+    {
+      "url": "https://www.lpu.in/events/freshmeninduction/where-to-stay.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:41Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/events/freshmeninduction/what-to-bring.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:44Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/admission/reporting-schedule.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:48Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/student-services/residence.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:51Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/student-services/security.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:54Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/student-grievance-redressal.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:15:57Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/anti-ragging.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:16:00Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/conferences/icaicc/contact.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:16:04Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "redirected to https://www.lpu.in/conferences/; no block statement"
+    },
+    {
+      "url": "https://www.lpu.in/campus-life/entrepreneurship.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:16:07Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/rti/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:13Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/tenders/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:16Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/caste-based-discrimination.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:19Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/esanad/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:22Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "HIT: Building No. 32 (Department of Records)"
+    },
+    {
+      "url": "https://www.lpu.in/events/freshmeninduction/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:26Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/events/freshmeninduction/freshmen-induction.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:29Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/events/freshmeninduction/airport-cab-service.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:32Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/student-services/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:35Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/student-services/banking-postal-services.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:39Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/student-services/education-loan-assistance.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:42Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/student-services/shopping-dining.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:45Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/academics/laboratories.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:48Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/academics/research.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:52Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/campus-life/art-and-culture.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:55Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "HIT: Block 13 (Student Welfare Wing)"
+    },
+    {
+      "url": "https://www.lpu.in/campus-life/student-organisations.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:17:58Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/campus-life/community-services.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:18:01Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/conferences/icaiaeesd/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:18:05Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "redirected to https://www.lpu.in/404.php; no block statement"
+    },
+    {
+      "url": "https://www.lpu.in/conferences/icccet/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:18:08Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/jobs/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:18:11Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/faq.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:18:14Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/campus-life/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:19:06Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/campus-life/on-campus-jobs.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:19:09Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/campus-life/uni-communication-networks.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:19:12Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/about-lpu/organization-structure.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:19:15Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/admission/admissions.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:19:18Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/events/freshmeninduction/local-attractions.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:19:22Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/academics/guest-lectures.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:19:25Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/placements.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:19:28Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/jobs/current-openings.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:19:31Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/student-services/ums.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:19:34Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://library.lpu.in/",
+      "httpStatus": null,
+      "retrievedAt": null,
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "not fetched: robots.txt disallows this User-Agent"
+    },
+    {
+      "url": "https://happenings.lpu.in/?s=block+no",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:19:44Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "site search: no block-to-entity statement in results"
+    },
+    {
+      "url": "https://www.lpu.in/blog/?s=block",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:19:55Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "site search: no block-to-entity statement in results"
+    },
+    {
+      "url": "https://happenings.lpu.in/?s=%22block+34%22",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:20:25Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "site search: no block-to-entity statement in results"
+    },
+    {
+      "url": "https://happenings.lpu.in/?s=%22block+32%22",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:20:29Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "site search: no block-to-entity statement in results"
+    },
+    {
+      "url": "https://happenings.lpu.in/?s=%22block+38%22",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:20:33Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "site search: no block-to-entity statement in results"
+    },
+    {
+      "url": "https://happenings.lpu.in/?s=%22block+no%22",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:20:37Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "site search: no block-to-entity statement in results"
+    },
+    {
+      "url": "https://www.lpu.in/blog/?s=%22block+no%22",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:21:01Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "site search: no block-to-entity statement in results"
+    },
+    {
+      "url": "https://www.lpu.in/blog/?s=%22block-37%22",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:21:11Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "site search: no block-to-entity statement in results"
+    },
+    {
+      "url": "https://www.lpu.in/academics/libraries.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:24:40Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "HIT: Block-37 (Central Library)"
+    },
+    {
+      "url": "https://www.lpu.in/student-services/healthcare.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23T22:24:43Z",
+      "method": "live GET (User-Agent LPU-Campus-Atlas-research/0.1)",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/agriculture/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/bioengineering-and-biosciences/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/business/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/computer-applications/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/civil-engineering/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/computer-science-engineering/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/electronics-electrical-engineering/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/hotel-management-and-tourism/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/journalism-film-production/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/law/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/social-sciences/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/education/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/architecture-design/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/mechanical-engineering/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/physical-sciences/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/pharmaceutical-sciences/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/polytechnic/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/physical-education/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/physiotherapy-and-paramedical-sciences/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/interior-and-furniture/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/fashion/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/animation-and-multimedia/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/film-tv-production/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/management-and-commerce/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/performing-arts/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/fine-arts/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/schools/planning/",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    },
+    {
+      "url": "https://www.lpu.in/campus-life/sports.php",
+      "httpStatus": 200,
+      "retrievedAt": "2026-10-23",
+      "method": "re-read from repo cache data/.cache/lpu (fetched earlier by scripts/fetch-public-data.ts); not re-requested",
+      "result": "no block-number statement"
+    }
+  ]
+}

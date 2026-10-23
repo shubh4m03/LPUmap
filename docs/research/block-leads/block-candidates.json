@@ -1,0 +1,2728 @@
+[
+  {
+    "block": "1",
+    "leadNames": ["School of Fashion"],
+    "candidates": [
+      {
+        "osmId": "osm:way/354743583",
+        "score": 0.5,
+        "distanceM": 266.6,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Star/cross-shaped outline with stepped edges, like the vignette's cross/zigzag-stepped roof",
+          "At the dead end of the tree-lined road that leaves the gate-side fork past the pin-2 forecourt, matching the drawn order gate fork -> 2 -> 1",
+          "building:levels=5",
+          "OSM: way/354743583, 1667 m2, building:levels=5, name='Lovely Institute Of Management'"
+        ],
+        "conflicts": [
+          "OSM name is 'Lovely Institute Of Management'; the caption says SCHOOL OF FASHION (the OSM name may be historical)",
+          "Pin lies outside the control-point hull (gate end); the projection is an extrapolation and its distance is weak evidence."
+        ]
+      },
+      {
+        "osmId": "osm:way/427330237",
+        "score": 0.21,
+        "distanceM": 341.3,
+        "shapeMatch": "weak",
+        "reasons": ["Next footprint along the same road", "OSM: way/427330237, 938 m2, building:levels=2"],
+        "conflicts": ["Long narrow bar, not a compact stepped block; better for block 2"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1276, 1707] projected to lon/lat (75.711845, 31.259158); local transform error ~33.8 m; search radius 250 m (widened: extrapolated). Check on site: Is the star-shaped building at the end of the road past the auditorium forecourt signed Block 1 / School of Fashion?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.6,
+      "changes": ["score osm:way/354743583: 0.6 -> 0.5", "recommendation: confirm-on-site -> ambiguous"],
+      "reasons": [
+        "Position carries no weight: the pin is extrapolated and lands 245-267 m from the footprint, and held-out check point C16 by the pin-2 forecourt misses by 217 m.",
+        "Independent re-projection without the 4 circular landmark control points puts the pin-2 projection nearer to way/354743583 (48 m) than the pin-1 projection (245 m); road order is the only positional argument left.",
+        "The cross/zigzag shape is real in OSM (4 concave pockets, solidity 0.76), but an independent source contradicts the function: OSM name 'Lovely Institute Of Management' vs caption SCHOOL OF FASHION."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 244.8,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "2",
+    "leadNames": ["Campus Cafe", "Baldev Raj Auditorium"],
+    "candidates": [
+      {
+        "osmId": "osm:way/427330237",
+        "score": 0.56,
+        "distanceM": 122.6,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Long narrow low bar (building:levels=2), with a curved piece and a circular footprint at one end, like the vignette's low bar with a rounded end and a circular drum",
+          "Between the gate-side fork and the block-1 candidate, as drawn",
+          "OSM: way/427330237, 938 m2, building:levels=2"
+        ],
+        "conflicts": [
+          "The tall square tower drawn at one end has no separate OSM footprint",
+          "Check point C16 (the fan of green strips in front of this forecourt) misfits the transform by ~217 m, so this part of the drawing is very schematic",
+          "Pin lies outside the control-point hull (gate end); the projection is an extrapolation and its distance is weak evidence."
+        ]
+      },
+      {
+        "osmId": "osm:way/422732974",
+        "score": 0.55,
+        "distanceM": 138.9,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Small circular footprint (building:levels=0.2) at the end of the bar; candidate for the drawn circular drum",
+          "OSM: way/422732974, 181 m2, building:levels=0.2"
+        ],
+        "conflicts": ["Probably part of block 2, not a separate block"]
+      },
+      {
+        "osmId": "osm:way/427330238",
+        "score": 0.54,
+        "distanceM": 149.2,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Curved piece (building:levels=0.2) between the bar and the circle; candidate for the drawn stepped terraces",
+          "OSM: way/427330238, 587 m2, building:levels=0.2"
+        ],
+        "conflicts": ["Probably part of block 2"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1401, 1596] projected to lon/lat (75.709637, 31.258484); local transform error ~37.0 m; search radius 250 m (widened: extrapolated). Lead conflicts (from block-leads.json): Index lists only BALDEV RAJ AUDITORIUM for 2; 'Campus Cafe' appears only on the vignette. PRIORITY: the lead explicitly says cafe. Check on site: Is the long low building with the round drum Block 2, and is it the Baldev Raj (Mittal) Auditorium and/or a campus cafe?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.56,
+      "changes": ["none"],
+      "reasons": [
+        "Kept as ambiguous. The three top candidates (bar way/427330237, curved piece way/427330238, circle way/422732974) touch each other and together match the drawn bar + drum + terraces, so the open question is which part carries the number, not which building it is.",
+        "All three ways were edited in 2026 (versions 2-4), so their outlines are recent."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 1,
+        "distanceToTopM": 119.3,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "3",
+    "leadNames": ["School of Physiotherapy and Paramedical Science"],
+    "candidates": [
+      {
+        "osmId": "osm:way/354755644",
+        "score": 0.55,
+        "distanceM": 0.0,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Compact block next to the block-4 candidate on the gate side, as drawn",
+          "Projection falls inside it",
+          "OSM: way/354755644, 1574 m2, building:levels=7, name='Lovely Institute of Technology'"
+        ],
+        "conflicts": [
+          "OSM name is 'Lovely Institute of Technology'; the caption says SCHOOL OF PHYSIOTHERAPY... (index PHYSIOTHERAPY 3)",
+          "building:levels=7; the vignette draws a lower block",
+          "Pin lies outside the control-point hull (gate end); the projection is an extrapolation and its distance is weak evidence."
+        ]
+      },
+      {
+        "osmId": "osm:way/426283204",
+        "score": 0.45,
+        "distanceM": 13.1,
+        "shapeMatch": "weak",
+        "reasons": [
+          "7-level footprint overlapping way 354755644",
+          "OSM: way/426283204, 231 m2, building:levels=7"
+        ],
+        "conflicts": ["Probably part of the same building"]
+      },
+      {
+        "osmId": "osm:way/354830243",
+        "score": 0.37,
+        "distanceM": 15.4,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/354830243, 957 m2, building:levels=5, name='Lovely Institute of Pharmacy'"
+        ],
+        "conflicts": ["Shape fits block 4 better"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1562, 1448] projected to lon/lat (75.707061, 31.257865); local transform error ~40.5 m; search radius 250 m (widened: extrapolated). Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:7930d4c28310bfd2 (321 m2, 0% covered by OSM, 50 m from the projected pin); det:google-open-buildings:e06bf101099dfd90 (874 m2, 0% covered by OSM, 109 m from the projected pin). Check on site: Which building next to the pharmacy block is signed Block 3 (physiotherapy)? Is way 426283204 part of it?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.6,
+      "changes": ["score osm:way/354755644: 0.6 -> 0.55"],
+      "reasons": [
+        "OSM name 'Lovely Institute of Technology' (7 levels) does not match the caption (physiotherapy), and the pin is extrapolated."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "4",
+    "leadNames": ["School of Pharmaceutical Science"],
+    "candidates": [
+      {
+        "osmId": "osm:way/354830243",
+        "score": 0.75,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Front made of projecting bays (sawtooth in plan), like the vignette's comb of four bays with a wider end wing",
+          "Next to an OSM lawn (osm:way/422437884, 940 m2), consistent with the GARDEN AREA scene",
+          "OSM name 'Lovely Institute of Pharmacy' agrees with the index row PHARMACY 4,7 (OSM names are community data, not official)",
+          "Projection falls inside it",
+          "OSM: way/354830243, 957 m2, building:levels=5, name='Lovely Institute of Pharmacy'"
+        ],
+        "conflicts": [
+          "Pin lies outside the control-point hull (gate end); the projection is an extrapolation and its distance is weak evidence."
+        ]
+      },
+      {
+        "osmId": "osm:way/354755644",
+        "score": 0.36,
+        "distanceM": 27.5,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/354755644, 1574 m2, building:levels=7, name='Lovely Institute of Technology'"
+        ],
+        "conflicts": ["Compact shape; better for block 3"]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1431, 1380] projected to lon/lat (75.707397, 31.257624); local transform error ~29.5 m; search radius 250 m (widened: extrapolated). Lead conflicts (from block-leads.json): Index groups PHARMACY under 4 and 7; slide-27 calls 7 'DEPARTMENT OF PHARMACEUTICAL SCIENCE' — consistent, but two numbers for one school. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:7930d4c28310bfd2 (321 m2, 0% covered by OSM, 64 m from the projected pin); det:microsoft-ml:bd716f75beca87c0 (734 m2, 0% covered by OSM, 92 m from the projected pin); det:google-open-buildings:e06bf101099dfd90 (874 m2, 0% covered by OSM, 99 m from the projected pin); det:microsoft-ml:ccf4e041092ccbda (474 m2, 0% covered by OSM, 114 m from the projected pin). Check on site: Is the building with the sawtooth front facing the lawn signed Block 4 (pharmaceutical sciences)?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.82,
+      "changes": ["score osm:way/354830243: 0.82 -> 0.75"],
+      "reasons": [
+        "Shape holds in OSM: a diagonal bar with a sawtooth of 4-5 teeth on one side and a hooked wing at the NW end (4 blobs after a 7 m erosion).",
+        "The OSM name 'Lovely Institute of Pharmacy' is independent of the illustration, but the index lists PHARMACY at 4 AND 7, so the name supports block 4 or 7 equally; only the drawing's sawtooth separates them.",
+        "Lowered from 0.82 because the pin is extrapolated (outside the control hull)."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "5",
+    "leadNames": [],
+    "candidates": [
+      {
+        "osmId": "osm:way/422738980",
+        "score": 0.31,
+        "distanceM": null,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Small 1-level footprint across a road from the lawn beside the block-4 candidate",
+          "OSM: way/422738980, 242 m2, building:levels=1"
+        ],
+        "conflicts": [
+          "The scene shows only the corner of a red flat-roofed building; there is nothing to compare"
+        ]
+      },
+      {
+        "osmId": "osm:way/427330237",
+        "score": 0.31,
+        "distanceM": null,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Low building across the road from the same lawn",
+          "OSM: way/427330237, 938 m2, building:levels=2"
+        ],
+        "conflicts": ["Better as block 2"]
+      }
+    ],
+    "recommendation": "no-plausible-footprint",
+    "notes": "No overview pin for this number, so there is no projected position; any proximity weight comes only from its relation to neighbours in a vignette/scene (see MATCHING_METHOD.md). Lead conflicts (from block-leads.json): No caption anywhere; not in the overview index; no pin 5 on the overview (overview draws an unlabelled red block in a similar spot). This lead may have no OSM footprint at all. Check on site: Find a building signed Block 5 near the garden by Block 4; none is identifiable from the drawing.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "no-plausible-footprint",
+      "previousTopScore": 0.31,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md"
+    }
+  },
+  {
+    "block": "6",
+    "leadNames": [
+      "School of Architecture & Planning",
+      "Division of Construction(s)",
+      "Division of Architecture & Design"
+    ],
+    "candidates": [
+      {
+        "osmId": "osm:way/425717556",
+        "score": 0.26,
+        "distanceM": 172.3,
+        "shapeMatch": "weak",
+        "reasons": ["Nearest OSM footprint (about 20 m)", "OSM: way/425717556, 135 m2, building:levels=none"],
+        "conflicts": [
+          "135 m2: far too small for the large 6-7-8 complex drawn",
+          "Pin lies outside the control-point hull (gate end); the projection is an extrapolation and its distance is weak evidence."
+        ]
+      },
+      {
+        "osmId": "osm:way/425717558",
+        "score": 0.26,
+        "distanceM": 165.6,
+        "shapeMatch": "weak",
+        "reasons": ["Nearest OSM footprint", "OSM: way/425717558, 57 m2, building:levels=none"],
+        "conflicts": ["57 m2: far too small"]
+      }
+    ],
+    "recommendation": "no-plausible-footprint",
+    "notes": "Overview pin at slide-28 px [1168, 1306] projected to lon/lat (75.708474, 31.257108); local transform error ~32.6 m; search radius 250 m (widened: extrapolated). Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:bd716f75beca87c0 (734 m2, 0% covered by OSM, 111 m from the projected pin); det:microsoft-ml:ccf4e041092ccbda (474 m2, 0% covered by OSM, 116 m from the projected pin). This lead may have no OSM footprint at all - see the detections listed above. Check on site: Locate the large 6-7-8 complex; OSM has no outline there (Microsoft detection only). Note each wing's block sign.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "no-plausible-footprint",
+      "previousTopScore": 0.26,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 8,
+        "distanceToTopM": 174.2,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "7",
+    "leadNames": ["Department of Pharmaceutical Science"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422437902",
+        "score": 0.37,
+        "distanceM": 84.4,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422437902, 1494 m2, building:levels=10"
+        ],
+        "conflicts": ["Shape and setting fit girls hostel 9/12 better"]
+      },
+      {
+        "osmId": "osm:way/425717556",
+        "score": 0.33,
+        "distanceM": 78.3,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/425717556, 135 m2, building:levels=none"
+        ],
+        "conflicts": [
+          "Far too small",
+          "Pin lies outside the control-point hull (gate end); the projection is an extrapolation and its distance is weak evidence."
+        ]
+      }
+    ],
+    "recommendation": "no-plausible-footprint",
+    "notes": "Overview pin at slide-28 px [1289, 1229] projected to lon/lat (75.706783, 31.256938); local transform error ~31.6 m; search radius 250 m (widened: extrapolated). Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:google-open-buildings:e06bf101099dfd90 (874 m2, 0% covered by OSM, 4 m from the projected pin); det:microsoft-ml:4574c88ab06ec241 (2284 m2, 0% covered by OSM, 31 m from the projected pin); det:microsoft-ml:bd716f75beca87c0 (734 m2, 0% covered by OSM, 58 m from the projected pin); det:microsoft-ml:7930d4c28310bfd2 (321 m2, 0% covered by OSM, 63 m from the projected pin). This lead may have no OSM footprint at all - see the detections listed above. Check on site: As for 6: identify the middle wing's block sign.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "no-plausible-footprint",
+      "previousTopScore": 0.37,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 3,
+        "distanceToTopM": 88.5,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "8",
+    "leadNames": ["School of Fine Arts", "School of Design (Multimedia)", "Animation"],
+    "candidates": [
+      {
+        "osmId": "osm:way/425717556",
+        "score": 0.35,
+        "distanceM": 41.2,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/425717556, 135 m2, building:levels=none"
+        ],
+        "conflicts": [
+          "Far too small for the tallest wedge-roofed wing drawn",
+          "Pin lies outside the control-point hull (gate end); the projection is an extrapolation and its distance is weak evidence."
+        ]
+      },
+      {
+        "osmId": "osm:way/425717558",
+        "score": 0.35,
+        "distanceM": 38.8,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/425717558, 57 m2, building:levels=none"
+        ],
+        "conflicts": ["Far too small"]
+      }
+    ],
+    "recommendation": "no-plausible-footprint",
+    "notes": "Overview pin at slide-28 px [1225, 1215] projected to lon/lat (75.707045, 31.256596); local transform error ~33.1 m; search radius 250 m (widened: extrapolated). Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:4574c88ab06ec241 (2284 m2, 0% covered by OSM, 28 m from the projected pin); det:microsoft-ml:ccf4e041092ccbda (474 m2, 0% covered by OSM, 35 m from the projected pin); det:microsoft-ml:bd716f75beca87c0 (734 m2, 0% covered by OSM, 38 m from the projected pin); det:google-open-buildings:e06bf101099dfd90 (874 m2, 0% covered by OSM, 45 m from the projected pin). This lead may have no OSM footprint at all - see the detections listed above. Check on site: As for 6: identify the tall wedge-roofed wing's block sign.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "no-plausible-footprint",
+      "previousTopScore": 0.35,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 1,
+        "distanceToTopM": 45.6,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "9",
+    "leadNames": ["Girls Hostel 1 (number by caption order only)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422437902",
+        "score": 0.55,
+        "distanceM": 14.5,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Largest footprint of the group (1 494 m2, 10 levels), two wings joined at one end, like the vignette's broad U/E-shaped block",
+          "near the projected pin (see distanceM)",
+          "OSM: way/422437902, 1494 m2, building:levels=10"
+        ],
+        "conflicts": ["The central projecting stair tower drawn is not visible in the OSM outline"]
+      },
+      {
+        "osmId": "osm:way/422437904",
+        "score": 0.45,
+        "distanceM": 4.1,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Projection falls 4 m from it; 10 levels",
+          "OSM: way/422437904, 896 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "Part of the stepped 'diamond' chain (with ways 422437906/908, 425716257-259) that matches the vignette's description of block 11"
+        ]
+      },
+      {
+        "osmId": "osm:way/422437908",
+        "score": 0.45,
+        "distanceM": 25.3,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Small chain unit near the projected pin (see distanceM)",
+          "OSM: way/422437908, 219 m2, building:levels=10"
+        ],
+        "conflicts": ["Too small for the largest hostel"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1401, 1166] projected to lon/lat (75.705336, 31.256805); local transform error ~30.6 m; search radius 60 m. Lead conflicts (from block-leads.json): Caption pairs 'BLOCK- 09,10, 11,12' with 'GIRLS HOSTAL 1, 2, 3, 4' in parallel order; the per-block hostel number is implied by order, not stated. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:google-open-buildings:82e1bdb2014307de (1911 m2, 0% covered by OSM, 44 m from the projected pin); det:microsoft-ml:a0daa64cb726ab78 (267 m2, 0% covered by OSM, 51 m from the projected pin); det:microsoft-ml:1de0553df2a5be0c (450 m2, 3% covered by OSM, 60 m from the projected pin); det:microsoft-ml:4f271a5f250ef404 (362 m2, 0% covered by OSM, 62 m from the projected pin). PRIORITY: the lead explicitly says hostel. Check on site: Read the block signs on each building of the girls-hostel group (U-shaped block, diamond chain, unmapped block to the west).",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.8,
+      "changes": [
+        "score osm:way/422437904: 0.8 -> 0.45",
+        "score osm:way/422437902: 0.74 -> 0.55",
+        "score osm:way/422437908: 0.46 -> 0.45 (alternative capped: its score was mostly proximity)",
+        "top candidate: osm:way/422437904 -> osm:way/422437902"
+      ],
+      "reasons": [
+        "Contradiction: the drawing makes 9 the LARGEST of the group with a broad U/E shape. OSM way/422437902 (1 494 m2, U-shape, 2 pockets) fits that; the previous top way/422437904 (896 m2, T-shape) does not.",
+        "With the non-circular fit, pin 9 is nearest to way/422437902 (8 m), with way/422437904 at 13 m. way/422437902 is also the top candidate for 12, so 9 and 12 cannot both be right.",
+        "Several unmapped ML outlines sit in this group, so OSM is incomplete here."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 1,
+        "distanceToTopM": 12.8,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "10",
+    "leadNames": ["Girls Hostel 2 (number by caption order only)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422437902",
+        "score": 0.26,
+        "distanceM": 132.3,
+        "shapeMatch": "weak",
+        "reasons": ["Nearest group footprint", "OSM: way/422437902, 1494 m2, building:levels=10"],
+        "conflicts": [
+          "Projection lands near the projected pin (see distanceM), outside the campus boundary; the drawing puts 10 at the far side of the courtyard"
+        ]
+      }
+    ],
+    "recommendation": "no-plausible-footprint",
+    "notes": "Overview pin at slide-28 px [1505, 1112] projected to lon/lat (75.704054, 31.256613); local transform error ~29.7 m; search radius 60 m. Lead conflicts (from block-leads.json): Caption pairs 'BLOCK- 09,10, 11,12' with 'GIRLS HOSTAL 1, 2, 3, 4' in parallel order; the per-block hostel number is implied by order, not stated. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:86ed1f8df9bfb0a4 (1303 m2, 0% covered by OSM, 92 m from the projected pin). This lead may have no OSM footprint at all - see the detections listed above. PRIORITY: the lead explicitly says hostel. Check on site: Find Block 10; the drawn position has no OSM outline (Microsoft detection nearby).",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "no-plausible-footprint",
+      "previousTopScore": 0.26,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 5,
+        "distanceToTopM": 133.8,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "11",
+    "leadNames": ["Girls Hostel 3 (number by caption order only)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422437904",
+        "score": 0.4,
+        "distanceM": 130.0,
+        "shapeMatch": "partial",
+        "reasons": [
+          "With ways 422437906/908 and 425716257-259 it forms a chain of small square units stepping diagonally, like the vignette's 'chain of linked cubes'",
+          "OSM: way/422437904, 896 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "The projection of pin 11 lands about 150 m west of this chain; by position the chain sits where pin 9 projects (shape and position disagree)"
+        ]
+      },
+      {
+        "osmId": "osm:way/422437885",
+        "score": 0.33,
+        "distanceM": 47.9,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Closest OSM footprint to the projection (about 24 m)",
+          "OSM: way/422437885, 3386 m2, building:levels=10"
+        ],
+        "conflicts": ["Long tapering wedge; fits block 15 much better"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1421, 1065] projected to lon/lat (75.70407, 31.256121); local transform error ~31.2 m; search radius 60 m. Lead conflicts (from block-leads.json): Caption pairs 'BLOCK- 09,10, 11,12' with 'GIRLS HOSTAL 1, 2, 3, 4' in parallel order; the per-block hostel number is implied by order, not stated. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:86ed1f8df9bfb0a4 (1303 m2, 0% covered by OSM, 78 m from the projected pin); det:microsoft-ml:4f271a5f250ef404 (362 m2, 0% covered by OSM, 118 m from the projected pin). PRIORITY: the lead explicitly says hostel. Check on site: Is the diamond-shaped chain Block 11, or Block 9?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.4,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 5,
+        "distanceToTopM": 134.9,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "12",
+    "leadNames": ["Girls Hostel 4 (number by caption order only)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422437902",
+        "score": 0.45,
+        "distanceM": 2.6,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Projection falls inside (3 m); next to the junction island used as C10, where the vignette places 12 at the corner of the enclosure",
+          "OSM: way/422437902, 1494 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "The vignette draws 12 as a compact block with a stepped roof; this outline is a two-wing U"
+        ]
+      },
+      {
+        "osmId": "osm:way/422437885",
+        "score": 0.27,
+        "distanceM": 58.0,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422437885, 3386 m2, building:levels=10"
+        ],
+        "conflicts": ["Wedge shape fits block 15"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1323, 1150] projected to lon/lat (75.705661, 31.256444); local transform error ~32.1 m; search radius 60 m. Lead conflicts (from block-leads.json): Caption pairs 'BLOCK- 09,10, 11,12' with 'GIRLS HOSTAL 1, 2, 3, 4' in parallel order; the per-block hostel number is implied by order, not stated. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:google-open-buildings:82e1bdb2014307de (1911 m2, 0% covered by OSM, 8 m from the projected pin); det:microsoft-ml:4f271a5f250ef404 (362 m2, 0% covered by OSM, 41 m from the projected pin); det:microsoft-ml:1de0553df2a5be0c (450 m2, 3% covered by OSM, 52 m from the projected pin); det:microsoft-ml:86ed1f8df9bfb0a4 (1303 m2, 0% covered by OSM, 79 m from the projected pin). PRIORITY: the lead explicitly says hostel. Check on site: Which girls-hostel building is signed 12?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.8,
+      "changes": ["score osm:way/422437902: 0.8 -> 0.45"],
+      "reasons": [
+        "way/422437902 is the largest U-shaped block in the group. That fits the drawn shape of 9, not the 'compact block with stepped roof' of 12. Both pins project onto it within the ~48 m position error."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.6,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "13",
+    "leadNames": ["Division of Student Welfare"],
+    "candidates": [
+      {
+        "osmId": "osm:relation/7099162",
+        "score": 0.8,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Square footprint with a central open courtyard (OSM relation with an inner ring), like the vignette's square box around an open atrium",
+          "Close to the projected pin (see distanceM); across the main road from the open-auditorium footprint, as drawn",
+          "An official LPU page says Block 13 houses the Student Welfare Wing (OFFICIAL_CROSSCHECK.md); that pairs the number with a function but places nothing",
+          "OSM: relation/7099162, 1409 m2, building:levels=10"
+        ],
+        "conflicts": ["The index also lists BUSINESS 13"]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1146, 1080] projected to lon/lat (75.705991, 31.255129); local transform error ~37.6 m; search radius 60 m. Lead conflicts (from block-leads.json): Index EDUCATION list has 'BUSINESS 13', but the slide-23 vignette calls 13 'DIVISION OF STUDENT WELFARE' (index ADMINISTRATIVE list also has 'STUDENT WELFARE 13') and slide-24 puts 'MITTAL SCHOOL OF BUSINESS' at BLOCK-14. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:google-open-buildings:c6bb467e2fde7e74 (355 m2, 0% covered by OSM, 60 m from the projected pin). Check on site: Check whether the courtyard building is signed Block 13. The official page ties Block 13 to the Student Welfare Wing (number and function only; it places nothing).",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:relation/7099162: 0.85 -> 0.8"],
+      "reasons": [
+        "Checked: relation/7099162 is the ONLY footprint in the dataset with an inner ring (courtyard). It is a 46 x 41 m square with a front stub, like the drawn courtyard box with an entrance platform.",
+        "The pin projects 3 m away even without the circular control points. The next footprint is 56 m away, about one position error, so shape is what decides.",
+        "An official page ties Block 13 to the Student Welfare Wing (function only). Lowered to 0.80 so it does not read as certain."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 3.3,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "14",
+    "leadNames": ["Mittal School of Business"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422437887",
+        "score": 0.65,
+        "distanceM": 0.0,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Projection falls inside; beside the block-13 candidate and across the road from the open auditorium, as drawn",
+          "OSM: way/422437887, 1818 m2, building:levels=11"
+        ],
+        "conflicts": [
+          "Trapezoid/wedge outline; the vignette draws a rectangular box with a sawtooth roof edge",
+          "Index has no row for 14; the vignette caption says MITTAL SCHOOL OF BUSINESS while the index says BUSINESS 13"
+        ]
+      },
+      {
+        "osmId": "osm:way/422437888",
+        "score": 0.6,
+        "distanceM": 12.5,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Attached to way 422437887 (10 levels); possibly the same building",
+          "OSM: way/422437888, 485 m2, building:levels=10"
+        ],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1104, 1011] projected to lon/lat (75.705442, 31.254345); local transform error ~39.9 m; search radius 60 m. Lead conflicts (from block-leads.json): Block 14 does not appear in the overview index at all; the index assigns BUSINESS to 13. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:google-open-buildings:c6bb467e2fde7e74 (355 m2, 0% covered by OSM, 117 m from the projected pin). Check on site: Is the trapezoid building (and its annex) Block 14 / Mittal School of Business?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.82,
+      "changes": [
+        "score osm:way/422437887: 0.82 -> 0.65",
+        "score osm:way/422437888: 0.75 -> 0.6 (alternative capped: its score was mostly proximity)"
+      ],
+      "reasons": [
+        "way/422437887 is a convex trapezoid, not the drawn rectangle with a sawtooth roof edge. The adjoining way/422437888 may be part of the same building. Block 14 is not in the overview index."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "15",
+    "leadNames": ["Uni-Centre", "School of Hotel Management and Tourism"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422437885",
+        "score": 0.8,
+        "distanceM": 19.5,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Long tapering slab whose wide end is rounded, like the vignette's wedge with a rounded, glazed wide end",
+          "Runs along the open-auditorium footprint, which the scene shows it abutting",
+          "near the projected pin (see distanceM) (the pin is drawn on a tall roof)",
+          "OSM: way/422437885, 3386 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "Tagged in OSM as a building:part (isBuildingPart=true); check whether a parent outline is missing"
+        ]
+      },
+      {
+        "osmId": "osm:way/422823431",
+        "score": 0.55,
+        "distanceM": 0.0,
+        "shapeMatch": "weak",
+        "reasons": ["Projection falls inside", "OSM: way/422823431, 12793 m2, building:levels=4"],
+        "conflicts": ["This outline is the open-auditorium roof (lead 16)"]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1279, 1050] projected to lon/lat (75.704798, 31.255423); local transform error ~34.4 m; search radius 60 m. Lead conflicts (from block-leads.json): 'Uni-Center' is not in the index (index lists only HOTEL MANAGEMENT 15). Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:google-open-buildings:c6bb467e2fde7e74 (355 m2, 0% covered by OSM, 62 m from the projected pin); det:microsoft-ml:86ed1f8df9bfb0a4 (1303 m2, 0% covered by OSM, 85 m from the projected pin); det:microsoft-ml:2a977a674d1fccb3 (238 m2, 0% covered by OSM, 101 m from the projected pin); det:microsoft-ml:4f271a5f250ef404 (362 m2, 0% covered by OSM, 102 m from the projected pin). Check on site: Is the long wedge along the open auditorium Block 15 (Uni-Centre / hotel management)?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": [
+        "score osm:way/422437885: 0.85 -> 0.8",
+        "score osm:way/422823431: 0.68 -> 0.55 (alternative capped: its score was mostly proximity)"
+      ],
+      "reasons": [
+        "The alternative way/422823431 (the open-auditorium roof, weak shape match) was lowered from 0.68 to 0.55: its score came from the pin landing inside it, and position error here is ~48 m.",
+        "Shape holds: way/422437885 is a convex wedge 150 x 33 m that narrows from about 35 m to about 10 m, with a rounded wide end, next to the largest roof (way/422823431).",
+        "The pin itself lands inside way/422823431 (both fits); the wedge is 14 m away, so shape and adjacency decide, not position. 'Uni-Centre' has no official block number (the official page names 'Uni-Mall (Unicentre)' without one)."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 1,
+        "distanceToTopM": 14.2,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "16",
+    "leadNames": ["(open auditorium — inferred only from the scene caption)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422823431",
+        "score": 0.7,
+        "distanceM": null,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Largest footprint on campus (12 793 m2), irregular polygon, building:levels=4, like the very large irregular roof on columns",
+          "Adjoins the block-15 candidate, as in the OPEN AUDITORIUM AND SURROUNDINGS scene",
+          "OSM: way/422823431, 12793 m2, building:levels=4"
+        ],
+        "conflicts": [
+          "Used as control point C8, so its position is not independent evidence",
+          "No overview pin; the block number comes from a scene pin only"
+        ]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "No overview pin for this number, so there is no projected position; any proximity weight comes only from its relation to neighbours in a vignette/scene (see MATCHING_METHOD.md). Lead conflicts (from block-leads.json): No block caption; not in the overview index; the overview draws the same pavilion next to 15 but with no pin 16. Check on site: Is the large covered open auditorium numbered 16 at all? (Only a scene pin says so.)",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.82,
+      "changes": ["score osm:way/422823431: 0.82 -> 0.7"],
+      "reasons": [
+        "The largest footprint on campus (12 794 m2, irregular pentagon) matches the drawn pavilion. It was control point C8, so its distance is circular; with C8 held out, the fit misses by 39 m.",
+        "The number comes only from a scene pin, and the 'open auditorium' name only from the scene caption. Lowered to 0.70."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md"
+    }
+  },
+  {
+    "block": "18",
+    "leadNames": [
+      "School of Social Science and Language",
+      "School of Physical Education",
+      "Department of Education"
+    ],
+    "candidates": [
+      {
+        "osmId": "osm:way/422437890",
+        "score": 0.75,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "H-shaped outline (two end blocks joined by a narrower bar), like the vignette's H-shape",
+          "Projection falls inside; beside the junction island used as C9, as drawn",
+          "OSM: way/422437890, 1466 m2, building:levels=6"
+        ],
+        "conflicts": ["building:levels=6"]
+      },
+      {
+        "osmId": "osm:way/425699179",
+        "score": 0.23,
+        "distanceM": 56.3,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Thin bar near the projected pin (see distanceM)",
+          "OSM: way/425699179, 363 m2, building:levels=4"
+        ],
+        "conflicts": ["Shape does not match"]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1365, 976] projected to lon/lat (75.703404, 31.255141); local transform error ~33.0 m; search radius 60 m. Lead conflicts (from block-leads.json): Index names only EDUCATION for 18; vignette lists three units. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:2a977a674d1fccb3 (238 m2, 0% covered by OSM, 71 m from the projected pin). Check on site: Is the H-shaped building signed Block 18?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422437890: 0.85 -> 0.75"],
+      "reasons": [
+        "Partly holds: a bar with wider end blocks and a narrower middle (H-like), but with two tabs on the south side and a bump on the north side (4 concave pockets, not the 2 of a clean H).",
+        "The pin lands 2 m away in both fits, and the next footprint is 51 m away. Lowered to 0.75."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 1.8,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "19",
+    "leadNames": ["School of Films, Journalism and Creative Arts", "Performing Arts"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422548856",
+        "score": 0.5,
+        "distanceM": null,
+        "shapeMatch": "partial",
+        "reasons": [
+          "The 19/20/21 vignette draws one connected stepped chain with a quarter-circle corner; ways 422548856-858 form a stepped, curved L inside a loop road",
+          "OSM: way/422548856, 708 m2, building:levels=10"
+        ],
+        "conflicts": ["No overview pin for 19", "The overview pins 21 on a different cluster"]
+      },
+      {
+        "osmId": "osm:way/422548858",
+        "score": 0.5,
+        "distanceM": null,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Curved (quarter-circle) piece of the same complex",
+          "OSM: way/422548858, 525 m2, building:levels=10"
+        ],
+        "conflicts": ["The vignette ties the curved corner to pin 20, not 19"]
+      },
+      {
+        "osmId": "osm:way/422548857",
+        "score": 0.5,
+        "distanceM": null,
+        "shapeMatch": "partial",
+        "reasons": ["Third piece of the same complex", "OSM: way/422548857, 754 m2, building:levels=10"],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "No overview pin for this number, so there is no projected position; any proximity weight comes only from its relation to neighbours in a vignette/scene (see MATCHING_METHOD.md). Lead conflicts (from block-leads.json): Vignette: 19 = Films, Journalism and Creative Arts; index: 19 = PERFORMING ARTS and FILM & JOURNALISM = 20. | No pin 19 on the overview. Check on site: Which wing of the curved complex is signed 19?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.5,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md"
+    }
+  },
+  {
+    "block": "20",
+    "leadNames": ["FILM & JOURNALISM", "LAW"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422548858",
+        "score": 0.47,
+        "distanceM": 80.2,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Quarter-circle piece of the stepped complex inside a loop road, like the vignette's rounded inner corner at pin 20",
+          "OSM: way/422548858, 525 m2, building:levels=10"
+        ],
+        "conflicts": ["near the projected pin (see distanceM) (beyond the search radius)"]
+      },
+      {
+        "osmId": "osm:way/422548857",
+        "score": 0.47,
+        "distanceM": 82.0,
+        "shapeMatch": "partial",
+        "reasons": ["Part of the same complex", "OSM: way/422548857, 754 m2, building:levels=10"],
+        "conflicts": ["Overview describes an H-like building; OSM shows a curved L"]
+      },
+      {
+        "osmId": "osm:way/422548856",
+        "score": 0.47,
+        "distanceM": 100.8,
+        "shapeMatch": "partial",
+        "reasons": ["Part of the same complex", "OSM: way/422548856, 708 m2, building:levels=10"],
+        "conflicts": []
+      },
+      {
+        "osmId": "osm:way/422738883",
+        "score": 0.16,
+        "distanceM": 87.7,
+        "shapeMatch": "weak",
+        "reasons": ["2-level footprint near the complex", "OSM: way/422738883, 414 m2, building:levels=2"],
+        "conflicts": ["Too low for the multi-storey building drawn"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1385, 888] projected to lon/lat (75.702269, 31.254449); local transform error ~32.6 m; search radius 60 m. Lead conflicts (from block-leads.json): Index puts both FILM & JOURNALISM and LAW at 20; the slide-21 vignette puts film/journalism at 19 and law at 21 and gives 20 no caption. Check on site: Which wing of the curved complex is signed 20?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.47,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 84.6,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "21",
+    "leadNames": ["School of Law"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422548303",
+        "score": 0.47,
+        "distanceM": 60.2,
+        "shapeMatch": "partial",
+        "reasons": [
+          "The overview puts pin 21 on a cluster of linked multi-storey blocks across a road from pin 20; ways 422548301-320 form such a cluster (10 levels)",
+          "OSM: way/422548303, 1174 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "near the projected pin (see distanceM)",
+          "The vignette caption makes 21 the School of Law inside the 19/20/21 complex; the index makes 21A/B girls hostels"
+        ]
+      },
+      {
+        "osmId": "osm:way/422548301",
+        "score": 0.47,
+        "distanceM": 90.5,
+        "shapeMatch": "partial",
+        "reasons": ["Part of the same cluster", "OSM: way/422548301, 1063 m2, building:levels=10"],
+        "conflicts": []
+      },
+      {
+        "osmId": "osm:way/422548304",
+        "score": 0.47,
+        "distanceM": 73.1,
+        "shapeMatch": "partial",
+        "reasons": ["Part of the same cluster", "OSM: way/422548304, 1101 m2, building:levels=10"],
+        "conflicts": []
+      },
+      {
+        "osmId": "osm:way/422437897",
+        "score": 0.35,
+        "distanceM": 43.9,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422437897, 2323 m2, building:levels=10"
+        ],
+        "conflicts": ["Fits apartment block 43/44 better"]
+      },
+      {
+        "osmId": "osm:way/1550425052",
+        "score": 0.34,
+        "distanceM": 36.3,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/1550425052, 1402 m2, building:levels=none"
+        ],
+        "conflicts": ["U-shaped, no levels tag; not a multi-tower cluster"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1276, 740] projected to lon/lat (75.701259, 31.252658); local transform error ~34.8 m; search radius 60 m. Lead conflicts (from block-leads.json): Index has LAW at 20, not 21. | Index RESIDENTIAL lists 'GIRLS HOSTEL ... 21A,B' — a hostel numbered 21A/21B — while the vignette makes 21 the School of Law. | Overview pin 21 sits on a cluster drawn like the residential blocks, physically separate from pin 20, whereas the vignette draws 19, 20 and 21 as one connected building. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:8ec762527380d97e (1496 m2, 0% covered by OSM, 57 m from the projected pin); det:google-open-buildings:6684ec2de2a23a11 (712 m2, 0% covered by OSM, 66 m from the projected pin); det:google-open-buildings:ca4cc0d8e3294c47 (822 m2, 0% covered by OSM, 69 m from the projected pin); det:microsoft-ml:bd59106633369896 (415 m2, 11% covered by OSM, 116 m from the projected pin). Check on site: Is the 21 sign on the curved complex (law school) or on the hostel cluster across the road?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.47,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 2,
+        "distanceToTopM": 56.8,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "21A",
+    "leadNames": ["Girls Hostel 21A"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422548303",
+        "score": 0.18,
+        "distanceM": null,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Residential-looking cluster where the overview's pin 21 stands",
+          "OSM: way/422548303, 1174 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "No pin or caption for 21A at all; any link is by appearance only and must not be asserted"
+        ]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Rule gave 'no-plausible-footprint'. Kept as ambiguous instead of no-plausible-footprint: the index lists it, but there is no pin, so no footprint can be proposed; the owner must locate 21A on site. No overview pin for this number, so there is no projected position; any proximity weight comes only from its relation to neighbours in a vignette/scene (see MATCHING_METHOD.md). Lead conflicts (from block-leads.json): Index-only; conflicts with slide-21 'BLOCK-21 SCHOOL OF LAW'. | Relationship to the vignette 'BLOCK-22,23 GIRLS HOSTAL 5, 6.' (which has no index entry and no overview pin) is unresolved. This lead may have no OSM footprint at all. PRIORITY: the lead explicitly says hostel. Check on site: Find the buildings signed 21A and 21B (girls hostels) and note which outline they occupy.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.18,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md"
+    }
+  },
+  {
+    "block": "21B",
+    "leadNames": ["Girls Hostel 21B"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422548303",
+        "score": 0.18,
+        "distanceM": null,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Residential-looking cluster where the overview's pin 21 stands",
+          "OSM: way/422548303, 1174 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "No pin or caption for 21B at all; any link is by appearance only and must not be asserted"
+        ]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Rule gave 'no-plausible-footprint'. Kept as ambiguous instead of no-plausible-footprint: the index lists it, but there is no pin, so no footprint can be proposed; the owner must locate 21B on site. No overview pin for this number, so there is no projected position; any proximity weight comes only from its relation to neighbours in a vignette/scene (see MATCHING_METHOD.md). Lead conflicts (from block-leads.json): Index-only; conflicts with slide-21 'BLOCK-21 SCHOOL OF LAW'. | Relationship to the vignette 'BLOCK-22,23 GIRLS HOSTAL 5, 6.' (which has no index entry and no overview pin) is unresolved. This lead may have no OSM footprint at all. PRIORITY: the lead explicitly says hostel. Check on site: See 21A.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.18,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md"
+    }
+  },
+  {
+    "block": "22",
+    "leadNames": ["Girls Hostel 5 (number by caption order only)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422548303",
+        "score": 0.32,
+        "distanceM": null,
+        "shapeMatch": "partial",
+        "reasons": [
+          "The vignette draws a rectangular perimeter of linked wings with cross-wings and two inner courts; ways 422548301-320 form a grid of linked 10-level blocks with two courts",
+          "OSM: way/422548303, 1174 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "No overview pin for 22",
+          "The same cluster carries overview pin 21; numbers 22/23 are not in the index"
+        ]
+      },
+      {
+        "osmId": "osm:way/422548301",
+        "score": 0.32,
+        "distanceM": null,
+        "shapeMatch": "partial",
+        "reasons": ["Part of the same cluster", "OSM: way/422548301, 1063 m2, building:levels=10"],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "No overview pin for this number, so there is no projected position; any proximity weight comes only from its relation to neighbours in a vignette/scene (see MATCHING_METHOD.md). Lead conflicts (from block-leads.json): Not in the overview index (index girls hostels: 9,10,11,12,21A,B); no pin 22/23 on the overview. | Caption pairs 22,23 with hostels 5,6 by order only. This lead may have no OSM footprint at all. PRIORITY: the lead explicitly says hostel. Check on site: Is the large courtyard cluster of linked blocks signed 22/23 (girls hostels 5, 6)?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.32,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md"
+    }
+  },
+  {
+    "block": "23",
+    "leadNames": ["Girls Hostel 6 (number by caption order only)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422548304",
+        "score": 0.32,
+        "distanceM": null,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Second half of the same courtyard cluster (see 22)",
+          "OSM: way/422548304, 1101 m2, building:levels=10"
+        ],
+        "conflicts": ["No overview pin for 23", "Same cluster carries overview pin 21"]
+      },
+      {
+        "osmId": "osm:way/422548303",
+        "score": 0.32,
+        "distanceM": null,
+        "shapeMatch": "partial",
+        "reasons": ["Part of the same cluster", "OSM: way/422548303, 1174 m2, building:levels=10"],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "No overview pin for this number, so there is no projected position; any proximity weight comes only from its relation to neighbours in a vignette/scene (see MATCHING_METHOD.md). Lead conflicts (from block-leads.json): Not in the overview index (index girls hostels: 9,10,11,12,21A,B); no pin 22/23 on the overview. | Caption pairs 22,23 with hostels 5,6 by order only. This lead may have no OSM footprint at all. PRIORITY: the lead explicitly says hostel. Check on site: See 22.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.32,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md"
+    }
+  },
+  {
+    "block": "25",
+    "leadNames": ["School of Agriculture"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422823421",
+        "score": 0.75,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Comb of five parallel wings joined along one side (8 200 m2, 10 levels), like the drawn diagonal row 25-29 with connectors",
+          "25 projects onto the outer wing at the road bend",
+          "OSM: way/422823421, 8200 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "One OSM way covers all five parallel wings drawn as 25-29; matching a single block needs the wing to be identified on site and the way split."
+        ]
+      },
+      {
+        "osmId": "osm:way/422556249",
+        "score": 0.47,
+        "distanceM": 23.6,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422556249, 5927 m2, building:levels=10"
+        ],
+        "conflicts": ["V-shaped; fits 36-38"]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1123, 792] projected to lon/lat (75.702829, 31.252486); local transform error ~39.9 m; search radius 60 m. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:237943d699feee6c (663 m2, 2% covered by OSM, 92 m from the projected pin). PRIORITY: the lead explicitly says agriculture. Check on site: Count the wings of the five-wing comb from the road bend and note each block sign.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422823421: 0.85 -> 0.75"],
+      "reasons": [
+        "Shape holds: way/422823421 has exactly 5 units separated by paired notches (7 concave pockets), matching the drawn row of 5 blocks (25-29). Its west end is at the road bend, as drawn for 25.",
+        "Pins 25-29 AND pins 35, 37 and 38 all project into or next to this way (0-13 m), so position cannot tell the row from the V. The assignment rests on topology: the row is north of the V and the admin block 30-32 is at its east end.",
+        "One OSM way would carry 5 block numbers, so per-unit numbers need a site check and a split of the way. Lowered to 0.75."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "26",
+    "leadNames": ["School of Agriculture"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422823421",
+        "score": 0.75,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Second wing of the five-wing comb, as drawn",
+          "OSM: way/422823421, 8200 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "One OSM way covers all five parallel wings drawn as 25-29; matching a single block needs the wing to be identified on site and the way split."
+        ]
+      },
+      {
+        "osmId": "osm:way/422556249",
+        "score": 0.42,
+        "distanceM": 32.1,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422556249, 5927 m2, building:levels=10"
+        ],
+        "conflicts": ["Fits 36-38"]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1098, 812] projected to lon/lat (75.703205, 31.252558); local transform error ~40.7 m; search radius 61 m. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:237943d699feee6c (663 m2, 2% covered by OSM, 117 m from the projected pin). PRIORITY: the lead explicitly says agriculture. Check on site: See 25.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422823421: 0.85 -> 0.75"],
+      "reasons": [
+        "Shape holds: way/422823421 has exactly 5 units separated by paired notches (7 concave pockets), matching the drawn row of 5 blocks (25-29). Its west end is at the road bend, as drawn for 25.",
+        "Pins 25-29 AND pins 35, 37 and 38 all project into or next to this way (0-13 m), so position cannot tell the row from the V. The assignment rests on topology: the row is north of the V and the admin block 30-32 is at its east end.",
+        "One OSM way would carry 5 block numbers, so per-unit numbers need a site check and a split of the way. Lowered to 0.75."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "27",
+    "leadNames": ["School of Chemical Engineering and Physical Science"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422823421",
+        "score": 0.7,
+        "distanceM": 1.2,
+        "shapeMatch": "strong",
+        "reasons": ["Third wing of the five-wing comb", "OSM: way/422823421, 8200 m2, building:levels=10"],
+        "conflicts": [
+          "One OSM way covers all five parallel wings drawn as 25-29; matching a single block needs the wing to be identified on site and the way split."
+        ]
+      },
+      {
+        "osmId": "osm:way/422556250",
+        "score": 0.14,
+        "distanceM": 60.4,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422556250, 940 m2, building:levels=4"
+        ],
+        "conflicts": ["Auditorium bowl"]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1085, 837] projected to lon/lat (75.703563, 31.252724); local transform error ~41.2 m; search radius 62 m. Lead conflicts (from block-leads.json): Index omits Chemical Engineering (lists PHYSICAL SCIENCE only). Check on site: See 25.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422823421: 0.85 -> 0.7"],
+      "reasons": [
+        "Same comb as 25/26. A middle unit is placed only by counting from the end, so it is weaker than the end units. Lowered to 0.70."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 4.9,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "28",
+    "leadNames": ["School of Bioengineering and Biosciences", "Biotechnology"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422823421",
+        "score": 0.7,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": ["Fourth wing of the five-wing comb", "OSM: way/422823421, 8200 m2, building:levels=10"],
+        "conflicts": [
+          "One OSM way covers all five parallel wings drawn as 25-29; matching a single block needs the wing to be identified on site and the way split."
+        ]
+      },
+      {
+        "osmId": "osm:way/422823423",
+        "score": 0.27,
+        "distanceM": 60.9,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422823423, 1584 m2, building:levels=10"
+        ],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1057, 847] projected to lon/lat (75.703832, 31.252695); local transform error ~42.0 m; search radius 63 m. Check on site: See 25.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422823421: 0.85 -> 0.7"],
+      "reasons": [
+        "Same comb as 25/26. A middle unit is placed only by counting from the end, so it is weaker than the end units. Lowered to 0.70."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 5.1,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "29",
+    "leadNames": ["Office of the Pro-Chancellor", "Administration-II"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422823421",
+        "score": 0.7,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Last wing of the comb, facing the open plaza, as drawn",
+          "OSM: way/422823421, 8200 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "One OSM way covers all five parallel wings drawn as 25-29; matching a single block needs the wing to be identified on site and the way split."
+        ]
+      },
+      {
+        "osmId": "osm:way/422823423",
+        "score": 0.4,
+        "distanceM": 37.6,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422823423, 1584 m2, building:levels=10"
+        ],
+        "conflicts": ["Fits the 30-32 group"]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1038, 865] projected to lon/lat (75.704133, 31.252773); local transform error ~42.5 m; search radius 64 m. Lead conflicts (from block-leads.json): Vignette: 29 = Pro-Chancellor + Administration-II; index: PROCHANCELLOR = 30 and 29 = ADMINISTRATIVE. The administrative block numbers 29-32 appear shifted by one between vignette and index. Check on site: See 25; also confirm whether it is an administrative block.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422823421: 0.85 -> 0.7"],
+      "reasons": [
+        "East end unit of the 5-unit comb, facing 30-32. The vignette and index disagree on its function (administrative numbers 29-32 appear shifted by one). Lowered to 0.70."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 12.9,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "30",
+    "leadNames": ["The Chancellery", "Administration-I"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422823423",
+        "score": 0.55,
+        "distanceM": 7.5,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Block at the foot of the bowl next to the comb's end, as drawn",
+          "OSM: way/422823423, 1584 m2, building:levels=10"
+        ],
+        "conflicts": ["Outline is larger than the 'small block' drawn"]
+      },
+      {
+        "osmId": "osm:way/422823420",
+        "score": 0.5,
+        "distanceM": 44.5,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Front comb of linked wings next to the bowl (5 311 m2)",
+          "OSM: way/422823420, 5311 m2, building:levels=10"
+        ],
+        "conflicts": ["One OSM way covers several wings drawn as 30-34"]
+      },
+      {
+        "osmId": "osm:way/422823424",
+        "score": 0.39,
+        "distanceM": 30.8,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Small 6-level footprint near the projected pin (see distanceM)",
+          "OSM: way/422823424, 228 m2, building:levels=6"
+        ],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1005, 882] projected to lon/lat (75.70448, 31.252781); local transform error ~43.4 m; search radius 65 m. Lead conflicts (from block-leads.json): Vignette: 30 = Chancellery; index: 30 = PROCHANCELLOR and CHANCELLOR = 31. Check on site: Which block at the foot of the auditorium is 30?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.78,
+      "changes": [
+        "score osm:way/422823423: 0.78 -> 0.55",
+        "score osm:way/422823420: 0.51 -> 0.5 (alternative capped: its score was mostly proximity)"
+      ],
+      "reasons": [
+        "Blocks 30, 31 and 32 all compete for the single trapezoid way/422823423 (plus its small neighbours 422823424/426/428), and the sources disagree on 29-32. The score is mostly proximity, while the position error (~48 m) is about the same as the median building spacing (51 m)."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 15.3,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "31",
+    "leadNames": ["Division of Admissions", "Museum of Academics"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422823423",
+        "score": 0.45,
+        "distanceM": null,
+        "shapeMatch": "partial",
+        "reasons": [
+          "The vignette puts 31 between 30 and 32 at the front of the cluster",
+          "OSM: way/422823423, 1584 m2, building:levels=10"
+        ],
+        "conflicts": ["No overview pin for 31"]
+      },
+      {
+        "osmId": "osm:way/422823420",
+        "score": 0.45,
+        "distanceM": null,
+        "shapeMatch": "partial",
+        "reasons": ["Front comb of linked wings", "OSM: way/422823420, 5311 m2, building:levels=10"],
+        "conflicts": ["No overview pin for 31"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "No overview pin for this number, so there is no projected position; any proximity weight comes only from its relation to neighbours in a vignette/scene (see MATCHING_METHOD.md). Lead conflicts (from block-leads.json): Vignette: 31 = Admissions + Museum; index: 31 = CHANCELLOR and ADMINISTRATIVE, ADMISSION = 32. | No pin 31 on the overview (pins 30 and 32 are present). Check on site: Find Block 31 between 30 and 32 (no overview pin).",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.54,
+      "changes": ["score osm:way/422823423: 0.54 -> 0.45", "score osm:way/422823420: 0.54 -> 0.45"],
+      "reasons": ["No overview pin. Shares one footprint with 30 and 32."],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md"
+    }
+  },
+  {
+    "block": "32",
+    "leadNames": ["Office of the Vice-Chancellor", "Administration-III"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422823423",
+        "score": 0.6,
+        "distanceM": 0.0,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Projection falls inside; taller block at the front of the cluster, as drawn",
+          "An official LPU page puts the Department of Records in 'Building No. 32' (OFFICIAL_CROSSCHECK.md); that places nothing",
+          "OSM: way/422823423, 1584 m2, building:levels=10"
+        ],
+        "conflicts": []
+      },
+      {
+        "osmId": "osm:way/422823420",
+        "score": 0.55,
+        "distanceM": 28.4,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Front comb; near the projected pin (see distanceM)",
+          "OSM: way/422823420, 5311 m2, building:levels=10"
+        ],
+        "conflicts": ["One OSM way covers several wings"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [977, 877] projected to lon/lat (75.704542, 31.252615); local transform error ~44.1 m; search radius 66 m. Lead conflicts (from block-leads.json): Vignette: 32 = Vice-Chancellor + Administration-III; index: 32 = ADMISSION. Vice-Chancellor does not appear in the index. Check on site: Confirm which front block is 32 (official: Department of Records, Building No. 32).",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.82,
+      "changes": [
+        "score osm:way/422823423: 0.82 -> 0.6",
+        "score osm:way/422823420: 0.59 -> 0.55 (alternative capped: its score was mostly proximity)"
+      ],
+      "reasons": [
+        "The official 'Building No. 32' (Department of Records) gives the number and function only. Shares one footprint with 30 and 31. Lowered from 0.82."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "33",
+    "leadNames": ["School of Computer Science and Engineering"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422823420",
+        "score": 0.55,
+        "distanceM": 18.5,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Front comb of linked wings with connectors, where 33 and 34 are drawn",
+          "OSM: way/422823420, 5311 m2, building:levels=10"
+        ],
+        "conflicts": ["One OSM way covers several wings"]
+      },
+      {
+        "osmId": "osm:way/422823423",
+        "score": 0.5,
+        "distanceM": 10.8,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422823423, 1584 m2, building:levels=10"
+        ],
+        "conflicts": []
+      },
+      {
+        "osmId": "osm:way/1566888543",
+        "score": 0.41,
+        "distanceM": 13.6,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/1566888543, 316 m2, building:levels=none"
+        ],
+        "conflicts": ["Inner arc of the auditorium (lead 35), not a teaching block"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [958, 850] projected to lon/lat (75.704319, 31.252297); local transform error ~44.4 m; search radius 66 m. Lead conflicts (from block-leads.json): Vignette: 33 = Computer Science and Engineering; index: 33 = COMPUTER APPLICATION (vignette puts Computer Applications at 38). Check on site: Which wing of the front comb is 33?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.72,
+      "changes": [
+        "score osm:way/422823420: 0.72 -> 0.55",
+        "score osm:way/422823423: 0.55 -> 0.5 (alternative capped: its score was mostly proximity)"
+      ],
+      "reasons": [
+        "With the non-circular fit, the pin is nearest to way/422823423 (4 m) and way/422823421 (12 m); the 33/34 comb way/422823420 is 26 m away (rank 3)."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 2,
+        "distanceToTopM": 25.6,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "34",
+    "leadNames": ["School of Computer Science and Engineering"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422823420",
+        "score": 0.6,
+        "distanceM": 13.8,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Far end of the front comb, where the vignette puts the taller end block 34",
+          "OSM: way/422823420, 5311 m2, building:levels=10"
+        ],
+        "conflicts": ["One OSM way covers several wings"]
+      },
+      {
+        "osmId": "osm:way/1566888543",
+        "score": 0.46,
+        "distanceM": 3.2,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/1566888543, 316 m2, building:levels=none"
+        ],
+        "conflicts": ["Inner arc of the auditorium"]
+      },
+      {
+        "osmId": "osm:way/422556250",
+        "score": 0.45,
+        "distanceM": 5.3,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422556250, 940 m2, building:levels=4"
+        ],
+        "conflicts": [
+          "This is the auditorium bowl; the illustration compresses the cluster, so the projection is drawn into it"
+        ]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [920, 842] projected to lon/lat (75.704362, 31.252059); local transform error ~45.1 m; search radius 68 m. Check on site: Is the far end wing of the front comb Block 34?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.75,
+      "changes": ["score osm:way/422823420: 0.75 -> 0.6"],
+      "reasons": [
+        "The N-S comb way/422823420 (4-5 units) is a fair match for the drawn 33-34 pair, but both blocks share one way, and the small way/422556253 and way/1566888543 are as close."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 1,
+        "distanceToTopM": 10.5,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "35",
+    "leadNames": ["Shanti Devi Mittal Auditorium"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422556250",
+        "score": 0.7,
+        "distanceM": 30.4,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Quarter-circle footprint in the crook of the V (way 422556249), like the drawn fan-shaped bowl closed by the curved facade of 37",
+          "An official LPU page gives Block No. 35 = Shanti Devi Mittal Auditorium (OFFICIAL_CROSSCHECK.md); that places nothing",
+          "OSM: way/422556250, 940 m2, building:levels=4"
+        ],
+        "conflicts": ["Used as control point C6, so its position is not independent evidence"]
+      },
+      {
+        "osmId": "osm:way/1566888543",
+        "score": 0.5,
+        "distanceM": 30.1,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Inner concentric arc of the same bowl (stage/pit)",
+          "OSM: way/1566888543, 316 m2, building:levels=none"
+        ],
+        "conflicts": ["Probably part of the same auditorium"]
+      },
+      {
+        "osmId": "osm:way/422556253",
+        "score": 0.5,
+        "distanceM": 31.2,
+        "shapeMatch": "partial",
+        "reasons": ["Innermost concentric arc", "OSM: way/422556253, 71 m2, building:levels=1"],
+        "conflicts": ["Probably part of the same auditorium"]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1003, 850] projected to lon/lat (75.704135, 31.252492); local transform error ~43.3 m; search radius 65 m. Check on site: Check whether the bowl is signed Block 35. The official page ties Block 35 to the Shanti Devi Mittal Auditorium (number and function only; it places nothing).",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.79,
+      "changes": [
+        "score osm:way/422556250: 0.79 -> 0.7",
+        "score osm:way/1566888543: 0.61 -> 0.5 (alternative capped: its score was mostly proximity)",
+        "score osm:way/422556253: 0.6 -> 0.5 (alternative capped: its score was mostly proximity)"
+      ],
+      "reasons": [
+        "Shape holds: way/422556250 is the only quarter-circle (fan) footprint, sitting inside the curve of the V as drawn. An official page puts the Shanti Devi Mittal Auditorium in Block 35 (function only).",
+        "Position is NOT supporting evidence: the bowl was control point C6. Held out, the fit misses it by 57 m, and with the 4 circular points removed the pin lands inside the comb way/422823421 and the bowl ranks 6th (54 m). Lowered to 0.70.",
+        "Alternatives way/1566888543 and way/422556253 (small, partial shape) were capped at 0.50; their scores were proximity-driven."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 5,
+        "distanceToTopM": 53.6,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "36",
+    "leadNames": ["School of Electronics and Electrical Engineering", "Electronics & Telecommunication"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422556249",
+        "score": 0.6,
+        "distanceM": 4.8,
+        "shapeMatch": "strong",
+        "reasons": [
+          "V-shaped footprint with a notch at the apex wrapping the bowl, like the drawn V of 36 and 38 meeting at 37; 36 = one arm",
+          "OSM: way/422556249, 5927 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "One OSM way covers the whole V (drawn as 36, 37, 38); per-block matching needs the wing identified on site."
+        ]
+      },
+      {
+        "osmId": "osm:way/422556250",
+        "score": 0.56,
+        "distanceM": 0.0,
+        "shapeMatch": "weak",
+        "reasons": ["Projection falls inside", "OSM: way/422556250, 940 m2, building:levels=4"],
+        "conflicts": ["Auditorium bowl (lead 35)"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [967, 820] projected to lon/lat (75.703963, 31.252077); local transform error ~43.9 m; search radius 66 m. Lead conflicts (from block-leads.json): Minor naming difference only (Electrical vs Telecom). Check on site: Which arm of the V is 36?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422556249: 0.85 -> 0.6", "recommendation: confirm-on-site -> ambiguous"],
+      "reasons": [
+        "The V (way/422556249, 3 large pockets) matches the drawn 36-37-38 chevron as a whole. Which arm is 36 comes only from reading the drawing's orientation, and the same way carries 37 and 38.",
+        "With the non-circular fit, pin 36 is nearest to the bowl (5 m), way/1566888543 (7 m) and the comb (11 m); the V ranks 5th (20 m).",
+        "An ML detection (det:microsoft-ml:237943d699feee6c, 663 m2) lies in the notch between the arms and is not drawn: a possible later building, or an OSM gap."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 4,
+        "distanceToTopM": 19.9,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "37",
+    "leadNames": ["Central Library"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422556249",
+        "score": 0.75,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Apex of the V, behind the bowl, where the vignette draws the curved facade of 37",
+          "An official LPU page puts the Central Library in Block-37 (OFFICIAL_CROSSCHECK.md); that places nothing",
+          "OSM: way/422556249, 5927 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "One OSM way covers the whole V (drawn as 36, 37, 38); per-block matching needs the wing identified on site."
+        ]
+      },
+      {
+        "osmId": "osm:way/422556250",
+        "score": 0.5,
+        "distanceM": 10.4,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422556250, 940 m2, building:levels=4"
+        ],
+        "conflicts": ["Auditorium bowl"]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1007, 814] projected to lon/lat (75.703722, 31.252196); local transform error ~43.0 m; search radius 64 m. Lead conflicts (from block-leads.json): Vignette: 37 = CENTRAL LIBRARY; index: 37 = RESEARCH. Check on site: Check whether the apex of the V is signed Block 37. The official page ties Block 37 to the Central Library (number and function only; it places nothing).",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422556249: 0.85 -> 0.75"],
+      "reasons": [
+        "Kept because an official page puts the Central Library in Block 37, which makes it easy to check on site, and the apex of the V behind the bowl matches the drawn arched facade.",
+        "The footprint is shared with 36 and 38 and would need a split. The pin projects inside the comb way/422823421 under the non-circular fit, so position does not support it. Lowered to 0.75."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 1,
+        "distanceToTopM": 13.8,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "38",
+    "leadNames": ["School of Computer Applications"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422556249",
+        "score": 0.6,
+        "distanceM": 6.8,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Other arm of the V, running toward the 25-29 comb, as drawn",
+          "OSM: way/422556249, 5927 m2, building:levels=10"
+        ],
+        "conflicts": [
+          "One OSM way covers the whole V (drawn as 36, 37, 38); per-block matching needs the wing identified on site."
+        ]
+      },
+      {
+        "osmId": "osm:way/422823421",
+        "score": 0.57,
+        "distanceM": 5.5,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422823421, 8200 m2, building:levels=10"
+        ],
+        "conflicts": ["Fits 25-29"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1057, 805] projected to lon/lat (75.703364, 31.252328); local transform error ~41.7 m; search radius 62 m. Lead conflicts (from block-leads.json): Vignette: 38 = Computer Applications; index: 38 = CIVIL (vignette slide-11 puts Civil at 56; index puts COMPUTER APPLICATION at 33). Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:237943d699feee6c (663 m2, 2% covered by OSM, 110 m from the projected pin). Check on site: Which arm of the V is 38?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422556249: 0.85 -> 0.6", "recommendation: confirm-on-site -> ambiguous"],
+      "reasons": [
+        "Same V as 36/37. The arm toward the 25-29 comb is the drawn reading, but the pin projects inside the comb (1 m), with the V 27 m away. The index calls 38 CIVIL, contradicting the vignette."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 1,
+        "distanceToTopM": 26.7,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "41",
+    "leadNames": ["Apartments (staff residence)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422437894",
+        "score": 0.45,
+        "distanceM": 9.2,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Front slab next to the round tank footprints (ways 422886524-529), like the small round discs drawn beside 41",
+          "OSM: way/422437894, 1100 m2, building:levels=10"
+        ],
+        "conflicts": ["Outline (1 100 m2) is not the smallest of the four, as the vignette says"]
+      },
+      {
+        "osmId": "osm:way/422437895",
+        "score": 0.45,
+        "distanceM": 32.7,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Parallel slab; near the projected pin (see distanceM)",
+          "OSM: way/422437895, 845 m2, building:levels=10"
+        ],
+        "conflicts": ["Fits 42 by order"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1070, 728] projected to lon/lat (75.702443, 31.251713); local transform error ~40.5 m; search radius 61 m. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:237943d699feee6c (663 m2, 2% covered by OSM, 1 m from the projected pin); det:google-open-buildings:6684ec2de2a23a11 (712 m2, 0% covered by OSM, 119 m from the projected pin). Check on site: Read the block signs on the four apartment slabs next to the large hall.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.77,
+      "changes": ["score osm:way/422437894: 0.77 -> 0.45", "score osm:way/422437895: 0.56 -> 0.45"],
+      "reasons": [
+        "Alternative reading B: the vignette draws 41 and 42 as separate slabs and 43-44 as one linked pair. OSM way/422437897 is exactly two masses joined by a link (2 blobs after erosion), giving 41 = way/422437895, 42 = way/422437896, 43+44 = way/422437897.",
+        "Under reading B, way/422437894 (across the road by the round tanks; 1 100 m2, larger than the drawn 'smallest' 41) is not part of the vignette.",
+        "Against reading B: on the overview, pin 41 is drawn beside a group of round grey tanks, and OSM way/422437894 is the slab next to the round tank footprints. That supports the matcher's reading A (41 = way/422437894, 42 = way/422437895, 43 = way/422437896, 44 = way/422437897). Neither reading wins, so all four stay open."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 25.4,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "42",
+    "leadNames": ["Apartments (staff residence)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422437895",
+        "score": 0.5,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Rectangular slab parallel to its neighbours (845 m2, 10 levels); projection falls inside",
+          "OSM: way/422437895, 845 m2, building:levels=10"
+        ],
+        "conflicts": []
+      },
+      {
+        "osmId": "osm:way/422437896",
+        "score": 0.5,
+        "distanceM": 23.7,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Next slab; near the projected pin (see distanceM)",
+          "OSM: way/422437896, 845 m2, building:levels=10"
+        ],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1112, 716] projected to lon/lat (75.702051, 31.251777); local transform error ~39.3 m; search radius 60 m. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:237943d699feee6c (663 m2, 2% covered by OSM, 38 m from the projected pin); det:google-open-buildings:6684ec2de2a23a11 (712 m2, 0% covered by OSM, 82 m from the projected pin); det:microsoft-ml:8ec762527380d97e (1496 m2, 0% covered by OSM, 117 m from the projected pin). Check on site: See 41.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": [
+        "score osm:way/422437895: 0.85 -> 0.5",
+        "score osm:way/422437896: 0.61 -> 0.5",
+        "recommendation: confirm-on-site -> ambiguous"
+      ],
+      "reasons": [
+        "Internal contradiction: the matcher's own reason for 44 says way/422437897 is 'the vignette's linked 43-44', yet it put 43 on way/422437896. Under reading B, 42 = way/422437896 and 41 = way/422437895.",
+        "way/422437895 and way/422437896 are identical 46 x 19 m rectangles, so shape cannot separate them.",
+        "Reading A is supported by the overview drawing pin 41 beside round tanks (OSM way/422437894 is next to the tank footprints). Reading B is supported by the vignette's linked 43-44 pair. Both stay open."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 8.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "43",
+    "leadNames": ["Apartments (staff residence)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422437896",
+        "score": 0.5,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Rectangular slab parallel to its neighbours (845 m2, 10 levels); projection falls inside",
+          "OSM: way/422437896, 845 m2, building:levels=10"
+        ],
+        "conflicts": []
+      },
+      {
+        "osmId": "osm:way/422437897",
+        "score": 0.5,
+        "distanceM": 26.3,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Two linked slabs; near the projected pin (see distanceM); the vignette says 43 and 44 are linked",
+          "OSM: way/422437897, 2323 m2, building:levels=10"
+        ],
+        "conflicts": ["Could be the 43+44 pair as one outline"]
+      },
+      {
+        "osmId": "osm:way/1550425052",
+        "score": 0.44,
+        "distanceM": 19.7,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM); U-shaped, no levels tag",
+          "OSM: way/1550425052, 1402 m2, building:levels=none"
+        ],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [1158, 715] projected to lon/lat (75.701745, 31.251953); local transform error ~38.1 m; search radius 60 m. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:google-open-buildings:6684ec2de2a23a11 (712 m2, 0% covered by OSM, 48 m from the projected pin); det:microsoft-ml:237943d699feee6c (663 m2, 2% covered by OSM, 72 m from the projected pin); det:microsoft-ml:8ec762527380d97e (1496 m2, 0% covered by OSM, 83 m from the projected pin); det:microsoft-ml:6e219cd673e031a1 (194 m2, 0% covered by OSM, 110 m from the projected pin). Check on site: See 41.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": [
+        "score osm:way/422437896: 0.85 -> 0.5",
+        "score osm:way/422437897: 0.59 -> 0.5",
+        "recommendation: confirm-on-site -> ambiguous"
+      ],
+      "reasons": [
+        "Reading A (matcher): 43 = way/422437896. Reading B: 43 = the long slab of way/422437897, linked to 44 as the vignette draws it. The non-circular pin lands 3 m from way/422437895 and 7 m from way/422437896, which does not decide.",
+        "The newer way/1550425052 (U-shape, 1 402 m2, beside the slabs) is not in the vignette: built after the illustration, or left out of it.",
+        "Reading A is supported by the overview drawing pin 41 beside round tanks. Reading B is supported by the vignette's linked 43-44 pair. Both stay open."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 1,
+        "distanceToTopM": 6.7,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "44",
+    "leadNames": ["Apartments (staff residence)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422437897",
+        "score": 0.7,
+        "distanceM": 9.8,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Two slabs joined by a link (2 323 m2, 10 levels), at the back next to the large shed, like the vignette's linked 43-44 at the back",
+          "OSM: way/422437897, 2323 m2, building:levels=10"
+        ],
+        "conflicts": ["May hold both 43 and 44"]
+      },
+      {
+        "osmId": "osm:way/422437896",
+        "score": 0.39,
+        "distanceM": 36.3,
+        "shapeMatch": "weak",
+        "reasons": [
+          "near the projected pin (see distanceM)",
+          "OSM: way/422437896, 845 m2, building:levels=10"
+        ],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1156, 669] projected to lon/lat (75.701249, 31.251546); local transform error ~37.5 m; search radius 60 m. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:6e219cd673e031a1 (194 m2, 0% covered by OSM, 45 m from the projected pin); det:google-open-buildings:6684ec2de2a23a11 (712 m2, 0% covered by OSM, 57 m from the projected pin); det:microsoft-ml:8ec762527380d97e (1496 m2, 0% covered by OSM, 81 m from the projected pin); det:microsoft-ml:237943d699feee6c (663 m2, 2% covered by OSM, 116 m from the projected pin). Check on site: See 41; is the linked pair one or two block numbers?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422437897: 0.85 -> 0.7"],
+      "reasons": [
+        "Both readings put 44 on way/422437897 (two linked masses), but in reading B the same way also carries 43. Lowered to 0.70; the owner should check both halves."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "45",
+    "leadNames": ["Boys Hostel 1"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422548300",
+        "score": 0.8,
+        "distanceM": 3.7,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Three parallel slabs linked at their ends (3 957 m2, 10 levels), like the vignette's three echelon slabs",
+          "OSM water tower (node 4224770131) beside it, as drawn (that tower is control point C4, not the building)",
+          "OSM: way/422548300, 3957 m2, building:levels=10"
+        ],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1225, 581] projected to lon/lat (75.699822, 31.251058); local transform error ~34.1 m; search radius 60 m. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:6e219cd673e031a1 (194 m2, 0% covered by OSM, 104 m from the projected pin); det:microsoft-ml:f174064e9a908497 (203 m2, 0% covered by OSM, 117 m from the projected pin). PRIORITY: the lead explicitly says hostel. Check on site: Is the three-slab hostel next to the water tower Boys Hostel 1 / Block 45?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422548300: 0.85 -> 0.8"],
+      "reasons": [
+        "Checked: way/422548300 is the ONLY footprint that splits into exactly 3 parallel slabs linked at their ends (3 blobs after erosion), as drawn. The pin lands 3 m away; the next footprint is 69 m away.",
+        "'Boys Hostel 1' is the caption's hostel number, not an official one. Lowered to 0.80."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 3.5,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "47",
+    "leadNames": ["Indoor (sports) facility"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422737297",
+        "score": 0.75,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Largest single hall west of the axis (10 171 m2), like the large shed drawn beside the apartments",
+          "OSM: way/422737297, 10171 m2, building:levels=none"
+        ],
+        "conflicts": [
+          "Used as control point C5, so its position is not independent evidence",
+          "No levels tag"
+        ]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1050, 651] projected to lon/lat (75.701746, 31.250981); local transform error ~39.6 m; search radius 60 m. Lead conflicts (from block-leads.json): No vignette. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:6e219cd673e031a1 (194 m2, 0% covered by OSM, 90 m from the projected pin); det:microsoft-ml:8e72e8e43f6d1946 (161 m2, 0% covered by OSM, 103 m from the projected pin); det:microsoft-ml:237943d699feee6c (663 m2, 2% covered by OSM, 106 m from the projected pin); det:microsoft-ml:75f8b206a7f7b229 (1085 m2, 0% covered by OSM, 110 m from the projected pin). Check on site: Is the large hall Block 47 (indoor sports)?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422737297: 0.85 -> 0.75"],
+      "reasons": [
+        "Plain 119 x 86 m rectangle, the second-largest footprint. It was control point C5 (circular); held out, the fit misses by 50 m, and the nearest other footprints are 54-61 m away. 'INDOOR' is index-only (no vignette). Lowered to 0.75."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "48",
+    "leadNames": ["Boys Hostel 2 (number by caption order only)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422548297",
+        "score": 0.75,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Chain of linked square blocks (5 505 m2, 10 levels) next to round green features, like the drawn chain of towers with round tanks",
+          "OSM: way/422548297, 5505 m2, building:levels=10"
+        ],
+        "conflicts": ["One OSM way covers the whole chain, which the vignette splits between 48 and 49"]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [984, 521] projected to lon/lat (75.700896, 31.24969); local transform error ~38.0 m; search radius 60 m. Lead conflicts (from block-leads.json): Caption pairs 48,49 with hostels 2,3 by order only. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:f372bba12e0a8db2 (237 m2, 0% covered by OSM, 59 m from the projected pin); det:microsoft-ml:75f8b206a7f7b229 (1085 m2, 0% covered by OSM, 75 m from the projected pin); det:microsoft-ml:aa50379f55ffa4ea (183 m2, 0% covered by OSM, 102 m from the projected pin); det:microsoft-ml:cf9ae916a37d2c86 (1259 m2, 0% covered by OSM, 117 m from the projected pin). PRIORITY: the lead explicitly says hostel. Check on site: Where does 48 end and 49 begin along the chain of towers?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422548297: 0.85 -> 0.75"],
+      "reasons": [
+        "Checked: way/422548297 breaks into 6 tower blobs after erosion, matching the drawn chain of ~6 linked towers. way/422548298 breaks into 5, matching the drawn 5-tower chain of 51. That separates the two chains.",
+        "Both 48 and 49 sit on this one way, so which towers carry which number needs a site check. Hostel numbers 2/3 come from caption order only. Lowered to 0.75."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "49",
+    "leadNames": ["Boys Hostel 3 (number by caption order only)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422548297",
+        "score": 0.75,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Same chain as 48; 49 is drawn toward the top end",
+          "OSM: way/422548297, 5505 m2, building:levels=10"
+        ],
+        "conflicts": ["One OSM way covers the whole chain, which the vignette splits between 48 and 49"]
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1037, 521] projected to lon/lat (75.700547, 31.249881); local transform error ~37.4 m; search radius 60 m. Lead conflicts (from block-leads.json): Caption pairs 48,49 with hostels 2,3 by order only. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:f372bba12e0a8db2 (237 m2, 0% covered by OSM, 80 m from the projected pin); det:microsoft-ml:75f8b206a7f7b229 (1085 m2, 0% covered by OSM, 101 m from the projected pin); det:microsoft-ml:cf9ae916a37d2c86 (1259 m2, 0% covered by OSM, 108 m from the projected pin). PRIORITY: the lead explicitly says hostel. Check on site: See 48.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422548297: 0.85 -> 0.75"],
+      "reasons": [
+        "Checked: way/422548297 breaks into 6 tower blobs after erosion, matching the drawn chain of ~6 linked towers. way/422548298 breaks into 5, matching the drawn 5-tower chain of 51. That separates the two chains.",
+        "Both 48 and 49 sit on this one way, so which towers carry which number needs a site check. Hostel numbers 2/3 come from caption order only. Lowered to 0.75."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.2,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "50",
+    "leadNames": ["Boys Hostel 7"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422548299",
+        "score": 0.75,
+        "distanceM": 0.0,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Single free-standing block (9 levels) at the end of a dead-end road, as drawn",
+          "OSM: way/422548299, 936 m2, building:levels=9"
+        ],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [1214, 396] projected to lon/lat (75.698069, 31.249546); local transform error ~31.8 m; search radius 60 m. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:13542854011ba39d (196 m2, 0% covered by OSM, 83 m from the projected pin). PRIORITY: the lead explicitly says hostel. Check on site: Is the isolated tower at the dead-end road Block 50 (Boys Hostel 7)?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422548299: 0.85 -> 0.75"],
+      "reasons": [
+        "Single near-rectangular block (40 x 26 m). The pin lands inside it, and the next footprint is 98 m away. The shape is generic, so position and 'isolated at the end of a dead-end road' decide. Lowered to 0.75."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "51",
+    "leadNames": ["Boys Hostel (number not printed)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422548298",
+        "score": 0.8,
+        "distanceM": 1.5,
+        "shapeMatch": "strong",
+        "reasons": [
+          "Chain of five linked blocks beside the cricket ground (10 levels), as drawn",
+          "OSM: way/422548298, 3419 m2, building:levels=10"
+        ],
+        "conflicts": []
+      },
+      {
+        "osmId": "osm:way/422738863",
+        "score": 0.3,
+        "distanceM": 43.1,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Small 2-level footprint near the projected pin (see distanceM)",
+          "OSM: way/422738863, 210 m2, building:levels=2"
+        ],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "confirm-on-site",
+    "notes": "Overview pin at slide-28 px [973, 403] projected to lon/lat (75.699987, 31.248779); local transform error ~36.0 m; search radius 60 m. Lead conflicts (from block-leads.json): Caption gives no hostel number; Boys Hostel 4 is not assigned anywhere in the slides (1=45, 2,3=48,49, 5,6=53,54, 7=50). Do not infer 51=BH4. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:cf9ae916a37d2c86 (1259 m2, 0% covered by OSM, 35 m from the projected pin); det:microsoft-ml:89e781efb006a323 (351 m2, 0% covered by OSM, 55 m from the projected pin). PRIORITY: the lead explicitly says hostel. Check on site: Is the chain beside the cricket ground Block 51?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "confirm-on-site",
+      "previousTopScore": 0.85,
+      "changes": ["score osm:way/422548298: 0.85 -> 0.8"],
+      "reasons": [
+        "Checked: 5 tower blobs after erosion, as drawn, and the pin lands inside it. The caption prints no hostel number (do not infer BH4). Lowered to 0.80."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "52",
+    "leadNames": ["BOYS HOSTEL"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422738863",
+        "score": 0.21,
+        "distanceM": null,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Small 2-level footprint at the edge of the cricket ground",
+          "OSM: way/422738863, 210 m2, building:levels=2"
+        ],
+        "conflicts": ["The PLAYGROUND scene puts pin 52 on the oval itself, not on a building"]
+      }
+    ],
+    "recommendation": "no-plausible-footprint",
+    "notes": "No overview pin for this number, so there is no projected position; any proximity weight comes only from its relation to neighbours in a vignette/scene (see MATCHING_METHOD.md). Lead conflicts (from block-leads.json): Index lists 52 as a BOYS HOSTEL, but the only pin 52 is on the cricket ground (slide-03), not on a building. | No pin 52 on the overview; no vignette caption. | Index boys-hostel list reads '51,53,52' and omits 54, which slide-10 captions as a boys hostel. This lead may have no OSM footprint at all. PRIORITY: the lead explicitly says hostel. Check on site: Is there a Block 52 at all? The drawing puts the pin on the cricket ground.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "keep",
+      "previousRecommendation": "no-plausible-footprint",
+      "previousTopScore": 0.21,
+      "changes": ["none"],
+      "reasons": [
+        "Checked and left unchanged: the scores are already low or the lead has no usable pin, and the notes already say that no footprint is placed."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md"
+    }
+  },
+  {
+    "block": "53",
+    "leadNames": ["Boys Hostel 5 (number by caption order only)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422323508",
+        "score": 0.5,
+        "distanceM": 0.0,
+        "shapeMatch": "partial",
+        "reasons": [
+          "One end slab of the spine-and-four-slabs complex (ways 422323508, 422547443-447), like the drawn comb/double-H; projection falls inside",
+          "OSM: way/422323508, 1310 m2, building:levels=10"
+        ],
+        "conflicts": ["Which end slab is 53 depends only on the pin position"]
+      },
+      {
+        "osmId": "osm:way/422547444",
+        "score": 0.5,
+        "distanceM": 38.1,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Slab at the other end of the same spine",
+          "OSM: way/422547444, 1267 m2, building:levels=10"
+        ],
+        "conflicts": []
+      },
+      {
+        "osmId": "osm:way/422547443",
+        "score": 0.5,
+        "distanceM": 18.0,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Central spine; near the projected pin (see distanceM)",
+          "OSM: way/422547443, 2972 m2, building:levels=10"
+        ],
+        "conflicts": ["The vignette pins 53 on an end slab, not the spine"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [551, 614] projected to lon/lat (75.703312, 31.24857); local transform error ~46.0 m; search radius 69 m. Lead conflicts (from block-leads.json): Caption pairs 53,54 with hostels 5,6 by order only. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:google-open-buildings:ebbb32f16a06d452 (343 m2, 0% covered by OSM, 74 m from the projected pin); det:microsoft-ml:36b3f8c4bba145b8 (414 m2, 18% covered by OSM, 76 m from the projected pin). PRIORITY: the lead explicitly says hostel. Check on site: Which slab of the spine-and-slabs complex is 53?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.82,
+      "changes": [
+        "score osm:way/422323508: 0.82 -> 0.5",
+        "score osm:way/422547444: 0.55 -> 0.5 (alternative capped: its score was mostly proximity)",
+        "score osm:way/422547443: 0.51 -> 0.5 (alternative capped: its score was mostly proximity)"
+      ],
+      "reasons": [
+        "The 53/54 complex has 4 slabs of nearly the same size (1 267-1 310 m2) around the spine way/422547443, 30-45 m apart, which is less than the position error (~48 m). The two west slabs (way/422323508, way/422547447) share a sawtooth west edge. Shape cannot pick the slab. Lowered from 0.82."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 0.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "54",
+    "leadNames": ["Boys Hostel 6 (number by caption order only)"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422547447",
+        "score": 0.5,
+        "distanceM": 0.0,
+        "shapeMatch": "partial",
+        "reasons": [
+          "End slab next to the block-53 candidate on the same side of the spine; projection falls inside",
+          "OSM: way/422547447, 1274 m2, building:levels=10"
+        ],
+        "conflicts": ["Which end slab is 54 depends only on the pin position"]
+      },
+      {
+        "osmId": "osm:way/422547446",
+        "score": 0.5,
+        "distanceM": 39.6,
+        "shapeMatch": "partial",
+        "reasons": ["Slab at the other end", "OSM: way/422547446, 1308 m2, building:levels=10"],
+        "conflicts": []
+      },
+      {
+        "osmId": "osm:way/422547443",
+        "score": 0.5,
+        "distanceM": 21.0,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Central spine; near the projected pin (see distanceM)",
+          "OSM: way/422547443, 2972 m2, building:levels=10"
+        ],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [490, 583] projected to lon/lat (75.703302, 31.248087); local transform error ~46.1 m; search radius 69 m. Lead conflicts (from block-leads.json): Caption pairs 53,54 with hostels 5,6 by order only. | 54 is missing from the index BOYS HOSTEL list ('51,53,52'). Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:google-open-buildings:ebbb32f16a06d452 (343 m2, 0% covered by OSM, 65 m from the projected pin); det:microsoft-ml:f92d70b0452e6db8 (486 m2, 0% covered by OSM, 114 m from the projected pin); det:microsoft-ml:36b3f8c4bba145b8 (414 m2, 18% covered by OSM, 119 m from the projected pin). PRIORITY: the lead explicitly says hostel. Check on site: Which slab is 54?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.82,
+      "changes": [
+        "score osm:way/422547447: 0.82 -> 0.5",
+        "score osm:way/422547446: 0.54 -> 0.5 (alternative capped: its score was mostly proximity)"
+      ],
+      "reasons": [
+        "The 53/54 complex has 4 slabs of nearly the same size (1 267-1 310 m2) around the spine way/422547443, 30-45 m apart, which is less than the position error (~48 m). The two west slabs (way/422323508, way/422547447) share a sawtooth west edge. Shape cannot pick the slab. Lowered from 0.82."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 3.5,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "55",
+    "leadNames": ["School of Mechanical Engineering"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422547449",
+        "score": 0.4,
+        "distanceM": null,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Wedge of the curved radiating group on the side facing the playing fields",
+          "OSM: way/422547449, 517 m2, building:levels=9"
+        ],
+        "conflicts": ["No overview pin for 55; position comes only from the PLAYGROUND scene"]
+      },
+      {
+        "osmId": "osm:way/422547451",
+        "score": 0.4,
+        "distanceM": null,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Wedge of the same group, also facing the fields",
+          "OSM: way/422547451, 538 m2, building:levels=9"
+        ],
+        "conflicts": ["No overview pin for 55"]
+      },
+      {
+        "osmId": "osm:way/422547448",
+        "score": 0.4,
+        "distanceM": null,
+        "shapeMatch": "partial",
+        "reasons": ["End wedge of the group", "OSM: way/422547448, 1421 m2, building:levels=9"],
+        "conflicts": ["No overview pin for 55"]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "No overview pin for this number, so there is no projected position; any proximity weight comes only from its relation to neighbours in a vignette/scene (see MATCHING_METHOD.md). Lead conflicts (from block-leads.json): Vignette: Mechanical = 55; index: MECHANICAL = 56. Block 55 is not in the index and has no overview pin. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:6af6f6f5bb32fbd3 (1890 m2, 0% covered by OSM). Check on site: Which wedge of the curved group is 55 (mechanical engineering)? Check the unmapped building by the fields too.",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.5,
+      "changes": [
+        "score osm:way/422547449: 0.5 -> 0.4",
+        "score osm:way/422547451: 0.5 -> 0.4",
+        "score osm:way/422547448: 0.5 -> 0.4"
+      ],
+      "reasons": [
+        "No overview pin. Wedges way/422547449 and way/422547451 are near-identical. The C12 crescent centroid used as a control point is itself built from these ways."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md"
+    }
+  },
+  {
+    "block": "56",
+    "leadNames": ["School of Civil Engineering"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422547448",
+        "score": 0.45,
+        "distanceM": 0.0,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Wedge of the curved radiating group; projection falls inside",
+          "OSM: way/422547448, 1421 m2, building:levels=9"
+        ],
+        "conflicts": ["The vignette calls 56 the widest middle wing; way 422547450 is the middle one"]
+      },
+      {
+        "osmId": "osm:way/422547450",
+        "score": 0.45,
+        "distanceM": 20.1,
+        "shapeMatch": "partial",
+        "reasons": ["Middle wedge of the group (1 440 m2)", "OSM: way/422547450, 1440 m2, building:levels=9"],
+        "conflicts": []
+      },
+      {
+        "osmId": "osm:way/422547449",
+        "score": 0.45,
+        "distanceM": 21.0,
+        "shapeMatch": "weak",
+        "reasons": [
+          "Smaller wedge near the projected pin (see distanceM)",
+          "OSM: way/422547449, 517 m2, building:levels=9"
+        ],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [346, 517] projected to lon/lat (75.703428, 31.247005); local transform error ~46.2 m; search radius 69 m. Lead conflicts (from block-leads.json): Vignette: 56 = Civil; index: 56 = MECHANICAL and CIVIL = 38. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:c19d5c86ea4dba6e (213 m2, 5% covered by OSM, 111 m from the projected pin). Check on site: Which wedge is 56?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.82,
+      "changes": [
+        "score osm:way/422547448: 0.82 -> 0.45",
+        "score osm:way/422547450: 0.64 -> 0.45 (alternative capped: its score was mostly proximity)",
+        "score osm:way/422547449: 0.5 -> 0.45 (alternative capped: its score was mostly proximity)"
+      ],
+      "reasons": [
+        "way/422547448, way/422547450 and way/422547452 are near-identical wedges (1 421-1 448 m2, 54 x 28-30 m, 9 levels). Only position separates them, and the crescent was control point C12 (circular; held out, the miss is 53 m). Lowered from 0.82."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 0,
+        "distanceToTopM": 17.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "57",
+    "leadNames": ["School of Polytechnic"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422547450",
+        "score": 0.45,
+        "distanceM": 0.0,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Wedge of the curved group; projection falls inside",
+          "OSM: way/422547450, 1440 m2, building:levels=9"
+        ],
+        "conflicts": []
+      },
+      {
+        "osmId": "osm:way/422547452",
+        "score": 0.45,
+        "distanceM": 34.9,
+        "shapeMatch": "partial",
+        "reasons": ["Outer end wedge of the group", "OSM: way/422547452, 1449 m2, building:levels=9"],
+        "conflicts": []
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [263, 524] projected to lon/lat (75.703799, 31.246678); local transform error ~46.8 m; search radius 70 m. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:c19d5c86ea4dba6e (213 m2, 5% covered by OSM, 96 m from the projected pin). Check on site: Which wedge is 57 (polytechnic)?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.82,
+      "changes": [
+        "score osm:way/422547450: 0.82 -> 0.45",
+        "score osm:way/422547452: 0.57 -> 0.45 (alternative capped: its score was mostly proximity)"
+      ],
+      "reasons": [
+        "Same identical-wedge problem as 56. With the non-circular fit, the pin falls inside way/422547448, and way/422547450 ranks 5th (32 m). Lowered from 0.82."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 4,
+        "distanceToTopM": 32.0,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  },
+  {
+    "block": "58",
+    "leadNames": ["Project Lab"],
+    "candidates": [
+      {
+        "osmId": "osm:way/422547452",
+        "score": 0.35,
+        "distanceM": 0.0,
+        "shapeMatch": "weak",
+        "reasons": ["Projection falls inside", "OSM: way/422547452, 1449 m2, building:levels=9"],
+        "conflicts": ["A wedge of the curved group, not an L-shaped low building"]
+      },
+      {
+        "osmId": "osm:way/422551921",
+        "score": 0.35,
+        "distanceM": 41.0,
+        "shapeMatch": "partial",
+        "reasons": [
+          "Long low-looking bar beside the two car parks at the far end next to the curved group, as drawn",
+          "OSM: way/422551921, 1169 m2, building:levels=6"
+        ],
+        "conflicts": [
+          "building:levels=6, whereas the overview draws a low building",
+          "near the projected pin (see distanceM)"
+        ]
+      }
+    ],
+    "recommendation": "ambiguous",
+    "notes": "Overview pin at slide-28 px [275, 465] projected to lon/lat (75.703398, 31.246341); local transform error ~45.5 m; search radius 68 m. Lead conflicts (from block-leads.json): Index EDUCATION list ends with a row '58' that has no label; ADMINISTRATIVE list has 'PROJECT LAB 58'. No vignette. Unmatched building detections near this lead (public/data/detections.geojson; not OSM, not verified): det:microsoft-ml:c19d5c86ea4dba6e (213 m2, 5% covered by OSM, 43 m from the projected pin). Check on site: Is the long building by the car parks Block 58 (project lab)?",
+    "reviewedBy": "adversarial-check",
+    "review": {
+      "verdict": "downgrade",
+      "previousRecommendation": "ambiguous",
+      "previousTopScore": 0.6,
+      "changes": [
+        "score osm:way/422547452: 0.6 -> 0.35",
+        "score osm:way/422551921: 0.51 -> 0.35 (alternative capped: its score was mostly proximity)"
+      ],
+      "reasons": [
+        "way/422547452 is a wedge identical to 56/57, not the drawn low L-shaped building. With the non-circular fit, the pin is nearest to way/422547448. The long low way/422551921 (106 x 16 m) by the car park is at least as plausible. All candidates capped at 0.35."
+      ],
+      "reviewedAt": "2026-10-24",
+      "details": "REVIEW.md",
+      "nonCircularProjection": {
+        "topCandidateRank": 5,
+        "distanceToTopM": 50.1,
+        "note": "Pin re-projected (local MLS, sigma 250 px) without control points C5, C6, C8 and C12, which are buildings that also carry leads. Rank 0 = nearest footprint; ranks are for the pre-review top candidate."
+      }
+    }
+  }
+]

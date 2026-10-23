@@ -1,0 +1,1900 @@
+{
+  "$comment": "Transcribed by hand from owner-supplied screenshots of a third-party Behance illustration (undated). STATUS: UNVERIFIED LEADS FOR OWNER REVIEW ONLY — not applied data. The illustration must never by itself name, number or position a real footprint, and no official LPU block number may be inferred solely from location or appearance. Captions are quoted as printed (typos kept) only for block number <-> function facts; no artwork is reproduced. shapeNotes describe the drawing, for later human-checked matching against OSM footprints. No OSM/repo data was read or modified to produce this file.",
+  "source": {
+    "name": "Behance — LPU isometric map design (third-party illustration)",
+    "url": "https://www.behance.net/gallery/105159145/LPU-isometric-map-design",
+    "retrievedVia": "owner-supplied screenshots",
+    "dateUnknown": true,
+    "status": "unverified-lead",
+    "filesRead": [
+      "reference/assets/behance-slides/slide-02.png … slide-30.png (29 files)",
+      "reference/assets/lpu-isometric-map-reference.png (earlier overview screenshot; same map and index at lower resolution, no differences found)"
+    ]
+  },
+  "evidenceWhereValues": {
+    "block vignette caption": "caption text beside a single-building vignette slide",
+    "overview index": "INFORMATION index on the overview slide-28.jpg",
+    "overview pin": "numbered pin drawn on the overview map slide-28.jpg",
+    "block vignette pin": "numbered pin on a block vignette that has no caption for that number",
+    "scene vignette pin": "numbered pin inside a scene vignette (PLAYGROUND, GARDEN AREA, OPEN AUDITORIUM ...)"
+  },
+  "leads": [
+    {
+      "block": "1",
+      "labelsAsPrinted": ["SCHOOL OF FASHION", "FASHION"],
+      "normalizedNames": ["School of Fashion"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-29.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-1 / SCHOOL OF FASHION"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "FASHION 1"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "1"
+        }
+      ],
+      "shapeNotes": "Compact irregular block: cross/zigzag-stepped roof outline around a triangular open atrium/skylight; lower flat-roofed annex wing in front with a small entrance canopy and steps. Overview places it alone near the southern end beside a large car park.",
+      "conflicts": []
+    },
+    {
+      "block": "2",
+      "labelsAsPrinted": ["CAMPUS CAFE  & BALDEV RAJ AUDITORIUM", "BALDEV RAJ AUDITORIUM"],
+      "normalizedNames": ["Campus Cafe", "Baldev Raj Auditorium"],
+      "kind": "auditorium",
+      "evidence": [
+        {
+          "slide": "slide-30.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-2 / CAMPUS CAFE & BALDEV RAJ AUDITORIUM"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "BALDEV RAJ AUDITORIUM 2"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "2"
+        }
+      ],
+      "shapeNotes": "Long narrow low bar (cafe) with a rounded end and a circular drum/plinth, stepped terraces along one long side, attached at one end to a tall square tower/box (grey). Overview: faces a large open forecourt ringed by parked vehicles.",
+      "conflicts": [
+        "Index lists only BALDEV RAJ AUDITORIUM for 2; 'Campus Cafe' appears only on the vignette."
+      ],
+      "notes": "Mixed use: kind chosen as 'auditorium'; could equally be 'cafe'."
+    },
+    {
+      "block": "3",
+      "labelsAsPrinted": ["SCHOOL OF PHYSIOTHERAPHY AND PARAMEDICAL SCIENCE", "PHYSIOTHERAPY"],
+      "normalizedNames": ["School of Physiotherapy and Paramedical Science"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-25.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-3 / SCHOOL OF PHYSIOTHERAPHY AND PARAMEDICAL SCIENCE"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "PHYSIOTHERAPY 3"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "3"
+        }
+      ],
+      "shapeNotes": "Grey (not brick-red) compact two-part block with slightly splayed walls, large dark rectangular roof element with truss edge plus two small roof slabs, glazed corner, external dog-leg staircase at one corner. Overview: next to a long arched covered walkway.",
+      "conflicts": []
+    },
+    {
+      "block": "4",
+      "labelsAsPrinted": ["SCHOOL OF PHARAMACEUTICAL SCIENCE", "PHARMACY"],
+      "normalizedNames": ["School of Pharmaceutical Science"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-26.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-4 / SCHOOL OF PHARAMACEUTICAL SCIENCE"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "PHARMACY 4,7"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "4"
+        },
+        {
+          "slide": "slide-05.png",
+          "where": "scene vignette pin",
+          "text": "4 (GARDEN AREA)"
+        }
+      ],
+      "shapeNotes": "Grey long bar whose front is a sawtooth/comb of 4 projecting bays, with a wider plain wing at one end (overall L-ish). Faces a large rectangular tree-grid garden.",
+      "conflicts": [
+        "Index groups PHARMACY under 4 and 7; slide-27 calls 7 'DEPARTMENT OF PHARMACEUTICAL SCIENCE' — consistent, but two numbers for one school."
+      ]
+    },
+    {
+      "block": "5",
+      "labelsAsPrinted": [],
+      "normalizedNames": [],
+      "kind": "other",
+      "evidence": [
+        {
+          "slide": "slide-05.png",
+          "where": "scene vignette pin",
+          "text": "5 (GARDEN AREA)"
+        }
+      ],
+      "shapeNotes": "Only a corner of a red flat-roofed building is visible at the edge of the GARDEN AREA vignette, across a road from the garden.",
+      "conflicts": [
+        "No caption anywhere; not in the overview index; no pin 5 on the overview (overview draws an unlabelled red block in a similar spot)."
+      ],
+      "notes": "Numbered pin with no caption. Function unknown."
+    },
+    {
+      "block": "6",
+      "labelsAsPrinted": [
+        "SCHOOL OF ARCHITECRURE & PLANING",
+        "DIVISION OF CONSTRUCTIONS",
+        "DIVISION OF ARCHITECTURE & DESIGN",
+        "ARCHITECTURE"
+      ],
+      "normalizedNames": [
+        "School of Architecture & Planning",
+        "Division of Construction(s)",
+        "Division of Architecture & Design"
+      ],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-27.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-6 / SCHOOL OF ARCHITECRURE & PLANING / DIVISION OF CONSTRUCTIONS / DIVISION OF ARCHITECTURE & DESIGN"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "ARCHITECTURE 6"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "6"
+        }
+      ],
+      "shapeNotes": "Front long bar of the 6-7-8 connected complex, with a short tower at its end and ribbon windows; linked by a bridging wing to 7 and 8.",
+      "conflicts": []
+    },
+    {
+      "block": "7",
+      "labelsAsPrinted": ["DEPARTMENT OF PHARMACEUTICAL SCIENCE", "PHARMACY"],
+      "normalizedNames": ["Department of Pharmaceutical Science"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-27.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-7 / DEPARTMENT OF PHARMACEUTICAL SCIENCE"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "PHARMACY 4,7"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "7"
+        }
+      ],
+      "shapeNotes": "Rectangular wing of the 6-7-8 complex with tall vertical fins/strip windows on its end facade; sits between 6 and 8.",
+      "conflicts": []
+    },
+    {
+      "block": "8",
+      "labelsAsPrinted": ["SCHOOL OF FINE ARTS AND SCHOOL OF DESIGN (MULTIMEDIA)", "ANIMATION", "FINE ARTS"],
+      "normalizedNames": ["School of Fine Arts", "School of Design (Multimedia)", "Animation"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-27.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-8 / SCHOOL OF FINE ARTS AND SCHOOL OF DESIGN (MULTIMEDIA)"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "ANIMATION 8; FINE ARTS 8"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "8"
+        }
+      ],
+      "shapeNotes": "Large wedge/trapezoid-roofed rear wing of the 6-7-8 complex (one long sloping edge), tallest mass of the group.",
+      "conflicts": []
+    },
+    {
+      "block": "9",
+      "labelsAsPrinted": ["GIRLS HOSTAL 1, 2, 3, 4", "GIRLS HOSTEL"],
+      "normalizedNames": ["Girls Hostel 1 (number by caption order only)"],
+      "kind": "hostel-girls",
+      "evidence": [
+        {
+          "slide": "slide-22.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 09,10, 11,12 / GIRLS HOSTAL 1, 2, 3, 4"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "GIRLS HOSTEL 9,10, 11,12, 21A,B"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "9"
+        }
+      ],
+      "shapeNotes": "Largest of the 9-12 group: broad U/E-shaped block with a central projecting stair/balcony tower and small entrance canopy.",
+      "conflicts": [
+        "Caption pairs 'BLOCK- 09,10, 11,12' with 'GIRLS HOSTAL 1, 2, 3, 4' in parallel order; the per-block hostel number is implied by order, not stated."
+      ]
+    },
+    {
+      "block": "10",
+      "labelsAsPrinted": ["GIRLS HOSTAL 1, 2, 3, 4", "GIRLS HOSTEL"],
+      "normalizedNames": ["Girls Hostel 2 (number by caption order only)"],
+      "kind": "hostel-girls",
+      "evidence": [
+        {
+          "slide": "slide-22.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 09,10, 11,12 / GIRLS HOSTAL 1, 2, 3, 4"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "GIRLS HOSTEL 9,10, 11,12, 21A,B"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "10"
+        }
+      ],
+      "shapeNotes": "Rectangular block with wings and dark window grid, on the far side of a small courtyard/sports court from 9 and 12.",
+      "conflicts": [
+        "Caption pairs 'BLOCK- 09,10, 11,12' with 'GIRLS HOSTAL 1, 2, 3, 4' in parallel order; the per-block hostel number is implied by order, not stated."
+      ]
+    },
+    {
+      "block": "11",
+      "labelsAsPrinted": ["GIRLS HOSTAL 1, 2, 3, 4", "GIRLS HOSTEL"],
+      "normalizedNames": ["Girls Hostel 3 (number by caption order only)"],
+      "kind": "hostel-girls",
+      "evidence": [
+        {
+          "slide": "slide-22.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 09,10, 11,12 / GIRLS HOSTAL 1, 2, 3, 4"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "GIRLS HOSTEL 9,10, 11,12, 21A,B"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "11"
+        }
+      ],
+      "shapeNotes": "Chain of small linked cubes stepping diagonally (4-5 units) forming one side of the 9-12 enclosure.",
+      "conflicts": [
+        "Caption pairs 'BLOCK- 09,10, 11,12' with 'GIRLS HOSTAL 1, 2, 3, 4' in parallel order; the per-block hostel number is implied by order, not stated."
+      ]
+    },
+    {
+      "block": "12",
+      "labelsAsPrinted": ["GIRLS HOSTAL 1, 2, 3, 4", "GIRLS HOSTEL"],
+      "normalizedNames": ["Girls Hostel 4 (number by caption order only)"],
+      "kind": "hostel-girls",
+      "evidence": [
+        {
+          "slide": "slide-22.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 09,10, 11,12 / GIRLS HOSTAL 1, 2, 3, 4"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "GIRLS HOSTEL 9,10, 11,12, 21A,B"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "12"
+        }
+      ],
+      "shapeNotes": "Compact block with stepped roof and balcony stack, at the corner of the 9-12 enclosure.",
+      "conflicts": [
+        "Caption pairs 'BLOCK- 09,10, 11,12' with 'GIRLS HOSTAL 1, 2, 3, 4' in parallel order; the per-block hostel number is implied by order, not stated."
+      ]
+    },
+    {
+      "block": "13",
+      "labelsAsPrinted": ["DIVISION OF STUDENT WELFARE", "BUSINESS", "STUDENT WELFARE"],
+      "normalizedNames": ["Division of Student Welfare"],
+      "kind": "administrative",
+      "evidence": [
+        {
+          "slide": "slide-23.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-13 / DIVISION OF STUDENT WELFARE"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "BUSINESS 13"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "STUDENT WELFARE 13"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "13"
+        }
+      ],
+      "shapeNotes": "Square box with a central open square courtyard/atrium (galleries visible), a small notch at one roof corner, front entrance with broad stepped platform.",
+      "conflicts": [
+        "Index EDUCATION list has 'BUSINESS 13', but the slide-23 vignette calls 13 'DIVISION OF STUDENT WELFARE' (index ADMINISTRATIVE list also has 'STUDENT WELFARE 13') and slide-24 puts 'MITTAL SCHOOL OF BUSINESS' at BLOCK-14."
+      ]
+    },
+    {
+      "block": "14",
+      "labelsAsPrinted": ["MITTAL SCHOOL OF BUSINESS"],
+      "normalizedNames": ["Mittal School of Business"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-24.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-14 / MITTAL SCHOOL OF BUSINESS"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "14"
+        },
+        {
+          "slide": "slide-02.png",
+          "where": "scene vignette pin",
+          "text": "14 (OPEN AUDITORIUM AND SURROUNDINGS; slide-06 identical)"
+        }
+      ],
+      "shapeNotes": "Rectangular box with a sawtooth (3 peaks) along one roof edge, vertical fins on the short end, entrance canopy on slender columns.",
+      "conflicts": [
+        "Block 14 does not appear in the overview index at all; the index assigns BUSINESS to 13."
+      ]
+    },
+    {
+      "block": "15",
+      "labelsAsPrinted": ["UNI-CENTER, SCHOOL OF HOTAL MANGMENT AND TOURISM", "HOTEL MANAGEMENT"],
+      "normalizedNames": ["Uni-Centre", "School of Hotel Management and Tourism"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-19.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-15 / UNI-CENTER, SCHOOL OF HOTAL MANGMENT AND TOURISM"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "HOTEL MANAGEMENT 15"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "15"
+        },
+        {
+          "slide": "slide-02.png",
+          "where": "scene vignette pin",
+          "text": "15 (OPEN AUDITORIUM AND SURROUNDINGS; slide-06 identical)"
+        }
+      ],
+      "shapeNotes": "Wedge in plan: long tapering slab, one long side with a regular window grid, the wide end rounded and fully glazed in horizontal blue bands; entrance canopy mid-way along the long side. Overview: abuts the large open-auditorium pavilion (16).",
+      "conflicts": ["'Uni-Center' is not in the index (index lists only HOTEL MANAGEMENT 15)."]
+    },
+    {
+      "block": "16",
+      "labelsAsPrinted": [],
+      "normalizedNames": ["(open auditorium — inferred only from the scene caption)"],
+      "kind": "auditorium",
+      "evidence": [
+        {
+          "slide": "slide-02.png",
+          "where": "scene vignette pin",
+          "text": "16 (OPEN AUDITORIUM AND SURROUNDINGS; slide-06 identical)"
+        }
+      ],
+      "shapeNotes": "Very large irregular-polygon grey roof on thin red columns, perforated with round openings, two solar-panel arrays, orange canopy along one edge; adjoins 15.",
+      "conflicts": [
+        "No block caption; not in the overview index; the overview draws the same pavilion next to 15 but with no pin 16."
+      ],
+      "notes": "Pin 16 sits on the pavilion inside a scene captioned 'OPEN AUDITORIUM AND SURROUNDINGS'; the name is an association by placement, not a block caption."
+    },
+    {
+      "block": "18",
+      "labelsAsPrinted": [
+        "SCHOOL OF SOCIAL SCIENCE AND LANGUAGE",
+        "SCHOOL OF PHYSICAL EDUCATION",
+        "DEPARTMENT OF EDUCATION",
+        "EDUCATION"
+      ],
+      "normalizedNames": [
+        "School of Social Science and Language",
+        "School of Physical Education",
+        "Department of Education"
+      ],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-20.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-18 / SCHOOL OF SOCIAL SCIENCE AND LANGUAGE / SCHOOL OF PHYSICAL EDUCATION / DEPARTMENT OF EDUCATION"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "EDUCATION 18"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "18"
+        },
+        {
+          "slide": "slide-02.png",
+          "where": "scene vignette pin",
+          "text": "18 (OPEN AUDITORIUM AND SURROUNDINGS; slide-06 identical)"
+        }
+      ],
+      "shapeNotes": "H-shape: two square end blocks with blue glazed facades joined by a narrower central bar; open column frame in the middle at ground level.",
+      "conflicts": ["Index names only EDUCATION for 18; vignette lists three units."]
+    },
+    {
+      "block": "19",
+      "labelsAsPrinted": ["SCHOOL OF FILMS, JOURNALISM, AND CREATIVE ARTS", "PERFORMING ARTS"],
+      "normalizedNames": ["School of Films, Journalism and Creative Arts", "Performing Arts"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-21.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-19 / SCHOOL OF FILMS, JOURNALISM, AND CREATIVE ARTS"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "PERFORMING ARTS 19"
+        },
+        {
+          "slide": "slide-21.png",
+          "where": "block vignette pin",
+          "text": "19"
+        }
+      ],
+      "shapeNotes": "One wing of a single connected 19-20-21 complex drawn as a stepped/zigzag chain of rectangular wings with white-framed window grids; 19 is the wing at the lower end.",
+      "conflicts": [
+        "Vignette: 19 = Films, Journalism and Creative Arts; index: 19 = PERFORMING ARTS and FILM & JOURNALISM = 20.",
+        "No pin 19 on the overview."
+      ]
+    },
+    {
+      "block": "20",
+      "labelsAsPrinted": ["FILM & JOURNALISM", "LAW"],
+      "normalizedNames": [],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-21.png",
+          "where": "block vignette pin",
+          "text": "20 (no caption on the slide)"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "FILM & JOURNALISM 20"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "LAW 20"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "20"
+        }
+      ],
+      "shapeNotes": "Middle/end wing of the 19-20-21 complex with a rounded (quarter-circle) inner corner and dark glazed panel. Overview pin 20 is on an H-like white-framed building near 18 inside a looping road.",
+      "conflicts": [
+        "Index puts both FILM & JOURNALISM and LAW at 20; the slide-21 vignette puts film/journalism at 19 and law at 21 and gives 20 no caption."
+      ],
+      "notes": "Pin present on vignette and overview, no vignette caption."
+    },
+    {
+      "block": "21",
+      "labelsAsPrinted": ["SCHOOL OF LAW"],
+      "normalizedNames": ["School of Law"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-21.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-21 / SCHOOL OF LAW"
+        },
+        {
+          "slide": "slide-21.png",
+          "where": "block vignette pin",
+          "text": "21"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "21"
+        }
+      ],
+      "shapeNotes": "Vignette: the wing of the 19-20-21 complex with a small square entrance canopy and steps. Overview pin 21 is instead on a separate multi-tower cluster (several linked 6-8 storey blocks) across a road from the 20 pin.",
+      "conflicts": [
+        "Index has LAW at 20, not 21.",
+        "Index RESIDENTIAL lists 'GIRLS HOSTEL ... 21A,B' — a hostel numbered 21A/21B — while the vignette makes 21 the School of Law.",
+        "Overview pin 21 sits on a cluster drawn like the residential blocks, physically separate from pin 20, whereas the vignette draws 19, 20 and 21 as one connected building."
+      ]
+    },
+    {
+      "block": "21A",
+      "labelsAsPrinted": ["GIRLS HOSTEL"],
+      "normalizedNames": ["Girls Hostel 21A"],
+      "kind": "hostel-girls",
+      "evidence": [
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "GIRLS HOSTEL 9,10, 11,12, 21A,B"
+        }
+      ],
+      "shapeNotes": "No vignette and no pin labelled 21A/21B. (The overview's pin 21 cluster is the only candidate drawn as residential; that link is an appearance inference and is NOT asserted.)",
+      "conflicts": [
+        "Index-only; conflicts with slide-21 'BLOCK-21 SCHOOL OF LAW'.",
+        "Relationship to the vignette 'BLOCK-22,23 GIRLS HOSTAL 5, 6.' (which has no index entry and no overview pin) is unresolved."
+      ]
+    },
+    {
+      "block": "21B",
+      "labelsAsPrinted": ["GIRLS HOSTEL"],
+      "normalizedNames": ["Girls Hostel 21B"],
+      "kind": "hostel-girls",
+      "evidence": [
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "GIRLS HOSTEL 9,10, 11,12, 21A,B"
+        }
+      ],
+      "shapeNotes": "No vignette and no pin labelled 21A/21B. (The overview's pin 21 cluster is the only candidate drawn as residential; that link is an appearance inference and is NOT asserted.)",
+      "conflicts": [
+        "Index-only; conflicts with slide-21 'BLOCK-21 SCHOOL OF LAW'.",
+        "Relationship to the vignette 'BLOCK-22,23 GIRLS HOSTAL 5, 6.' (which has no index entry and no overview pin) is unresolved."
+      ]
+    },
+    {
+      "block": "22",
+      "labelsAsPrinted": ["GIRLS HOSTAL 5, 6."],
+      "normalizedNames": ["Girls Hostel 5 (number by caption order only)"],
+      "kind": "hostel-girls",
+      "evidence": [
+        {
+          "slide": "slide-16.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-22,23 / GIRLS HOSTAL 5, 6."
+        },
+        {
+          "slide": "slide-16.png",
+          "where": "block vignette pin",
+          "text": "22"
+        }
+      ],
+      "shapeNotes": "Courtyard complex: rectangular perimeter of linked wings with internal cross-wings forming two inner courts; several taller tower elements. 22 and 23 are the two halves.",
+      "conflicts": [
+        "Not in the overview index (index girls hostels: 9,10,11,12,21A,B); no pin 22/23 on the overview.",
+        "Caption pairs 22,23 with hostels 5,6 by order only."
+      ]
+    },
+    {
+      "block": "23",
+      "labelsAsPrinted": ["GIRLS HOSTAL 5, 6."],
+      "normalizedNames": ["Girls Hostel 6 (number by caption order only)"],
+      "kind": "hostel-girls",
+      "evidence": [
+        {
+          "slide": "slide-16.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-22,23 / GIRLS HOSTAL 5, 6."
+        },
+        {
+          "slide": "slide-16.png",
+          "where": "block vignette pin",
+          "text": "23"
+        }
+      ],
+      "shapeNotes": "Courtyard complex: rectangular perimeter of linked wings with internal cross-wings forming two inner courts; several taller tower elements. 22 and 23 are the two halves.",
+      "conflicts": [
+        "Not in the overview index (index girls hostels: 9,10,11,12,21A,B); no pin 22/23 on the overview.",
+        "Caption pairs 22,23 with hostels 5,6 by order only."
+      ]
+    },
+    {
+      "block": "25",
+      "labelsAsPrinted": ["SCHOOL OF AGRICULTURE", "AGRICULTURE"],
+      "normalizedNames": ["School of Agriculture"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-25,26: SCHOOL OF AGRICULTURE"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "AGRICULTURE 25,26"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "25"
+        }
+      ],
+      "shapeNotes": "End unit of a diagonal row of similar parallel rectangular blocks (25-29) joined by blue barrel-roofed connectors; 25 is the outermost, at the road bend.",
+      "conflicts": []
+    },
+    {
+      "block": "26",
+      "labelsAsPrinted": ["SCHOOL OF AGRICULTURE", "AGRICULTURE"],
+      "normalizedNames": ["School of Agriculture"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-25,26: SCHOOL OF AGRICULTURE"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "AGRICULTURE 25,26"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "26"
+        }
+      ],
+      "shapeNotes": "Second unit of the 25-29 diagonal row of parallel blocks with blue connectors.",
+      "conflicts": []
+    },
+    {
+      "block": "27",
+      "labelsAsPrinted": ["SCHOOL OF CHEMICAL ENGINEERING AND PHYSICAL SCIENCE", "PHYSICAL SCIENCE"],
+      "normalizedNames": ["School of Chemical Engineering and Physical Science"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-27: SCHOOL OF CHEMICAL ENGINEERING AND PHYSICAL SCIENCE"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "PHYSICAL SCIENCE 27"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "27"
+        }
+      ],
+      "shapeNotes": "Third unit of the 25-29 diagonal row.",
+      "conflicts": ["Index omits Chemical Engineering (lists PHYSICAL SCIENCE only)."]
+    },
+    {
+      "block": "28",
+      "labelsAsPrinted": ["SCHOOL OF BIO ENGINEERING AND BIO SCIENCES", "BIOTECHNOLOGY"],
+      "normalizedNames": ["School of Bioengineering and Biosciences", "Biotechnology"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-28: SCHOOL OF BIO ENGINEERING AND BIO SCIENCES"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "BIOTECHNOLOGY 28"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "28"
+        }
+      ],
+      "shapeNotes": "Fourth unit of the 25-29 diagonal row.",
+      "conflicts": []
+    },
+    {
+      "block": "29",
+      "labelsAsPrinted": ["OFFICE OF THE PRO-CHANCELLOR  I) ADMINISTRATION-II", "ADMINISTRATIVE"],
+      "normalizedNames": ["Office of the Pro-Chancellor", "Administration-II"],
+      "kind": "administrative",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-29: OFFICE OF THE PRO-CHANCELLOR  I) ADMINISTRATION-II"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "ADMINISTRATIVE 29"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "29"
+        }
+      ],
+      "shapeNotes": "Last/front unit of the 25-29 row; drawn with a broad blue glazed gable face toward the plaza.",
+      "conflicts": [
+        "Vignette: 29 = Pro-Chancellor + Administration-II; index: PROCHANCELLOR = 30 and 29 = ADMINISTRATIVE. The administrative block numbers 29-32 appear shifted by one between vignette and index."
+      ]
+    },
+    {
+      "block": "30",
+      "labelsAsPrinted": ["THE CHANCELLORY  I) ADMINISTRATION-I", "PROCHANCELLOR"],
+      "normalizedNames": ["The Chancellery", "Administration-I"],
+      "kind": "administrative",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-30: THE CHANCELLORY  I) ADMINISTRATION-I"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "PROCHANCELLOR 30"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "30"
+        }
+      ],
+      "shapeNotes": "Small block at the front-left foot of the auditorium bowl (35), with blue glazed side.",
+      "conflicts": ["Vignette: 30 = Chancellery; index: 30 = PROCHANCELLOR and CHANCELLOR = 31."]
+    },
+    {
+      "block": "31",
+      "labelsAsPrinted": [
+        "I) DIVISSION OF ADMISSIONS II)MUSEUM OF ACADEMICS",
+        "CHANCELLOR",
+        "ADMINISTRATIVE"
+      ],
+      "normalizedNames": ["Division of Admissions", "Museum of Academics"],
+      "kind": "administrative",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-31: I) DIVISSION OF ADMISSIONS II)MUSEUM OF ACADEMICS"
+        },
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette pin",
+          "text": "31"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "CHANCELLOR 31"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "ADMINISTRATIVE 31"
+        }
+      ],
+      "shapeNotes": "Block with a glazed/gridded stepped front (grand staircase) at the front of the cluster between 32 and 30.",
+      "conflicts": [
+        "Vignette: 31 = Admissions + Museum; index: 31 = CHANCELLOR and ADMINISTRATIVE, ADMISSION = 32.",
+        "No pin 31 on the overview (pins 30 and 32 are present)."
+      ]
+    },
+    {
+      "block": "32",
+      "labelsAsPrinted": ["I) OFFICE OF VICE CHANCELLORY II)ADMINISTRATION-III", "ADMISSION"],
+      "normalizedNames": ["Office of the Vice-Chancellor", "Administration-III"],
+      "kind": "administrative",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-32: I) OFFICE OF VICE CHANCELLORY II)ADMINISTRATION-III"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "ADMISSION 32"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "32"
+        }
+      ],
+      "shapeNotes": "Taller block at the left-front of the cluster, behind the stepped glazed front of 31.",
+      "conflicts": [
+        "Vignette: 32 = Vice-Chancellor + Administration-III; index: 32 = ADMISSION. Vice-Chancellor does not appear in the index."
+      ]
+    },
+    {
+      "block": "33",
+      "labelsAsPrinted": ["SCHOOL OF COMPUTER SCIENCE AND ENGINEERING", "COMPUTER APPLICATION"],
+      "normalizedNames": ["School of Computer Science and Engineering"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-33,34 : SCHOOL OF COMPUTER SCIENCE AND ENGINEERING"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "COMPUTER APPLICATION 33"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "33"
+        }
+      ],
+      "shapeNotes": "Smaller block between 34 and 32 linked by a blue barrel-roofed connector.",
+      "conflicts": [
+        "Vignette: 33 = Computer Science and Engineering; index: 33 = COMPUTER APPLICATION (vignette puts Computer Applications at 38)."
+      ]
+    },
+    {
+      "block": "34",
+      "labelsAsPrinted": ["SCHOOL OF COMPUTER SCIENCE AND ENGINEERING", "COMPTER SCIENCE"],
+      "normalizedNames": ["School of Computer Science and Engineering"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-33,34 : SCHOOL OF COMPUTER SCIENCE AND ENGINEERING"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "COMPTER SCIENCE 34"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "34"
+        }
+      ],
+      "shapeNotes": "Taller end block at the far-left end of the 25-38 cluster, linked to 33 by a blue connector.",
+      "conflicts": []
+    },
+    {
+      "block": "35",
+      "labelsAsPrinted": ["SHANTI DEVI MITTAL AUDITORIUM", "SHANTIDEVI AUDITORIUM"],
+      "normalizedNames": ["Shanti Devi Mittal Auditorium"],
+      "kind": "auditorium",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-35: SHANTI DEVI MITTAL AUDITORIUM"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "SHANTIDEVI AUDITORIUM 35"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "35"
+        }
+      ],
+      "shapeNotes": "Fan-shaped open bowl/amphitheatre at the centre of the cluster, enclosed at the back by the curved arched facade of 37.",
+      "conflicts": []
+    },
+    {
+      "block": "36",
+      "labelsAsPrinted": ["SCHOOL OF ELECTRONICS & ELECTRICAL ENGINEERING", "ELECTRONIC TELECOM"],
+      "normalizedNames": [
+        "School of Electronics and Electrical Engineering",
+        "Electronics & Telecommunication"
+      ],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-36: SCHOOL OF ELECTRONICS & ELECTRICAL ENGINEERING"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "ELECTRONIC TELECOM 36"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "36"
+        }
+      ],
+      "shapeNotes": "Long wing running from the 37 vault toward 34 (left arm of a V/chevron pair with 38).",
+      "conflicts": ["Minor naming difference only (Electrical vs Telecom)."]
+    },
+    {
+      "block": "37",
+      "labelsAsPrinted": ["CENTRAL LIBRARY", "RESEARCH"],
+      "normalizedNames": ["Central Library"],
+      "kind": "library",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-37: CENTRAL LIBRARY"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "RESEARCH 37"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "37"
+        }
+      ],
+      "shapeNotes": "Curved concave facade with a grid of round openings (arched vault) closing the back of the 35 bowl; sits at the apex of the V formed by 36 and 38 (roof shows a notch/triangular cut).",
+      "conflicts": ["Vignette: 37 = CENTRAL LIBRARY; index: 37 = RESEARCH."]
+    },
+    {
+      "block": "38",
+      "labelsAsPrinted": ["SCHOOL OF COMPUTER APPLICATIONS", "CIVIL"],
+      "normalizedNames": ["School of Computer Applications"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-12.png",
+          "where": "block vignette caption",
+          "text": "BLOCK-38: SCHOOL OF COMPUTER APPLICATIONS"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "CIVIL 38"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "38"
+        }
+      ],
+      "shapeNotes": "Long straight wing running from the 37 vault toward 25-26 (right arm of the V), with a long window grid.",
+      "conflicts": [
+        "Vignette: 38 = Computer Applications; index: 38 = CIVIL (vignette slide-11 puts Civil at 56; index puts COMPUTER APPLICATION at 33)."
+      ]
+    },
+    {
+      "block": "41",
+      "labelsAsPrinted": ["APARTMENTS", "APARTMENT"],
+      "normalizedNames": ["Apartments (staff residence)"],
+      "kind": "apartment",
+      "evidence": [
+        {
+          "slide": "slide-17.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 41,42,43,44 / APARTMENTS"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "APARTMENT 41,42, 43,44"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "41"
+        }
+      ],
+      "shapeNotes": "One of four parallel rectangular slab blocks stepping in echelon (41 smallest/front, 44 at the back); 43 and 44 linked. Overview: next to the large shed 47.",
+      "conflicts": [],
+      "notes": "'staff residence' is an interpretation of 'APARTMENTS', not printed."
+    },
+    {
+      "block": "42",
+      "labelsAsPrinted": ["APARTMENTS", "APARTMENT"],
+      "normalizedNames": ["Apartments (staff residence)"],
+      "kind": "apartment",
+      "evidence": [
+        {
+          "slide": "slide-17.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 41,42,43,44 / APARTMENTS"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "APARTMENT 41,42, 43,44"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "42"
+        }
+      ],
+      "shapeNotes": "One of four parallel rectangular slab blocks stepping in echelon (41 smallest/front, 44 at the back); 43 and 44 linked.",
+      "conflicts": []
+    },
+    {
+      "block": "43",
+      "labelsAsPrinted": ["APARTMENTS", "APARTMENT"],
+      "normalizedNames": ["Apartments (staff residence)"],
+      "kind": "apartment",
+      "evidence": [
+        {
+          "slide": "slide-17.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 41,42,43,44 / APARTMENTS"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "APARTMENT 41,42, 43,44"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "43"
+        }
+      ],
+      "shapeNotes": "One of four parallel rectangular slab blocks stepping in echelon (41 smallest/front, 44 at the back); 43 and 44 linked.",
+      "conflicts": []
+    },
+    {
+      "block": "44",
+      "labelsAsPrinted": ["APARTMENTS", "APARTMENT"],
+      "normalizedNames": ["Apartments (staff residence)"],
+      "kind": "apartment",
+      "evidence": [
+        {
+          "slide": "slide-17.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 41,42,43,44 / APARTMENTS"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "APARTMENT 41,42, 43,44"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "44"
+        }
+      ],
+      "shapeNotes": "One of four parallel rectangular slab blocks stepping in echelon (41 smallest/front, 44 at the back); 43 and 44 linked. Overview: next to the large shed 47.",
+      "conflicts": []
+    },
+    {
+      "block": "45",
+      "labelsAsPrinted": ["BOYS HOSTEL-1", "BOYS HOSTEL"],
+      "normalizedNames": ["Boys Hostel 1"],
+      "kind": "hostel-boys",
+      "evidence": [
+        {
+          "slide": "slide-18.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 45 / BOYS HOSTEL-1"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "BOYS HOSTEL 45,48, 49,50, 51,53,52"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "45"
+        }
+      ],
+      "shapeNotes": "Three parallel rectangular slabs staggered in echelon and linked at their ends; one has an open ground floor. Overview: a water tower nearby.",
+      "conflicts": []
+    },
+    {
+      "block": "47",
+      "labelsAsPrinted": ["INDOOR"],
+      "normalizedNames": ["Indoor (sports) facility"],
+      "kind": "sports",
+      "evidence": [
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "INDOOR 47"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "47"
+        }
+      ],
+      "shapeNotes": "Overview only: large shed/hall with pitched roof and blue strip along one side, beside the 41-44 apartments.",
+      "conflicts": ["No vignette."],
+      "notes": "'sports' is an interpretation of 'INDOOR'."
+    },
+    {
+      "block": "48",
+      "labelsAsPrinted": ["BOYS HOSTEL -2, 3", "BOYS HOSTEL"],
+      "normalizedNames": ["Boys Hostel 2 (number by caption order only)"],
+      "kind": "hostel-boys",
+      "evidence": [
+        {
+          "slide": "slide-13.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 48, 49 / BOYS HOSTEL -2, 3"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "BOYS HOSTEL 45,48, 49,50, 51,53,52"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "48"
+        }
+      ],
+      "shapeNotes": "Part of a diagonal chain of ~6 linked square towers with rooftop water tanks and external cylindrical stair cores (48 at the lower end, 49 toward the top). Overview: near several round green tanks/ponds.",
+      "conflicts": ["Caption pairs 48,49 with hostels 2,3 by order only."]
+    },
+    {
+      "block": "49",
+      "labelsAsPrinted": ["BOYS HOSTEL -2, 3", "BOYS HOSTEL"],
+      "normalizedNames": ["Boys Hostel 3 (number by caption order only)"],
+      "kind": "hostel-boys",
+      "evidence": [
+        {
+          "slide": "slide-13.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 48, 49 / BOYS HOSTEL -2, 3"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "BOYS HOSTEL 45,48, 49,50, 51,53,52"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "49"
+        }
+      ],
+      "shapeNotes": "Part of a diagonal chain of ~6 linked square towers with rooftop water tanks and external cylindrical stair cores (48 at the lower end, 49 toward the top). Overview: near several round green tanks/ponds.",
+      "conflicts": ["Caption pairs 48,49 with hostels 2,3 by order only."]
+    },
+    {
+      "block": "50",
+      "labelsAsPrinted": ["BOYS HOSTEL-7", "BOYS HOSTEL"],
+      "normalizedNames": ["Boys Hostel 7"],
+      "kind": "hostel-boys",
+      "evidence": [
+        {
+          "slide": "slide-14.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 50 / BOYS HOSTEL-7"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "BOYS HOSTEL 45,48, 49,50, 51,53,52"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "50"
+        }
+      ],
+      "shapeNotes": "Single free-standing rectangular tower with rooftop tanks and a stair projection on one short side. Overview: isolated at the end of a dead-end road.",
+      "conflicts": []
+    },
+    {
+      "block": "51",
+      "labelsAsPrinted": ["BOYS HOSTEL"],
+      "normalizedNames": ["Boys Hostel (number not printed)"],
+      "kind": "hostel-boys",
+      "evidence": [
+        {
+          "slide": "slide-15.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 51 / BOYS HOSTEL"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "BOYS HOSTEL 45,48, 49,50, 51,53,52"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "51"
+        },
+        {
+          "slide": "slide-03.png",
+          "where": "scene vignette pin",
+          "text": "51 (PLAYGROUND)"
+        }
+      ],
+      "shapeNotes": "Diagonal chain of 5 linked square towers with rooftop tanks and cylindrical stair cores (similar module to 48/49). Overview: beside the cricket ground.",
+      "conflicts": [
+        "Caption gives no hostel number; Boys Hostel 4 is not assigned anywhere in the slides (1=45, 2,3=48,49, 5,6=53,54, 7=50). Do not infer 51=BH4."
+      ]
+    },
+    {
+      "block": "52",
+      "labelsAsPrinted": ["BOYS HOSTEL"],
+      "normalizedNames": [],
+      "kind": "hostel-boys",
+      "evidence": [
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "BOYS HOSTEL 45,48, 49,50, 51,53,52"
+        },
+        {
+          "slide": "slide-03.png",
+          "where": "scene vignette pin",
+          "text": "52 (PLAYGROUND)"
+        }
+      ],
+      "shapeNotes": "No building drawn: in the PLAYGROUND vignette pin 52 stands on the cricket oval/pitch.",
+      "conflicts": [
+        "Index lists 52 as a BOYS HOSTEL, but the only pin 52 is on the cricket ground (slide-03), not on a building.",
+        "No pin 52 on the overview; no vignette caption.",
+        "Index boys-hostel list reads '51,53,52' and omits 54, which slide-10 captions as a boys hostel."
+      ]
+    },
+    {
+      "block": "53",
+      "labelsAsPrinted": ["BOYS HOSTEL - 5, 6", "BOYS HOSTEL"],
+      "normalizedNames": ["Boys Hostel 5 (number by caption order only)"],
+      "kind": "hostel-boys",
+      "evidence": [
+        {
+          "slide": "slide-10.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 53, 54 / BOYS HOSTEL - 5, 6"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "BOYS HOSTEL 45,48, 49,50, 51,53,52"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "53"
+        },
+        {
+          "slide": "slide-03.png",
+          "where": "scene vignette pin",
+          "text": "53 (PLAYGROUND)"
+        }
+      ],
+      "shapeNotes": "Comb/double-H complex: a long central spine with perpendicular slabs crossing it at both ends (four long slabs + spine); 53 and 54 are pinned on two adjacent end slabs. Overview: south-west edge of the sports fields, a water tower beside it.",
+      "conflicts": ["Caption pairs 53,54 with hostels 5,6 by order only."]
+    },
+    {
+      "block": "54",
+      "labelsAsPrinted": ["BOYS HOSTEL - 5, 6"],
+      "normalizedNames": ["Boys Hostel 6 (number by caption order only)"],
+      "kind": "hostel-boys",
+      "evidence": [
+        {
+          "slide": "slide-10.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 53, 54 / BOYS HOSTEL - 5, 6"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "54"
+        },
+        {
+          "slide": "slide-03.png",
+          "where": "scene vignette pin",
+          "text": "54 (PLAYGROUND)"
+        }
+      ],
+      "shapeNotes": "Comb/double-H complex: a long central spine with perpendicular slabs crossing it at both ends (four long slabs + spine); 53 and 54 are pinned on two adjacent end slabs. Overview: south-west edge of the sports fields, a water tower beside it.",
+      "conflicts": [
+        "Caption pairs 53,54 with hostels 5,6 by order only.",
+        "54 is missing from the index BOYS HOSTEL list ('51,53,52')."
+      ]
+    },
+    {
+      "block": "55",
+      "labelsAsPrinted": ["SCHOOL OF MECHANICAL INGNEERING"],
+      "normalizedNames": ["School of Mechanical Engineering"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-11.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 55 / SCHOOL OF MECHANICAL INGNEERING"
+        },
+        {
+          "slide": "slide-11.png",
+          "where": "block vignette pin",
+          "text": "55"
+        },
+        {
+          "slide": "slide-03.png",
+          "where": "scene vignette pin",
+          "text": "55 (PLAYGROUND)"
+        }
+      ],
+      "shapeNotes": "Inner/lowest wedge of a curved crescent (C-shape) of 3-4 radiating wedge wings (55-56-57); 55 is the wing nearest the playing fields, with a triangular lawn beside it.",
+      "conflicts": [
+        "Vignette: Mechanical = 55; index: MECHANICAL = 56. Block 55 is not in the index and has no overview pin."
+      ]
+    },
+    {
+      "block": "56",
+      "labelsAsPrinted": ["SCHOOL OF CIVIL INGNEERING", "MECHANICAL"],
+      "normalizedNames": ["School of Civil Engineering"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-11.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 56 / SCHOOL OF CIVIL INGNEERING"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "MECHANICAL 56"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "56"
+        },
+        {
+          "slide": "slide-03.png",
+          "where": "scene vignette pin",
+          "text": "56 (PLAYGROUND)"
+        }
+      ],
+      "shapeNotes": "Middle wedge of the 55-57 crescent (widest curved wing).",
+      "conflicts": ["Vignette: 56 = Civil; index: 56 = MECHANICAL and CIVIL = 38."]
+    },
+    {
+      "block": "57",
+      "labelsAsPrinted": ["SCHOOL OF POLYTECHNIC", "POLYTECHINQUE"],
+      "normalizedNames": ["School of Polytechnic"],
+      "kind": "academic",
+      "evidence": [
+        {
+          "slide": "slide-11.png",
+          "where": "block vignette caption",
+          "text": "BLOCK- 57 / SCHOOL OF POLYTECHNIC"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "POLYTECHINQUE 57"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "57"
+        },
+        {
+          "slide": "slide-03.png",
+          "where": "scene vignette pin",
+          "text": "57 (PLAYGROUND)"
+        }
+      ],
+      "shapeNotes": "Outer/top wing of the 55-57 crescent, with a dark roof element.",
+      "conflicts": []
+    },
+    {
+      "block": "58",
+      "labelsAsPrinted": ["PROJECT LAB"],
+      "normalizedNames": ["Project Lab"],
+      "kind": "other",
+      "evidence": [
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "(blank label) 58 — last row of EDUCATION list"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview index",
+          "text": "PROJECT LAB 58"
+        },
+        {
+          "slide": "slide-28.jpg",
+          "where": "overview pin",
+          "text": "58"
+        },
+        {
+          "slide": "slide-03.png",
+          "where": "scene vignette pin",
+          "text": "58 (PLAYGROUND, clipped at left edge)"
+        }
+      ],
+      "shapeNotes": "Overview only: low L-shaped flat-roofed building at the far end of the campus, adjoining the 55-57 crescent next to a car park.",
+      "conflicts": [
+        "Index EDUCATION list ends with a row '58' that has no label; ADMINISTRATIVE list has 'PROJECT LAB 58'. No vignette."
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "caption": "OPEN AUDITORIUM AND SURROUNDINGS",
+      "slide": "slide-02.png",
+      "duplicateOf": null,
+      "contents": "Large grey perforated pavilion roof on columns with solar panels (pin 16); wedge building (pin 15); block with tree row (pin 14); block on the right (pin 18); tree-lined road and green strips with a row of flag poles upper-left; blue covered walkway; a clipped, illegible pin at the bottom edge."
+    },
+    {
+      "caption": "OPEN AUDITORIUM AND SURROUNDINGS",
+      "slide": "slide-06.png",
+      "duplicateOf": "slide-02.png",
+      "contents": "Byte-identical file to slide-02.png (same SHA-256)."
+    },
+    {
+      "caption": "PLAYGROUND",
+      "slide": "slide-03.png",
+      "duplicateOf": null,
+      "contents": "Cricket oval with pitch (pin 52 on the oval), tennis courts and basketball courts, open football fields, a parking strip full of cars along the outer road; pins 57, 56, 55 (crescent), 54, 53 (hostel complex), 51, 48; a '58' pin clipped at the left edge; water tower and round green tanks."
+    },
+    {
+      "caption": "DILDO PARK",
+      "slide": "slide-04.png",
+      "duplicateOf": null,
+      "contents": "Rectangular walled lawn with trees and a paved patch in the middle, between a grey building and a road. No pins. Caption transcribed exactly as printed; its meaning is unclear (possibly a joke or misprint) and it must not be used as a place name without independent confirmation."
+    },
+    {
+      "caption": "GARDEN AREA",
+      "slide": "slide-05.png",
+      "duplicateOf": null,
+      "contents": "Rectangular garden with a regular grid of shrubs/trees; pin 4 on the grey comb-fronted building; pin 5 on a red building corner across the road; red brick building and tree-lined road upper-left."
+    },
+    {
+      "caption": "FLAG AREA",
+      "slide": "slide-07.png",
+      "duplicateOf": null,
+      "contents": "Tall flagpole with the Indian flag, square garden with a statue on a plinth, benches and lamps; shrub grid; arched covered walkway/building with staircase upper-left; large lawn with one big tree and a small red hut."
+    },
+    {
+      "caption": "UNIVERSITY ENTRENCE",
+      "slide": "slide-08.png",
+      "duplicateOf": null,
+      "contents": "Title slide 'LPU MAP' with an entrance vignette: tall gate tower with emblem, multi-lane gate canopy (toll-booth style), a second gate with a slim pylon and low red buildings, tree-lined roads. 'ENTRENCE' is a typo for 'Entrance'."
+    },
+    {
+      "caption": "PARKING AREA AND GARDEN AREA",
+      "slide": "slide-09.png",
+      "duplicateOf": null,
+      "contents": "Large parking lot full of cars, lawn with a big tree and a small red hut, landscaped entrance lanes with the gate tower."
+    },
+    {
+      "caption": "(overview map; INFORMATION index; legend)",
+      "slide": "slide-28.jpg",
+      "duplicateOf": null,
+      "contents": "Whole-campus isometric overview (3371x2384) with numbered pins, LPU logo/wordmark block, legend (GARDEN OR GROUND AREA, ROAD, PEDESTRIAN, PARKING AREA, LPU SURROUNDINGS) and the INFORMATION index transcribed in overviewIndex."
+    }
+  ],
+  "overviewIndex": {
+    "EDUCATION": [
+      ["FASHION", "1"],
+      ["PHARMACY", "4,7"],
+      ["PHYSIOTHERAPY", "3"],
+      ["ARCHITECTURE", "6"],
+      ["ANIMATION", "8"],
+      ["FINE ARTS", "8"],
+      ["BUSINESS", "13"],
+      ["HOTEL MANAGEMENT", "15"],
+      ["EDUCATION", "18"],
+      ["PERFORMING ARTS", "19"],
+      ["FILM & JOURNALISM", "20"],
+      ["LAW", "20"],
+      ["AGRICULTURE", "25,26"],
+      ["PHYSICAL SCIENCE", "27"],
+      ["BIOTECHNOLOGY", "28"],
+      ["COMPUTER APPLICATION", "33"],
+      ["COMPTER SCIENCE", "34"],
+      ["ELECTRONIC TELECOM", "36"],
+      ["RESEARCH", "37"],
+      ["CIVIL", "38"],
+      ["MECHANICAL", "56"],
+      ["POLYTECHINQUE", "57"],
+      ["", "58"]
+    ],
+    "ADMINISTRATIVE": [
+      ["ADMINISTRATIVE", "29"],
+      ["PROCHANCELLOR", "30"],
+      ["CHANCELLOR", "31"],
+      ["ADMINISTRATIVE", "31"],
+      ["ADMISSION", "32"],
+      ["STUDENT WELFARE", "13"],
+      ["SHANTIDEVI AUDITORIUM", "35"],
+      ["BALDEV RAJ AUDITORIUM", "2"],
+      ["INDOOR", "47"],
+      ["PROJECT LAB", "58"]
+    ],
+    "RESIDENTIAL": [
+      ["GIRLS HOSTEL", "9,10, 11,12, 21A,B"],
+      ["APARTMENT", "41,42, 43,44"],
+      ["BOYS HOSTEL", "45,48, 49,50, 51,53,52"]
+    ]
+  },
+  "overviewPins": [
+    {
+      "block": "1",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "2",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "3",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "4",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "6",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "7",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "8",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "9",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "10",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "11",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "12",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "13",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "14",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": false
+    },
+    {
+      "block": "15",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "18",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "20",
+      "hasBlockVignetteCaption": false,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "21",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": false
+    },
+    {
+      "block": "25",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "26",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "27",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "28",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "29",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "30",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "32",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "33",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "34",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "35",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "36",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "37",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "38",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "41",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "42",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "43",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "44",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "45",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "47",
+      "hasBlockVignetteCaption": false,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "48",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "49",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "50",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "51",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "53",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "54",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": false
+    },
+    {
+      "block": "56",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "57",
+      "hasBlockVignetteCaption": true,
+      "inOverviewIndex": true
+    },
+    {
+      "block": "58",
+      "hasBlockVignetteCaption": false,
+      "inOverviewIndex": true
+    }
+  ],
+  "pinsWithoutBlockCaption": [
+    {
+      "block": "5",
+      "seenOn": ["slide-05.png (GARDEN AREA scene)"],
+      "inOverviewIndex": false,
+      "onOverview": false
+    },
+    {
+      "block": "16",
+      "seenOn": ["slide-02.png / slide-06.png (OPEN AUDITORIUM AND SURROUNDINGS scene)"],
+      "inOverviewIndex": false,
+      "onOverview": false
+    },
+    {
+      "block": "20",
+      "seenOn": ["slide-21.png (19/20/21 vignette, uncaptioned pin)", "slide-28.jpg overview"],
+      "inOverviewIndex": true,
+      "onOverview": true
+    },
+    {
+      "block": "47",
+      "seenOn": ["slide-28.jpg overview"],
+      "inOverviewIndex": true,
+      "onOverview": true
+    },
+    {
+      "block": "52",
+      "seenOn": ["slide-03.png (PLAYGROUND scene, on cricket ground)"],
+      "inOverviewIndex": true,
+      "onOverview": false
+    },
+    {
+      "block": "58",
+      "seenOn": ["slide-28.jpg overview", "slide-03.png (clipped)"],
+      "inOverviewIndex": true,
+      "onOverview": true
+    }
+  ],
+  "indexOnlyEntries": [
+    {
+      "indexText": "LAW 20 / FILM & JOURNALISM 20",
+      "block": "20",
+      "note": "No vignette caption for 20; vignette gives law to 21 and film/journalism to 19."
+    },
+    {
+      "indexText": "GIRLS HOSTEL ... 21A,B",
+      "block": "21A",
+      "note": "No vignette, no 21A pin; vignette 21 = School of Law."
+    },
+    {
+      "indexText": "GIRLS HOSTEL ... 21A,B",
+      "block": "21B",
+      "note": "No vignette, no 21B pin."
+    },
+    {
+      "indexText": "INDOOR 47",
+      "block": "47",
+      "note": "Overview pin only, no vignette."
+    },
+    {
+      "indexText": "BOYS HOSTEL ... 51,53,52",
+      "block": "52",
+      "note": "Only pin 52 is on the cricket ground in the PLAYGROUND scene; no building, no overview pin."
+    },
+    {
+      "indexText": "(blank) 58 / PROJECT LAB 58",
+      "block": "58",
+      "note": "Overview pin only, no vignette."
+    }
+  ],
+  "vignetteOrScenePinsNotInIndex": ["5", "14", "16", "22", "23", "54", "55"],
+  "numbersNeverShown": {
+    "numbers": ["17", "24", "39", "40", "46"],
+    "note": "Gaps in 1-58 that appear in no caption, pin or index row (5 and 16 appear only as scene pins)."
+  },
+  "globalConflicts": [
+    "Overview index and block vignettes disagree on 13 numbers: 13, 19, 20, 21, 29, 30, 31, 32, 33, 37, 38, 55, 56 (see per-lead conflicts).",
+    "Administrative blocks 29-32 look shifted by one between sources (vignette: 29 Pro-Chancellor, 30 Chancellery, 31 Admissions, 32 Vice-Chancellor; index: 29 Administrative, 30 Prochancellor, 31 Chancellor/Administrative, 32 Admission).",
+    "Engineering numbering differs: vignette 55 Mechanical / 56 Civil; index 56 Mechanical / 38 Civil (vignette 38 = Computer Applications).",
+    "Girls hostels: vignette has 9-12 (GH 1-4) and 22,23 (GH 5,6); index has 9-12 and 21A,B with no 22/23.",
+    "Boys hostels: index '45,48,49,50,51,53,52' includes 52 (a pin on the cricket ground) and omits 54; Boys Hostel 4 is never assigned.",
+    "Overview omits pins 5, 16, 19, 22, 23, 31, 52, 55 that appear on vignettes/scenes.",
+    "slide-02.png and slide-06.png are byte-identical."
+  ]
+}

@@ -1,0 +1,597 @@
+{
+  "$comment": "Control points, residuals and per-pin projections behind block-candidates.json. Illustration coordinates are original pixels of reference/assets/behance-slides/slide-28.jpg (3371x2384) measured by eye; local metres are an equirectangular projection centred on lon 75.7032 lat 31.2533. REVIEW MATERIAL ONLY.",
+  "generatedAt": "2026-10-23T22:49:29Z",
+  "osmInputs": {
+    "buildings": "public/data/buildings.geojson (working copy; parsed, 131 features; sha256 a5ee6d00f4fe7b4c037bf4c7f85946213d35164f1d7bf817e27636aa7404954a; HEAD 902af566 differs by a one-line change)",
+    "basemap": "public/data/basemap.geojson (working copy)",
+    "boundary": "public/data/boundary.geojson",
+    "detections": "public/data/detections.geojson",
+    "raw": "data/raw/osm/campus-bbox.osm (water towers, road junction nodes)"
+  },
+  "pinBaseOffsetPx": 30,
+  "extrapolatedPins": ["1", "2", "3", "4", "6", "7", "8"],
+  "extrapolatedSearchRadiusM": 250.0,
+  "scoreWeights": {
+    "proximity": 0.35,
+    "shape": 0.4,
+    "order": 0.15,
+    "levels": 0.1,
+    "cap": 0.85,
+    "shapeValues": {
+      "strong": 1.0,
+      "partial": 0.55,
+      "weak": 0.2
+    }
+  },
+  "controlPoints": [
+    {
+      "id": "C1",
+      "desc": "Cricket/athletics oval centre",
+      "uv": [803, 352],
+      "xy": [-266, -622],
+      "osmEvidence": "osm:way/422577269 (leisure=pitch, sport=cricket) centroid",
+      "kind": "ground",
+      "globalResidualM": 70.3,
+      "leaveOneOutGlobalM": 98.2,
+      "leaveOneOutLocalM": 31.8
+    },
+    {
+      "id": "C2",
+      "desc": "Court cluster (tennis+basketball) centre",
+      "uv": [675, 490],
+      "xy": [-125, -563],
+      "osmEvidence": "mean of 9 pitch polygons osm:way/422551912-422551920",
+      "kind": "ground",
+      "globalResidualM": 47.9,
+      "leaveOneOutGlobalM": 55.5,
+      "leaveOneOutLocalM": 30.1
+    },
+    {
+      "id": "C3",
+      "desc": "Road junction island beside the round tanks",
+      "uv": [880, 530],
+      "xy": [-183, -485],
+      "osmEvidence": "roundabout arcs osm:way/422552786 + 1116481252",
+      "kind": "junction",
+      "globalResidualM": 65.4,
+      "leaveOneOutGlobalM": 77.8,
+      "leaveOneOutLocalM": 35.1
+    },
+    {
+      "id": "C4",
+      "desc": "Water tower beside hostel 45 slabs",
+      "uv": [1295, 670],
+      "xy": [-304, -162],
+      "osmEvidence": "node 4224770131 man_made=water_tower",
+      "kind": "ground",
+      "globalResidualM": 74.7,
+      "leaveOneOutGlobalM": 108.8,
+      "leaveOneOutLocalM": 9.6
+    },
+    {
+      "id": "C5",
+      "desc": "Large shed (pin 47) footprint centre",
+      "uv": [1040, 680],
+      "xy": [-163.7, -276.8],
+      "osmEvidence": "osm:way/422737297 centroid (10 171 m2, largest single footprint W of the axis)",
+      "kind": "landmark-building",
+      "globalResidualM": 43.1,
+      "leaveOneOutGlobalM": 49.2,
+      "leaveOneOutLocalM": 44.8
+    },
+    {
+      "id": "C6",
+      "desc": "Fan-shaped bowl (pin 35) centre",
+      "uv": [1000, 868],
+      "xy": [83.7, -137.4],
+      "osmEvidence": "osm:way/422556250 (quarter-circle part inside the V of way/422556249)",
+      "kind": "landmark-building",
+      "globalResidualM": 33.6,
+      "leaveOneOutGlobalM": 36.5,
+      "leaveOneOutLocalM": 49.4
+    },
+    {
+      "id": "C7",
+      "desc": "Road junction island at the foot of the blue walkway",
+      "uv": [1070, 955],
+      "xy": [166, 55],
+      "osmEvidence": "roundabout arcs osm:way/1116524624 + 1116524625",
+      "kind": "junction",
+      "globalResidualM": 140.8,
+      "leaveOneOutGlobalM": 153.5,
+      "leaveOneOutLocalM": 69.2
+    },
+    {
+      "id": "C8",
+      "desc": "Open-auditorium roof (pin 16 in scene) centre, at ground",
+      "uv": [1235, 1070],
+      "xy": [146.0, 193.2],
+      "osmEvidence": "osm:way/422823431 centroid (12 793 m2, largest footprint on campus)",
+      "kind": "landmark-building",
+      "globalResidualM": 128.9,
+      "leaveOneOutGlobalM": 139.8,
+      "leaveOneOutLocalM": 34.0
+    },
+    {
+      "id": "C9",
+      "desc": "Road junction island beside pin 18",
+      "uv": [1370, 1040],
+      "xy": [60, 248],
+      "osmEvidence": "roundabout arcs osm:way/422550020 + 1116516081",
+      "kind": "junction",
+      "globalResidualM": 156.5,
+      "leaveOneOutGlobalM": 169.9,
+      "leaveOneOutLocalM": 28.3
+    },
+    {
+      "id": "C10",
+      "desc": "Road junction island between pins 15 and 12",
+      "uv": [1255, 1170],
+      "xy": [271, 305],
+      "osmEvidence": "roundabout arcs osm:way/422553591 + 1116524619",
+      "kind": "junction",
+      "globalResidualM": 177.1,
+      "leaveOneOutGlobalM": 200.1,
+      "leaveOneOutLocalM": 16.5
+    },
+    {
+      "id": "C11",
+      "desc": "Main-gate lanes / booth canopy",
+      "uv": [2150, 1700],
+      "xy": [322.1, 746.2],
+      "osmEvidence": "centroid of 4 booth footprints osm:way/422550006-422550009 on the access road from the trunk road",
+      "kind": "ground",
+      "globalResidualM": 59.9,
+      "leaveOneOutGlobalM": 81.7,
+      "leaveOneOutLocalM": 27.6
+    },
+    {
+      "id": "C12",
+      "desc": "Curved crescent (pins 56/57) centre of mass",
+      "uv": [285, 545],
+      "xy": [45.1, -729.0],
+      "osmEvidence": "area-weighted centroid of the 9 radiating footprints osm:way/422547448-422547456",
+      "kind": "landmark-building",
+      "globalResidualM": 114.4,
+      "leaveOneOutGlobalM": 179.3,
+      "leaveOneOutLocalM": 42.5
+    },
+    {
+      "id": "C13",
+      "desc": "Water tower at the corner of the 53/54 complex",
+      "uv": [510, 750],
+      "xy": [76, -466],
+      "osmEvidence": "node 4225472858 man_made=water_tower",
+      "kind": "ground",
+      "globalResidualM": 96.4,
+      "leaveOneOutGlobalM": 142.5,
+      "leaveOneOutLocalM": 69.1
+    },
+    {
+      "id": "C14",
+      "desc": "Square garden with a dark central square, just inside the gate",
+      "uv": [1980, 1745],
+      "xy": [357, 705],
+      "osmEvidence": "osm:way/422550820 (natural=water, pond) inside the oval lawn by the gate roundabout",
+      "kind": "ground",
+      "globalResidualM": 89.3,
+      "leaveOneOutGlobalM": 122.8,
+      "leaveOneOutLocalM": 98.4
+    },
+    {
+      "id": "C15",
+      "desc": "Tall gate tower at the trunk road",
+      "uv": [2275, 1810],
+      "xy": [350.8, 798.7],
+      "osmEvidence": "osm:way/422550528 centroid (84 m2, building:levels=6, on the trunk-road edge next to the gate structure way/422550525)",
+      "kind": "ground",
+      "globalResidualM": 122.3,
+      "leaveOneOutGlobalM": 181.1,
+      "leaveOneOutLocalM": 44.6
+    }
+  ],
+  "globalAffine": {
+    "matrix_uv1_to_xy": [
+      [-0.39583, 0.34644],
+      [0.8514, 0.66983],
+      [-289.87638, -1079.57225]
+    ],
+    "rmsResidualM": 103.7,
+    "maxResidualM": 177.1,
+    "metresPerPxAlongU": 0.526,
+    "metresPerPxAlongV": 1.083,
+    "angleBetweenPixelAxesInGroundDeg": 100.6,
+    "singularValues": [1.089, 0.514],
+    "anisotropy": 2.12,
+    "rmsLeaveOneOutM": 130.0
+  },
+  "checkPoints": [
+    {
+      "id": "C16",
+      "desc": "Fan of slanted green strips in front of the pin-2 forecourt",
+      "uv": [1420, 1730],
+      "xy": [414, 566],
+      "osmEvidence": "mean of 4 small grass polygons osm:way/422736731-422736734",
+      "kind": "ground",
+      "globalErrorM": 207.0,
+      "localErrorM": 217.2
+    },
+    {
+      "id": "C17",
+      "desc": "Road fork just inside the gate (gate road / road toward pins 3-4 / tree-lined road toward pin 1)",
+      "uv": [1700, 1510],
+      "xy": [325, 582],
+      "osmEvidence": "road node shared by 3 ways at lon 75.7066106 lat 31.2585643",
+      "kind": "junction",
+      "globalErrorM": 61.2,
+      "localErrorM": 49.6
+    }
+  ],
+  "localMLS": {
+    "sigmaPx": 250.0,
+    "rmsLeaveOneOutM": 47.4,
+    "maxLeaveOneOutM": 98.4
+  },
+  "pins": {
+    "1": {
+      "uv": [1276, 1707],
+      "uvBase": [1276, 1737],
+      "xy": [822.7, 647.5],
+      "localErrM": 33.8,
+      "radiusM": 60.0,
+      "lonlat": [75.7118449, 31.2591576]
+    },
+    "2": {
+      "uv": [1401, 1596],
+      "uvBase": [1401, 1626],
+      "xy": [612.6, 573.0],
+      "localErrM": 37.0,
+      "radiusM": 60.0,
+      "lonlat": [75.7096372, 31.2584836]
+    },
+    "3": {
+      "uv": [1562, 1448],
+      "uvBase": [1562, 1478],
+      "xy": [367.4, 504.6],
+      "localErrM": 40.5,
+      "radiusM": 60.8,
+      "lonlat": [75.7070606, 31.2578649]
+    },
+    "4": {
+      "uv": [1431, 1380],
+      "uvBase": [1431, 1410],
+      "xy": [399.4, 478.0],
+      "localErrM": 29.5,
+      "radiusM": 60.0,
+      "lonlat": [75.7073969, 31.2576242]
+    },
+    "6": {
+      "uv": [1168, 1306],
+      "uvBase": [1168, 1336],
+      "xy": [501.9, 420.9],
+      "localErrM": 32.6,
+      "radiusM": 60.0,
+      "lonlat": [75.708474, 31.2571077]
+    },
+    "7": {
+      "uv": [1289, 1229],
+      "uvBase": [1289, 1259],
+      "xy": [341.0, 402.1],
+      "localErrM": 31.6,
+      "radiusM": 60.0,
+      "lonlat": [75.7067832, 31.2569376]
+    },
+    "8": {
+      "uv": [1225, 1215],
+      "uvBase": [1225, 1245],
+      "xy": [365.9, 364.3],
+      "localErrM": 33.1,
+      "radiusM": 60.0,
+      "lonlat": [75.7070449, 31.2565956]
+    },
+    "9": {
+      "uv": [1401, 1166],
+      "uvBase": [1401, 1196],
+      "xy": [203.3, 387.4],
+      "localErrM": 30.6,
+      "radiusM": 60.0,
+      "lonlat": [75.7053363, 31.2568046]
+    },
+    "10": {
+      "uv": [1505, 1112],
+      "uvBase": [1505, 1142],
+      "xy": [81.3, 366.2],
+      "localErrM": 29.7,
+      "radiusM": 60.0,
+      "lonlat": [75.7040543, 31.2566128]
+    },
+    "11": {
+      "uv": [1421, 1065],
+      "uvBase": [1421, 1095],
+      "xy": [82.8, 311.8],
+      "localErrM": 31.2,
+      "radiusM": 60.0,
+      "lonlat": [75.7040701, 31.2561207]
+    },
+    "12": {
+      "uv": [1323, 1150],
+      "uvBase": [1323, 1180],
+      "xy": [234.2, 347.5],
+      "localErrM": 32.1,
+      "radiusM": 60.0,
+      "lonlat": [75.705661, 31.2564437]
+    },
+    "13": {
+      "uv": [1146, 1080],
+      "uvBase": [1146, 1110],
+      "xy": [265.6, 202.2],
+      "localErrM": 37.6,
+      "radiusM": 60.0,
+      "lonlat": [75.7059909, 31.2551292]
+    },
+    "14": {
+      "uv": [1104, 1011],
+      "uvBase": [1104, 1041],
+      "xy": [213.4, 115.5],
+      "localErrM": 39.9,
+      "radiusM": 60.0,
+      "lonlat": [75.7054424, 31.2543449]
+    },
+    "15": {
+      "uv": [1279, 1050],
+      "uvBase": [1279, 1080],
+      "xy": [152.1, 234.7],
+      "localErrM": 34.4,
+      "radiusM": 60.0,
+      "lonlat": [75.7047983, 31.2554232]
+    },
+    "18": {
+      "uv": [1365, 976],
+      "uvBase": [1365, 1006],
+      "xy": [19.4, 203.5],
+      "localErrM": 33.0,
+      "radiusM": 60.0,
+      "lonlat": [75.7034039, 31.255141]
+    },
+    "20": {
+      "uv": [1385, 888],
+      "uvBase": [1385, 918],
+      "xy": [-88.6, 127.0],
+      "localErrM": 32.6,
+      "radiusM": 60.0,
+      "lonlat": [75.702269, 31.2544489]
+    },
+    "21": {
+      "uv": [1276, 740],
+      "uvBase": [1276, 770],
+      "xy": [-184.7, -71.0],
+      "localErrM": 34.8,
+      "radiusM": 60.0,
+      "lonlat": [75.7012592, 31.2526577]
+    },
+    "25": {
+      "uv": [1123, 792],
+      "uvBase": [1123, 822],
+      "xy": [-35.3, -90.0],
+      "localErrM": 39.9,
+      "radiusM": 60.0,
+      "lonlat": [75.7028291, 31.2524858]
+    },
+    "26": {
+      "uv": [1098, 812],
+      "uvBase": [1098, 842],
+      "xy": [0.5, -82.0],
+      "localErrM": 40.7,
+      "radiusM": 61.0,
+      "lonlat": [75.7032053, 31.2525582]
+    },
+    "27": {
+      "uv": [1085, 837],
+      "uvBase": [1085, 867],
+      "xy": [34.5, -63.7],
+      "localErrM": 41.2,
+      "radiusM": 61.8,
+      "lonlat": [75.7035625, 31.2527237]
+    },
+    "28": {
+      "uv": [1057, 847],
+      "uvBase": [1057, 877],
+      "xy": [60.1, -66.9],
+      "localErrM": 42.0,
+      "radiusM": 62.9,
+      "lonlat": [75.7038315, 31.2526948]
+    },
+    "29": {
+      "uv": [1038, 865],
+      "uvBase": [1038, 895],
+      "xy": [88.8, -58.3],
+      "localErrM": 42.5,
+      "radiusM": 63.8,
+      "lonlat": [75.7041331, 31.2527726]
+    },
+    "30": {
+      "uv": [1005, 882],
+      "uvBase": [1005, 912],
+      "xy": [121.8, -57.4],
+      "localErrM": 43.4,
+      "radiusM": 65.1,
+      "lonlat": [75.7044799, 31.2527807]
+    },
+    "32": {
+      "uv": [977, 877],
+      "uvBase": [977, 907],
+      "xy": [127.7, -75.7],
+      "localErrM": 44.1,
+      "radiusM": 66.1,
+      "lonlat": [75.7045419, 31.2526152]
+    },
+    "33": {
+      "uv": [958, 850],
+      "uvBase": [958, 880],
+      "xy": [106.5, -110.9],
+      "localErrM": 44.4,
+      "radiusM": 66.5,
+      "lonlat": [75.7043191, 31.2522967]
+    },
+    "34": {
+      "uv": [920, 842],
+      "uvBase": [920, 872],
+      "xy": [110.6, -137.2],
+      "localErrM": 45.1,
+      "radiusM": 67.6,
+      "lonlat": [75.7043622, 31.2520588]
+    },
+    "35": {
+      "uv": [1003, 850],
+      "uvBase": [1003, 880],
+      "xy": [89.0, -89.3],
+      "localErrM": 43.3,
+      "radiusM": 65.0,
+      "lonlat": [75.7041352, 31.2524921]
+    },
+    "36": {
+      "uv": [967, 820],
+      "uvBase": [967, 850],
+      "xy": [72.6, -135.2],
+      "localErrM": 43.9,
+      "radiusM": 65.8,
+      "lonlat": [75.7039629, 31.2520769]
+    },
+    "37": {
+      "uv": [1007, 814],
+      "uvBase": [1007, 844],
+      "xy": [49.7, -122.0],
+      "localErrM": 43.0,
+      "radiusM": 64.4,
+      "lonlat": [75.7037222, 31.2521963]
+    },
+    "38": {
+      "uv": [1057, 805],
+      "uvBase": [1057, 835],
+      "xy": [15.6, -107.5],
+      "localErrM": 41.7,
+      "radiusM": 62.5,
+      "lonlat": [75.7033639, 31.2523275]
+    },
+    "41": {
+      "uv": [1070, 728],
+      "uvBase": [1070, 758],
+      "xy": [-72.0, -175.4],
+      "localErrM": 40.5,
+      "radiusM": 60.7,
+      "lonlat": [75.7024434, 31.2517132]
+    },
+    "42": {
+      "uv": [1112, 716],
+      "uvBase": [1112, 746],
+      "xy": [-109.3, -168.3],
+      "localErrM": 39.3,
+      "radiusM": 60.0,
+      "lonlat": [75.7020515, 31.2517775]
+    },
+    "43": {
+      "uv": [1158, 715],
+      "uvBase": [1158, 745],
+      "xy": [-138.5, -148.9],
+      "localErrM": 38.1,
+      "radiusM": 60.0,
+      "lonlat": [75.7017446, 31.251953]
+    },
+    "44": {
+      "uv": [1156, 669],
+      "uvBase": [1156, 699],
+      "xy": [-185.7, -193.9],
+      "localErrM": 37.5,
+      "radiusM": 60.0,
+      "lonlat": [75.7012487, 31.2515459]
+    },
+    "45": {
+      "uv": [1225, 581],
+      "uvBase": [1225, 611],
+      "xy": [-321.5, -247.8],
+      "localErrM": 34.1,
+      "radiusM": 60.0,
+      "lonlat": [75.6998217, 31.2510583]
+    },
+    "47": {
+      "uv": [1050, 651],
+      "uvBase": [1050, 681],
+      "xy": [-138.4, -256.3],
+      "localErrM": 39.6,
+      "radiusM": 60.0,
+      "lonlat": [75.7017457, 31.2509814]
+    },
+    "48": {
+      "uv": [984, 521],
+      "uvBase": [984, 551],
+      "xy": [-219.3, -399.0],
+      "localErrM": 38.0,
+      "radiusM": 60.0,
+      "lonlat": [75.7008956, 31.2496904]
+    },
+    "49": {
+      "uv": [1037, 521],
+      "uvBase": [1037, 551],
+      "xy": [-252.5, -377.9],
+      "localErrM": 37.4,
+      "radiusM": 60.0,
+      "lonlat": [75.7005467, 31.2498813]
+    },
+    "50": {
+      "uv": [1214, 396],
+      "uvBase": [1214, 426],
+      "xy": [-488.3, -415.0],
+      "localErrM": 31.8,
+      "radiusM": 60.0,
+      "lonlat": [75.6980689, 31.2495457]
+    },
+    "51": {
+      "uv": [973, 403],
+      "uvBase": [973, 433],
+      "xy": [-305.8, -499.8],
+      "localErrM": 36.0,
+      "radiusM": 60.0,
+      "lonlat": [75.6999866, 31.2487786]
+    },
+    "53": {
+      "uv": [551, 614],
+      "uvBase": [551, 644],
+      "xy": [10.7, -522.9],
+      "localErrM": 46.0,
+      "radiusM": 68.9,
+      "lonlat": [75.7033124, 31.2485696]
+    },
+    "54": {
+      "uv": [490, 583],
+      "uvBase": [490, 613],
+      "xy": [9.7, -576.3],
+      "localErrM": 46.1,
+      "radiusM": 69.2,
+      "lonlat": [75.7033019, 31.2480865]
+    },
+    "56": {
+      "uv": [346, 517],
+      "uvBase": [346, 547],
+      "xy": [21.7, -695.8],
+      "localErrM": 46.2,
+      "radiusM": 69.3,
+      "lonlat": [75.703428, 31.2470054]
+    },
+    "57": {
+      "uv": [263, 524],
+      "uvBase": [263, 554],
+      "xy": [57.0, -732.0],
+      "localErrM": 46.8,
+      "radiusM": 70.2,
+      "lonlat": [75.703799, 31.246678]
+    },
+    "58": {
+      "uv": [275, 465],
+      "uvBase": [275, 495],
+      "xy": [18.8, -769.3],
+      "localErrM": 45.5,
+      "radiusM": 68.3,
+      "lonlat": [75.7033976, 31.2463405]
+    }
+  }
+}
