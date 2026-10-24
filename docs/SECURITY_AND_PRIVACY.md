@@ -1,7 +1,13 @@
 # Security and privacy
 
-LPU Campus Atlas is a static, client-only app. It has no backend, no accounts, no analytics and no
-runtime third-party requests. That removes most server-side risk. The remaining risks are in the
+LPU Campus Atlas is mostly a static app: no public accounts, no analytics. It has a small server of
+its own (Cloudflare Pages Functions with D1) for the owner's published updates (`GET /api/locations`),
+public place suggestions (`POST /api/contributions/locations`) and the owner-only `/admin`; its
+security (authentication, CSRF, rate limits, audit) is specified in
+[COMMUNITY_MODULE_CONTRACTS.md](COMMUNITY_MODULE_CONTRACTS.md) and
+[ADMIN_OPERATIONS.md](ADMIN_OPERATIONS.md). The only runtime third-party requests are satellite
+imagery tiles, and only when a build configures an imagery provider
+([MAP_PROVIDER_CONFIGURATION.md](MAP_PROVIDER_CONFIGURATION.md)). The remaining risks are in the
 browser (content injection, unsafe links, storage), in the data pipeline (what is fetched and what is
 committed), and in the supply chain.
 
@@ -21,8 +27,10 @@ committed), and in the supply chain.
 | Third-party rights            | Redistributing LPU content                                                                         | Only names, titles and URLs are committed; HTML is cached only in the git-ignored `data/.cache/`                                                                                                                                                                                                                  |
 | Supply chain                  | A compromised or vulnerable dependency                                                             | Exact versions in `package.json`, a committed `package-lock.json`, `npm ci`, a small dependency set, `npm audit`                                                                                                                                                                                                  |
 
-Out of scope: a server compromise (there is no server), account takeover (there are no accounts),
-and hosting-provider security (see [DEPLOYMENT.md](DEPLOYMENT.md)).
+Out of scope here: the server and the owner account (see
+[COMMUNITY_MODULE_CONTRACTS.md](COMMUNITY_MODULE_CONTRACTS.md) and
+[ADMIN_OPERATIONS.md](ADMIN_OPERATIONS.md)) and hosting-provider security (see
+[DEPLOYMENT.md](DEPLOYMENT.md)).
 
 ## Content Security Policy and headers
 
@@ -30,9 +38,10 @@ and hosting-provider security (see [DEPLOYMENT.md](DEPLOYMENT.md)).
 
 ```text
 Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';
-  img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:;
-  child-src blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self';
-  form-action 'self'; object-src 'none'
+  img-src 'self' data: blob:; font-src 'self';
+  connect-src 'self' https://ibasemaps-api.arcgis.com https://tiles.maps.eox.at;
+  worker-src 'self' blob:; child-src blob:; manifest-src 'self'; frame-ancestors 'none';
+  base-uri 'self'; form-action 'self'; object-src 'none'
 Permissions-Policy: geolocation=(self), camera=(), microphone=()
 Referrer-Policy: strict-origin-when-cross-origin
 X-Content-Type-Options: nosniff
@@ -70,8 +79,9 @@ Certificates → HSTS) once the custom domain is final.
 2. **In memory only.** `GeoSample`s live in the Zustand nav slice and in the navigation and tracking
    objects. They are never written to local or session storage, IndexedDB, cookies, the URL or the
    service worker.
-3. **Never transmitted.** There is no backend. The CSP forbids other origins. Correction reports
-   explicitly exclude location and device data.
+3. **Never transmitted.** No request carries a location fix: not the satellite tiles, not the
+   owner's published updates, and not a place suggestion (which sends only the map point the user
+   chooses). Correction reports explicitly exclude location and device data.
 4. **Stopped when done.** `stop()` clears the browser watch id. Navigation, tracking and unmount all
    stop the watch. A one-shot "My location" releases the watch once the endpoint is set, unless
    location was already on.
@@ -109,11 +119,18 @@ Neither is cleared by "Clear all local data". Use the browser's "Clear site data
 
 Map preferences (3D mode, layer visibility, labels) are not persisted. They reset on reload.
 
-## No backend, no analytics
+## Requests and data the app sends
 
-- There are no cookies, tracking pixels, analytics SDKs, error reporters, fonts or tiles from other
-  origins, and no ads.
-- At runtime the app requests only its own origin: the app shell, `data/*` and `fonts/*`.
+- There are no tracking pixels, analytics SDKs, error reporters, fonts from other origins, or ads.
+  The only cookie is the owner's admin session (`__Host-atlas_session`, HttpOnly, Secure,
+  SameSite=Strict), set only on `/admin` sign-in in password mode.
+- At runtime the app requests its own origin (the app shell, `data/*`, `fonts/*` and the owner's
+  published updates at `/api/locations`) and, only in a build with an imagery provider configured,
+  satellite tiles from that provider's host (listed in `connect-src` above). Imagery tiles are never
+  cached by the service worker.
+- "Suggest a missing place" sends what the user typed and the chosen map point to this site's
+  server, for the owner to review. The server keeps no IP address: rate limits use a keyed hash of
+  it that changes with each counting window (`server/auth/rate-limit.ts`).
 - Two actions open another site, and only when the user chooses them: an external link (an official
   website, OpenStreetMap), and "Open prefilled report" when `VITE_CORRECTIONS_URL` is configured.
 

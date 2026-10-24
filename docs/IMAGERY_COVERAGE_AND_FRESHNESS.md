@@ -1,6 +1,10 @@
 # Imagery coverage and freshness at LPU
 
-**Status:** research record. **Nothing here is implemented.** **Date:** 2026-10-24.
+**Status:** research record, updated after implementation. **Date:** 2026-10-24. Under the owner's no-billing
+decision (2026-10-24) the app implements only free sources: Esri World Imagery (free ArcGIS Location Platform tier,
+key needed) and the EOX Sentinel-2 2016 backdrop (keyless, opt-in); see §7 and
+[`MAP_PROVIDER_CONFIGURATION.md`](MAP_PROVIDER_CONFIGURATION.md) §Free providers. The Google sections below are a
+record only: Google Map Tiles need billing and are not implemented.
 **Companion documents:** [`GOOGLE_EARTH_STYLE_MAP_ASSESSMENT.md`](GOOGLE_EARTH_STYLE_MAP_ASSESSMENT.md) and
 [`MAP_PROVIDER_CONFIGURATION.md`](MAP_PROVIDER_CONFIGURATION.md).
 
@@ -61,13 +65,13 @@ which returns capture metadata polygons, not imagery.
 
 ### 3.3 Terrain and building height sources
 
-| Source                        | Status at LPU                                                                                       | Evidence                                                                                                                                                                                                                                                              |
-| ----------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Copernicus DEM GLO-30         | 30 m **surface** model (includes buildings and trees); the LPU tile is public                       | [DOC] "a Digital Surface Model (DSM) which represents the surface of the Earth including buildings, infrastructure and vegetation" (https://registry.opendata.aws/copernicus-dem/). [MEASURED] `HEAD` on `Copernicus_DSM_COG_10_N31_00_E075_00_DEM.tif` returned 200. |
-| AWS Terrain Tiles (terrarium) | Available to z15 (z16 returns 404); source SRTM 30 m                                                | [MEASURED] `terrarium/15/23274/13392.png` 200, `terrarium/16/46549/26784.png` 404. [DOC] tilezen/joerd data-sources.md.                                                                                                                                               |
-| Relief inside campus          | **Unknown** (probably small; the campus is on the Punjab plain)                                     | [INFERRED]. To measure: decode the GLO-30 tile with GDAL in a scratch directory and compute min/max inside the boundary.                                                                                                                                              |
-| Our building heights          | **Estimates, not measurements**: 122 of 131 are floors × 3.2 m, 9 are a 6 m placeholder, 0 measured | [MEASURED] tally over `public/data/buildings.geojson`; `scripts/lib/height.ts:55-96`.                                                                                                                                                                                 |
-| Our building outlines         | OpenStreetMap snapshot retrieved 2026-10-23T09:39:00Z (ODbL)                                        | `public/data/manifest.json` `sources[0]`.                                                                                                                                                                                                                             |
+| Source                        | Status at LPU                                                                                       | Evidence                                                                                                                                                                                                                                                                                           |
+| ----------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Copernicus DEM GLO-30         | 30 m **surface** model (includes buildings and trees); the LPU tile is public                       | [DOC] "a Digital Surface Model (DSM) which represents the surface of the Earth including buildings, infrastructure and vegetation" (https://registry.opendata.aws/copernicus-dem/). [MEASURED] `HEAD` on `Copernicus_DSM_COG_10_N31_00_E075_00_DEM.tif` returned 200.                              |
+| AWS Terrain Tiles (terrarium) | Available to z15 (z16 returns 404); source SRTM 30 m                                                | [MEASURED] `terrarium/15/23274/13392.png` 200, `terrarium/16/46549/26784.png` 404. [DOC] tilezen/joerd data-sources.md.                                                                                                                                                                            |
+| Relief inside campus          | **≈4.7 m of ground-level variation** (≈0.3 % slope); surface range 26.5 m including buildings/trees | [MEASURED 2026-10-24] GLO-30 tile decoded in a scratch directory (geotiff.js, not GDAL), 1,080 pixels inside the boundary: min 222.5, p5 232.4, median 234.0, p95 242.2, max 249.1 m. Ground proxy (10th percentile per cell of a 3 × 3 grid): 231.2–235.9 m. Not visible in 3D; no terrain added. |
+| Our building heights          | **Estimates, not measurements**: 122 of 131 are floors × 3.2 m, 9 are a 6 m placeholder, 0 measured | [MEASURED] tally over `public/data/buildings.geojson`; `scripts/lib/height.ts:55-96`.                                                                                                                                                                                                              |
+| Our building outlines         | OpenStreetMap snapshot retrieved 2026-10-23T09:39:00Z (ODbL)                                        | `public/data/manifest.json` `sources[0]`.                                                                                                                                                                                                                                                          |
 
 ### 3.4 Date metadata each source exposes
 
@@ -186,14 +190,32 @@ These apply to every mode label, tooltip, attribution line, legend, announcement
 
 ## 6. Open items
 
-| Item                                           | How to close it                                                                             |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Photoreal 3D coverage at LPU                   | §4.1, then §4.3                                                                             |
-| Google 2D max zoom over campus                 | §4.2                                                                                        |
-| Esri capture footprint over the whole campus   | Closed 2026-10-24: centroid and 4 near-corner points all report the 2023-12-18 WV03 capture |
-| Esri metadata use from inside the app          | Ask Esri or read the Location Platform terms                                                |
-| MapTiler and Mapbox resolution and date at LPU | Inspect in the vendors' own viewers with free keys                                          |
-| Terrain relief inside campus                   | Decode GLO-30 locally with GDAL                                                             |
+| Item                                           | How to close it                                                                               |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Photoreal 3D coverage at LPU                   | §4.1, then §4.3                                                                               |
+| Google 2D max zoom over campus                 | §4.2                                                                                          |
+| Esri capture footprint over the whole campus   | Closed 2026-10-24: centroid and 4 near-corner points all report the 2023-12-18 WV03 capture   |
+| Esri metadata use from inside the app          | Not needed: the app shows the dated build-time record (§7), never a live metadata query       |
+| MapTiler and Mapbox resolution and date at LPU | Out of scope (no billing-free commercial tier)                                                |
+| Terrain relief inside campus                   | Closed 2026-10-24: ≈4.7 m ground variation, no terrain added (§3.3)                           |
+| Esri response when the free tier is exhausted  | Observe once on a real key; the app treats it as auth/quota/network and falls back either way |
+
+## 7. What the app shows (implemented 2026-10-24)
+
+| Provider                      | Where                                    | Date / freshness wording shown                                                                                                                                                                                                                                                                |
+| ----------------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Esri World Imagery            | Satellite 2D, Campus 3D (key configured) | "Esri World Imagery · not live · Powered by Esri"; inside the verified bbox (centroid + 4 near-corner points, §3.2): "Imagery captured 2023-12-18 according to Esri World Imagery Wayback metadata (retrieved 2026-10-24)."; elsewhere: "Capture date not verified for this part of the map." |
+| EOX Sentinel-2 cloudless 2016 | Satellite 2D only (opt-in, no Esri key)  | "EOX Sentinel-2 cloudless 2016 · not live", "10 m imagery — buildings not visible", "Sentinel-2 cloudless mosaic, 2016 (EOX)." — a mosaic year, never a capture date                                                                                                                          |
+| Photorealistic 3D             | never                                    | "Not available: no free photorealistic 3D source covers LPU." plus the billing explanation                                                                                                                                                                                                    |
+
+Rules §5.1, §5.3, §5.7 and §5.9 are applied in code (`src/map/providers/esri.ts`, `eox.ts`, `attribution.ts`,
+`types.ts`) and checked by unit tests. The date record is static: if Esri replaces the imagery, the sentence stays true
+only as "according to … (retrieved 2026-10-24)"; re-run the metadata query and update `ESRI_IMAGERY_DATE` when
+checking again.
+
+[MEASURED 2026-10-24, curl, bodies discarded] Esri's tile endpoint answers a request without a token with HTTP 200
+`text/plain` ("Token Required", code 499) and answered a request with a malformed token normally (HTTP 200
+`image/jpeg`); see `MAP_PROVIDER_CONFIGURATION.md` §Esri for how the app detects key problems.
 
 ## Sources
 
@@ -218,3 +240,9 @@ All retrieved 2026-10-24.
 - https://planetarycomputer.microsoft.com/api/stac/v1/collections
 - https://bhuvan.nrsc.gov.in/home/terms.php
 - https://registry.opendata.aws/copernicus-dem/ and https://registry.opendata.aws/terrain-tiles/
+- https://developers.arcgis.com/maplibre-gl-js/maps/raster-tile-basemaps/display-multiple-basemap-layers/ (World
+  Imagery tile URL and token parameter); https://developers.arcgis.com/rest/static-basemap-tiles/
+- https://cloudless.eox.at/documentation/faq (re-checked; 2016 terms) and
+  https://tiles.maps.eox.at/wmts/1.0.0/WMTSCapabilities.xml (layer `s2cloudless_3857`)
+- https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N31_00_E075_00_DEM/Copernicus_DSM_COG_10_N31_00_E075_00_DEM.tif
+  (downloaded to a scratch directory only; not in the repo)

@@ -8,7 +8,8 @@
  *   5. unknown path 404 / wrong method 405 / malformed id 400
  *   6. mutating: same-origin Origin (403 csrf), password mode X-CSRF-Token
  *   7. authorization (permission)           → 403
- *   8. handler: JSON content type (415), body ≤ 32 KB (413), schema (400)
+ *   8. handler: JSON content type (415), body ≤ 32 KB (413), schema (400);
+ *      these body rejections are audited as 'rejected' for the actor
  */
 import { authenticate } from '../../auth/authenticate.ts';
 import { authorize } from '../../auth/authorize.ts';
@@ -74,7 +75,16 @@ export async function handleAdmin(request: Request, deps: HandlerDeps): Promise<
       authorize(actor, match.route.handler.permission!);
     }
 
-    const ctx = new AdminCtx({ request, params: match.params, env, db, deps, now, actor });
+    const ctx = new AdminCtx({
+      request,
+      params: match.params,
+      env,
+      db,
+      deps,
+      now,
+      actor,
+      audit: match.route.handler.audit,
+    });
     res = await match.route.handler.run(ctx);
   } catch (err) {
     res = errorResponse(err, {

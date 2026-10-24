@@ -98,3 +98,21 @@ describe('PRIVACY_FACTS', () => {
     for (const word of ['favourites', 'recent', 'settings', 'session storage']) expect(text).toContain(word);
   });
 });
+
+describe('PRIVACY_FACTS', () => {
+  const all = () => privacy.PRIVACY_FACTS.map((f) => `${f.title} ${f.detail}`).join(' ');
+
+  it('never claims the site has no server: suggestions and published updates come from it', () => {
+    expect(all()).not.toMatch(/no server/i);
+    expect(all()).toContain('owner’s published updates');
+  });
+
+  it('says what a suggestion sends, that it is reviewed, and how the IP address is (not) kept', () => {
+    const fact = privacy.PRIVACY_FACTS.find((f) => f.id === 'suggestions');
+    expect(fact?.detail).toContain('sends only what you type and the map point you choose');
+    expect(fact?.detail).toContain('site owner reviews it');
+    expect(fact?.detail).toContain('location fix is never attached');
+    expect(fact?.detail).toContain('one-way hash of your IP address');
+    expect(fact?.detail).toContain('the address itself is not stored');
+  });
+});

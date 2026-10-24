@@ -89,8 +89,21 @@ import { resolveTemplateDefinition } from './templates.ts';
 /** Honest label for a building without a name (never an invented name). */
 export const UNNAMED_STUDIO_TITLE = 'Unnamed building (owner-placed model)';
 
-/** Max serialized size of the before-snapshot a permanent delete keeps in the audit log. */
-const DELETE_SNAPSHOT_MAX_BYTES = 1_500_000;
+/** Max serialized size (UTF-8 bytes) of the before-snapshot a permanent delete keeps in the audit log. */
+export const DELETE_SNAPSHOT_MAX_BYTES = 1_500_000;
+
+const utf8 = new TextEncoder();
+
+/**
+ * Whether a permanent-delete before-snapshot fits in one audit row. Measured
+ * in UTF-8 BYTES of the stored JSON (what D1 stores and limits), not UTF-16
+ * code units: Devanagari or Gurmukhi text takes 3 bytes per code unit, so a
+ * `.length` check would let a snapshot of up to 3× the limit through to an
+ * audit write D1 refuses (and the delete would fail late, after validation).
+ */
+export function deleteSnapshotFits(snapshot: unknown, maxBytes: number = DELETE_SNAPSHOT_MAX_BYTES): boolean {
+  return utf8.encode(JSON.stringify(snapshot)).byteLength <= maxBytes;
+}
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -127,6 +140,27 @@ const buildingAudit = (
 async function buildingConflict(db: SqlDatabase, id: string): Promise<never> {
   const latest = (await getStudioBuildingRow(db, id)) ?? notFound('Studio building', id);
   return conflict('This building', toHead(latest));
+}
+
+/**
+ * 409 after a guarded publish/restore batch wrote nothing. Two causes, one
+ * code ('conflict', `details.current` = the head):
+ *  - the head changed (another write moved its revision) → the usual message;
+ *  - the head is UNCHANGED but publication_version moved since validation
+ *    (another building was published, archived or restored, or a location or
+ *    override changed), so the validation ran against a stale published set.
+ *    The message says so: the caller's revision is still current, and the
+ *    same request can be retried after re-validating.
+ */
+async function guardedWriteConflict(db: SqlDatabase, row: StudioBuildingRow): Promise<never> {
+  const latest = (await getStudioBuildingRow(db, row.id)) ?? notFound('Studio building', row.id);
+  if (latest.revision !== row.revision || latest.status !== row.status)
+    return conflict('This building', toHead(latest));
+  return fail(
+    'conflict',
+    'The published map changed while this building was being validated (another change was published). Nothing was saved; your revision is still current, so validate again and retry.',
+    { details: { current: toHead(latest) } },
+  );
 }
 
 /** Loads a head and enforces the optimistic revision (409 with the current head). */
@@ -196,11 +230,37 @@ export function changedPaths(a: unknown, b: unknown, prefix = ''): string[] {
 const placement = (d: StudioDraft | null) =>
   d ? { anchor: d.model.anchor, rotationDeg: d.model.rotationDeg } : null;
 
-/** Accuracy class of the template a model came from; a custom model is an illustrative 'generic-prefab'. */
-async function accuracyClassFor(db: SqlDatabase, ctx: StudioContext, d: StudioDraft): Promise<AccuracyClass> {
-  if (!d.templateRef) return 'generic-prefab';
-  const t = await resolveTemplateDefinition(db, ctx, d.templateRef);
-  return t?.accuracyClass ?? 'generic-prefab';
+/** Classes an owner (D1) template may carry (S3): never presented as evidence-backed. */
+const OWNER_TEMPLATE_CLASSES: ReadonlySet<AccuracyClass> = new Set(['generic-prefab', 'stylized']);
+
+/**
+ * The public accuracy class, derived on the server from the STORED template
+ * version (code library or D1), never from anything the client asserts. The
+ * draft's `templateRef` is only a pointer; it counts only when it is
+ * consistent with the model being published:
+ *  - the template version exists (D1 row or code library entry);
+ *  - it defines the named variant;
+ *  - it builds with the model's own generator id AND version.
+ * Otherwise — a custom model, a spoofed or stale ref, a ref to a template of a
+ * different generator — the class is the most modest one, 'generic-prefab'.
+ * An owner template's stored class is additionally capped at
+ * generic-prefab | stylized (S3), whatever its stored JSON says.
+ */
+export async function accuracyClassFor(
+  db: SqlDatabase,
+  ctx: StudioContext,
+  d: StudioDraft,
+): Promise<AccuracyClass> {
+  const ref = d.templateRef;
+  if (!ref) return 'generic-prefab';
+  const t = await resolveTemplateDefinition(db, ctx, ref);
+  if (!t || t.id !== ref.templateId || t.version !== ref.templateVersion) return 'generic-prefab';
+  if (!t.variants.some((v) => v.id === ref.variantId)) return 'generic-prefab';
+  if (t.generatorId !== d.model.generatorId || t.generatorVersion !== d.model.generatorVersion)
+    return 'generic-prefab';
+  if (OWNER_TEMPLATE_ID_RE.test(t.id) && !OWNER_TEMPLATE_CLASSES.has(t.accuracyClass))
+    return 'generic-prefab';
+  return t.accuracyClass;
 }
 
 async function detailOf(
@@ -562,12 +622,15 @@ export async function publishStudioBuilding(
     };
     const publicRecord = toPublishedStudioBuilding(
       {
-        ...versionRow,
+        buildingId: id,
+        version,
         record: draft,
         footprint: run.footprint.footprint,
+        footprintAreaM2: versionRow.footprintAreaM2,
         membership,
-        validation: run.result,
-        acknowledgements: acks,
+        accuracyClass: versionRow.accuracyClass,
+        positionCorrected: versionRow.positionCorrected,
+        publishedAt: now,
       },
       row.targetId,
     );
@@ -617,7 +680,8 @@ export async function publishStudioBuilding(
       bumpPublicationStmt(db, now, { sql: GUARD_AFTER_CHANGE }),
     ];
     const [audit, ins, upd] = await db.batch(statements);
-    if (changes(upd) !== 1 || changes(ins) !== 1 || changes(audit) !== 1) return buildingConflict(db, id);
+    if (changes(upd) !== 1 || changes(ins) !== 1 || changes(audit) !== 1)
+      return guardedWriteConflict(db, row);
     const [building, state] = await Promise.all([reload(db, ctx, id), getPublicationState(db)]);
     return { building, publicationVersion: state.version };
   });
@@ -707,7 +771,7 @@ export async function restoreStudioBuilding(
       restoreStmt(db, id, row.revision, to, actor, now, { sql: GUARD_AFTER_CHANGE }),
       ...(to === 'published' ? [bumpPublicationStmt(db, now, { sql: GUARD_AFTER_CHANGE })] : []),
     ]);
-    if (changes(upd) !== 1 || changes(audit) !== 1) return buildingConflict(db, id);
+    if (changes(upd) !== 1 || changes(audit) !== 1) return guardedWriteConflict(db, row);
     const [building, state] = await Promise.all([reload(db, ctx, id), getPublicationState(db)]);
     return { building, publicationVersion: state.version };
   });
@@ -733,7 +797,7 @@ export async function deleteStudioBuilding(
       });
     const versions = await listStudioVersionRows(db, id);
     const before = { head: toHead(row), draft: row.draft, versions };
-    if (JSON.stringify(before).length > DELETE_SNAPSHOT_MAX_BYTES)
+    if (!deleteSnapshotFits(before))
       fail(
         'invalid',
         'This building has too much history to keep in one audit snapshot; it was not deleted.',

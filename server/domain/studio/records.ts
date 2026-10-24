@@ -14,7 +14,11 @@ import {
   type StudioMembership,
   type StudioPublishedVersion,
 } from '../../../src/building-studio/schema.ts';
-import type { StudioBuildingRow, StudioVersionRow } from '../../db/studio-buildings.ts';
+import type {
+  PublishedStudioVersionRow,
+  StudioBuildingRow,
+  StudioVersionRow,
+} from '../../db/studio-buildings.ts';
 
 /** Stored draft → StudioDraft, or null when it no longer parses with this build's schema. */
 export function readDraft(stored: unknown): StudioDraft | null {
@@ -70,7 +74,7 @@ export function toPublishedVersion(v: StudioVersionRow): StudioPublishedVersion 
  * public schema is not published (null).
  */
 export function toPublishedStudioBuilding(
-  v: StudioVersionRow,
+  v: PublishedStudioVersionRow,
   targetId: string | null,
 ): PublishedStudioBuilding | null {
   const rec = (typeof v.record === 'object' && v.record !== null ? v.record : {}) as Record<string, unknown>;

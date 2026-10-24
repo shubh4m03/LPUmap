@@ -12,6 +12,11 @@
  * publication_version in the same batch, so the ETag stays exact. The list
  * does not depend on the base dataset (a record whose base target vanished is
  * reported as an orphan by the client merge and the admin quality view).
+ *
+ * All four reads run in ONE db.batch (a D1 transaction), so the body is a
+ * consistent snapshot: its rows always belong to its publicationVersion and
+ * a write landing mid-read can never pair new rows with an old version (or
+ * the reverse), which would make the ETag lie.
  */
 import {
   PUBLICATION_SCHEMA_VERSION,
@@ -19,23 +24,35 @@ import {
   publishedOverrideSchema,
   type Publication,
 } from '../../src/community/schema.ts';
-import { listLocationRows } from '../db/locations.ts';
-import { getPublicationState } from '../db/meta.ts';
-import { listOverrideRows } from '../db/overrides.ts';
-import { toPublishedLocation, toPublishedOverride } from '../db/records.ts';
-import { listPublishedStudioVersions } from '../db/studio-buildings.ts';
+import { activeLocationsStmt } from '../db/locations.ts';
+import { getPublicationState, publicationStateStmt, toPublicationState } from '../db/meta.ts';
+import { listOverridesStmt } from '../db/overrides.ts';
+import { rowToLocation, rowToOverride, toPublishedLocation, toPublishedOverride } from '../db/records.ts';
+import { publishedStudioVersionsStmt, rowToPublishedStudioVersion } from '../db/studio-buildings.ts';
 import type { SqlDatabase } from '../db/types.ts';
 import { toPublishedStudioBuilding } from './studio/records.ts';
 
 const byString = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 
+/**
+ * The current publication version alone (one indexed read): lets
+ * GET /api/locations answer If-None-Match with 304 before building the body.
+ */
+export async function getPublicationVersion(db: SqlDatabase): Promise<number> {
+  return (await getPublicationState(db)).version;
+}
+
 export async function getPublication(db: SqlDatabase): Promise<Publication> {
-  const [state, locations, overrides, studio] = await Promise.all([
-    getPublicationState(db),
-    listLocationRows(db, { status: 'active' }),
-    listOverrideRows(db),
-    listPublishedStudioVersions(db),
+  const [stateRes, locationRes, overrideRes, studioRes] = await db.batch([
+    publicationStateStmt(db),
+    activeLocationsStmt(db),
+    listOverridesStmt(db),
+    publishedStudioVersionsStmt(db),
   ]);
+  const state = toPublicationState(stateRes?.results ?? []);
+  const locations = (locationRes?.results ?? []).map(rowToLocation);
+  const overrides = (overrideRes?.results ?? []).map(rowToOverride);
+  const studio = (studioRes?.results ?? []).map(rowToPublishedStudioVersion);
   // Every record is re-checked against the public schema; a row that would not validate is never published.
   const pubLocations = locations
     .map(toPublishedLocation)

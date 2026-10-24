@@ -11,12 +11,16 @@ export const HASHED_ASSET_RE = /^assets\/[^/]+-[A-Za-z0-9_-]{8,}\.(?:js|mjs|css)
 /**
  * Credential-looking patterns that must never ship. Deliberately broad: a
  * false positive is investigated by a human, a false negative leaks a key.
+ * The api-key rule needs a string literal after the name: an identifier or a
+ * type annotation (`apiKey: string`, `VITE_ARCGIS_API_KEY:void 0` in a build
+ * without the optional imagery key) cannot hold a secret, but any embedded
+ * value (`apiKey: "…"`, `API_KEY = '…'`) is still flagged.
  */
 export const SECRET_PATTERNS: readonly RegExp[] = [
   /AKIA[0-9A-Z]{16}/,
   /sk_live_[0-9A-Za-z]+/,
   /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
-  /api[_-]?key\s*[:=]/i,
+  /api[_-]?key\s*[:=]\s*["'`]/i,
 ];
 
 const BINARY_EXT_RE = /\.(?:png|jpe?g|gif|webp|avif|ico|pbf|woff2?|ttf|otf)$/i;

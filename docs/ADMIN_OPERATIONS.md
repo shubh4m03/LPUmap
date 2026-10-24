@@ -112,6 +112,14 @@ Locally, copy `.dev.vars.example` to `.dev.vars` (git-ignored) and fill it.
 
 - `PUBLIC_ORIGIN` — extra allowed `Origin` for admin writes (e.g. the custom
   domain when the request host differs). https only.
+- `ADMIN_LOGIN_GLOBAL_LIMIT` (added 2026-10-24, password mode) — an integer
+  1–100000: the most password-login attempts accepted from **all** clients
+  together per login window (15 minutes), on top of the per-client limit
+  (5 per window). Unset means no global cap. Any other value is ignored and
+  named in the env warnings. Trade-off: during a distributed guessing attack
+  the cap also locks the owner out until the window ends; it bounds the
+  number of guesses, not availability. A client already over its own limit
+  does not use up the global budget.
 
 ### 1.3 Verify
 
@@ -171,8 +179,9 @@ accessPoint?}` — absent fields are kept, `null` clears an optional field,
   `note` is private. `DELETE /api/admin/overrides/:targetId {revision}`
   reverts the place to its base values.
 - Every public change bumps `publication_version`; `GET /api/locations`
-  answers with `ETag: W/"pub-<n>"` and `Cache-Control: no-cache`, so visitors
-  see the change on their next load.
+  answers with `ETag: W/"pub-v<schema>-<n>"` (for example `W/"pub-v2-17"`;
+  amended 2026-10-24: the publication schema version is part of the tag) and
+  `Cache-Control: no-cache`, so visitors see the change on their next load.
 
 ## 4. Hiding vs deleting
 
@@ -246,7 +255,7 @@ npx wrangler d1 execute lpu-atlas --remote --command   "UPDATE meta SET value = 
 A restore rewinds **everything**, including the audit log and
 `publication_version`. Keep the pre-restore export so later legitimate
 changes can be re-applied by hand. The last step matters: the public ETag is
-`W/"pub-<publication_version>"`, so after a rewind the next edits would reuse
+`W/"pub-v<schema>-<publication_version>"`, so after a rewind the next edits would reuse
 version numbers that browsers already hold for _different_ content and get a
 false `304 Not Modified`. Setting the version above anything served before
 the restore makes every client fetch the restored layer. Prefer §6.1 for

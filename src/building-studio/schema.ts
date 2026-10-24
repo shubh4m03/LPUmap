@@ -33,10 +33,10 @@ import {
   isHttpUrl,
   isProhibitedSourceUrl,
   line,
+  nameLine,
   PROHIBITED_SOURCE_MESSAGE,
   provenanceLine,
   provenanceText,
-  text,
 } from './text.ts';
 
 // ---------------------------------------------------------------------------
@@ -429,7 +429,7 @@ export function modelSupport(model: unknown): ModelSupport {
 // ---------------------------------------------------------------------------
 
 const aliasesSchema = z
-  .array(line(STUDIO_LIMITS.alias.max).pipe(z.string().min(STUDIO_LIMITS.alias.min)))
+  .array(nameLine(STUDIO_LIMITS.alias.max).pipe(z.string().min(STUDIO_LIMITS.alias.min)))
   .max(STUDIO_LIMITS.maxAliases)
   .refine((a) => new Set(a.map((s) => s.toLocaleLowerCase('en'))).size === a.length, {
     message: 'Aliases must be unique',
@@ -437,13 +437,14 @@ const aliasesSchema = z
 
 export const studioIdentitySchema = z.strictObject({
   /** null = no name. Never invent one; the UI shows an honest label instead. */
-  name: blankToNull(line(STUDIO_LIMITS.name.max).pipe(z.string().min(STUDIO_LIMITS.name.min))),
+  name: blankToNull(nameLine(STUDIO_LIMITS.name.max).pipe(z.string().min(STUDIO_LIMITS.name.min))),
   aliases: aliasesSchema,
   categoryId: studioCategoryIdSchema,
   subtype: blankToNull(line(STUDIO_LIMITS.subtype)),
-  description: blankToNull(text(STUDIO_LIMITS.description)),
-  /** PRIVATE owner notes: never published, never in the public payload. */
-  notes: blankToNull(text(STUDIO_LIMITS.notes)),
+  /** Public free text that can cite a source: the prohibited-source rule applies (S6). */
+  description: blankToNull(provenanceText(STUDIO_LIMITS.description)),
+  /** PRIVATE owner notes: never published, never in the public payload. Can cite sources, so S6 applies. */
+  notes: blankToNull(provenanceText(STUDIO_LIMITS.notes)),
   /** false → drawn and selectable on the map, but not listed in the directory or search. */
   directoryVisible: z.boolean(),
 });
@@ -576,15 +577,15 @@ export const templateConstraintsSchema = z.strictObject({
 
 export const templateVariantSchema = z.strictObject({
   id: variantIdSchema,
-  name: line(STUDIO_LIMITS.templateName.max).pipe(z.string().min(STUDIO_LIMITS.templateName.min)),
-  description: blankToNull(text(STUDIO_LIMITS.intendedUse)),
+  name: nameLine(STUDIO_LIMITS.templateName.max).pipe(z.string().min(STUDIO_LIMITS.templateName.min)),
+  description: blankToNull(provenanceText(STUDIO_LIMITS.intendedUse)),
   defaults: modelDefaultsSchema,
 });
 
 const templateBodyShape = {
-  name: line(STUDIO_LIMITS.templateName.max).pipe(z.string().min(STUDIO_LIMITS.templateName.min)),
+  name: nameLine(STUDIO_LIMITS.templateName.max).pipe(z.string().min(STUDIO_LIMITS.templateName.min)),
   libraryCategory: libraryCategorySchema,
-  intendedUse: line(STUDIO_LIMITS.intendedUse).pipe(z.string().min(3)),
+  intendedUse: provenanceLine(STUDIO_LIMITS.intendedUse).pipe(z.string().min(3)),
   suggestedCategoryId: studioCategoryIdSchema,
   generatorId: generatorIdSchema,
   generatorVersion: z.number().int().positive(),
@@ -921,7 +922,7 @@ export const publishRequestSchema = z.strictObject({
 });
 export const archiveRequestSchema = z.strictObject({
   revision,
-  reason: blankToNull(line(STUDIO_LIMITS.archiveReason)),
+  reason: blankToNull(provenanceLine(STUDIO_LIMITS.archiveReason)),
 });
 export const restoreRequestSchema = z.strictObject({ revision, acknowledgements: acknowledgementsSchema });
 export const deleteStudioBuildingRequestSchema = z.strictObject({

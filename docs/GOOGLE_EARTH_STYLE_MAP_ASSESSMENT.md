@@ -1,6 +1,6 @@
 # Google Earth-style map: assessment and recommended architecture
 
-**Status:** research and design only (phases 1–2). **Nothing in this document is implemented.** **Date:** 2026-10-24.
+**Status:** research and design (phases 1–2), superseded in part by the owner decision of 2026-10-24 (no billing) — see the final section, "Owner decision 2026-10-24: no billing", for what was implemented. **Date:** 2026-10-24.
 **Scope:** the owner's request for a map that looks and moves like Google Earth (real satellite imagery,
 photorealistic 3D, smooth camera) with three modes (Satellite 2D, Photorealistic Earth 3D, Editable Campus 3D)
 plus the existing isometric overview.
@@ -731,3 +731,30 @@ updated 2026-10-21 UTC" unless noted.
 | Copernicus DEM licence; AWS registry                   | https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/Data/DEM/resources/license/License-COPDEM-30.pdf ; https://registry.opendata.aws/copernicus-dem/                                                                 |
 | AWS Terrain Tiles                                      | https://registry.opendata.aws/terrain-tiles/                                                                                                                                                                                    |
 | MapLibre style spec (sources)                          | https://maplibre.org/maplibre-style-spec/sources/                                                                                                                                                                               |
+
+---
+
+## Owner decision 2026-10-24: no billing
+
+**Decision (binding):** no billing account and free sources only. Google Map Tiles (2D satellite and Photorealistic
+3D Tiles) need a Google Cloud billing account, so nothing Google is implemented; Google Maps, Earth and Street View
+are never a data source. A 3D-tiles renderer may be added only if evidence justifies it; with no photorealistic
+source there is nothing to draw, so **no dependency was added** (D4 is moot). Decisions D1–D3, D5–D7 lapse with the
+Google modes. D8 is answered: Esri's free tier (key, pay-as-you-go off) and the EOX 2016 backdrop.
+
+| Item in this assessment                               | Status after the decision                                                                                                                                                                                                                                                                          |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| §7 provider layer in `src/map/providers/`             | **Implemented** in a smaller form: no `MapProvider` mount abstraction; one MapLibre map, imagery added as a raster source under our overlays (`imagery-layer.ts`), plus config, registry/capability, failure classification, attribution, camera helpers.                                          |
+| Satellite 2D (`google-satellite`)                     | **Implemented with free sources instead**: Esri World Imagery (`VITE_ARCGIS_API_KEY`) or the EOX Sentinel-2 2016 backdrop (`VITE_EOX_BACKDROP=true`, 10 m, zoom-capped, "buildings not visible"). Not configured → the option stays visible and says so.                                           |
+| Photorealistic Earth 3D (`google-photoreal`, deck.gl) | **Not implemented** (needs billing; LPU coverage likely terrain-only, §0.2). Shown as a permanently unavailable option with the reason; `?view=earth` is ignored.                                                                                                                                  |
+| Editable Campus 3D                                    | **Implemented**: our buildings and studio models, on Esri imagery when a key is set (neutral tones on imagery, no textures). The map-editing interface (`src/map/editing`) keeps working on every basemap (the Google-only editing ban of §4 does not apply to Esri/EOX; see the open item below). |
+| §7.6 camera                                           | **Implemented**: maxPitch 60 (MapLibre default, non-experimental), eased mode changes, "Back to campus" control.                                                                                                                                                                                   |
+| §7.8 capability detection, §7.9 fallback              | **Implemented**: build configuration, online/offline, one metadata probe (Esri), tile-error classification (auth/quota/network) → Campus map 2D with a toast and announcement; never a blank map.                                                                                                  |
+| §7.10 CSP, PWA, privacy                               | **Implemented**: `connect-src` adds exactly `https://ibasemaps-api.arcgis.com` and `https://tiles.maps.eox.at`; no runtime caching (tested, plus an e2e Cache Storage check); the privacy panel names the provider when one is configured.                                                         |
+| Terrain (§3.5 GLO-30 / AWS)                           | **Measured, not added**: ≈4.7 m ground variation across campus (`IMAGERY_COVERAGE_AND_FRESHNESS.md` §3.3).                                                                                                                                                                                         |
+| §9 phases A–F                                         | A, D, E (Google) dropped; B/C done in the reduced form above; F's docs updated (`MAP_PROVIDER_CONFIGURATION.md` §Free providers, `IMAGERY_COVERAGE_AND_FRESHNESS.md` §7, `.env.example`).                                                                                                          |
+
+Open items: whether ArcGIS Location Platform sign-up asks for a payment card (the help pages do not say);
+Esri's exact response once the free tier is used up; whether using Esri imagery as a visual reference while placing
+Building Studio models raises any Esri-terms question (the Studio records the owner's placement, never data copied
+from imagery; owner/legal to confirm). Details and sources: `MAP_PROVIDER_CONFIGURATION.md` §Free providers.

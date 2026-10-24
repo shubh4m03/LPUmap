@@ -10,7 +10,15 @@ import type { LngLat } from '../../data/schema.ts';
 import type { CorrectionKind } from '../../feedback/index.ts';
 import type { NavSlice } from './nav-types.ts';
 import type { RouteSlice } from './route-types.ts';
-import type { MapViewMode, ViewMode, ViewModeChangeReason } from '../view-mode.ts';
+import type { ImageryRuntime } from '../../map/providers/registry.ts';
+import type { ProviderRegistry } from '../../map/providers/types.ts';
+import type {
+  MapViewMode,
+  ResolvedViewMode,
+  ViewMode,
+  ViewModeAvailability,
+  ViewModeChangeReason,
+} from '../view-mode.ts';
 
 export type PanelId =
   | 'none'
@@ -24,7 +32,9 @@ export type PanelId =
   | 'info'
   | 'category'
   /** The building directory (docs/ISOMETRIC_AND_3D_DESIGN.md §7.5): the accessible list of every drawn building. */
-  | 'directory';
+  | 'directory'
+  /** "Suggest a missing place" (src/components/suggest): map placement + form; nothing is published by it. */
+  | 'suggest';
 export type OpenPanelId = Exclude<PanelId, 'none'>;
 
 /** What the correction dialog is about. `{}` = a general report not tied to a place. */
@@ -109,6 +119,21 @@ export interface MapSlice {
    * user-facing reason the switcher shows; only the overview is offered.
    */
   mapUnavailable: string | null;
+  /**
+   * Satellite / photorealistic availability with user-facing reasons, derived from this build's
+   * provider registry and `imageryRuntime` (src/map/providers). The switcher shows the reasons.
+   */
+  availability: ViewModeAvailability;
+  /** This build's map providers (src/map/providers/runtime.ts; injectable in tests). */
+  providers: ProviderRegistry;
+  /** Imagery trouble seen this session and online/offline. */
+  imageryRuntime: ImageryRuntime;
+  /**
+   * Records imagery trouble or recovery and recomputes `availability`. When the current mode can
+   * no longer be shown (Satellite 2D after an imagery failure) it moves to the fallback and
+   * returns it (announce `reason`); otherwise returns null.
+   */
+  setImageryRuntime(runtime: ImageryRuntime): ResolvedViewMode | null;
   /**
    * Derived, kept in sync by the slice: true iff viewMode === 'realistic3d'.
    * Kept for existing callers; new code reads viewMode.

@@ -86,13 +86,14 @@ describe('parseEnv', () => {
 
 describe('publication ETag', () => {
   it('uses weak comparison and supports lists and *', () => {
-    const e = publicationEtag(7);
-    expect(e).toBe('W/"pub-7"');
-    expect(etagMatches('W/"pub-7"', e)).toBe(true);
-    expect(etagMatches('"pub-7"', e)).toBe(true);
-    expect(etagMatches('W/"pub-6", W/"pub-7"', e)).toBe(true);
+    const e = publicationEtag(7, 2);
+    expect(e).toBe('W/"pub-v2-7"');
+    expect(etagMatches('W/"pub-v2-7"', e)).toBe(true);
+    expect(etagMatches('"pub-v2-7"', e)).toBe(true);
+    expect(etagMatches('W/"pub-v2-6", W/"pub-v2-7"', e)).toBe(true);
     expect(etagMatches('*', e)).toBe(true);
-    expect(etagMatches('W/"pub-70"', e)).toBe(false);
+    expect(etagMatches('W/"pub-v2-70"', e)).toBe(false);
+    expect(etagMatches('W/"pub-7"', e)).toBe(false);
     expect(etagMatches(null, e)).toBe(false);
   });
 });

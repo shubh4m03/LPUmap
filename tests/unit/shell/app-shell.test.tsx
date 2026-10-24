@@ -145,6 +145,22 @@ describe('App shell', () => {
     expect(useAppStore.getState().pickingOnMap).toBeNull();
   });
 
+  it('while picking, a place not connected to the paths explains itself in a toast and picking stays on', async () => {
+    renderApp();
+    await screen.findByTestId('mock-map');
+    act(() => useAppStore.getState().setPickingOnMap('destination'));
+    // osm:node/6 (Synthetic Bank) has a position but no validated path node.
+    act(() => mapProps.current!.onSelectPlace('osm:node/6'));
+    expect(
+      await screen.findByText(/“Synthetic Bank” is not connected to the mapped paths/),
+    ).toBeInTheDocument();
+    expect(useAppStore.getState()).toMatchObject({
+      pickingOnMap: 'destination',
+      destination: null,
+      selectedPlaceId: null,
+    });
+  });
+
   it('a ?place deep link selects and focuses the place', async () => {
     window.history.replaceState(null, '', '/?place=osm:node/6');
     renderApp();

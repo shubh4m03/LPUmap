@@ -52,6 +52,12 @@ export function MoreMenu({ className }: { className?: string }) {
             </li>
           ))}
           <li>
+            <button type="button" className={ROW} onClick={() => go(() => openPanel('suggest'))}>
+              <Icon name="plus" className="text-muted" />
+              Suggest a missing place
+            </button>
+          </li>
+          <li>
             <button type="button" className={ROW} onClick={() => go(() => openReport({}))}>
               <Icon name="flag" className="text-muted" />
               Report a correction

@@ -232,6 +232,98 @@ fixture buildings published. In all five viewports the custom WebGL2 layer was u
 last layer render of about 0.1 ms. This is a correctness check on a software renderer, not a
 frame-time measurement.
 
+## UI wave: admin, Building Studio, suggestions and map providers (2026-10-24)
+
+Measured by the integration lead on the same laptop (dataset `62e807e6d444`) from a production build
+of the integrated working tree, `npx vite build --outDir <scratch>` (not `dist/`, so the owner's
+preview was not touched), with **no imagery variables set**. Raw bytes on disk; gzip is level 9 from
+Node `zlib`. Rollup names a shared chunk after one of its modules, so some names below are not what
+the chunk mainly holds; the "Holds" column says what is in it (read from the source maps).
+
+| Chunk                    | Raw         | gzip      | Holds                                                             | Loaded                                   |
+| ------------------------ | ----------- | --------- | ----------------------------------------------------------------- | ---------------------------------------- |
+| `index-*.js` (entry)     | 261,438 B   | 83,270 B  | React DOM, app store, shell glue, provider registry (no MapLibre) | at start                                 |
+| `categories-*.js`        | 102,401 B   | 28,864 B  | Zod 4 and the category registry                                   | at start                                 |
+| `AppShell-*.js`          | 74,763 B    | 23,587 B  | layouts, panels, controls                                         | at start                                 |
+| `apply-publication-*.js` | 28,089 B    | 9,679 B   | owner publication merge                                           | at start                                 |
+| `services-*.js`          | 21,875 B    | 8,663 B   | search index, router, directory                                   | at start                                 |
+| `index-*.css`            | 116,473 B   | 19,358 B  | Tailwind output                                                   | at start                                 |
+| `MapView-*.js`           | 1,085,388 B | 294,788 B | MapLibre GL and the map view                                      | only in the map modes                    |
+| `MapStage-*.js`          | 6,704 B     | 2,833 B   | store wiring of the map                                           | only in the map modes                    |
+| `studio-*.js`            | 41,797 B    | 15,752 B  | **the isometric overview** (`src/isometric/**`; no `maplibre-gl`) | only in the overview                     |
+| `generate-*.js`          | 9,607 B     | 4,028 B   | procedural studio meshes                                          | with the overview or the studio layer    |
+| `runtime-*.js`           | 14,695 B    | 6,181 B   | WebGL2 custom layer for studio models                             | only when a studio model is drawn in 3D  |
+| `SuggestPanel-*.js`      | 13,362 B    | 4,603 B   | "Suggest a missing place"                                         | when the panel opens                     |
+| `DirectionsPanel-*.js`   | 16,672 B    | 5,753 B   | directions panel                                                  | when the panel opens                     |
+| `AdminApp-*.js`          | 28,983 B    | 10,011 B  | admin shell, session gate, API client                             | only on `/admin`                         |
+| `QueueSection-*.js`      | 19,980 B    | 6,523 B   | moderation queue                                                  | only on `/admin`                         |
+| `LocationsSection-*.js`  | 13,940 B    | 5,014 B   | locations editor                                                  | only on `/admin/locations`               |
+| `OverridesSection-*.js`  | 14,162 B    | 5,045 B   | base-place overrides                                              | only on `/admin/overrides`               |
+| `AuditSection-*.js`      | 4,087 B     | 1,918 B   | history                                                           | only on `/admin/audit`                   |
+| `QualitySection-*.js`    | 3,180 B     | 1,388 B   | quality warnings                                                  | only on `/admin/quality`                 |
+| `StudioSection-*.js`     | 123,796 B   | 36,263 B  | Building Studio UI                                                | only on `/admin/studio`                  |
+| `TemplatesSection-*.js`  | 11,772 B    | 3,898 B   | template library management                                       | only on `/admin/templates`               |
+| `controls-*.js`          | 31,242 B    | 10,045 B  | studio asset library, thumbnails, field helpers                   | only in the studio and templates screens |
+
+- **Admin isolation (checked in the built entry):** `index-*.js` contains none of `X-CSRF-Token`,
+  `/api/admin`, `Owner password`, `Moderation queue`, `Approve and publish` or `cdn-cgi/access`. The
+  admin adds about 1.4 kB of source to the entry (the lazy boundary and the path test).
+- **Entry growth:** 225,003 B at the earlier view-modes snapshot → 261,438 B now (+36 kB raw). The
+  source map attributes the entry's own code mostly to `src/app`, `src/components` and `src/map` (the
+  five-mode switcher, the provider registry, the imagery notice, return-to-campus and the shell glue);
+  it was not broken down further. No new npm dependency was added.
+- **Precache:** 96 files, 4.6 MiB (smoke). Imagery tiles are never precached or cached at runtime.
+- **Isometric chunk budget (≤ 25 kB gzip, no `maplibre-gl`):** 15,752 B gzip, no `maplibre` string —
+  within budget.
+
+### Isometric overview budgets (D8)
+
+The budgets are in [ISOMETRIC_AND_3D_DESIGN.md §9.1](ISOMETRIC_AND_3D_DESIGN.md#91-budgets) and are
+measured by `tests/perf/iso.perf.spec.ts` (`npx playwright test -c tests/perf/playwright.iso.config.ts --project=perf`,
+Chromium with CDP CPU throttling as the mid-range-phone proxy). The five runs recorded on 2026-10-24 on
+a **shared, loaded** machine are in
+[modules/isometric-overview.md](modules/isometric-overview.md) ("Measured results"):
+everything within budget except the full redraw at 4×, which was over its 25 ms p95 budget in 2 of 5
+runs (25.6 and 29.3 ms).
+
+One more run by the integration lead after this wave's changes (2026-10-24, same laptop, only idle
+preview servers of this session running; `test-results/perf/iso.json`):
+
+| Metric (budget)                                          | Result                      |
+| -------------------------------------------------------- | --------------------------- |
+| Scene build, unthrottled max (≤ 30 ms)                   | 6.5 ms                      |
+| Full redraw, unthrottled p95 (≤ 8 ms)                    | 1.5 ms                      |
+| Scene build at 4×, max (≤ 120 ms)                        | 74.8 ms                     |
+| Full redraw at 4×, p95 of 14 (≤ 25 ms)                   | 13.9 ms                     |
+| Gesture frames at 4× (p95 ≤ 20 ms; ≤ 2 % over 50 ms)     | p95 16.8 ms; 0 % over 50 ms |
+| Hit-test at 4×, max of 10 (≤ 1 ms)                       | **1.2 ms — over budget**    |
+| Mode switch → first frame at 4×, chunk cached (≤ 300 ms) | 151 ms                      |
+| JS heap growth after opening the overview (≤ 8 MB)       | 2.19 MB                     |
+
+The spec therefore failed on its soft hit-test assertion in this run (one sample of ten at 1.2 ms; the
+median was 0 ms at the timer's 0.1 ms resolution). Earlier runs measured 0.2–1.0 ms. One run on a
+shared laptop is not a verdict either way; re-measure on an idle machine.
+
+### 3D renderer bake-off
+
+The decision on how to draw owner-placed models in Realistic 3D (raw-WebGL2 custom layer, guarded,
+with fill-extrusion as the automatic fallback) and its measurements are in
+[research/renderer-bakeoff/REPORT.md](research/renderer-bakeoff/REPORT.md). In headless Chromium WebGL
+runs on SwiftShader (CPU), so its frame times are not device frame times.
+
+### Gaps (not measured)
+
+- **Device D8 is not measured.** No Realistic-3D frame time (rAF p95 ≤ 33 ms during a scripted camera
+  move) has been taken on a real mid-range Android phone; headless numbers are CPU-rendered and are
+  not a substitute. The bake-off's open condition (switch phones to the extrusion representation if
+  studio models push p95 over 33 ms) therefore remains open.
+- **Satellite imagery cost** (tile count, transfer, frame time with imagery under Campus 3D) is not
+  measured: no real key is configured, and the e2e runs answer every provider request with synthetic
+  tiles.
+- **Admin and Studio screens** have no performance budget; their chunk sizes above are the only
+  numbers.
+- Page-load timings in this file predate this wave and were not re-measured.
+
 ## How to reproduce
 
 The measurement scripts lived in the session's scratch directory, not in the repository. To repeat

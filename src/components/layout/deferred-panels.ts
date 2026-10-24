@@ -14,6 +14,7 @@ const loaders = {
   favorites: () => import('../favorites/FavoritesPanel.tsx').then((m) => ({ default: m.FavoritesPanel })),
   directions: () => import('../directions/DirectionsPanel.tsx').then((m) => ({ default: m.DirectionsPanel })),
   report: () => import('../report/ReportDialog.tsx').then((m) => ({ default: m.ReportDialog })),
+  suggest: () => import('../suggest/SuggestPanel.tsx').then((m) => ({ default: m.SuggestPanel })),
   navCard: () => import('../navigation/NavCard.tsx').then((m) => ({ default: m.NavCard })),
   trackingCard: () => import('../navigation/TrackingCard.tsx').then((m) => ({ default: m.TrackingCard })),
   trackingSummary: () =>
@@ -46,6 +47,7 @@ export const LazyCampusInfoPanel = lazyWithPreload(loaders.info);
 export const LazyFavoritesPanel = lazyWithPreload(loaders.favorites);
 export const LazyDirectionsPanel = lazyWithPreload(loaders.directions);
 export const LazyReportDialog = lazyWithPreload(loaders.report);
+export const LazySuggestPanel = lazyWithPreload(loaders.suggest);
 export const LazyNavCard = lazyWithPreload(loaders.navCard);
 export const LazyTrackingCard = lazyWithPreload(loaders.trackingCard);
 export const LazyTrackingSummaryDialog = lazyWithPreload(loaders.trackingSummary);
@@ -57,6 +59,7 @@ const DEFERRED = [
   LazyFavoritesPanel,
   LazyDirectionsPanel,
   LazyReportDialog,
+  LazySuggestPanel,
   LazyNavCard,
   LazyTrackingCard,
   LazyTrackingSummaryDialog,

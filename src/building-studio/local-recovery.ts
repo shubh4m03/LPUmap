@@ -100,6 +100,41 @@ export function loadRecovery(
   }
 }
 
+/** Storage that can also enumerate its keys (window.localStorage satisfies it). */
+export interface EnumerableRecoveryStorage extends RecoveryStorage {
+  readonly length: number;
+  key(index: number): string | null;
+}
+
+/**
+ * Removes EVERY stored Studio recovery entry of this browser (on admin
+ * logout, so unsaved drafts never outlive the session that made them).
+ * Returns how many entries were removed; 0 when storage is unavailable.
+ */
+export function clearAllRecovery(opts: { storage?: EnumerableRecoveryStorage | null } = {}): number {
+  let storage: EnumerableRecoveryStorage | null;
+  try {
+    storage =
+      opts.storage === undefined
+        ? ((globalThis as { localStorage?: EnumerableRecoveryStorage }).localStorage ?? null)
+        : opts.storage;
+  } catch {
+    return 0;
+  }
+  if (!storage) return 0;
+  try {
+    const keys: string[] = [];
+    for (let i = 0; i < storage.length; i++) {
+      const k = storage.key(i);
+      if (k !== null && k.startsWith(PREFIX)) keys.push(k);
+    }
+    for (const k of keys) storage.removeItem(k);
+    return keys.length;
+  } catch {
+    return 0;
+  }
+}
+
 /** Removes the stored draft (after a successful save, a discard or an explicit dismissal). */
 export function clearRecovery(key: string, opts: Pick<RecoveryOptions, 'storage'> = {}): void {
   const storage = opts.storage === undefined ? defaultStorage() : opts.storage;

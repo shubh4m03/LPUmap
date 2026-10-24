@@ -18,3 +18,7 @@ RATE_LIMIT_KEY=
 #
 # Optional extra allowed Origin for admin writes (e.g. the custom domain):
 # PUBLIC_ORIGIN=https://atlas.example.org
+#
+# Optional global cap on password-login attempts from all clients per 15-minute window
+# (integer 1-100000; unset = per-client limit only). See docs/ADMIN_OPERATIONS.md.
+# ADMIN_LOGIN_GLOBAL_LIMIT=30

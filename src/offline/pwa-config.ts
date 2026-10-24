@@ -74,8 +74,11 @@ export const pwaOptions: Partial<VitePWAOptions> = {
     // Workbox's defaults (utm_*, fbclid) are kept.
     ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^v$/],
     cacheId: APP_CONFIG.storage.prefix,
-    // No runtime caching: the app makes no third-party requests, and everything
-    // first-party is already in the versioned precache. The owner publication
+    // No runtime caching: everything first-party is already in the versioned precache,
+    // and third-party satellite imagery (ibasemaps-api.arcgis.com, tiles.maps.eox.at;
+    // src/map/providers) must never be cached or stored for offline use — Esri's terms
+    // forbid storing Data, and the atlas keeps one rule for every provider. With no
+    // route here the worker never touches those requests (tests/unit/map-providers). The owner publication
     // (/api/locations) is never handled here: the app fetches it network-first and keeps
     // its own last good copy (src/app/data/publication.ts); /api/admin/** is never cached.
     runtimeCaching: [],

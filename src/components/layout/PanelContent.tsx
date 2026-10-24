@@ -12,6 +12,7 @@ import {
   LazyDirectionsPanel,
   LazyFavoritesPanel,
   LazySettingsPanel,
+  LazySuggestPanel,
 } from './deferred-panels.ts';
 import { PanelSuspense } from './PanelSuspense.tsx';
 import { STATIC_TITLES } from './panel-titles.ts';
@@ -59,6 +60,12 @@ export function PanelBody({ panel }: { panel: PanelId }): ReactNode {
       return <CategoryPanel />;
     case 'directory':
       return <DirectoryPanel />;
+    case 'suggest':
+      return (
+        <PanelSuspense label="Loading the suggestion form…">
+          <LazySuggestPanel />
+        </PanelSuspense>
+      );
     case 'none':
       return null;
   }

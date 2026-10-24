@@ -21,13 +21,29 @@ export function loginRateRule(): RateRule {
   return { scope: 'admin:login', limit: r.perWindow, windowS: r.windowMinutes * 60 };
 }
 
+/**
+ * Login rate rules: the per-client limit first, then (when
+ * ADMIN_LOGIN_GLOBAL_LIMIT is set) one bucket shared by every client over the
+ * same window. A client already over its own limit stops at the first rule
+ * and does not consume the global budget.
+ */
+export function loginRateRules(globalLimit: number | null): RateRule[] {
+  const perClient = loginRateRule();
+  return globalLimit === null
+    ? [perClient]
+    : [
+        perClient,
+        { scope: 'admin:login:global', limit: globalLimit, windowS: perClient.windowS, global: true },
+      ];
+}
+
 export const loginRoute: AdminHandler = {
   permission: null,
   async run(c) {
     if (c.env.auth.mode !== 'password') throw new HttpError('not-found', 'Not found');
     const passwordHash = c.env.auth.passwordHash;
     checkSameOrigin(c.request, c.env.publicOrigin, { requireOrigin: true });
-    await enforceRateLimits(c.request, [loginRateRule()], {
+    await enforceRateLimits(c.request, loginRateRules(c.env.loginGlobalLimit), {
       db: c.db,
       repo: c.deps.services.rateLimits,
       salts: c.deps.services.salts,

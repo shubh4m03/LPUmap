@@ -47,6 +47,7 @@ export const domainAdapter: DomainPort = {
   listAudit: domain.listAudit,
 
   getPublication: domain.getPublication,
+  getPublicationVersion: domain.getPublicationVersion,
   getOverview: domain.getOverview,
   getQualityWarnings: domain.getQualityWarnings,
 };

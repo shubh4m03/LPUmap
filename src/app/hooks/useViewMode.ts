@@ -2,12 +2,13 @@ import { useEffect } from 'react';
 import { useAnnounce } from '../../accessibility/index.ts';
 import { carryCamera } from '../map-controller.ts';
 import { useAppStore } from '../store/index.ts';
+import { useImageryRuntimeSync } from './useImageryRuntime.ts';
 import {
   buildViewUrl,
+  deepLinkViewMode,
   isMapViewMode,
   locationSwitchAnnouncement,
   navigationSwitchAnnouncement,
-  parseViewParam,
   VIEW_PARAM,
 } from '../view-mode.ts';
 
@@ -31,14 +32,19 @@ export function writeViewParam(mode: Parameters<typeof buildViewUrl>[1]): void {
  *  - crossing between the overview and a map mode carries the camera (same
  *    ground point, equivalent scale) instead of re-flying to an old focus;
  *  - live navigation or live location started in the overview switches to the
- *    last map mode and says so (the overview has no live GPS, §8.2).
+ *    last map mode and says so (the overview has no live GPS, §8.2);
+ *  - imagery availability follows the connection (useImageryRuntimeSync).
  */
 export function useViewModeSync(): void {
   const announce = useAnnounce();
+  useImageryRuntimeSync();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.has(VIEW_PARAM) && parseViewParam(window.location.search) === null) writeViewParam(null);
+    // Unknown values and modes that are not available here are dropped from the URL.
+    const { availability } = useAppStore.getState();
+    if (params.has(VIEW_PARAM) && deepLinkViewMode(window.location.search, availability) === null)
+      writeViewParam(null);
   }, []);
 
   useEffect(

@@ -1,10 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
+import { ADMIN_PASSWORD_ENV, adminPassword, BACKEND_PORT, BACKEND_URL } from './tests/e2e/backend/config.ts';
 
 // Viewports required by docs/QA_STRATEGY.md. The suite runs against the
 // production build (vite preview) so the service worker and data files are
 // exercised exactly as deployed: run `npx vite build` first.
 // PW_PORT lets a run use its own preview server when another one already holds 4173.
 const PORT = Number(process.env.PW_PORT ?? 4173);
+// E2E_DIST serves a build from another directory (both servers), so a run never has to rebuild dist/.
+const PREVIEW_OUT_DIR = process.env.E2E_DIST ? ` --outDir "${process.env.E2E_DIST}"` : '';
 
 export default defineConfig({
   testDir: 'tests/e2e',
@@ -56,10 +59,22 @@ export default defineConfig({
       },
     },
   ],
-  webServer: {
-    command: `npx vite preview --port ${PORT} --strictPort`,
-    url: `http://localhost:${PORT}`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-  },
+  webServer: [
+    {
+      command: `npx vite preview --port ${PORT} --strictPort${PREVIEW_OUT_DIR}`,
+      url: `http://localhost:${PORT}`,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120000,
+    },
+    {
+      // The REAL server handlers over a fresh local in-memory D1 (tests/e2e/backend/server.ts),
+      // serving the same build, for the admin and suggestion specs. Password mode with a
+      // throwaway password generated for this run (never written to disk).
+      command: 'node tests/e2e/backend/server.ts',
+      url: `${BACKEND_URL}/api/health`,
+      reuseExistingServer: false,
+      timeout: 120000,
+      env: { [ADMIN_PASSWORD_ENV]: adminPassword(), E2E_BACKEND_PORT: String(BACKEND_PORT) },
+    },
+  ],
 });

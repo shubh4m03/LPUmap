@@ -22,6 +22,7 @@ instead.
 - [Campus data](#campus-data)
 - [Licensing of data](#licensing-of-data)
 - [Environment variables](#environment-variables)
+- [Admin setup](#admin-setup)
 - [Deployment](#deployment)
 - [Troubleshooting](#troubleshooting)
 - [Known limitations](#known-limitations)
@@ -36,17 +37,23 @@ listed under [Known limitations](#known-limitations).
 
 **Map**
 
-- A MapLibre GL map drawn entirely from the project's own GeoJSON: campus boundary, roads, paths,
-  green areas, water and building footprints. There are no third-party tiles and no API key. The map
+- A MapLibre GL map drawn from the project's own GeoJSON: campus boundary, roads, paths, green
+  areas, water and building footprints. By default there are no third-party tiles and no API key;
+  satellite imagery is optional (see [Map providers](#map-providers-free-sources-only)). The map
   glyphs (Noto Sans) are self-hosted.
-- Three view modes, chosen with the "View mode" switcher in the map controls or the `?view=3d|iso|2d`
-  deep link: **3D map** (extruded footprints), **Isometric overview** (a Canvas2D drawing of the
-  campus that needs no WebGL) and **2D map**. Selection, search, saved places and the planned route
-  are shared: switching keeps the selected building and opens on the same ground point. The app
-  starts in 3D on screens 768 px and wider and in 2D on phones. What a mode cannot do is said, never
-  hidden: live location and navigation use a map mode (starting either from the overview switches to
-  the last map mode and announces it), and the overview option is disabled with its reason while
-  live navigation runs.
+- Five view modes in one "View mode" switcher in the map controls (or the `?view=` deep link):
+  **Satellite map** (`satellite`), **Photorealistic 3D** (`earth`, always unavailable, see below),
+  **3D map** (`3d`: our buildings and owner-placed models, on satellite imagery when it is
+  configured), **Isometric overview** (`iso`: a Canvas2D drawing that needs no WebGL) and **2D map**
+  (`2d`). Selection, search, saved places and the planned route are shared: switching keeps the
+  selected building and opens on the same ground point. The app starts in 3D on screens 768 px and
+  wider and in 2D on phones. A mode that cannot be used stays visible with its reason (a toast and
+  an announcement when chosen), never hidden and never faked: Satellite without a configured free
+  source, Photorealistic 3D always, the overview during live navigation. Live location and
+  navigation use a map mode; starting either from the overview switches to the last map mode and
+  announces it. A deep link to an
+  unavailable mode is ignored and dropped from the URL. A "Back to campus" button appears whenever
+  the campus is off screen.
 - The 3D legend separates the height sources: measured heights (`height` tag, none in the current
   snapshot), heights estimated from `building:levels`, placeholder heights, and owner-placed models.
 - Layer groups (academic, residences, food, study, health, ATMs, sports, transport and others), a
@@ -84,7 +91,11 @@ listed under [Known limitations](#known-limitations).
 - Walking, cycling and step-free profiles, with a "shortest" or "least time" preference and up to
   two genuinely different alternatives. Each route has turn-by-turn steps and caveats: steps on the
   route, pushing a bike, a long off-network connector, unnamed paths, and "accessibility unverified".
-- Start and end points can be chosen by search, by tapping the map, or from "My location".
+- Start and end points can be chosen by search, by tapping the map, or from "My location". A place
+  that is not connected to the mapped paths cannot be a route endpoint (it is never snapped to the
+  nearest path): tapping it while choosing on the map says so and keeps picking on, its details
+  offer "Choose a nearby point on the map", and a failed route offers "Choose start/destination on
+  map". The chosen point is labelled as a picked point, never as the place.
 - Live navigation from device GPS: remaining distance and time, off-route detection, and arrival.
   Low-accuracy, stale and implausible fixes are filtered out. The map follows your position until
   you pan it, and "Follow" resumes it. When you are off route, "Recalculate from here" plans a new
@@ -118,7 +129,38 @@ listed under [Known limitations](#known-limitations).
   used and the app shows no error. Hosts with a single-page fallback answer quietly; a host that
   answers 404 instead leaves one network line in the browser console, which the app cannot suppress.
 
-There is no account for visitors, no analytics and no third-party request at runtime.
+- **Suggest a missing place** (menu, or a place's details): place a point on the map (click or
+  drag on desktop, a centre pin on phones, or "Use the map centre" from the keyboard), then give a
+  name, category and optional description, landmark and evidence link. It is sent to the owner's
+  moderation queue; "Submitted for review" appears only after the server confirms it, and nothing is
+  ever published without the owner's approval. Rate limits, an unsupported host and unknown
+  outcomes each get their own honest message.
+
+**Owner tools (`/admin`)**
+
+Only the site owner can open them (Cloudflare Access or a password session, see
+[Admin setup](#admin-setup)). The admin is a separate lazily loaded chunk: no admin code or text is
+in the public bundle.
+
+- **Moderation queue** with pending, needs-information, approved, rejected and duplicate tabs,
+  suggestion detail with the server's duplicate candidates, and the actions the server allows.
+  Approving creates a location; an access point is chosen explicitly from validated path nodes (or
+  none).
+- **Locations** editor on the map (add, edit, move, hide, restore, delete with a typed
+  confirmation), **base-place overrides** (rename, recategorise, hide, orphans with their reason),
+  **History** (field-level audit with revert) and **Quality** warnings.
+- **Building Studio** (`/admin/studio`): place, move, rotate and resize template buildings on the
+  map (desktop handles and numeric fields; on phones a centre reticle, step buttons and a bottom
+  sheet), edit identity, size, floors, roof and appearance, run the server's checks, acknowledge
+  warnings with a reason, save drafts and publish with a change summary. Unsaved, saved-draft,
+  published and archived states are always shown; crash recovery is kept in this browser and cleared
+  on sign-out. Archive, restore, duplicate and typed-confirmation delete are available, and existing
+  base buildings can be modelled through studio records. **Templates** (`/admin/templates`) manages
+  owner templates, versions and retirement. Published models are labelled "Illustrative model placed
+  by the site owner — not verified" unless they carry a cited source or survey.
+
+There is no account for visitors and no analytics. Without the optional satellite imagery there is
+no third-party request at runtime.
 
 ## Screenshots
 
@@ -155,7 +197,8 @@ npm run preview        # http://localhost:4173 (strict port)
 | `npm test`                 | All Vitest suites (unit + integration) in jsdom                                                                                                |
 | `npm run test:unit`        | `tests/unit` only                                                                                                                              |
 | `npm run test:integration` | `tests/integration` only (data pipeline on a synthetic snapshot and on the real committed snapshot)                                            |
-| `npm run test:e2e`         | Playwright against `vite preview` on port 4173, in five viewports (needs a prior `vite build`)                                                 |
+| `npm run test:e2e`         | Playwright against `vite preview` on port 4173 plus a local real-handler backend, in five viewports (needs a prior `vite build`)               |
+| `npm run test:server`      | Server suites (`vitest.server.config.ts`): handlers, domain, auth, studio and red-team tests on a local in-memory D1                           |
 | `npm run test:a11y`        | Only the Playwright specs tagged `@a11y` (axe checks)                                                                                          |
 | `npm run smoke`            | `scripts/smoke.ts`: checks the built `dist/` (HTML shell, web manifest, service worker, shipped dataset, a real search and route, secret scan) |
 | `npm run check`            | The full gate: `format:check` → `lint` → `typecheck` → `test` → `data:check` → `vite build` → `smoke` → `test:e2e`                             |
@@ -176,7 +219,11 @@ Load the app with `?e2e=1` to expose read-only test hooks: `window.__ATLAS_MAP__
 selection, route, layer and Realistic-3D state) and, in the overview, `window.__ATLAS_ISO__`. They
 never report user coordinates. See [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md).
 
-The e2e suite never talks to a live backend. Specs that need owner data enable the
+The e2e suite never talks to a live or remote backend. The admin, suggestion and Building Studio
+specs run the **real** server handlers locally (`tests/e2e/backend/server.ts`) over a fresh
+in-memory D1 with `migrations/*.sql` applied, in password mode with a throwaway password generated
+per run. Set `E2E_DIST=<dir>` to serve a build from another directory (both servers), so a test run
+never has to rebuild `dist/`. Other specs that need owner data enable the
 `syntheticPublication` option (`tests/e2e/fixtures/publication.ts`), which serves a clearly synthetic
 publication ("E2E fixture hall (synthetic)", a synthetic canteen, leaked draft/archived records that
 must never appear) through route interception; it is never shipped. Set `PW_PORT` to run the
@@ -235,6 +282,68 @@ See `.env.example`. **None is a secret**, and nothing needs to be set to build o
 | `VITE_CORRECTIONS_URL` | `src/feedback/report.ts`                               | An `https://` URL, such as a GitHub "new issue" URL. When set, the correction dialog offers "Open prefilled report". When empty or not https, reports can only be copied or downloaded |
 | `VITE_PUBLIC_SITE_URL` | Declared in `.env.example`                             | Reserved for canonical and Open Graph metadata. **The current code does not read it**, so setting it has no effect yet                                                                 |
 | `DATA_FETCH_CONTACT`   | `scripts/fetch-osm.ts`, `scripts/fetch-public-data.ts` | A contact e-mail or URL, sent in the data scripts' User-Agent as the OSM and Overpass usage policies ask. Required for live runs of `data:fetch-public`. Never shipped to the browser  |
+| `VITE_ARCGIS_API_KEY`  | `src/map/providers/`                                   | Optional free-tier ArcGIS key for Esri World Imagery. **Public once built**; put it only in `.env.local` (git-ignored) or the host's build settings, never in git. See below           |
+| `VITE_EOX_BACKDROP`    | `src/map/providers/`                                   | `true` adds the keyless EOX Sentinel-2 2016 backdrop (10 m, Satellite map only, when no Esri key is set). Empty = off                                                                  |
+
+The owner features need server-side settings (`AUTH_MODE` and friends) that are **not** `VITE_`
+variables and never reach the browser; see [Admin setup](#admin-setup).
+
+### Map providers (free sources only)
+
+**Owner decision (2026-10-24): no billing.** Google Map Tiles (2D satellite and Photorealistic 3D
+Tiles) need a Google Cloud billing account, so they are **not implemented**. The Photorealistic 3D
+option is always shown as unavailable with the reason (no billing-free provider; Google's 3D
+coverage at LPU is unverified and likely absent); it is never imitated with our own blocks. Google
+Maps, Earth and Street View are never a data source.
+
+- **Nothing set (default):** no third-party request; "Satellite map" says "Not configured".
+- **`VITE_ARCGIS_API_KEY`:** Esri World Imagery in Satellite map and under the 3D map. Create the key
+  in ArcGIS Location Platform with pay-as-you-go **off** (access stops at the free limit, no bill),
+  the Basemaps privilege only and referrer restrictions to your site. With a key the desktop start
+  view (3D map) contacts Esri at start-up. The capture date is shown only as Esri's published
+  metadata ("Imagery captured 2023-12-18 according to Esri World Imagery Wayback metadata (retrieved
+  2026-10-24)") and only over the area where it was checked; imagery is never called live.
+- **`VITE_EOX_BACKDROP=true`:** a keyless 10 m Sentinel-2 2016 backdrop for Satellite map only,
+  zoom-capped, with "10 m imagery — buildings not visible".
+- Attribution is always visible while imagery is drawn. Imagery tiles are never precached or cached
+  offline. A missing or refused key, an exhausted free tier or a network failure falls back to the
+  campus map with an explanation; there is never a blank screen.
+
+Details: [docs/MAP_PROVIDER_CONFIGURATION.md](docs/MAP_PROVIDER_CONFIGURATION.md); licences:
+[docs/GEODATA_SOURCES_AND_LICENSES.md §17](docs/GEODATA_SOURCES_AND_LICENSES.md#17-runtime-basemaps-and-elevation-free-sources-only).
+
+## Admin setup
+
+The owner tools run on Cloudflare Pages Functions (`functions/`, over `server/`) with a D1
+database. The public map does not need them. The full runbook is
+[docs/ADMIN_OPERATIONS.md](docs/ADMIN_OPERATIONS.md); in short:
+
+1. `npx wrangler d1 create lpu-atlas`, put the id in `wrangler.toml`, then apply
+   `migrations/0001_initial.sql` and `0002_building_studio.sql` with
+   `npx wrangler d1 migrations apply lpu-atlas --remote` (`npm run db:migrate:local` for local
+   development). Rollback is in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#d1-migrations-rollback).
+2. Choose **one** `AUTH_MODE`. Without it every `/api/admin/**` endpoint answers 503 (fail closed).
+   - `access` (recommended): a Cloudflare Access application over `/admin*` and `/api/admin/*`, plus
+     `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD` and `OWNER_EMAILS`.
+   - `password`: `npm run admin:hash-password`, then store the printed hash as the
+     `OWNER_PASSWORD_HASH` secret (`npx wrangler pages secret put OWNER_PASSWORD_HASH`). Add a
+     `RATE_LIMIT_KEY` secret of at least 32 random characters.
+3. Check `https://<host>/api/health` → `{"ok":true,"db":"ok","auth":"access"}` (or `"password"`),
+   then open `https://<host>/admin`.
+
+Locally: copy `.dev.vars.example` to `.dev.vars` (git-ignored), fill it, run
+`npm run db:migrate:local`, `npm run build` and `npx wrangler pages dev dist`. Secrets never go in
+git, `wrangler.toml` or a `VITE_` variable.
+
+**Using the Building Studio.** Open `/admin/studio` and sign in. Pick a template in the asset browser
+(search, categories, preview), place it by clicking the map, dragging or typing coordinates, then
+move, rotate or resize it with the handles or the numeric fields. The inspector edits identity,
+dimensions and floors, roof and appearance; the checks panel shows boundary, overlap and path
+problems with their reasons. "Save draft" keeps it on the server (and in local crash recovery until
+saved); "Publish" shows the change summary and every unresolved warning, which needs an
+acknowledgement with a reason. Published models appear in the 3D map, the isometric overview, search
+and the directory, always labelled as owner-placed. Archive hides a model and can be undone; delete
+needs the typed id.
 
 ## Deployment
 
@@ -246,7 +355,9 @@ The app is a static site: `dist/` after `npm run build`. The reference host is *
 
 `public/_headers` sets the Content Security Policy, the security headers and the cache rules.
 Settings, update behaviour, rollback and other hosts are covered in
-[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). The owner tools additionally need the Pages Functions, the
+D1 binding `DB` with migrations 0001 and 0002 applied, and `AUTH_MODE` (see
+[Admin setup](#admin-setup)); without them the site runs as a static map.
 
 ## Troubleshooting
 
@@ -302,6 +413,9 @@ from the OSM snapshot of 2026-10-23) and from the module reviews. The module doc
 data/            raw OSM snapshot, curated sourced records, JSON schemas (see data/README.md)
 docs/            architecture, plans, data sources, QA, security, deployment, performance, module docs
 public/          static files: _headers, generated data/, self-hosted fonts/, icons/
+functions/       Cloudflare Pages Functions (thin entry points over server/)
+server/          API handlers, domain logic (community, Building Studio, publication), auth, D1 access
+migrations/      D1 migrations 0001 (community) and 0002 (Building Studio); rollback in docs/db/
 scripts/         Node 24 TypeScript CLIs: fetch-osm, fetch-public-data, build-data, validate-data, smoke, generate-icons
   lib/           pipeline stages (parse, geometry, buildings, places, graph, relations, quality, validate)
 src/
@@ -313,7 +427,11 @@ src/
   navigation/    route progress and walk tracking
   search/        search index, normalisation, ranking, highlighting
   facilities/    directory, opening hours, nearest, relation checks
-  map/           MapView (MapLibre), style, layers, controller, e2e hook
+  map/           MapView (MapLibre), style, layers, controller, e2e hook; providers/ (free imagery), editing/ (map-editing contract)
+  isometric/     Canvas2D isometric overview
+  building-studio/  studio schema, mesh generator, validation, history, editor state, studio UI store
+  community/     publication and contribution schemas shared with the server
+  admin/         the lazily loaded /admin app: API client, session gate, sections, Building Studio UI
   buildings3d/   fill-extrusion layers, 2D/3D mode, WebGL2 probe
   favorites/ privacy/ feedback/ offline/   platform modules
   accessibility/ live region, focus trap, theme, media queries
@@ -325,28 +443,35 @@ tests/
   unit/          Vitest suites, one folder per module or UI area
   integration/   data pipeline end-to-end (synthetic and real snapshot)
   fixtures/      synthetic-* OSM and graph fixtures
-  e2e/           Playwright specs
+  server/        server suites on a local in-memory D1 (vitest.server.config.ts)
+  e2e/           Playwright specs; backend/ runs the real handlers locally for admin, suggest and studio specs
 ```
 
 ## Documentation
 
-| Document                                                                   | Topic                                                                                 |
-| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                               | System diagram, module boundaries, data flow, key decisions, extension points         |
-| [docs/MODULE_CONTRACTS.md](docs/MODULE_CONTRACTS.md)                       | Public interface of every module                                                      |
-| [docs/modules/](docs/modules/)                                             | One page per module: purpose, interface, invariants, tests, limitations               |
-| [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md)                 | The staged plan that was followed, with acceptance criteria                           |
-| [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md)                               | Every source, its licence and status, and what was looked for but not found           |
-| [docs/DATA_QUALITY_REPORT.md](docs/DATA_QUALITY_REPORT.md)                 | Generated by `data:build`: counts, gaps, survey priorities                            |
-| [docs/research/LPU_PUBLIC_SOURCES.md](docs/research/LPU_PUBLIC_SOURCES.md) | Every LPU page examined, `robots.txt` and terms findings                              |
-| [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md)                                 | Test pyramid, browser matrix, workflows, accessibility, CI stages                     |
-| [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md)               | Threat model, CSP, storage inventory, location privacy, supply chain, incident record |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                                   | Cloudflare Pages, headers, service-worker updates, rollback, other hosts              |
-| [docs/PERFORMANCE.md](docs/PERFORMANCE.md)                                 | Budgets and measured search, route, load and bundle numbers                           |
-| [docs/PROJECT_ASSESSMENT.md](docs/PROJECT_ASSESSMENT.md)                   | Starting state and data reachability                                                  |
-| [data/README.md](data/README.md)                                           | Pipeline rules and curated-file formats                                               |
-| [src/offline/README.md](src/offline/README.md)                             | Offline and PWA strategy                                                              |
-| [CONTRIBUTING.md](CONTRIBUTING.md)                                         | Coding standards, data-contribution rules, PR checklist                               |
+| Document                                                                     | Topic                                                                                   |
+| ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                                 | System diagram, module boundaries, data flow, key decisions, extension points           |
+| [docs/MODULE_CONTRACTS.md](docs/MODULE_CONTRACTS.md)                         | Public interface of every module                                                        |
+| [docs/modules/](docs/modules/)                                               | One page per module: purpose, interface, invariants, tests, limitations                 |
+| [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md)                   | The staged plan that was followed, with acceptance criteria                             |
+| [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md)                                 | Every source, its licence and status, and what was looked for but not found             |
+| [docs/DATA_QUALITY_REPORT.md](docs/DATA_QUALITY_REPORT.md)                   | Generated by `data:build`: counts, gaps, survey priorities                              |
+| [docs/research/LPU_PUBLIC_SOURCES.md](docs/research/LPU_PUBLIC_SOURCES.md)   | Every LPU page examined, `robots.txt` and terms findings                                |
+| [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md)                                   | Test pyramid, browser matrix, workflows, accessibility, CI stages                       |
+| [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md)                 | Threat model, CSP, storage inventory, location privacy, supply chain, incident record   |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                                     | Cloudflare Pages, headers, service-worker updates, rollback, D1 migrations, other hosts |
+| [docs/ADMIN_OPERATIONS.md](docs/ADMIN_OPERATIONS.md)                         | Owner runbook: auth setup, moderation, backups, recovery, credentials, incidents        |
+| [docs/COMMUNITY_MODULE_CONTRACTS.md](docs/COMMUNITY_MODULE_CONTRACTS.md)     | Suggestions, moderation, locations, overrides, audit: API and data contracts            |
+| [docs/BUILDING_STUDIO_DESIGN.md](docs/BUILDING_STUDIO_DESIGN.md)             | Building Studio design: schema, validation, publication, rollback                       |
+| [docs/ISOMETRIC_AND_3D_DESIGN.md](docs/ISOMETRIC_AND_3D_DESIGN.md)           | Isometric overview, realistic 3D and view modes                                         |
+| [docs/MAP_PROVIDER_CONFIGURATION.md](docs/MAP_PROVIDER_CONFIGURATION.md)     | The five view modes, free imagery providers, fallbacks, CSP and privacy                 |
+| [docs/GEODATA_SOURCES_AND_LICENSES.md](docs/GEODATA_SOURCES_AND_LICENSES.md) | Licences of every geodata and imagery source, including what is not used (Google)       |
+| [docs/PERFORMANCE.md](docs/PERFORMANCE.md)                                   | Budgets and measured search, route, load and bundle numbers                             |
+| [docs/PROJECT_ASSESSMENT.md](docs/PROJECT_ASSESSMENT.md)                     | Starting state and data reachability                                                    |
+| [data/README.md](data/README.md)                                             | Pipeline rules and curated-file formats                                                 |
+| [src/offline/README.md](src/offline/README.md)                               | Offline and PWA strategy                                                                |
+| [CONTRIBUTING.md](CONTRIBUTING.md)                                           | Coding standards, data-contribution rules, PR checklist                                 |
 
 ## Credits
 

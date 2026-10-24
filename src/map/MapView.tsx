@@ -19,6 +19,8 @@ import {
   type SelectionTarget,
 } from './apply.ts';
 import { createMapController } from './controller.ts';
+import { createEditingController, type EditingController, type EditingMap } from './editing/controller.ts';
+import { EditReticle } from './editing/EditReticle.tsx';
 import { classifyMapError, MAP_MESSAGES } from './errors.ts';
 import {
   anchoredOrganizations,
@@ -29,6 +31,9 @@ import {
 } from './geojson.ts';
 import { BUILDING_PICK_LAYER_IDS, POI_LAYER_IDS, SOURCE_IDS } from './ids.ts';
 import { pickPlaceId, renderedBuildingIds } from './picking.ts';
+import { MAX_PITCH } from './providers/camera.ts';
+import { classifyImageryError, ImageryHealth, type TileErrorLike } from './providers/failure.ts';
+import { applyImagery, IMAGERY_SOURCE_ID } from './providers/imagery-layer.ts';
 import { buildMapStyle, glyphsUrl, OSM_ATTRIBUTION_HTML } from './style.ts';
 import { installMapTestHooks } from './test-hooks.ts';
 import type { MapViewProps } from './types.ts';
@@ -64,11 +69,22 @@ export function MapView(props: MapViewProps) {
     detections = null,
     showNearbyOutsideCampus = false,
     contextPlaces,
+    editing = null,
+    imagery = null,
   } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<MapLibreMap | null>(null);
   const [r3d, setR3d] = useState<Realistic3DHandle | null>(null);
+  const [editingCtl, setEditingCtl] = useState<EditingController | null>(null);
+  // The editor's preview model is drawn by the studio layer like any other model, marked as a preview.
+  const previewModel = editing?.previewModel ?? null;
+  const renderModels = useMemo(
+    () => (previewModel ? [...studioModels, { ...previewModel, preview: true }] : studioModels),
+    [studioModels, previewModel],
+  );
   const [inlineNotice, setInlineNotice] = useState<RenderNotice | null>(null);
+  // Per-map debounce of imagery tile errors (auth/quota fail at once; network after several).
+  const imageryHealthRef = useRef<ImageryHealth | null>(null);
   const toast = useContext(ToastContext);
 
   const footprintIds = useMemo(
@@ -176,6 +192,7 @@ export function MapView(props: MapViewProps) {
         minZoom: APP_CONFIG.map.minZoom,
         maxZoom: APP_CONFIG.map.maxZoom,
         maxBounds: APP_CONFIG.map.maxBounds,
+        maxPitch: MAX_PITCH,
         pixelRatio: Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO),
         pitch: p.mode3d ? APP_CONFIG.map.pitch3d : 0,
         bearing: p.mode3d ? APP_CONFIG.map.bearing3d : 0,
@@ -192,15 +209,51 @@ export function MapView(props: MapViewProps) {
       return;
     }
 
+    const imageryHealth = new ImageryHealth();
+    imageryHealthRef.current = imageryHealth;
     const report = (message: string | null) => {
       if (message) latest.current.props.onError?.(message);
     };
-    instance.on('error', (e) => report(classifyMapError(e as Parameters<typeof classifyMapError>[0])));
+    instance.on('error', (e: { sourceId?: string; error?: TileErrorLike | null }) => {
+      // Imagery trouble is the provider's, not the campus data's: the parent falls back to the
+      // campus map and says why. The error (its URL carries the key) is never logged or shown.
+      if (e.sourceId === IMAGERY_SOURCE_ID) {
+        const p = latest.current.props;
+        const failure = imageryHealth.tileError(
+          classifyImageryError(e.error, {
+            requiresKey: p.imagery?.requiresKey ?? false,
+            online: typeof navigator === 'undefined' || navigator.onLine !== false,
+          }),
+        );
+        if (failure) p.onImageryFailure?.(failure);
+        return;
+      }
+      report(classifyMapError(e as Parameters<typeof classifyMapError>[0]));
+    });
+    instance.on('data', (e) => {
+      const ev = e as { sourceId?: string; tile?: unknown };
+      if (ev.sourceId === IMAGERY_SOURCE_ID && ev.tile) imageryHealth.tileLoaded();
+    });
+    const reportCamera = () => {
+      const cb = latest.current.props.onCameraIdle;
+      if (!cb) return;
+      const c = instance.getCenter();
+      const b = instance.getBounds();
+      cb({
+        center: [c.lng, c.lat],
+        zoom: instance.getZoom(),
+        bounds: [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()],
+      });
+    };
+    instance.on('moveend', reportCamera);
     instance.on('webglcontextlost', () => report(MAP_MESSAGES.contextLost));
 
+    let editingController: EditingController | null = null;
     instance.on('click', (e) => {
       const cb = latest.current.props;
       const id = pickPlaceId(instance, e.point);
+      // While editing, clicks belong to the editor and never select a place.
+      if (editingController?.handleClick([e.lngLat.lng, e.lngLat.lat], id)) return;
       if (id) {
         cb.onSelectPlace(id);
         return;
@@ -259,13 +312,18 @@ export function MapView(props: MapViewProps) {
         },
         getRealistic3D: () => realistic?.debug() ?? null,
       });
+      editingController = createEditingController(instance as unknown as EditingMap);
+      setEditingCtl(editingController);
       setR3d(realistic);
       setMap(instance);
       latest.current.props.onReady?.(controller);
+      reportCamera();
     });
 
     return () => {
       uninstallHooks();
+      editingController?.dispose();
+      setEditingCtl(null);
       realistic?.dispose();
       setR3d(null);
       setMap(null);
@@ -322,10 +380,21 @@ export function MapView(props: MapViewProps) {
     a.mode3d = mode3d;
   }, [map, r3d, mode3d, reducedMotion]);
 
+  // Basemap imagery: after the theme effect, so a theme change (which re-sets every paint
+  // property) gets the imagery contrast overrides back.
+  useEffect(() => {
+    if (!map) return;
+    imageryHealthRef.current?.reset();
+    applyImagery(map, imagery, { theme, reducedMotion });
+  }, [map, imagery, theme, reducedMotion]);
+
   // Realistic 3D: studio models, opt-in layers, selection highlight on the custom layer.
   useEffect(() => {
-    r3d?.setStudioModels(studioModels);
-  }, [r3d, studioModels]);
+    r3d?.setStudioModels(renderModels);
+  }, [r3d, renderModels]);
+  useEffect(() => {
+    editingCtl?.update(editing);
+  }, [editingCtl, editing]);
   useEffect(() => {
     r3d?.setStudioOpen(studioOpen);
   }, [r3d, studioOpen]);
@@ -351,6 +420,10 @@ export function MapView(props: MapViewProps) {
   return (
     <div className={props.className ?? 'relative h-full w-full'}>
       <div ref={containerRef} className="h-full w-full" data-testid="atlas-map" />
+      {editing?.input === 'reticle' ? (
+        // Mobile placement: the (padded) map centre is the placement point (reported via onReticleChange).
+        <EditReticle map={map} />
+      ) : null}
       {inlineNotice ? (
         <div
           role="status"

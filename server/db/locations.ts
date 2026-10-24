@@ -115,6 +115,11 @@ export async function getLocationRow(db: SqlDatabase, id: string): Promise<Locat
   return row ? rowToLocation(row) : null;
 }
 
+/** Every ACTIVE location in id order (the publication input; one statement for a consistent db.batch read). */
+export function activeLocationsStmt(db: SqlDatabase): SqlStatement {
+  return stmt(db, "SELECT * FROM locations WHERE status = 'active' ORDER BY id LIMIT 5000");
+}
+
 export interface LocationFilter {
   status?: string;
   origin?: string;

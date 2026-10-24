@@ -32,6 +32,90 @@ export function hasControlChars(s: string, allowed: readonly number[] = []): boo
   return false;
 }
 
+/** ZWNJ (U+200C) and ZWJ (U+200D): needed inside Indic, Arabic-script and other non-Latin words. */
+const isJoiner = (c: number) => c === 0x200c || c === 0x200d;
+
+/**
+ * Invisible or line-breaking code points that have no place in a name: they
+ * make two names that look identical compare different (search, duplicate
+ * and alias-uniqueness checks) or break a one-line label. ZWSP, word joiner,
+ * invisible math operators, BOM/ZWNBSP, Mongolian vowel separator, soft
+ * hyphen, combining grapheme joiner, Hangul fillers and the Unicode LINE /
+ * PARAGRAPH SEPARATORS (U+2028/2029).
+ */
+const isInvisibleInName = (c: number) =>
+  c === 0x200b ||
+  (c >= 0x2060 && c <= 0x2064) ||
+  c === 0xfeff ||
+  c === 0x180e ||
+  c === 0x00ad ||
+  c === 0x034f ||
+  c === 0x115f ||
+  c === 0x1160 ||
+  c === 0x3164 ||
+  c === 0xffa0 ||
+  c === 0x2028 ||
+  c === 0x2029;
+
+const NON_ASCII_LETTER_OR_MARK = /^[\p{L}\p{M}]$/u;
+const joinsLetters = (cp: number | undefined) =>
+  cp !== undefined && cp > 0x7f && NON_ASCII_LETTER_OR_MARK.test(String.fromCodePoint(cp));
+
+/** Whitespace after a joiner: the joiner then shapes the end of the preceding word only. */
+const isSpace = (cp: number | undefined) => cp !== undefined && /^\s$/u.test(String.fromCodePoint(cp));
+
+/**
+ * True when a NAME (or alias) holds an invisible character (see
+ * isInvisibleInName) or a misplaced ZWJ/ZWNJ. A joiner is allowed only right
+ * after a non-ASCII letter or mark, and only when it is followed by another
+ * non-ASCII letter or mark, by whitespace or by the end of the name: that is
+ * how Indic and Arabic-script text uses it (e.g. Devanagari KA + VIRAMA + ZWJ
+ * + SSA, or a ZWNJ ending a word). A joiner after Latin letters, digits or a
+ * space, at the start, or before an ASCII character is an invisible spoof
+ * ("Block" + ZWJ + "34" looks like "Block34") and is rejected.
+ */
+export function hasInvisibleNameChars(s: string): boolean {
+  const cps = Array.from(s, (ch) => ch.codePointAt(0)!);
+  for (let i = 0; i < cps.length; i++) {
+    const c = cps[i]!;
+    if (isInvisibleInName(c)) return true;
+    if (!isJoiner(c)) continue;
+    const next = cps[i + 1];
+    if (!joinsLetters(cps[i - 1]) || !(next === undefined || isSpace(next) || joinsLetters(next)))
+      return true;
+  }
+  return false;
+}
+
+/**
+ * Most combining marks one character may carry. Real text stays well below it
+ * (Indic conjuncts, pointed Hebrew and Vietnamese use at most 3–4 in a row);
+ * a long run ("Zalgo" text) stacks glyphs far above and below the line and
+ * paints over neighbouring UI, e.g. the owner's moderation queue.
+ */
+export const MAX_COMBINING_MARKS = 5;
+
+const COMBINING_MARK = /^\p{M}$/u;
+const FORMAT_CHAR = /^\p{Cf}$/u;
+
+/**
+ * True when `s` has more than `max` combining marks in a row. Format
+ * characters (ZWJ, ZWNJ, LRM…) between marks do not end the run, so they
+ * cannot be interleaved to get around the limit.
+ */
+export function hasCombiningMarkFlood(s: string, max: number = MAX_COMBINING_MARKS): boolean {
+  let run = 0;
+  for (const ch of s) {
+    if (COMBINING_MARK.test(ch)) {
+      run += 1;
+      if (run > max) return true;
+    } else if (!FORMAT_CHAR.test(ch)) {
+      run = 0;
+    }
+  }
+  return false;
+}
+
 /** http(s) URL without credentials. */
 export function isHttpUrl(s: string): boolean {
   try {
@@ -49,6 +133,11 @@ export const PROHIBITED_SOURCE_MESSAGE =
 const GOOGLE_HOST = /^(?:[a-z0-9-]+\.)*google\.[a-z]{2,3}(?:\.[a-z]{2})?$/;
 const GOOGLE_MAP_PATH = /^\/(?:maps|earth|streetview)(?:[/@;,.]|$)/;
 const GOOGLE_MAP_SUBDOMAIN = /^(?:maps|earth|streetview|mts?\d*|khms?\d*|cbks?\d*)\./;
+/**
+ * Google Maps place and contributor photos on googleusercontent.com
+ * (lh3.googleusercontent.com/p/AF1Qip…, /gps-cs-s/…, /gps-proxy/…).
+ */
+const MAPS_PHOTO_PATH = /^\/(?:p|gps-cs-s|gps-proxy)\//;
 /** Street View image endpoints (cbk0.google.com/cbk, geo0.ggpht.com/cbk). */
 const STREET_VIEW_PATH = /^\/cbk(?:[/?]|$)/;
 /** A URL embedded in a query value or path (redirect, consent and archive wrappers). */
@@ -76,9 +165,10 @@ function prohibitedUrl(value: string, depth: number): boolean {
   } catch {
     return false;
   }
+  // Trailing dots (fully-qualified `google.com.`, or `google.com..`) name the same host.
   const host = u.hostname
     .toLowerCase()
-    .replace(/\.$/, '')
+    .replace(/\.+$/, '')
     .replace(/^www\./, '');
   const path = normalizedPath(u);
   if (GOOGLE_HOST.test(host)) {
@@ -90,6 +180,7 @@ function prohibitedUrl(value: string, depth: number): boolean {
   if (host === 'maps.app.goo.gl' || host === 'earth.app.goo.gl' || host === 'g.page') return true;
   if (host === 'goo.gl' && GOOGLE_MAP_PATH.test(path)) return true;
   if (host === 'maps.gstatic.com') return true;
+  if (/(?:^|\.)googleusercontent\.com$/.test(host) && MAPS_PHOTO_PATH.test(path)) return true;
   if (/(?:^|\.)ggpht\.com$/.test(host) && STREET_VIEW_PATH.test(path)) return true;
   if (
     /(?:^|\.)googleapis\.com$/.test(host) &&
@@ -121,8 +212,15 @@ export function isProhibitedSourceUrl(value: string): boolean {
   return prohibitedUrl(value, 0);
 }
 
-/** URL-like tokens in free text: with or without a scheme (`maps.app.goo.gl/x`, `https://…`). */
-const URLISH = /(?:https?:\/\/)?(?:[a-z0-9-]+\.)+[a-z]{2,}(?::\d+)?(?:[/?#][^\s<>"'`)\]]*)?/gi;
+/**
+ * URL-like tokens in free text: with or without a scheme (`maps.app.goo.gl/x`,
+ * `https://…`). Label separators include the ideographic and full-width full
+ * stops the URL parser maps to '.', and trailing dots after the TLD
+ * (`www.google.com./maps`) stay part of the token, so neither splits a host
+ * from its path.
+ */
+const URLISH =
+  /(?:https?:\/\/)?(?:[a-z0-9-]+[.\u3002\uff0e\uff61])+[a-z]{2,}[.\u3002\uff0e\uff61]*(?::\d+)?(?:[/?#][^\s<>"'`)\]]*)?/gi;
 
 /** True when free text contains a prohibited source URL (see isProhibitedSourceUrl). */
 export function containsProhibitedSourceUrl(s: string): boolean {
@@ -148,7 +246,18 @@ export const text = (max: number) =>
     .max(max)
     .refine((s) => !hasControlChars(s, [0x09, 0x0a, 0x0d]), { message: CONTROL_MESSAGE });
 
-/** A field that documents provenance: additionally rejects Google Maps/Earth/Street View URLs. */
+const INVISIBLE_NAME_MESSAGE =
+  'Invisible characters (zero-width spaces, joiners outside a non-Latin word, line or paragraph separators) are not allowed in names';
+
+/** A name or alias: a single line that additionally rejects invisible characters (hasInvisibleNameChars). */
+export const nameLine = (max: number) =>
+  line(max).refine((s) => !hasInvisibleNameChars(s), { message: INVISIBLE_NAME_MESSAGE });
+
+/**
+ * A field that documents provenance (or is free text that can cite a source,
+ * such as a description or notes): additionally rejects Google
+ * Maps/Earth/Street View URLs.
+ */
 export const provenanceLine = (max: number) =>
   line(max).refine((s) => !containsProhibitedSourceUrl(s), { message: PROHIBITED_SOURCE_MESSAGE });
 export const provenanceText = (max: number) =>

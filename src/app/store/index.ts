@@ -4,7 +4,8 @@
  * unrelated updates — e.g. a new GPS fix — never re-render the map shell.
  */
 import { create, type StoreApi, type UseBoundStore } from 'zustand';
-import { parseViewParam, type ViewMode } from '../view-mode.ts';
+import { BUILD_VIEW_MODE_AVAILABILITY } from '../../map/providers/runtime.ts';
+import { deepLinkViewMode, type ViewMode } from '../view-mode.ts';
 import { createMapSlice, defaultViewMode, type MapDefaults } from './map-slice.ts';
 import { createNavSlice, type WatcherFactory } from './nav-slice.ts';
 import { createRouteSlice } from './route-slice.ts';
@@ -22,15 +23,22 @@ export interface AppStoreOptions {
 const legacyViewMode = (mode3d: boolean | undefined): ViewMode | undefined =>
   mode3d === undefined ? undefined : mode3d ? 'realistic3d' : 'standard2d';
 
-/** `?view=3d|iso|2d` of the page URL (docs/ISOMETRIC_AND_3D_DESIGN.md §8.3), so the first render is already in that mode. */
+/**
+ * `?view=` of the page URL (docs/ISOMETRIC_AND_3D_DESIGN.md §8.3), so the first render is already in
+ * that mode. A mode whose provider is not available (satellite without imagery, photorealistic 3D)
+ * is ignored like an unknown value: the device default applies.
+ */
 function viewModeFromUrl(): ViewMode | null {
-  return typeof window === 'undefined' ? null : parseViewParam(window.location.search);
+  return typeof window === 'undefined'
+    ? null
+    : deepLinkViewMode(window.location.search, BUILD_VIEW_MODE_AVAILABILITY);
 }
 
 export function createAppStore(opts: AppStoreOptions = {}): UseBoundStore<StoreApi<AppState>> {
   const mapDefaults: MapDefaults = {
     viewMode: opts.map?.viewMode ?? legacyViewMode(opts.map?.mode3d) ?? defaultViewMode(),
     showLabels: opts.map?.showLabels ?? true,
+    ...(opts.map?.providers ? { providers: opts.map.providers } : {}),
   };
   return create<AppState>()((...a) => ({
     ...createUiSlice(...a),

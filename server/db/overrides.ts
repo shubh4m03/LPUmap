@@ -58,7 +58,12 @@ export async function getOverrideRow(db: SqlDatabase, targetId: string): Promise
   return row ? rowToOverride(row) : null;
 }
 
+/** Every override in target order (also used inside the publication's consistent db.batch read). */
+export function listOverridesStmt(db: SqlDatabase): SqlStatement {
+  return stmt(db, 'SELECT * FROM overrides ORDER BY target_id LIMIT 10000');
+}
+
 export async function listOverrideRows(db: SqlDatabase): Promise<OverrideRecord[]> {
-  const { results } = await stmt(db, 'SELECT * FROM overrides ORDER BY target_id LIMIT 10000').all();
+  const { results } = await listOverridesStmt(db).all();
   return results.map(rowToOverride);
 }

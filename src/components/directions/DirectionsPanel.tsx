@@ -11,11 +11,11 @@ import { useAppStore } from '../../app/store/index.ts';
 import { sameRoute } from '../../app/store/route-slice.ts';
 import { formatDistance, formatDuration } from '../../distance/index.ts';
 import { Button } from '../ui/index.ts';
-import { failureAdvice } from './directions-model.ts';
+import { failureAdvice, pickFallbackRoles } from './directions-model.ts';
 import { EndpointField } from './EndpointField.tsx';
 import { NavigationStart, TrackWalkButton } from './NavigationStart.tsx';
 import { Notice } from './Notice.tsx';
-import { usePickingSheetRestore } from './picking-sheet.ts';
+import { startMapPicking, usePickingSheetRestore } from './picking-sheet.ts';
 import { ProfilePicker } from './ProfilePicker.tsx';
 import { RouteSteps } from './RouteSteps.tsx';
 import { RouteSummary } from './RouteSummary.tsx';
@@ -27,6 +27,7 @@ export function DirectionsPanel() {
   const result = useAppStore((s) => s.result);
   const route = useAppStore((s) => s.alternatives[s.activeAlternative] ?? null);
   const locked = useAppStore((s) => s.navigationActive);
+  const listMode = useAppStore((s) => s.listMode);
   const advice = result ? failureAdvice(result, profile, origin, destination) : null;
   useResultAnnouncements();
   usePickingSheetRestore();
@@ -54,7 +55,26 @@ export function DirectionsPanel() {
           Set a start and a destination to plan a route. Routes follow mapped paths only; nothing is guessed.
         </p>
       ) : result && !result.ok ? (
-        <Notice tone="danger" role="alert" title="No route found">
+        <Notice
+          tone="danger"
+          role="alert"
+          title="No route found"
+          actions={
+            listMode || locked || pickFallbackRoles(result).length === 0
+              ? null
+              : pickFallbackRoles(result).map((role) => (
+                  <Button
+                    key={role}
+                    size="sm"
+                    variant="secondary"
+                    icon="pin"
+                    onClick={() => startMapPicking(role)}
+                  >
+                    {role === 'origin' ? 'Choose start on map' : 'Choose destination on map'}
+                  </Button>
+                ))
+          }
+        >
           <p>{result.message}</p>
           {advice ? <p className="mt-1">{advice}</p> : null}
         </Notice>

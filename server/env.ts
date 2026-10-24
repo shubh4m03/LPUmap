@@ -23,6 +23,14 @@ export interface Env {
   OWNER_PASSWORD_HASH?: string;
   RATE_LIMIT_KEY?: string;
   PUBLIC_ORIGIN?: string;
+  /**
+   * Optional global cap on password-login attempts from ALL clients together
+   * per login rate window (an integer 1–100000). Unset → no global cap (only
+   * the per-client limit). Trade-off: under a distributed guessing attack the
+   * cap also locks the owner out until the window ends — it bounds guesses,
+   * not availability.
+   */
+  ADMIN_LOGIN_GLOBAL_LIMIT?: string;
 }
 
 export type AuthConfig =
@@ -38,11 +46,14 @@ export interface ParsedEnv {
   rateLimitKey: string | null;
   /** Extra allowed Origin (e.g. the production custom domain); null when unset/invalid. */
   publicOrigin: string | null;
+  /** Global password-login cap per login window (all clients); null = no global cap. */
+  loginGlobalLimit: number | null;
   /** Names of settings that were present but ignored as invalid (no values). */
   warnings: string[];
 }
 
 export const MIN_RATE_LIMIT_KEY_LENGTH = 32;
+export const MAX_LOGIN_GLOBAL_LIMIT = 100_000;
 const EMAIL_RE = /^[^\s@,]+@[^\s@,]+\.[^\s@,]+$/;
 
 function str(v: unknown): string | null {
@@ -119,6 +130,13 @@ export function parseEnv(env: Env | undefined | null): ParsedEnv {
     if (rawKey.length >= MIN_RATE_LIMIT_KEY_LENGTH) rateLimitKey = rawKey;
     else warnings.push('RATE_LIMIT_KEY');
   }
+  const rawGlobal = str(e.ADMIN_LOGIN_GLOBAL_LIMIT);
+  let loginGlobalLimit: number | null = null;
+  if (rawGlobal !== null) {
+    const n = /^\d{1,6}$/.test(rawGlobal) ? Number(rawGlobal) : NaN;
+    if (n >= 1 && n <= MAX_LOGIN_GLOBAL_LIMIT) loginGlobalLimit = n;
+    else warnings.push('ADMIN_LOGIN_GLOBAL_LIMIT');
+  }
   const rawOrigin = str(e.PUBLIC_ORIGIN);
   const publicOrigin = parseOrigin(rawOrigin);
   if (rawOrigin !== null && publicOrigin === null) warnings.push('PUBLIC_ORIGIN');
@@ -128,6 +146,7 @@ export function parseEnv(env: Env | undefined | null): ParsedEnv {
     auth: parseAuth(e),
     rateLimitKey,
     publicOrigin,
+    loginGlobalLimit,
     warnings,
   };
 }

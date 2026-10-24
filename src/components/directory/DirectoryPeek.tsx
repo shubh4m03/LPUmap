@@ -13,7 +13,7 @@ export function DirectoryPeek({ onBrowse }: { onBrowse(): void }) {
   const selected = useAppStore((s) => (s.selectedPlaceId ? dir.byId.get(s.selectedPlaceId) : undefined));
   if (selected) {
     return (
-      <div className="flex items-center gap-3 px-4 py-2">
+      <div className="flex items-center gap-3 px-4 py-1">
         <MapKeyGlyph mapKey={selected.key} />
         <span className="min-w-0 flex-1 truncate text-sm font-medium text-text">{selected.title}</span>
         <Button size="sm" variant="secondary" onClick={onBrowse}>
@@ -24,8 +24,8 @@ export function DirectoryPeek({ onBrowse }: { onBrowse(): void }) {
   }
   const keyed = dir.entries.filter((e) => e.key !== null).length;
   return (
-    <div className="flex items-center gap-3 px-4 py-2">
-      <span className="min-w-0 flex-1 truncate text-sm text-muted">
+    <div className="flex items-center gap-3 px-4 py-1">
+      <span className="line-clamp-2 min-w-0 flex-1 text-sm text-muted">
         {directorySummary({ total: dir.entries.length, keyed })}
       </span>
       <Button size="sm" variant="secondary" onClick={onBrowse}>

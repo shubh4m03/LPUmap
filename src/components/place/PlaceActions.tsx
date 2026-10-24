@@ -1,10 +1,12 @@
 import { useId } from 'react';
 import { useAtlas } from '../../app/data/atlas-context.ts';
+import { nearbyPointPrompt } from '../../app/map-picking.ts';
 import { placeEndpoint, routeBlockReason, shareUrlFor } from '../../app/place-actions.ts';
 import { useAppStore } from '../../app/store/index.ts';
 import type { Place } from '../../data/index.ts';
 import { useFavorites } from '../../favorites/index.ts';
 import { copyText } from '../../feedback/index.ts';
+import { startMapPicking } from '../directions/picking-sheet.ts';
 import { Button, useToast } from '../ui/index.ts';
 
 async function share(place: Place, toast: ReturnType<typeof useToast>) {
@@ -83,6 +85,23 @@ export function PlaceActions({ place, mapAvailable }: { place: Place; mapAvailab
           Directions unavailable: {blocked}
         </p>
       ) : null}
+      {blocked && mapAvailable && place.location !== null ? (
+        // Point fallback for a place with a position but no path connection: the user picks a
+        // nearby point on a path; the route ends there and is never presented as the place's own.
+        <Button
+          size="sm"
+          variant="secondary"
+          icon="pin"
+          className="self-start"
+          onClick={() => {
+            useAppStore.getState().openPanel('directions');
+            startMapPicking('destination');
+            toast.show({ message: nearbyPointPrompt(place.displayName), tone: 'neutral', durationMs: 10000 });
+          }}
+        >
+          Choose a nearby point on the map
+        </Button>
+      ) : null}
       <div className="flex flex-wrap gap-1">
         <Button
           size="sm"
@@ -115,6 +134,14 @@ export function PlaceActions({ place, mapAvailable }: { place: Place; mapAvailab
           }
         >
           Report a correction
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          icon="plus"
+          onClick={() => useAppStore.getState().openPanel('suggest')}
+        >
+          Suggest a missing place
         </Button>
       </div>
     </div>

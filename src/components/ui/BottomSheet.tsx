@@ -26,6 +26,11 @@ export interface BottomSheetProps {
   onSnapChange?: (snap: SheetSnap) => void;
   /** Extra header content (e.g. actions) shown next to the title. */
   headerActions?: ReactNode;
+  /**
+   * Interactive summary shown under the header only while the sheet is at peek
+   * (the body is inert there). Omit it to keep the plain peek.
+   */
+  peek?: ReactNode;
   closeLabel?: string;
   className?: string;
 }
@@ -60,6 +65,7 @@ function BottomSheetInner({
   defaultSnap = 'half',
   onSnapChange,
   headerActions,
+  peek,
   closeLabel = 'Close',
   className,
 }: BottomSheetProps) {
@@ -189,6 +195,11 @@ function BottomSheetInner({
         {headerActions}
         <IconButton icon="close" label={closeLabel} size="sm" onClick={onClose} />
       </div>
+      {peek && snap === 'peek' && !dragging ? (
+        <div className="shrink-0 pr-safe pl-safe" data-testid="sheet-peek">
+          {peek}
+        </div>
+      ) : null}
       <div
         inert={snap === 'peek'}
         className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-safe"

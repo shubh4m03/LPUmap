@@ -11,6 +11,7 @@ import type { HttpMethod, ParamName } from '../../http/router.ts';
 import { json } from '../../http/response.ts';
 import type { StudioPort } from '../ports.ts';
 import type { AdminCtx, AdminRoute } from './context.ts';
+import { auditAs } from './audit-spec.ts';
 
 const ok = (body: unknown, status = 200) => json(body, { status, cache: 'no-store' });
 
@@ -77,51 +78,104 @@ function post(
 
 export const STUDIO_ROUTES: readonly AdminRoute[] = [
   route('GET', '/library', 'admin:read', (s, c, ctx) => s.getLibrary(c.db, ctx)),
-  post('/templates', 'studio:templates', (s, c, b, ctx) => s.createTemplate(c.db, b, ctx), 201),
-  write('PUT', '/templates/:templateId', 'templateId', 'studio:templates', (s, c, id, b, ctx) =>
-    s.updateTemplate(c.db, id, b, ctx),
+  auditAs(
+    'template.create',
+    'template',
+    post('/templates', 'studio:templates', (s, c, b, ctx) => s.createTemplate(c.db, b, ctx), 201),
   ),
-  write('POST', '/templates/:templateId/retire', 'templateId', 'studio:templates', (s, c, id, b, ctx) =>
-    s.retireTemplate(c.db, id, b, ctx),
+  auditAs(
+    'template.version',
+    'template',
+    write('PUT', '/templates/:templateId', 'templateId', 'studio:templates', (s, c, id, b, ctx) =>
+      s.updateTemplate(c.db, id, b, ctx),
+    ),
   ),
-  write('POST', '/templates/:templateId/unretire', 'templateId', 'studio:templates', (s, c, id, b, ctx) =>
-    s.unretireTemplate(c.db, id, b, ctx),
+  auditAs(
+    'template.retire',
+    'template',
+    write('POST', '/templates/:templateId/retire', 'templateId', 'studio:templates', (s, c, id, b, ctx) =>
+      s.retireTemplate(c.db, id, b, ctx),
+    ),
+  ),
+  auditAs(
+    'template.unretire',
+    'template',
+    write('POST', '/templates/:templateId/unretire', 'templateId', 'studio:templates', (s, c, id, b, ctx) =>
+      s.unretireTemplate(c.db, id, b, ctx),
+    ),
   ),
 
   route('GET', '/buildings', 'admin:read', (s, c, ctx) => s.listBuildings(c.db, c.rawQuery(), ctx)),
   route('GET', '/buildings/:buildingId', 'admin:read', (s, c, ctx) =>
     s.getBuilding(c.db, c.param('buildingId'), ctx),
   ),
-  post('/buildings', 'studio:write', (s, c, b, ctx) => s.createBuilding(c.db, b, ctx), 201),
-  write('PUT', '/buildings/:buildingId/draft', 'buildingId', 'studio:write', (s, c, id, b, ctx) =>
-    s.saveDraft(c.db, id, b, ctx),
+  auditAs(
+    'building.create',
+    'building',
+    post('/buildings', 'studio:write', (s, c, b, ctx) => s.createBuilding(c.db, b, ctx), 201),
   ),
-  write('DELETE', '/buildings/:buildingId/draft', 'buildingId', 'studio:write', (s, c, id, b, ctx) =>
-    s.discardDraft(c.db, id, b, ctx),
+  auditAs(
+    'building.save-draft',
+    'building',
+    write('PUT', '/buildings/:buildingId/draft', 'buildingId', 'studio:write', (s, c, id, b, ctx) =>
+      s.saveDraft(c.db, id, b, ctx),
+    ),
   ),
+  auditAs(
+    'building.discard-draft',
+    'building',
+    write('DELETE', '/buildings/:buildingId/draft', 'buildingId', 'studio:write', (s, c, id, b, ctx) =>
+      s.discardDraft(c.db, id, b, ctx),
+    ),
+  ),
+  // A dry run: nothing is written, so neither its success nor its rejection is audited.
   post('/validate', 'admin:read', (s, c, b, ctx) => s.validate(c.db, b, ctx)),
-  write('POST', '/buildings/:buildingId/publish', 'buildingId', 'studio:publish', (s, c, id, b, ctx) =>
-    s.publish(c.db, id, b, ctx),
+  auditAs(
+    'building.publish',
+    'building',
+    write('POST', '/buildings/:buildingId/publish', 'buildingId', 'studio:publish', (s, c, id, b, ctx) =>
+      s.publish(c.db, id, b, ctx),
+    ),
   ),
-  write('POST', '/buildings/:buildingId/archive', 'buildingId', 'studio:write', (s, c, id, b, ctx) =>
-    s.archive(c.db, id, b, ctx),
+  auditAs(
+    'building.archive',
+    'building',
+    write('POST', '/buildings/:buildingId/archive', 'buildingId', 'studio:write', (s, c, id, b, ctx) =>
+      s.archive(c.db, id, b, ctx),
+    ),
   ),
-  write('POST', '/buildings/:buildingId/restore', 'buildingId', 'studio:publish', (s, c, id, b, ctx) =>
-    s.restore(c.db, id, b, ctx),
+  auditAs(
+    'building.restore',
+    'building',
+    write('POST', '/buildings/:buildingId/restore', 'buildingId', 'studio:publish', (s, c, id, b, ctx) =>
+      s.restore(c.db, id, b, ctx),
+    ),
   ),
-  write('DELETE', '/buildings/:buildingId', 'buildingId', 'studio:delete', (s, c, id, b, ctx) =>
-    s.deleteBuilding(c.db, id, b, ctx),
+  auditAs(
+    'building.delete',
+    'building',
+    write('DELETE', '/buildings/:buildingId', 'buildingId', 'studio:delete', (s, c, id, b, ctx) =>
+      s.deleteBuilding(c.db, id, b, ctx),
+    ),
   ),
-  write(
-    'POST',
-    '/buildings/:buildingId/duplicate',
-    'buildingId',
-    'studio:write',
-    (s, c, id, b, ctx) => s.duplicate(c.db, id, b, ctx),
-    201,
+  auditAs(
+    'building.duplicate',
+    'building',
+    write(
+      'POST',
+      '/buildings/:buildingId/duplicate',
+      'buildingId',
+      'studio:write',
+      (s, c, id, b, ctx) => s.duplicate(c.db, id, b, ctx),
+      201,
+    ),
   ),
-  write('POST', '/buildings/:buildingId/apply-template', 'buildingId', 'studio:write', (s, c, id, b, ctx) =>
-    s.applyTemplate(c.db, id, b, ctx),
+  auditAs(
+    'building.apply-template',
+    'building',
+    write('POST', '/buildings/:buildingId/apply-template', 'buildingId', 'studio:write', (s, c, id, b, ctx) =>
+      s.applyTemplate(c.db, id, b, ctx),
+    ),
   ),
   route('GET', '/quality', 'admin:read', (s, c, ctx) => s.getQuality(c.db, ctx)),
 ];

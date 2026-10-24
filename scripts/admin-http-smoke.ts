@@ -19,7 +19,9 @@
  *
  * After the community flow it runs the Building Studio flow (create draft →
  * save → validate → publish with an acknowledgement → public publication v2
- * → archive → gone → restore), which needs public/data served at /data/
+ * → archive → gone → restore), then the hardening checks (schema-versioned
+ * ETag, audited body rejections, prohibited-source and invisible-character
+ * rules over real HTTP). The studio flow needs public/data served at /data/
  * (the vite build output includes it; for the API alone, a directory holding
  * a copy of public/data under data/ is enough).
  *
@@ -60,10 +62,17 @@ function check(cond: unknown, name: string, detail: string): asserts cond {
 async function call(
   method: string,
   path: string,
-  opts: { body?: unknown; cookie?: string; csrf?: string; origin?: boolean; headers?: Json } = {},
+  opts: {
+    body?: unknown;
+    raw?: string;
+    cookie?: string;
+    csrf?: string;
+    origin?: boolean;
+    headers?: Json;
+  } = {},
 ): Promise<Res> {
   const headers = new Headers();
-  if (opts.body !== undefined) headers.set('Content-Type', 'application/json');
+  if (opts.body !== undefined || opts.raw !== undefined) headers.set('Content-Type', 'application/json');
   if (opts.origin !== false && method !== 'GET') headers.set('Origin', BASE);
   if (opts.cookie) headers.set('Cookie', opts.cookie);
   if (opts.csrf) headers.set('X-CSRF-Token', opts.csrf);
@@ -71,7 +80,7 @@ async function call(
   const res = await fetch(`${BASE}${path}`, {
     method,
     headers,
-    body: opts.body === undefined ? undefined : JSON.stringify(opts.body),
+    body: opts.raw ?? (opts.body === undefined ? undefined : JSON.stringify(opts.body)),
     redirect: 'manual',
   });
   const text = await res.text();
@@ -357,6 +366,9 @@ async function main(): Promise<void> {
   // box on an empty on-campus spot; its private note must never reach the public publication.
   await studioFlow(auth.cookie, csrf, Number(pub4.body.publicationVersion));
 
+  // 10c. Hardening (docs/BUILDING_STUDIO_DESIGN.md §5, §7, §10).
+  await hardeningChecks(auth.cookie, csrf);
+
   // 11. Logout → 401 afterwards (cookie replay rejected)
   const logout = await call('DELETE', '/api/admin/session', { ...auth, csrf });
   check(
@@ -583,6 +595,88 @@ async function studioFlow(cookie: string, csrf: string, v: number): Promise<void
     actions.join(','),
   );
   report('studio audit trail', actions.join(' → '));
+}
+
+/** The newest audit event for `action`, read through the admin API. */
+async function newestAudit(cookie: string, action: string): Promise<Json | null> {
+  const r = await call('GET', `/api/admin/audit?action=${encodeURIComponent(action)}&limit=1`, { cookie });
+  check(r.status === 200, `audit ${action}`, `status ${r.status}`);
+  return ((r.body.items as Json[] | undefined) ?? [])[0] ?? null;
+}
+
+async function hardeningChecks(cookie: string, csrf: string): Promise<void> {
+  const auth = { cookie, csrf };
+
+  // ETag carries the publication schema version; a schema-less validator never gets a false 304.
+  const pub = await call('GET', '/api/locations');
+  const etag = pub.headers.get('ETag') ?? '';
+  const n = Number(pub.body.publicationVersion);
+  check(
+    pub.status === 200 && etag === `W/"pub-v${String(pub.body.schemaVersion)}-${n}"`,
+    'schema-versioned ETag',
+    `ETag ${etag}`,
+  );
+  const old = await call('GET', '/api/locations', { headers: { 'If-None-Match': `W/"pub-${n}"` } });
+  const same = await call('GET', '/api/locations', { headers: { 'If-None-Match': etag } });
+  check(
+    old.status === 200 && same.status === 304,
+    'ETag validators',
+    `old ${old.status} current ${same.status}`,
+  );
+  report('ETag', `${etag}; schema-less W/"pub-${n}" → 200, current → 304`);
+
+  // A body rejected while being read is audited as 'rejected' for the session actor (never the body).
+  const bad = await call('POST', '/api/admin/locations', { ...auth, raw: '{"fields": SMOKE-BODY' });
+  check(bad.status === 400, 'malformed JSON', `status ${bad.status}`);
+  const ev = await newestAudit(cookie, 'location.create');
+  check(
+    ev !== null &&
+      ev.outcome === 'rejected' &&
+      ev.actor === 'owner' &&
+      String(ev.detail).startsWith('invalid (HTTP 400)') &&
+      !JSON.stringify(ev).includes('SMOKE-BODY'),
+    'malformed JSON audited',
+    JSON.stringify(ev),
+  );
+  report('malformed JSON body', `400; audit #${String(ev.id)} location.create rejected actor=owner`);
+
+  const wrongType = await call('POST', '/api/admin/studio/buildings', {
+    ...auth,
+    raw: '{}',
+    headers: { 'Content-Type': 'text/plain' },
+  });
+  check(wrongType.status === 415, 'wrong content type', `status ${wrongType.status}`);
+  const ev415 = await newestAudit(cookie, 'building.create');
+  check(
+    ev415 !== null && ev415.outcome === 'rejected' && String(ev415.detail).startsWith('invalid (HTTP 415)'),
+    'wrong content type audited',
+    JSON.stringify(ev415),
+  );
+  report('text/plain body', `415; audit #${String(ev415.id)} building.create rejected`);
+
+  // Prohibited sources in free text (trailing-dot host, Maps photo) and invisible characters in names.
+  const base = studioDraft(9.6);
+  const identity = base.identity as Json;
+  const cases: [string, Json][] = [
+    [
+      'description citing www.google.com./maps',
+      { ...identity, description: 'From www.google.com./maps/place/x' },
+    ],
+    [
+      'notes citing a Google Maps photo',
+      { ...identity, notes: 'Photo lh3.googleusercontent.com/p/AF1QipSmoke' },
+    ],
+    ['name with a zero-width space', { ...identity, name: 'Smoke\u200bPavilion' }],
+    ['alias with U+2028', { ...identity, aliases: ['Block\u202834'] }],
+  ];
+  for (const [label, id] of cases) {
+    const r = await call('POST', '/api/admin/studio/buildings', {
+      ...auth,
+      body: { targetId: null, draft: { ...base, identity: id } },
+    });
+    check(r.status === 400 && errCode(r) === 'invalid', label, `status ${r.status}`);
+    report(`studio create with ${label}`, `400 ${errCode(r)}`);
+  }
 }
 
 main().catch((err: unknown) => {

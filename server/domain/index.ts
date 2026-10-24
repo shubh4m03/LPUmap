@@ -45,7 +45,7 @@ export {
 } from './overrides.ts';
 export type { OverrideView } from './overrides.ts';
 export { revertAuditEvent, listAudit, REVERTABLE_ACTIONS } from './revert.ts';
-export { getPublication } from './publication.ts';
+export { getPublication, getPublicationVersion } from './publication.ts';
 export { getOverview, getQualityWarnings } from './overview.ts';
 export type { QualityWarning, QualityWarningKind } from './overview.ts';
 

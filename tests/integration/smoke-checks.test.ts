@@ -162,12 +162,19 @@ describe('smoke-web: service worker, secrets, formatting', () => {
 
   it('flags credential-looking strings and ignores clean text', () => {
     expect(findSecrets('a.js', 'const routing = { apiVersion: 2 };')).toEqual([]);
+    // Names without a literal value cannot hold a secret (the optional imagery key's env name in a
+    // build without it, a TypeScript parameter in a source map).
+    expect(findSecrets('a.js', 'Lt({VITE_ARCGIS_API_KEY:void 0,VITE_EOX_BACKDROP:void 0})')).toEqual([]);
+    expect(findSecrets('a.js.map', 'function f(apiKey: string | null) {}')).toEqual([]);
+    expect(findSecrets('a.js', 'return{arcgisApiKey:n}')).toEqual([]);
     for (const text of [
       'k="AKIAABCDEFGHIJKLMNOP"',
       'sk_live_abc123',
       '-----BEGIN RSA PRIVATE KEY-----',
       'API_KEY = "x"',
       '{apiKey: "x"}',
+      "{api_key:'x'}",
+      'VITE_ARCGIS_API_KEY:`AAPTxyz`',
     ]) {
       expect(findSecrets('a.js', text)).toHaveLength(1);
     }

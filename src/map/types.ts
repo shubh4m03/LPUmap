@@ -3,6 +3,9 @@ import type { StudioRenderSource } from '../building-studio/render/maplibre/inde
 import type { LayerGroupId } from '../config/categories.ts';
 import type { CampusData } from '../data/campus-data.ts';
 import type { DetectionsFile, LngLat, Place } from '../data/schema.ts';
+import type { MapEditingProps } from './editing/types.ts';
+import type { CameraView } from './providers/camera.ts';
+import type { ImageryProvider, ProviderFailure } from './providers/types.ts';
 import type { MapTheme } from './theme-colors.ts';
 
 export interface MapRouteOverlay {
@@ -84,4 +87,23 @@ export interface MapViewProps {
   contextPlaces?: readonly Place[];
   /** Degradation notices (slow frames, studio fallback). Without it MapView shows a toast or an inline notice. */
   onRenderNotice?(notice: RenderNotice): void;
+
+  // --- Basemap imagery (src/map/providers; all optional, absent = the campus map) ---
+  /**
+   * Satellite imagery drawn under the campus overlays (Satellite 2D, Campus 3D on imagery), or
+   * null for the campus vector basemap. Changing it never rebuilds the style.
+   */
+  imagery?: ImageryProvider | null;
+  /** The imagery provider failed (auth, quota, network): the parent falls back and says why. */
+  onImageryFailure?(failure: ProviderFailure): void;
+  /** Camera after each move settles (and once at load), for the return-to-campus control and date line. */
+  onCameraIdle?(view: CameraView): void;
+
+  // --- Map editing (Building Studio, owner location editor; src/map/editing/types.ts) ---
+  /**
+   * Set while an editor is open: map clicks go to `editing.onPointer` and never select a place;
+   * handles / reticle / preview are drawn; pan is suspended only while a handle is dragged.
+   * null/undefined restores normal selection and navigation.
+   */
+  editing?: MapEditingProps | null;
 }

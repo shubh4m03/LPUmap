@@ -1,16 +1,253 @@
 # Map provider configuration
 
-**Status: planned. None of this is implemented.** The app today uses only its own data, needs no key and makes no
-third-party requests (`.env.example:1-3`, `public/_headers:2`, `src/offline/pwa-config.ts:76-78`). Every variable,
-file and behaviour below is a proposal for the implementation phases in
-[`GOOGLE_EARTH_STYLE_MAP_ASSESSMENT.md`](GOOGLE_EARTH_STYLE_MAP_ASSESSMENT.md) §9. **Date:** 2026-10-24.
+**Status: §Modes and §Free providers are IMPLEMENTED (free sources only, owner decision 2026-10-24). §§1–11 are the
+earlier Google plan, kept only as a record: the no-billing decision rules out every Google part of them.** A build
+with no provider variables behaves as before: it needs no key and makes no third-party request. With
+`VITE_ARCGIS_API_KEY` (Esri World Imagery) or `VITE_EOX_BACKDROP=true` (EOX Sentinel-2 2016) the imagery modes work
+and the browser contacts exactly that provider's host. **Date:** 2026-10-24.
 
 Labels: **[DOC]** quoted from an official source (URL given; all retrieved 2026-10-24). **[INFERRED]** our
 recommendation or reasoning. **[UNVERIFIED]** needs a key or vendor answer; the procedure is in §9. **[SRC]** read
 in a third-party package's source in a scratch install outside this repo. **[PLANNED]** not built yet.
 
-Nothing in this document authorises adding a key. The owner's original rule was "no paid APIs or keys"; enabling
-Google modes needs the owner decisions D1–D3 and D7 in the assessment.
+Keys: only a free-tier ArcGIS key with pay-as-you-go left off is supported (§Free providers), and only the owner adds
+it, outside git. Google keys are out of scope under the no-billing decision. In §5 below, `VITE_ESRI_API_KEY` is
+superseded by `VITE_ARCGIS_API_KEY`.
+
+---
+
+## Modes
+
+**Owner decision (binding, 2026-10-24): no billing, free sources only.** Google Map Tiles (2D satellite and
+Photorealistic 3D Tiles) need a Google Cloud billing account, so they are **not implemented**; the Google parts of
+§§1–11 below remain a record of what enabling them would take, not a plan. Google Maps, Earth and Street View are
+never a data source. No 3D-tiles renderer dependency is added: with no photorealistic source there is nothing for it
+to draw.
+
+The app offers **five clearly labelled view modes in one flat list**. The basemap (campus vector map or satellite
+imagery) is a property of each mode, not a second user-facing switch: that is the simplest model that still gives
+the five options, keeps every `?view=` link meaningful, and leaves nothing to combine wrongly (e.g. "isometric +
+satellite").
+
+| Mode (title)       | Id            | `?view=`    | Switcher label / accessible name | Renderer  | Satellite imagery                     | Available today                                          | Falls back to                          |
+| ------------------ | ------------- | ----------- | -------------------------------- | --------- | ------------------------------------- | -------------------------------------------------------- | -------------------------------------- |
+| Satellite 2D       | `satellite2d` | `satellite` | Satellite / "Satellite map"      | MapLibre  | required                              | Only with a free provider configured (§Free providers)   | Campus map 2D → Isometric              |
+| Photorealistic 3D  | `photoreal3d` | `earth`     | Photoreal / "Photorealistic 3D"  | none      | —                                     | **Never** (no billing-free source; LPU coverage unknown) | Campus 3D → Campus map 2D → Isometric  |
+| Campus 3D          | `realistic3d` | `3d`        | 3D / "3D map"                    | MapLibre  | optional (used when one is available) | Yes (needs WebGL)                                        | Campus map 2D → Isometric              |
+| Isometric overview | `isometric`   | `iso`       | Overview / "Isometric overview"  | Canvas 2D | none                                  | Yes                                                      | — (needs neither WebGL nor a provider) |
+| Campus map 2D      | `standard2d`  | `2d`        | 2D / "2D map"                    | MapLibre  | none                                  | Yes (needs WebGL)                                        | Isometric                              |
+
+"Campus 3D" is the owner's "Editable Campus 3D": our campus buildings (imported OpenStreetMap footprints, not
+surveyed) plus published Building Studio models. It is not photorealistic and is never presented as the
+Photorealistic 3D mode.
+
+Rules (all implemented in `src/app/view-mode.ts` and tested in `tests/unit/app/view-mode.test.ts`):
+
+- **Unavailable modes stay visible with their reason**, never hidden and never faked. Reasons come from
+  `src/map/providers/types.ts`: `SATELLITE_NOT_CONFIGURED_REASON`, `PHOTOREAL_UNAVAILABLE_REASON` (+
+  `PHOTOREAL_UNAVAILABLE_DETAIL` for an info dialog), `PROVIDER_FAILURE_REASONS` (auth, quota, network, no WebGL).
+- **The store never enters a blocked mode**: `setViewMode` refuses it (`viewModeBlockedReason`).
+- **Deep links**: `?view=3d|iso|2d` work as before; `?view=satellite` and `?view=earth` open only when the mode is
+  available, otherwise the device default applies and the parameter is dropped from the URL (`deepLinkViewMode`).
+- **Fallbacks** (`VIEW_MODE_FALLBACKS`, `resolveViewMode`): a missing key, a quota or network failure, or no WebGL
+  moves to the next mode in the chain and returns the reason to announce. The chain always ends in the overview, so
+  there is no blank screen.
+- **Availability** is `ViewModeAvailability` (`{satellite, photoreal}`: null = available, else the reason). Until the
+  provider registry reports otherwise, `DEFAULT_VIEW_MODE_AVAILABILITY` applies: satellite not configured,
+  photorealistic unavailable.
+- **The switcher** (`src/components/map-controls/ViewModeSwitcher.tsx`) shows all five options in the owner's order
+  (`VIEW_MODE_OPTIONS`); on phones they sit in two columns so the control column is no taller than before (a
+  single column reached the bottom sheet and the attribution button and failed axe `target-size`). Choosing an
+  unavailable option changes nothing; its reason is shown as a toast and announced (Photorealistic 3D shows
+  `PHOTOREAL_UNAVAILABLE_DETAIL`). Accessible names: "Satellite map", "Photorealistic 3D", "3D map", "Isometric
+  overview", "2D map" — no name contains another, so role queries stay unambiguous (unit-tested).
+- **Availability is per build and per session**: the store holds `availability`, derived from this build's registry
+  (`BUILD_PROVIDERS`, `src/map/providers/runtime.ts`) and `imageryRuntime` (a failure seen this session; online or
+  not). Deep links are checked against it.
+
+Provider contract (`src/map/providers/types.ts`):
+
+- `ImageryProvider`: id, label, attribution as text parts plus required logo text (rendered as text nodes and
+  links, never HTML), min/max zoom, `requiresKey`, `configured()` (pure, no network), `source()` (raster tile
+  template(s) or a style URL; the key is added at runtime from `.env.local` / build env, never written in code),
+  `imageryDate` metadata or null, and `offline: false` (third-party tiles are never precached or cached offline).
+- `PhotorealProvider`: always `status: 'unavailable'` with a reason (`PHOTOREAL_PROVIDER`).
+- `TerrainProvider` (optional; none configured), `ProviderRegistry`, `ProviderStatus` / `CapabilityReport`
+  (capability and coverage detection result), `ProviderCamera`.
+- **Imagery date**: only an officially published capture date counts, with its source and the date it was checked;
+  a year in a copyright line is not a capture date, and imagery is never described as "live". If Esri World Imagery
+  is adopted, the measured record is "captured 2023-12-18, WorldView-3, 0.31 m" (Esri metadata service, checked
+  2026-10-24; `IMAGERY_COVERAGE_AND_FRESHNESS.md`). The UI shows it only as "Imagery captured 2023-12-18 according to
+  Esri World Imagery Wayback metadata (retrieved 2026-10-24)." and only while the view centre is inside the area
+  where it was verified (`ESRI_IMAGERY_DATE.verifiedBounds`); elsewhere it says "Capture date not verified for this
+  part of the map."
+- Added while implementing (additive, in `types.ts`): `ImageryDateMetadata.verifiedBounds` and `.statement`;
+  `ImageryProvider.detail` ('high' | 'low'), `cameraMaxZoom`, `cameraBounds`, `caption`, `notice`, `origins`,
+  `probeUrl()`.
+
+---
+
+## Free providers (implemented)
+
+Code: `src/map/providers/` — `config.ts` (env parsing; warnings name the variable, never the value), `esri.ts`,
+`eox.ts`, `registry.ts` (registry, capability detection, which imagery each mode draws), `failure.ts` (error
+classification, one metadata probe, debounce), `attribution.ts` (escaped attribution HTML, the date line),
+`camera.ts` (maxPitch, return-to-campus helpers), `imagery-layer.ts` (MapLibre wiring; imported by MapView only),
+`runtime.ts` (this build's registry). UI: `src/components/map-controls/ImageryNotice.tsx` and
+`ReturnToCampusButton.tsx`; wiring in `src/app/MapStage.tsx`, `src/map/MapView.tsx`, `src/app/store/map-slice.ts`
+and `src/app/hooks/useImageryRuntime.ts`.
+
+| Mode              | Imagery drawn                                                    | On top                                                                                                    |
+| ----------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Satellite 2D      | the first configured provider (Esri if its key is set, else EOX) | footprints (white outline, 22 % fill), boundary, footpaths/steps (light dashes), labels, routes, GPS puck |
+| Photorealistic 3D | none — never entered                                             | —                                                                                                         |
+| Campus 3D         | Esri only (`detail: 'high'`), never the 10 m EOX backdrop        | extrusions in the light-theme neutral tones in both themes (no textures), studio models, as above         |
+| Isometric         | none                                                             | —                                                                                                         |
+| Campus map 2D     | none (default, offline, unchanged look)                          | —                                                                                                         |
+
+On imagery our basemap area fills and road fills are hidden; everything else stays. Imagery is added and removed with
+`addSource`/`removeSource`, never `setStyle`, so selection, routes, the puck, studio models and the map-editing
+layers (`src/map/editing`) keep working on every basemap (unit-tested: the editing layers sit above the raster and
+clicks still go to the editor).
+
+### Esri World Imagery (ArcGIS Location Platform, free tier)
+
+- **Endpoint** [DOC, Esri's MapLibre tutorial "Display multiple basemap layers", retrieved 2026-10-24]: map tile
+  service `https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?token=<key>`
+  (rows before columns), 256 px tiles. The Static Basemap Tiles service (`static-map-tiles-api.arcgis.com`) lists
+  only `arcgis/imagery/labels`, not the imagery itself, so it is not used.
+- **Max zoom 19** over the campus (`MaxMapLevel 19` in Esri's metadata, [MEASURED] 2026-10-24); MapLibre over-zooms
+  beyond it instead of requesting tiles that do not exist.
+- **Attribution** [DOC https://developers.arcgis.com/documentation/esri-and-data-attribution/interactive-maps/]: the
+  text "Powered by Esri" ("The word Esri should be linked to https://www.esri.com" is a recommendation) and data
+  attribution "on or at the bottom of the map where it is always visible", with "an expandable UI … when they can not
+  be displayed on small screens" allowed. Implemented: MapLibre's attribution control lists "Powered by Esri | Source:
+  Esri, Vantor, Earthstar Geographics, and the GIS User Community" (the service's `copyrightText`, read 2026-10-24)
+  whenever the imagery is drawn, and the imagery notice repeats "Powered by Esri". Re-read `copyrightText` when
+  updating: Esri asks to "Frequently verify names as data source providers can change".
+- **Billing** [DOC https://location.arcgis.com/help/billing/]: "A payment method is required to enable pay-as-you-go
+  (PAYG) to continue using services beyond the free tier"; "Without PAYG turned on you only have privileges enabled
+  for services with a free tier" (and "that free tier has not been exhausted"). Free tier "2M free then $0.15 per
+  1,000 tiles" for "Vector, map, and static basemap tiles" [DOC https://location.arcgis.com/pricing/]. With PAYG left
+  off there is no bill: access stops until the next billing cycle and the app falls back (quota). Whether sign-up
+  asks for a card remains [UNVERIFIED]: the account-management help page lists email, username, password, portal URL,
+  security question and accepting the terms, and does not mention a card.
+- **Terms**: no caching or offline storage ([DOC] Esri Master Agreement E204 §3.2(c): "Customer may not otherwise
+  scrape, download, or store Data"). The service worker has no runtime route for it (tested).
+- **Owner steps (key)** [DOC
+  https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/location-platform/]:
+  1. Sign up for ArcGIS Location Platform and **leave pay-as-you-go off**.
+  2. Portal → Content → My content → New item → Developer credentials → API key credentials.
+  3. "Where will you use these credentials?" → **Public application**; item access: none.
+  4. Privileges: **Basemaps** only.
+  5. Referrers: the site's own origins only (production domain and this project's `pages.dev` domain). Expiration: at
+     most one year; "The expiration date and referrers of an access token cannot be changed without invalidating the
+     token".
+  6. Copy the key (shown once) into `.env.local` (git-ignored) as `VITE_ARCGIS_API_KEY=…` for local work, and into
+     the Cloudflare Pages **build** environment for deploys. Never commit it. It is public once built (a `VITE_`
+     variable); the referrer restriction and PAYG-off are what protect it.
+- **Measured failure behaviour** (2026-10-24, curl; bodies discarded, nothing stored): a tile request **without** a
+  token returns HTTP 200 `text/plain` with `{"error":{"code":499,"message":"Token Required."}}`; the service metadata
+  without a token returns the same JSON error with HTTP 200; a request with a **malformed** token was answered
+  normally (HTTP 200 JSON for the metadata, `image/jpeg` for a tile). So an invalid key is not reliably refused.
+  The app treats a non-image tile from a keyed provider, HTTP 401/403/498/499 and JSON error codes 498/499/403 as
+  **auth**, 429 as **quota**, and four failed tiles with none loaded in between as **network** (`failure.ts`). Esri's
+  answer when the free tier is exhausted has not been observed [UNVERIFIED]; it may surface as auth or network.
+- **Probe**: the first time Esri imagery is shown in a page, one metadata request (`…/MapServer?f=json&token=…`, no
+  imagery) checks the key; a 498/499/403 answer falls back at once.
+
+### EOX Sentinel-2 cloudless 2016 (keyless backdrop)
+
+- **Terms re-checked 2026-10-24** [DOC https://cloudless.eox.at/documentation/faq]: the 2016 vintage "is published
+  under the CC BY 4.0 license. You may use this data as an embedded basemap in commercial mobile apps, B2B portals,
+  video templates, and websites", provided attribution, no SLA, no redistribution of raw tiles, and "a Fair Use
+  Policy applies"; "Commercial apps may access the free 2016 endpoint under CC BY 4.0, provided traffic is
+  reasonable." For 2018+ layers "Using the public WMS/WMTS endpoints for commercial production apps is strictly
+  prohibited" — they are never used.
+- **Endpoint** (WMTS capabilities: layer `s2cloudless_3857`, "Sentinel-2 cloudless layer for 2016 by EOX - 3857",
+  matrix set `g`): `https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/g/{z}/{y}/{x}.jpg`.
+- **Attribution** ("Attribution must be visible whenever the imagery is shown"): "EOxCloudless
+  https://cloudless.eox.at by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016)", plus "CC BY 4.0".
+- **Never misleading**: 10 m pixels cannot show buildings. Tiles are requested up to z13 (≈16 m/px at the campus
+  latitude) and the camera stops at **z14** (≈8 m/px). The notice "10 m imagery — buildings not visible" stays
+  visible while it is shown. The campus panning limit keeps a 1440 px window above z14.6, so the backdrop uses a
+  wider limit (`EOX_CAMERA_BOUNDS`, about ±8 km); the campus limit returns when it is removed. Campus 3D never uses
+  it.
+- **Enable**: `VITE_EOX_BACKDROP=true`. It is used for Satellite 2D only when no Esri key is set. Off by default: it
+  sends the viewed area to EOX, so it is the owner's choice.
+
+### Photorealistic 3D: unavailable
+
+`PHOTOREAL_PROVIDER` (status 'unavailable') is the only photorealistic provider. The option is always visible,
+disabled, and explains why; `?view=earth` is ignored and removed from the URL. No 3D-tiles dependency was added.
+
+### Terrain: none (measured)
+
+[MEASURED 2026-10-24] Copernicus GLO-30 tile `Copernicus_DSM_COG_10_N31_00_E075_00_DEM.tif` from the public bucket
+`https://copernicus-dem-30m.s3.amazonaws.com/`, read in a scratch directory outside the repo (geotiff.js), 1,080
+pixel centres inside the campus boundary: min 222.5 m, p5 232.4 m, median 234.0 m, p95 242.2 m, max 249.1 m (range
+26.5 m). GLO-30 is a surface model, so the upper values include buildings and trees. A ground proxy (10th percentile
+in each cell of a 3 × 3 grid over the boundary bbox) varies only 231.2–235.9 m: about 4.7 m over roughly 1.1 × 1.7
+km, a ≈0.3 % slope. That relief would not be visible, and draping GLO-30 would raise the ground under buildings, so
+**no terrain is added** and nothing was added to the repo. If terrain is ever added, the Copernicus DEM licence
+(License-COPDEM-30) notice must be shown; copy its exact wording from the licence PDF at that time [UNVERIFIED here].
+
+### Fallbacks (never a blank map)
+
+| Trigger                                          | In Satellite 2D                                    | In Campus 3D with imagery                 |
+| ------------------------------------------------ | -------------------------------------------------- | ----------------------------------------- |
+| No key / not configured                          | option disabled with the reason                    | campus map look (no imagery)              |
+| 401/403/498/499, non-image tile, probe refusal   | → Campus map 2D, toast and announcement            | stays in Campus 3D without imagery, toast |
+| 429 / free tier used up                          | → Campus map 2D, "free limit … reached"            | as above                                  |
+| Network (4 failed tiles, or the browser offline) | → Campus map 2D; back online re-enables the option | as above                                  |
+
+Auth and quota failures last for the page session; the mode is never switched back automatically. Imagery errors
+never reach the generic "campus data" banner, and their URLs (which carry the key) are never logged or shown.
+
+### Camera
+
+- `maxPitch` 60 (MapLibre's default; MapLibre documents values above 60 as experimental), set explicitly in MapView.
+- Switching between map modes keeps the camera and eases pitch/bearing (`setBuildingMode`, 700 ms; a jump with
+  reduced motion); focusing a place uses `flyTo`.
+- **Return to campus**: a "Back to campus" button appears in every map mode and size while no part of the campus
+  boundary is on screen, and glides back to the whole-campus view (`requestFocus({kind:'reset'})`).
+
+### Privacy and the default view
+
+- Without provider variables: no third-party request; the privacy text is unchanged.
+- **With an Esri key**: Satellite 2D and **Campus 3D** draw Esri imagery. Campus 3D is the default view on screens at
+  least 768 px wide, so with a key **the desktop default view contacts Esri at start-up**; phones start in Campus map
+  2D, which never does. The privacy panel then adds "Satellite imagery comes from Esri World Imagery": the browser
+  downloads tiles directly from `ibasemaps-api.arcgis.com`, which receives the IP address and the viewed map area
+  (which shows roughly where the user is while the map follows their live location); tiles are never stored offline.
+  An owner who wants no third-party request by default should not set the key.
+- **With only the EOX backdrop**: only Satellite 2D contacts EOX, after the user picks it (or opens
+  `?view=satellite`).
+
+### CSP and PWA
+
+- `public/_headers`: `connect-src 'self' https://ibasemaps-api.arcgis.com https://tiles.maps.eox.at` — exactly the
+  provider origins (tested against `IMAGERY_ORIGINS`); every other directive unchanged. MapLibre fetches raster tiles
+  (`refreshExpiredTiles` stays at its default `true`), so `img-src` needs no host. The file is static, so a build
+  without provider variables also allows these two hosts; it never contacts them.
+- `src/offline/pwa-config.ts`: `runtimeCaching: []`, and no precache glob can match a provider (unit-tested); the e2e
+  smoke checks that Cache Storage holds no provider URL after Satellite 2D was shown.
+
+### Tests
+
+- Unit: `tests/unit/map-providers/*` (config, registry, availability, fallback, failure classification, probe,
+  attribution escaping, date line, CSP/PWA/no-key guards, privacy text, MapLibre wiring, store fallback, notices) and
+  `tests/unit/app/view-mode-switcher.test.tsx`.
+- e2e: `tests/e2e/map-modes.spec.ts`. Every provider request is answered by route interception with **synthetic**
+  tiles (a generated grid, not imagery) or an injected failure; any other non-local request fails the test. It reads
+  the build's configuration from the UI, so run it once per build, from a directory outside `dist/`:
+
+  ```sh
+  VITE_ARCGIS_API_KEY=TEST_ONLY_fake_arcgis_key_0123456789abcdef npx vite build --outDir <tmp>/key
+  npx vite preview --outDir <tmp>/key --port 5402 --strictPort   # in another shell
+  PW_PORT=5402 npx playwright test tests/e2e/map-modes.spec.ts
+  # repeat with VITE_EOX_BACKDROP=true and with no variables; MAP_MODES_SHOTS_DIR=<dir> also saves screenshots
+  ```
 
 ---
 

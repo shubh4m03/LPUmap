@@ -8,6 +8,7 @@ import type { Permission } from '../../auth/authorize.ts';
 import type { HttpMethod } from '../../http/router.ts';
 import { json } from '../../http/response.ts';
 import type { DomainCtx, DomainPort } from '../ports.ts';
+import { auditAs } from './audit-spec.ts';
 import type { AdminCtx, AdminRoute } from './context.ts';
 import {
   approveBody,
@@ -96,33 +97,57 @@ export const ADMIN_ROUTES: readonly AdminRoute[] = [
     },
   },
   read('GET', '/suggestions/:id', 'admin:read', (d, c, ctx) => d.getSuggestion(c.db, c.param('id'), ctx)),
-  mutate('PATCH', '/suggestions/:id', 'id', 'suggestions:review', editSuggestionBody, (d, c, id, b, ctx) =>
-    d.editSuggestion(c.db, id, b, ctx),
+  auditAs(
+    'suggestion.edit',
+    'suggestion',
+    mutate('PATCH', '/suggestions/:id', 'id', 'suggestions:review', editSuggestionBody, (d, c, id, b, ctx) =>
+      d.editSuggestion(c.db, id, b, ctx),
+    ),
   ),
-  mutate('POST', '/suggestions/:id/approve', 'id', 'suggestions:review', approveBody, (d, c, id, b, ctx) =>
-    d.approveSuggestion(c.db, id, b, ctx),
+  auditAs(
+    'suggestion.approve',
+    'suggestion',
+    mutate('POST', '/suggestions/:id/approve', 'id', 'suggestions:review', approveBody, (d, c, id, b, ctx) =>
+      d.approveSuggestion(c.db, id, b, ctx),
+    ),
   ),
-  mutate('POST', '/suggestions/:id/reject', 'id', 'suggestions:review', rejectBody, (d, c, id, b, ctx) =>
-    d.rejectSuggestion(c.db, id, b, ctx),
+  auditAs(
+    'suggestion.reject',
+    'suggestion',
+    mutate('POST', '/suggestions/:id/reject', 'id', 'suggestions:review', rejectBody, (d, c, id, b, ctx) =>
+      d.rejectSuggestion(c.db, id, b, ctx),
+    ),
   ),
-  mutate(
-    'POST',
-    '/suggestions/:id/duplicate',
-    'id',
-    'suggestions:review',
-    duplicateBody,
-    (d, c, id, b, ctx) => d.markDuplicate(c.db, id, b, ctx),
+  auditAs(
+    'suggestion.duplicate',
+    'suggestion',
+    mutate(
+      'POST',
+      '/suggestions/:id/duplicate',
+      'id',
+      'suggestions:review',
+      duplicateBody,
+      (d, c, id, b, ctx) => d.markDuplicate(c.db, id, b, ctx),
+    ),
   ),
-  mutate(
-    'POST',
-    '/suggestions/:id/request-info',
-    'id',
-    'suggestions:review',
-    requestInfoBody,
-    (d, c, id, b, ctx) => d.requestInformation(c.db, id, b, ctx),
+  auditAs(
+    'suggestion.request-info',
+    'suggestion',
+    mutate(
+      'POST',
+      '/suggestions/:id/request-info',
+      'id',
+      'suggestions:review',
+      requestInfoBody,
+      (d, c, id, b, ctx) => d.requestInformation(c.db, id, b, ctx),
+    ),
   ),
-  mutate('POST', '/suggestions/:id/reopen', 'id', 'suggestions:review', revisionBody, (d, c, id, b, ctx) =>
-    d.reopenSuggestion(c.db, id, b, ctx),
+  auditAs(
+    'suggestion.reopen',
+    'suggestion',
+    mutate('POST', '/suggestions/:id/reopen', 'id', 'suggestions:review', revisionBody, (d, c, id, b, ctx) =>
+      d.reopenSuggestion(c.db, id, b, ctx),
+    ),
   ),
 
   {
@@ -141,70 +166,113 @@ export const ADMIN_ROUTES: readonly AdminRoute[] = [
     pattern: '/locations',
     handler: {
       permission: 'locations:write',
+      audit: { action: 'location.create', entityType: 'location' },
       run: async (c) => {
         const body = await c.body(createLocationBody);
         return ok(await c.domain.createLocation(c.db, body, await c.domainCtx()), 201);
       },
     },
   },
-  mutate(
-    'PATCH',
-    '/locations/:locationId',
-    'locationId',
-    'locations:write',
-    updateLocationBody,
-    (d, c, id, b, ctx) => d.updateLocation(c.db, id, b, ctx),
+  auditAs(
+    'location.update',
+    'location',
+    mutate(
+      'PATCH',
+      '/locations/:locationId',
+      'locationId',
+      'locations:write',
+      updateLocationBody,
+      (d, c, id, b, ctx) => d.updateLocation(c.db, id, b, ctx),
+    ),
   ),
-  mutate(
-    'POST',
-    '/locations/:locationId/hide',
-    'locationId',
-    'locations:write',
-    revisionBody,
-    (d, c, id, b, ctx) => d.hideLocation(c.db, id, b, ctx),
+  auditAs(
+    'location.hide',
+    'location',
+    mutate(
+      'POST',
+      '/locations/:locationId/hide',
+      'locationId',
+      'locations:write',
+      revisionBody,
+      (d, c, id, b, ctx) => d.hideLocation(c.db, id, b, ctx),
+    ),
   ),
-  mutate(
-    'POST',
-    '/locations/:locationId/restore',
-    'locationId',
-    'locations:write',
-    revisionBody,
-    (d, c, id, b, ctx) => d.restoreLocation(c.db, id, b, ctx),
+  auditAs(
+    'location.restore',
+    'location',
+    mutate(
+      'POST',
+      '/locations/:locationId/restore',
+      'locationId',
+      'locations:write',
+      revisionBody,
+      (d, c, id, b, ctx) => d.restoreLocation(c.db, id, b, ctx),
+    ),
   ),
-  mutate(
-    'DELETE',
-    '/locations/:locationId',
-    'locationId',
-    'locations:delete',
-    deleteLocationBody,
-    (d, c, id, b, ctx) => d.deleteLocation(c.db, id, b, ctx),
+  auditAs(
+    'location.delete',
+    'location',
+    mutate(
+      'DELETE',
+      '/locations/:locationId',
+      'locationId',
+      'locations:delete',
+      deleteLocationBody,
+      (d, c, id, b, ctx) => d.deleteLocation(c.db, id, b, ctx),
+    ),
   ),
 
   read('GET', '/overrides', 'admin:read', (d, c, ctx) => d.listOverrides(c.db, ctx)),
   read('GET', '/overrides/:targetId', 'admin:read', (d, c, ctx) =>
     d.getOverride(c.db, c.param('targetId'), ctx),
   ),
-  mutate('PUT', '/overrides/:targetId', 'targetId', 'overrides:write', putOverrideBody, (d, c, id, b, ctx) =>
-    d.putOverride(c.db, id, b, ctx),
+  auditAs(
+    'override.put',
+    'override',
+    mutate(
+      'PUT',
+      '/overrides/:targetId',
+      'targetId',
+      'overrides:write',
+      putOverrideBody,
+      (d, c, id, b, ctx) => d.putOverride(c.db, id, b, ctx),
+    ),
   ),
-  mutate(
-    'POST',
-    '/overrides/:targetId/hide',
-    'targetId',
-    'overrides:write',
-    nullableRevisionBody,
-    (d, c, id, b, ctx) => d.hideOverride(c.db, id, b, ctx),
+  auditAs(
+    'override.hide',
+    'override',
+    mutate(
+      'POST',
+      '/overrides/:targetId/hide',
+      'targetId',
+      'overrides:write',
+      nullableRevisionBody,
+      (d, c, id, b, ctx) => d.hideOverride(c.db, id, b, ctx),
+    ),
   ),
-  mutate(
-    'POST',
-    '/overrides/:targetId/unhide',
-    'targetId',
-    'overrides:write',
-    revisionBody,
-    (d, c, id, b, ctx) => d.unhideOverride(c.db, id, b, ctx),
+  auditAs(
+    'override.unhide',
+    'override',
+    mutate(
+      'POST',
+      '/overrides/:targetId/unhide',
+      'targetId',
+      'overrides:write',
+      revisionBody,
+      (d, c, id, b, ctx) => d.unhideOverride(c.db, id, b, ctx),
+    ),
   ),
-  mutate('DELETE', '/overrides/:targetId', 'targetId', 'overrides:write', revisionBody, (d, c, id, b, ctx) =>
-    d.deleteOverride(c.db, id, b, ctx),
+  auditAs(
+    'override.delete',
+    'override',
+    mutate(
+      'DELETE',
+      '/overrides/:targetId',
+      'targetId',
+      'overrides:write',
+      revisionBody,
+      (d, c, id, b, ctx) => d.deleteOverride(c.db, id, b, ctx),
+    ),
   ),
 
   {
@@ -212,6 +280,7 @@ export const ADMIN_ROUTES: readonly AdminRoute[] = [
     pattern: '/revert',
     handler: {
       permission: 'audit:revert',
+      audit: { action: 'audit.revert', entityType: 'system' },
       run: async (c) => {
         const { auditEventId } = await c.body(revertBody);
         return ok(await c.domain.revertAuditEvent(c.db, auditEventId, await c.domainCtx()));

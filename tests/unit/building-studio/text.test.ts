@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   containsProhibitedSourceUrl,
+  hasCombiningMarkFlood,
   hasControlChars,
+  MAX_COMBINING_MARKS,
   isHttpUrl,
   isProhibitedSourceUrl,
 } from '../../../src/building-studio/text.ts';
@@ -61,4 +63,26 @@ describe('text safety', () => {
     expect(isHttpUrl('javascript:alert(1)')).toBe(false);
     expect(isHttpUrl('https://u:p@x.org')).toBe(false);
   });
+});
+
+describe('hasCombiningMarkFlood (stacked-mark "Zalgo" text)', () => {
+  const acute = '́';
+  it.each([
+    ['118 acutes on one letter', `A${acute.repeat(118)}`],
+    ['one past the limit', `A${acute.repeat(MAX_COMBINING_MARKS + 1)}`],
+    ['marks interleaved with ZWJ', `A${`${acute}‍`.repeat(MAX_COMBINING_MARKS + 1)}`],
+    ['marks interleaved with LRM', `A${`${acute}‎`.repeat(MAX_COMBINING_MARKS + 1)}`],
+    ['flood in the middle of a sentence', `Tea point n${'̶'.repeat(40)}ear gate`],
+  ])('flags %s', (_l, s) => expect(hasCombiningMarkFlood(s)).toBe(true));
+
+  it.each([
+    ['exactly the limit', `A${acute.repeat(MAX_COMBINING_MARKS)}`],
+    ['Gurmukhi', 'ਲਾਇਬ੍ਰੇਰੀ ਬਲਾਕ'],
+    ['Devanagari with ZWJ/ZWNJ', 'पुस्त‍कालय‌ ब्लॉक'],
+    ['Tibetan stack', 'བསྒྲུབས'],
+    ['decomposed Vietnamese', 'Tiếng Việt'],
+    ['pointed Hebrew', 'שָׁלוֹם'],
+    ['emoji with variation selector and keycap', '☕️ 1️⃣ corner'],
+    ['many separate accented letters', 'é'.normalize('NFD').repeat(40)],
+  ])('allows %s', (_l, s) => expect(hasCombiningMarkFlood(s)).toBe(false));
 });

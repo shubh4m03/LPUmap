@@ -22,8 +22,10 @@ import { PanelSuspense } from '../layout/PanelSuspense.tsx';
 const CARD =
   'pointer-events-auto w-full rounded-xl border border-border bg-surface-raised p-3 text-text shadow-3';
 
+// Right inset: clear of the phone control column, whose view-mode switcher is two 44 px options wide
+// (90 px with borders, MapStage COMPACT_CONTROLS_PX) plus an 8 px gap, so a prompt or card never hides a mode.
 const MOBILE_TOP =
-  'pointer-events-none fixed top-[calc(max(0.75rem,var(--ds-safe-top))+3.75rem)] right-[calc(max(0.75rem,var(--ds-safe-right))+3.5rem)] left-[max(0.75rem,var(--ds-safe-left))] z-(--ds-z-controls)';
+  'pointer-events-none fixed top-[calc(max(0.75rem,var(--ds-safe-top))+3.75rem)] right-[calc(max(0.75rem,var(--ds-safe-right))+6.125rem)] left-[max(0.75rem,var(--ds-safe-left))] z-(--ds-z-controls)';
 
 export function NavigationHud({ placement = 'overlay' }: { placement?: 'overlay' | 'inline' }) {
   const navigating = useAppStore((s) => s.navigationActive);

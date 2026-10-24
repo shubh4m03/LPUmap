@@ -217,20 +217,20 @@ describe('POST /api/contributions/locations', () => {
 });
 
 describe('GET /api/locations + moderation flow', () => {
-  it('ETag W/"pub-<n>", If-None-Match → 304, Cache-Control no-cache', async () => {
+  it('ETag W/"pub-v<schema>-<n>", If-None-Match → 304, Cache-Control no-cache', async () => {
     const first = await publication();
     expect(first.status).toBe(200);
     const etag = first.headers.get('ETag')!;
-    expect(etag).toMatch(/^W\/"pub-\d+"$/);
+    expect(etag).toMatch(/^W\/"pub-v\d+-\d+"$/);
     expect(first.headers.get('Cache-Control')).toBe('no-cache');
     const pub = publicationSchema.parse(await first.json());
-    expect(etag).toBe(`W/"pub-${pub.publicationVersion}"`);
+    expect(etag).toBe(`W/"pub-v${pub.schemaVersion}-${pub.publicationVersion}"`);
 
     const again = await publication(etag);
     expect(again.status).toBe(304);
     expect(await again.text()).toBe('');
     expect(again.headers.get('ETag')).toBe(etag);
-    expect((await publication('W/"pub-999999"')).status).toBe(200);
+    expect((await publication('W/"pub-v2-999999"')).status).toBe(200);
   });
 
   it('a suggestion appears publicly only after authenticated approval; approval is not repeatable', async () => {

@@ -1,4 +1,5 @@
 import { buildingLegend, type BuildingLegendOptions } from '../../buildings3d/index.ts';
+import { cx } from '../ui/index.ts';
 
 /**
  * Building colour key; colours come from the map palette so they match what is drawn.
@@ -16,10 +17,18 @@ export function BuildingLegend({ theme, ...opts }: { theme: 'light' | 'dark' } &
           <li key={e.key} className="flex items-start gap-3">
             <span
               aria-hidden="true"
-              className="mt-0.5 inline-block size-5 shrink-0 rounded-sm border border-border-strong"
+              data-swatch={e.swatch}
+              className={cx(
+                'mt-0.5 inline-block size-5 shrink-0 rounded-sm',
+                e.swatch === 'solid' && 'border border-border-strong',
+              )}
               style={
                 e.swatch === 'dashed'
-                  ? { border: `2px dashed ${e.color}`, backgroundColor: 'transparent' }
+                  ? // As drawn: a faint fill inside a dashed outline (flat, never extruded).
+                    {
+                      border: `2px dashed ${e.color}`,
+                      backgroundColor: `color-mix(in srgb, ${e.color} 14%, transparent)`,
+                    }
                   : { backgroundColor: e.color }
               }
             />

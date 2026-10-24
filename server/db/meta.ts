@@ -41,20 +41,28 @@ export async function setMeta(db: SqlDatabase, key: string, value: string): Prom
   ).run();
 }
 
-export async function getPublicationState(db: SqlDatabase): Promise<{ version: number; updatedAt: string }> {
-  const { results } = await stmt(
+export type PublicationState = { version: number; updatedAt: string };
+
+/** SELECT of the publication version and timestamp (for a consistent db.batch read). */
+export function publicationStateStmt(db: SqlDatabase): SqlStatement {
+  return stmt(
     db,
     'SELECT key, value FROM meta WHERE key IN (?, ?)',
     PUBLICATION_VERSION_KEY,
     PUBLICATION_UPDATED_AT_KEY,
-  ).all<{
-    key: string;
-    value: string;
-  }>();
-  const m = new Map(results.map((r) => [r.key, r.value]));
+  );
+}
+
+export function toPublicationState(rows: readonly Record<string, unknown>[]): PublicationState {
+  const m = new Map(rows.map((r) => [String(r.key), String(r.value)]));
   const version = Number(m.get(PUBLICATION_VERSION_KEY) ?? 0);
   return {
     version: Number.isInteger(version) && version >= 0 ? version : 0,
     updatedAt: m.get(PUBLICATION_UPDATED_AT_KEY) ?? '1970-01-01T00:00:00.000Z',
   };
+}
+
+export async function getPublicationState(db: SqlDatabase): Promise<PublicationState> {
+  const { results } = await publicationStateStmt(db).all();
+  return toPublicationState(results);
 }

@@ -466,17 +466,61 @@ export async function listStudioVersionRows(db: SqlDatabase, id: string): Promis
   return results.map(rowToStudioVersion);
 }
 
+/**
+ * The columns the publication needs from a published version. Validation
+ * results, acknowledgements, change summaries and actors are never read for
+ * the public layer (they are large and private).
+ */
+export type PublishedStudioVersionRow = Pick<
+  StudioVersionRow,
+  | 'buildingId'
+  | 'version'
+  | 'record'
+  | 'footprint'
+  | 'footprintAreaM2'
+  | 'membership'
+  | 'accuracyClass'
+  | 'positionCorrected'
+  | 'publishedAt'
+>;
+
 /** Latest version of every PUBLISHED (non-archived) head, in id order: the publication input. */
-export async function listPublishedStudioVersions(
-  db: SqlDatabase,
-): Promise<{ targetId: string | null; version: StudioVersionRow }[]> {
-  const { results } = await stmt(
+export function publishedStudioVersionsStmt(db: SqlDatabase): SqlStatement {
+  return stmt(
     db,
-    `SELECT v.*, b.target_id AS head_target_id FROM studio_buildings b
+    `SELECT v.building_id, v.version, v.record_json, v.footprint_json, v.footprint_area_m2, v.membership_json,
+            v.accuracy_class, v.position_corrected, v.published_at, b.target_id AS head_target_id
+     FROM studio_buildings b
      JOIN studio_building_versions v ON v.building_id = b.id AND v.version = b.published_version
      WHERE b.status = 'published' ORDER BY b.id LIMIT 5000`,
-  ).all();
-  return results.map((r) => ({ targetId: optStr(r, 'head_target_id'), version: rowToStudioVersion(r) }));
+  );
+}
+
+export function rowToPublishedStudioVersion(r: Row): {
+  targetId: string | null;
+  version: PublishedStudioVersionRow;
+} {
+  return {
+    targetId: optStr(r, 'head_target_id'),
+    version: {
+      buildingId: str(r, 'building_id'),
+      version: num(r, 'version'),
+      record: parseJsonColumn(r.record_json),
+      footprint: parseJsonColumn(r.footprint_json),
+      footprintAreaM2: num(r, 'footprint_area_m2'),
+      membership: parseJsonColumn(r.membership_json),
+      accuracyClass: str(r, 'accuracy_class'),
+      positionCorrected: num(r, 'position_corrected') === 1,
+      publishedAt: str(r, 'published_at'),
+    },
+  };
+}
+
+export async function listPublishedStudioVersions(
+  db: SqlDatabase,
+): Promise<{ targetId: string | null; version: PublishedStudioVersionRow }[]> {
+  const { results } = await publishedStudioVersionsStmt(db).all();
+  return results.map(rowToPublishedStudioVersion);
 }
 
 /** Every head (quality view; bounded). */

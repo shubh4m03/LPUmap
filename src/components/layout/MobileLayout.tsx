@@ -1,5 +1,6 @@
 import { useRef, type CSSProperties, type ReactNode } from 'react';
 import { useAppStore } from '../../app/store/index.ts';
+import { DirectoryPeek } from '../directory/DirectoryPeek.tsx';
 import { MapControls } from '../map-controls/MapControls.tsx';
 import { NavigationHud } from '../navigation/NavigationHud.tsx';
 import { SearchTrigger } from '../search/SearchTrigger.tsx';
@@ -62,6 +63,8 @@ export function MobileLayout({ map }: { map: ReactNode }) {
           snap={snap}
           onSnapChange={setSnap}
           headerActions={<PanelBackButton />}
+          // §8.4: the directory's peek shows the selected building or "N campus buildings · Browse".
+          peek={activePanel === 'directory' ? <DirectoryPeek onBrowse={() => setSnap('half')} /> : undefined}
         >
           <div className="-mx-4">
             <PanelBody panel={activePanel} />

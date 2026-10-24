@@ -13,6 +13,7 @@ export const STATIC_TITLES: Record<OpenPanelId, string> = {
   info: 'Campus information',
   category: 'Category',
   directory: 'Building directory',
+  suggest: 'Suggest a missing place',
 };
 
 /**

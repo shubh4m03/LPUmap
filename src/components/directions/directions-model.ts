@@ -109,6 +109,19 @@ export function failureAdvice(
   return null;
 }
 
+/**
+ * Which endpoints a "choose on map" fallback can fix after a failed request: the
+ * endpoint that is too far from the paths, or either one when the two sit on parts of
+ * the network that are not connected. Never offered while picking is impossible (list mode).
+ */
+export function pickFallbackRoles(result: RouteResult | null): Array<'origin' | 'destination'> {
+  if (!result || result.ok) return [];
+  if (result.reason === 'origin-unsnappable') return ['origin'];
+  if (result.reason === 'destination-unsnappable') return ['destination'];
+  if (result.reason === 'no-path') return ['origin', 'destination'];
+  return [];
+}
+
 export function endpointRoleLabel(role: 'origin' | 'destination'): string {
   return role === 'origin' ? 'start' : 'destination';
 }

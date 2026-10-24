@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useAtlas } from '../app/data/atlas-context.ts';
 import { setMapController } from '../app/map-controller.ts';
-import { placeEndpoint } from '../app/place-actions.ts';
+import { pickPlaceOnMap, pickPointOnMap } from '../app/map-picking.ts';
 import { buildRouteOverlay, useAppStore } from '../app/store/index.ts';
+import { ToastContext } from '../components/ui/toast-context.ts';
 import type { LngLat } from '../data/index.ts';
 import type { MapPadding } from '../map/types.ts';
 import type { IsoController } from './iso-controller.ts';
@@ -69,31 +70,24 @@ export function IsoStage({
   const selectedPoint: LngLat | null =
     selected && selected.kind !== 'building' && !selected.buildingId ? selected.location : null;
 
+  const toast = useContext(ToastContext);
   const onSelect = useCallback(
     (id: string | null) => {
+      // Same rules as MapStage (src/app/map-picking.ts): empty ground is onGroundClick;
+      // an unconnected place explains itself and keeps picking on.
+      const picked = pickPlaceOnMap(id ? getPlace(id) : undefined);
+      if (picked.kind === 'not-connected')
+        toast?.show({ message: picked.message, tone: 'warning', durationMs: 9000 });
+      if (picked.kind !== 'not-picking') return;
       const s = useAppStore.getState();
-      if (s.pickingOnMap) {
-        const place = id ? getPlace(id) : undefined;
-        const endpoint = place ? placeEndpoint(place) : null;
-        if (!endpoint) return; // An empty-ground click is handled by onGroundClick.
-        if (s.pickingOnMap === 'origin') s.setOrigin(endpoint);
-        else s.setDestination(endpoint);
-        s.setPickingOnMap(null);
-        return;
-      }
       if (id) s.selectPlace(id, { focus: false });
       else if (s.selectedPlaceId) s.clearSelection();
     },
-    [getPlace],
+    [getPlace, toast],
   );
 
   const onGroundClick = useCallback((lngLat: LngLat) => {
-    const s = useAppStore.getState();
-    if (!s.pickingOnMap) return;
-    const endpoint = { kind: 'point' as const, label: 'Point picked on map', location: lngLat };
-    if (s.pickingOnMap === 'origin') s.setOrigin(endpoint);
-    else s.setDestination(endpoint);
-    s.setPickingOnMap(null);
+    pickPointOnMap(lngLat);
   }, []);
 
   const onReady = useCallback((c: IsoController) => {

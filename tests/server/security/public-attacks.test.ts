@@ -124,11 +124,32 @@ describe('hostile text', () => {
     expect(contributionInputSchema.safeParse(validSuggestion({ details: 'ok‮gnp.exe' })).success).toBe(false);
   });
 
+  it('rejects a stacked combining-mark flood ("Zalgo") in any text field with 400, nothing stored', async () => {
+    const zalgo = `A${'́'.repeat(118)}`;
+    const interleaved = `Gate ${'́‍'.repeat(20)}one`;
+    for (const body of [
+      validSuggestion({ name: zalgo }),
+      validSuggestion({ description: `Near ${zalgo}` }),
+      validSuggestion({ landmark: interleaved }),
+      validSuggestion({
+        details: `x
+${'̶'.repeat(60)}`,
+      }),
+    ]) {
+      const res = await submit(k, { body });
+      expect(res.status).toBe(400);
+      expect(await errorCode(res)).toBe('invalid');
+    }
+    expect(await k.t.count('suggestions')).toBe(0);
+  });
+
   it.each([
     ['Gurmukhi', 'ਲਾਇਬ੍ਰੇਰੀ ਬਲਾਕ'],
     ['Devanagari with ZWJ/ZWNJ', 'पुस्त‍कालय‌ ब्लॉक'],
     ['emoji with surrogate pairs', 'Café ☕ 🍕 corner'],
     ['Arabic with RLM', 'مكتبة‏ 34'],
+    ['decomposed Vietnamese', 'Tiếng Việt'],
+    ['Tibetan stack', 'བསྒྲུབས ཁང'],
   ])('accepts legitimate %s text', async (_l, name) => {
     const res = await submit(k, { body: validSuggestion({ name }) });
     expect(res.status).toBe(201);

@@ -143,6 +143,8 @@ export interface DomainPort {
   listAudit(db: SqlDatabase, filter: Filter): Promise<unknown>;
 
   getPublication(db: SqlDatabase): Promise<Publication>;
+  /** The current publication version only (cheap; answers If-None-Match before the body is built). */
+  getPublicationVersion(db: SqlDatabase): Promise<number>;
   getOverview(db: SqlDatabase, ctx: DomainCtx): Promise<unknown>;
   getQualityWarnings(db: SqlDatabase, ctx: DomainCtx): Promise<unknown>;
 }

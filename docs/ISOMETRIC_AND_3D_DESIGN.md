@@ -41,6 +41,19 @@ scratch folder `C:/Users/shubh_qypqua6/AppData/Local/Temp/claude/c--Users-shubh-
 
 ### 1.1 Buildings (`public/data/buildings.geojson`)
 
+> **Dataset update (amended 2026-10-24).** The table below was measured on dataset `b628c5855b1d`, which held
+> all 535 footprints of the snapshot (campus and nearby). The current dataset is **`62e807e6d444`**
+> (`manifest.json` `schemaVersion` 2, built from the same OSM snapshot retrieved 2026-10-23T09:39:00Z). Its
+> `buildings.geojson` holds only the campus inventory: **131** footprints, all `geometrySource` `osm` and
+> `inCampusInventory: true`, with `campusStatus` **128** `inside` and **3** `crossing`. The manifest accounts for
+> the rest of the snapshot: 535 in the snapshot = 131 in the inventory + 390 outside (excluded) + 13 uncertain
+> (not in this file) + 1 duplicate removed. Render heights: 122 `osm-levels-estimate`, 9 `fallback`, 0
+> `osm-height`. Names: 3 named, 128 unnamed. Categories: 130 `building`, 1 `food`. Off-campus footprints are
+> no longer in this file, so rows below that count 535 features, the 137/398 `campusZone` split or off-campus
+> heights describe the earlier dataset only. They are kept as the record of the evidence D1–D8 were decided
+> on; re-measure before relying on any of those counts. (Tallied from `public/data/manifest.json` `counts` and
+> `public/data/buildings.geojson` properties.)
+
 | Fact                                                            | Value                                                                                                                                                                       | How                                                                                                                                                                           |
 | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Footprints                                                      | **535**, all `Polygon`                                                                                                                                                      | feature count                                                                                                                                                                 |

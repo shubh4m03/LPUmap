@@ -9,6 +9,11 @@
  */
 import { z } from 'zod';
 import { publishedStudioBuildingSchema } from '../building-studio/schema.ts';
+import {
+  MAX_COMBINING_MARKS,
+  hasCombiningMarkFlood,
+  hasInvisibleNameChars,
+} from '../building-studio/text.ts';
 import { CATEGORIES } from '../config/categories.ts';
 import { lngLatSchema, wheelchairSchema, verificationStatusSchema } from '../data/schema.ts';
 
@@ -67,15 +72,30 @@ function hasControlChars(s: string, allowed: readonly number[] = []): boolean {
   return false;
 }
 
-/** Single-line text: trimmed, no control characters. */
+/** Stacked combining marks ("Zalgo" text) paint over the surrounding UI; see hasCombiningMarkFlood. */
+const MARK_FLOOD_MESSAGE = `Too many combining marks (accents) on one character (at most ${MAX_COMBINING_MARKS})`;
+
+/** Single-line text: trimmed, no control characters, no stacked-mark floods. */
 const line = (max: number) =>
   z
     .string()
     .trim()
     .max(max)
-    .refine((s) => !hasControlChars(s), { message: 'Control characters are not allowed' });
+    .refine((s) => !hasControlChars(s), { message: 'Control characters are not allowed' })
+    .refine((s) => !hasCombiningMarkFlood(s), { message: MARK_FLOOD_MESSAGE });
 
-/** Multi-line text: trimmed; tab, LF and CR allowed, other control characters rejected. */
+/**
+ * A place name: a single line that also rejects invisible characters (zero-width
+ * spaces, stray joiners, U+2028/2029; see hasInvisibleNameChars), so two names
+ * that look identical never compare different.
+ */
+const nameLine = (max: number) =>
+  line(max).refine((s) => !hasInvisibleNameChars(s), {
+    message:
+      'Invisible characters (zero-width spaces, joiners outside a non-Latin word, line or paragraph separators) are not allowed in names',
+  });
+
+/** Multi-line text: trimmed; tab, LF and CR allowed, other control characters and stacked-mark floods rejected. */
 const text = (max: number) =>
   z
     .string()
@@ -83,7 +103,8 @@ const text = (max: number) =>
     .max(max)
     .refine((s) => !hasControlChars(s, [0x09, 0x0a, 0x0d]), {
       message: 'Control characters are not allowed',
-    });
+    })
+    .refine((s) => !hasCombiningMarkFlood(s), { message: MARK_FLOOD_MESSAGE });
 
 export const httpUrlSchema = z
   .string()
@@ -119,7 +140,7 @@ export type SuggestionStatus = z.infer<typeof suggestionStatusSchema>;
  * server assigns status itself. `website` is the honeypot field.
  */
 export const contributionInputSchema = z.object({
-  name: line(LIMITS.name.max).pipe(z.string().min(LIMITS.name.min)),
+  name: nameLine(LIMITS.name.max).pipe(z.string().min(LIMITS.name.min)),
   categoryId: categoryIdSchema,
   location: lngLatSchema,
   description: optional(text(LIMITS.description)),
@@ -177,7 +198,7 @@ export type ApiError = z.infer<typeof apiErrorSchema>;
 
 /** Editable place fields shared by owner locations and overrides. */
 export const placeFieldsSchema = z.object({
-  name: line(LIMITS.name.max).pipe(z.string().min(LIMITS.name.min)),
+  name: nameLine(LIMITS.name.max).pipe(z.string().min(LIMITS.name.min)),
   categoryId: categoryIdSchema,
   location: lngLatSchema,
   description: optional(text(LIMITS.description)),

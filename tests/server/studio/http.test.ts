@@ -16,7 +16,7 @@ import type { Env } from '../../../server/env.ts';
 import { handleAdmin } from '../../../server/handlers/admin/index.ts';
 import { ADMIN_ROUTES } from '../../../server/handlers/admin/routes.ts';
 import { STUDIO_ROUTES } from '../../../server/handlers/admin/studio-routes.ts';
-import { handlePublication } from '../../../server/handlers/publication.ts';
+import { handlePublication, publicationEtag } from '../../../server/handlers/publication.ts';
 import {
   publishResponseSchema,
   studioBuildingDetailSchema,
@@ -217,7 +217,7 @@ describe('body limits and structure', () => {
         draft: { identity: { aliases: Array.from({ length: 600 }, () => 'a') } },
       }),
     ],
-  ])('%s → 400 before the schema and before any DB access', async (_l, raw) => {
+  ])('%s → 400 before the schema; no studio access, only the rejected-attempt audit row', async (_l, raw) => {
     const counting = countingDb(t.db);
     const res = await handleAdmin(
       req('POST', path, { raw, headers: await access() }),
@@ -225,7 +225,11 @@ describe('body limits and structure', () => {
     );
     expect(res.status).toBe(400);
     expect(await errorCode(res)).toBe('invalid');
-    expect(counting.prepared.filter((s) => /studio_|audit_events/.test(s))).toEqual([]);
+    expect(counting.prepared.filter((s) => /studio_/.test(s))).toEqual([]);
+    // Body rejections are audited (BUILDING_STUDIO_DESIGN.md §7, amended 2026-10-24): exactly one INSERT.
+    const audit = counting.prepared.filter((s) => /audit_events/.test(s));
+    expect(audit).toHaveLength(1);
+    expect(audit[0]).toMatch(/^INSERT INTO audit_events/);
   });
 
   it('wrong content type → 415; malformed JSON → 400; a malformed id → 400', async () => {
@@ -305,7 +309,7 @@ describe('a full Access-mode flow and the wire shapes', () => {
 
     const publication = await handlePublication(req('GET', '/api/locations'), accessDeps());
     expect(publication.status).toBe(200);
-    expect(publication.headers.get('ETag')).toBe(`W/"pub-${pr.publicationVersion}"`);
+    expect(publication.headers.get('ETag')).toBe(publicationEtag(pr.publicationVersion));
     const text = await publication.text();
     const p = publicationSchema.parse(JSON.parse(text));
     expect(p.schemaVersion).toBe(2);

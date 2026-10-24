@@ -52,7 +52,7 @@ describe('functions/api/**', () => {
   it('locations: works with a real DB', async () => {
     const res = await locationsFn({ request: req('GET', '/api/locations'), env: { DB: t.db } });
     expect(res.status).toBe(200);
-    expect(res.headers.get('ETag')).toMatch(/^W\/"pub-\d+"$/);
+    expect(res.headers.get('ETag')).toMatch(/^W\/"pub-v\d+-\d+"$/);
   });
 
   it('contributions: submits through the adapter and stores pending', async () => {

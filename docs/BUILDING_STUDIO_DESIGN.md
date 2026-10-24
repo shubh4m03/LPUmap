@@ -1,6 +1,9 @@
 # Building Studio: frozen contract
 
-**Status:** frozen contract for parallel implementation. **Date:** 2026-10-24.
+**Status:** frozen contract for parallel implementation. **Date:** 2026-10-24. **Amended 2026-10-24
+(server hardening):** §1 S3 and S6, §3.5 (invisible characters in names), §5 (URL rules and the fields they
+cover), §7 (audit of body rejections), §8 (publication-version guard and 409), §10 (ETag, 304, read path),
+§11.2 (labels) and §14 (actual file names). Each amendment is marked in place.
 **Binding inputs:** the lead's decisions S1–S14 (restated in §1 with clarifications; none is weakened),
 `docs/ISOMETRIC_AND_3D_DESIGN.md` (D1–D8, amended under D2 on 2026-10-24),
 `docs/COMMUNITY_MODULE_CONTRACTS.md`, `docs/MODULE_CONTRACTS.md` ("v2 geographic contract"),
@@ -75,6 +78,13 @@ Code that already implements this contract:
 
 - Template `accuracyClass` is one of `generic-prefab | stylized | source-backed | surveyed`. Every starter
   template is `generic-prefab`. Owner templates may only be `generic-prefab | stylized`.
+- _Amended 2026-10-24:_ an instance's public `accuracyClass` is derived by the server at publish from the
+  **stored** template version (code library or D1 row), never from the client. The draft's `templateRef`
+  counts only when it is consistent with the model: the version exists, defines the named variant, and
+  builds with the model's own `generatorId` and `generatorVersion`. Anything else (a custom model, a spoofed
+  or stale ref, a ref to a template of another generator) publishes as `generic-prefab`. An owner template's
+  stored class is capped at `generic-prefab | stylized` whatever its stored JSON says
+  (`accuracyClassFor` in `server/domain/studio/buildings.ts`).
 - Instance verification is `unverified` (default), `source-backed` (needs a citation URL, title and access
   date, plus a note) or `surveyed` (needs a survey date and a note).
 - Public labels are `VERIFICATION_LABELS`, for example "Illustrative model placed by the site owner — not
@@ -141,6 +151,9 @@ Code that already implements this contract:
   - The rejection applies to every field that documents provenance: citation URL, citation title,
     verification note, position-correction reason, acknowledgement reason and change summary. It applies even
     in drafts (`text.ts`, `PROHIBITED_SOURCE_MESSAGE`).
+  - _Amended 2026-10-24:_ it also applies to free text that can cite a source: the identity `description`
+    and private `notes`, the archive `reason`, a template's `intendedUse` and each variant's `description`
+    (§5).
   - Google **Open Buildings** (`sites.research.google`, `storage.googleapis.com/open-buildings-data`) is a
     separately licensed dataset and is allowed.
 
@@ -351,6 +364,17 @@ templateRef | null, positionCorrection | null }`. It has no footprint, status, a
 All text is trimmed, and control, bidi-override and lone-surrogate characters are rejected (as in
 `src/community/schema.ts`).
 
+_Amended 2026-10-24:_ `name`, each alias, and template and variant names use `nameLine` (`text.ts`), which also
+rejects invisible characters that make two identical-looking names compare different: zero-width space,
+word joiner and the invisible operators U+2060–2064, U+FEFF inside a name (trimming already strips it at the
+ends), U+180E, soft hyphen, combining grapheme joiner, Hangul fillers and the LINE / PARAGRAPH SEPARATORS
+U+2028/2029. ZWJ and ZWNJ are allowed only right after a non-ASCII letter or mark and before another
+non-ASCII letter or mark, whitespace or the end of the name (how Indic and Arabic-script text uses them,
+including a ZWNJ that ends a word). After Latin letters, digits or a space, at the start, or before an ASCII
+character they are rejected. Place names in
+`src/community/schema.ts` (suggestions, owner locations, overrides) follow the same rule. `description` and
+`notes` additionally follow the prohibited-source rule (§5).
+
 ### 3.6 Verification
 
 | Schema                    | Use                    | `source-backed`                                                                          | `surveyed`                      |
@@ -441,6 +465,24 @@ A value without a scheme is read as https.
 
 `containsProhibitedSourceUrl(text)` scans free text for URL-like tokens. It does not judge prose such as "Not
 taken from Google Maps".
+
+_Amended 2026-10-24 (what the implementation matches, and the fields it covers):_
+
+- Also matched: the `cbk*.` subdomains and `/cbk` Street View image endpoints (`*.ggpht.com/cbk`); Google
+  Search map results (`/search?tbm=map`); and **Google Maps place and contributor photos** on
+  `*.googleusercontent.com` with a path starting `/p/`, `/gps-cs-s/` or `/gps-proxy/`. Other
+  `googleusercontent.com` paths (for example profile pictures under `/a/`) are not matched.
+- Hosts are compared case-insensitively with **every trailing dot removed** (`www.google.com./maps`,
+  `google.com../maps`) and `www.` stripped. Paths are percent-decoded, with repeated slashes collapsed.
+- A Maps URL wrapped in a redirect, consent or archive link (in a query value or in the path) is unwrapped up
+  to 3 levels deep.
+- In free text, a URL-like token may separate labels with `.` or with the ideographic and full-width full
+  stops (U+3002, U+FF0E, U+FF61, which the URL parser maps to `.`). Trailing dots after the top-level domain
+  stay part of the token, so `www.google.com./maps/…` is not split from its path.
+- Fields: `provenanceLine` and `provenanceText` now also back the identity `description` and `notes`, the
+  archive `reason`, a template's `intendedUse` and each variant's `description`, besides the provenance fields
+  listed in S6.
+- Names and aliases use `nameLine` (§3.5).
 
 ---
 
@@ -546,7 +588,12 @@ All routes:
 - bodies are ≤ 32 KB (`STUDIO_LIMITS.bodyBytes`) and parsed with the strict schemas;
 - the server assigns ids, statuses, versions, actors and timestamps;
 - every write is audited (success, rejected and failed), with entity type `building` or `template` and an
-  action from `STUDIO_AUDIT_ACTIONS`;
+  action from `STUDIO_AUDIT_ACTIONS`. _Amended 2026-10-24:_ this includes bodies the HTTP layer rejects
+  before the domain sees them (415 content type, 413 size, 400 malformed JSON or UTF-8, structural bounds).
+  Each route declares its audit target in the route table (`auditAs`, `server/handlers/admin/audit-spec.ts`),
+  and the rejection is written with outcome `rejected` for the authenticated actor and detail
+  `<code> (HTTP <status>): <fixed message>` (never the body). Every community write route does the same.
+  Unauthenticated requests, the login route and the `POST /studio/validate` dry run write no row;
 - every write to an existing record carries `revision`. A mismatch returns 409 `conflict`, with
   `details.current` = the head.
 
@@ -623,6 +670,22 @@ Error bodies:
   - **Duplicate:** INSERT a new head + audit on both ids.
   - **Templates:** INSERT a version + UPDATE the head + audit.
 - A failed batch changes nothing. The UI keeps the local draft and offers a retry.
+- **Publication-version guard** (_amended 2026-10-24: documents the implemented behaviour_). Publish and
+  restore-to-published validate against the published set. They read `publication_version` **before**
+  validating and guard the whole batch on it: the audit row and the version INSERT (publish) or the head
+  UPDATE (restore) are written only if the head revision **and** `publication_version` are both unchanged.
+  Any public change that lands in between (another building published, archived or restored, or a location
+  or override change) makes the batch write nothing. The answer is **409 `conflict`** with
+  `details.current` = the head, with one of two messages:
+  - the head's revision or status moved: "This building was changed by someone else since you loaded it…".
+    Reload, review and retry with the new revision;
+  - the head is unchanged and only the publication moved: "The published map changed while this building
+    was being validated… your revision is still current, so validate again and retry." The same request
+    with the same revision can be sent again; it is re-validated against the new published set.
+
+  Restoring a never-published record (back to `draft`) does not touch the publication and has no version
+  guard. Archive bumps the publication but needs no validation, so it is guarded on the head only.
+
 - **Verified** on a fresh local D1 and on a D1 that already holds 0001 data (copied rows, ids, sequence,
   indexes, triggers, a failed batch rolling back, the delete rules). The down script was checked the same
   way (§12). The permanent tests belong to studio-server.
@@ -679,6 +742,22 @@ Error bodies:
 - The server re-checks each record against the schema and never publishes one that fails, exactly as for
   locations.
 - It contains no notes, actors, drafts, acknowledgements, validation or change summaries.
+- _Amended 2026-10-24 (HTTP behaviour of `GET /api/locations`):_
+  - **ETag** `W/"pub-v<PUBLICATION_SCHEMA_VERSION>-<publicationVersion>"`, for example `W/"pub-v2-17"`. The
+    schema version is included because the body's shape depends on it, while `publication_version` does not
+    change on a deploy. Without it, a deploy or rollback across v1 and v2 would answer 304 to a client that
+    holds the other shape. The **base dataset version is deliberately not included**: the body never depends
+    on the base dataset (no base data is read; the client merges the publication against whatever dataset
+    it has), so a data refresh does not change the body. Older `W/"pub-<n>"` validators never match and get a 200.
+  - A matching `If-None-Match` is answered with **304 from one indexed `meta` read**, before any row is read
+    or the body is built.
+  - Otherwise the body is read as **one consistent snapshot** (one `db.batch`, which D1 runs as a
+    transaction: version, active locations, overrides, published studio versions). Its ETag is taken from the
+    version inside that snapshot, so rows and ETag always agree.
+  - The studio read selects only the columns the public record needs (`building_id`, `version`,
+    `record_json`, `footprint_json`, `footprint_area_m2`, `membership_json`, `accuracy_class`,
+    `position_corrected`, `published_at`, and the head's `target_id`). It never reads `validation_json`,
+    `acknowledgements_json`, `change_summary` or the actors.
 
 ---
 
@@ -741,7 +820,7 @@ interface StudioRenderModel {
    - `displayName` = name ?? `Unnamed building (owner-placed model)`;
    - aliases, `subcategory` = subtype, description, `wheelchair 'unknown'`;
    - provenance `{sourceId 'owner', sourceRef: id, verificationStatus (mapped, §3.6), notes:
-VERIFICATION_LABELS[status]}`;
+studioPublicLabel(record)}` (_amended 2026-10-24_; see **Labels** below);
    - **no** `levels` or `heightM` (an illustrative model is not a measurement).
 4. Routing: `graphNodeId` only through a validated `accessNodeId`, measured to the footprint. Otherwise the
    building is not routable and reported (shared `invalidAccess`).
@@ -757,6 +836,12 @@ VERIFICATION_LABELS[status]}`;
 - Otherwise the feature keeps the base id and the place override's name and category (precedence: base → place
   override for identity, point location and access → studio model for geometry, height and appearance).
 - `renderHeightM`/`renderMinHeightM`/`renderHeightSource` come from the model.
+- _Amended 2026-10-24 (as implemented in `src/building-studio/merge.ts`):_ the base building's own place
+  (kind `building`, `buildingId` = the target) keeps its override identity and location but describes what is
+  drawn. It gets `heightSource 'studio-model'` and **no** `heightM` (the illustrative model height is not a
+  measurement, and the base estimate no longer describes the drawn shape). The S3 label is appended to its
+  provenance notes as `<existing notes> · <studioPublicLabel(record)>`, or is the whole note when there was
+  none.
 - The geometry is replaced only when `positionCorrected`, and only if the corrected footprint still classifies
   `inside`/`crossing` with the current boundary. Otherwise the correction is ignored and reported
   (`correctionsIgnored`).
@@ -770,6 +855,15 @@ VERIFICATION_LABELS[status]}`;
 - **Isometric:** draws the same faces. Picking in every mode uses the footprint feature, whose id equals the
   public id.
 - **2D:** the footprint.
+
+**Labels** (_amended 2026-10-24_; `src/building-studio/labels.ts`, shared by the merge, the search and
+directory subtitles, the overview's info card and the Studio dialogs). `studioPublicLabel(record)` is
+`VERIFICATION_LABELS[verification.status]`, except for a **verified** record (`source-backed` or `surveyed`)
+whose model came from a generic or stylized template (`accuracyClass` `generic-prefab`, `stylized` or absent).
+That record gets the generic-template note appended: `<label> (shape and appearance from a generic template,
+not the real design)` (`GENERIC_SHAPE_NOTE`). Verification is evidence that the building is there; it never
+lets a generic prefab pass as the real building's design. An unverified record shows the unverified label
+alone.
 
 **Counts** are recomputed with studio buildings included (`buildings`, `heightSource:studio-model`, category
 and kind counts). Search docs come from campus places, so a studio building has exactly one doc.
@@ -818,7 +912,7 @@ The owner's lists are grouped as:
 | List  | Acceptance                                                                                                                                                                                                                                                                                                              | Tests (owner)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **A** | Searchable, categorized library (17 types, ≥ 2 variants for major types); thumbnails; metadata; translucent preview; placement by click, drag or coordinates in metres; feedback with reasons, no silent snapping                                                                                                       | studio-core: `asset-library.test.ts` (every template parses with `templateDefinitionSchema`, 17 categories, variants, `renderCost`, deterministic SVG snapshots). Admin UI: library search/filter (RTL). E2E (desktop + mobile): place by click and by typed coordinates, then assert the footprint is in metres via `__ATLAS_MAP__`; reticle placement on mobile; screenshots                                                                                                                                                                |
-| **B** | Move, rotate and resize with numeric fields and limits; appearance presets, reset, before/after; undo/redo (drag = 1 command); duplicate; archive and delete                                                                                                                                                            | studio-core: `command-stack.test.ts` (coalescing, undo after save → unsaved), `apply-template.test.ts`. Mesh: `mesh.test.ts` (this stage) + generator suites (volumes, closure, planarity, determinism, roof validity). Admin UI: inspector, step buttons, `beforeunload`. E2E: move/rotate/resize, undo/redo, duplicate offset                                                                                                                                                                                                               |
+| **B** | Move, rotate and resize with numeric fields and limits; appearance presets, reset, before/after; undo/redo (drag = 1 command); duplicate; archive and delete                                                                                                                                                            | studio-core: `history.test.ts` (coalescing, undo after save → unsaved), `template-compat.test.ts`. Mesh: `mesh.test.ts` (this stage) + generator suites (volumes, closure, planarity, determinism, roof validity). Admin UI: inspector, step buttons, `beforeunload`. E2E: move/rotate/resize, undo/redo, duplicate offset                                                                                                                                                                                                                    |
 | **C** | One canonical record and id across 3D, isometric, 2D, search, directory, favourites and URL; no duplicates; base edits via overrides; honest labels                                                                                                                                                                     | integrate: `merge-studio.test.ts` (one feature + one place + one doc per published building; `directoryVisible`; base-model precedence; hidden target; orphan; outside dropped; determinism under shuffles; counts). Directory/search integration. E2E: publish → find in search → open `?place=stu:…` in all three views → favourite                                                                                                                                                                                                         |
 | **D** | Validation before publish, acknowledged and audited overrides; drafts on the server; explicit, atomic, failure-safe publish with change summary; revision conflicts; auth, CSRF, Origin and limits on every write; reversible archive; confirmed delete; template versions never change published buildings; migrations | This stage: `schema.test.ts`, `text.test.ts`, `publication.test.ts`, the merge rule 4a regressions. studio-core: `validate.test.ts` (every code in §6.2: one passing and one failing fixture, thresholds, Google URLs). studio-server: route-table auth/CSRF/Origin/503 (auto-enumerated), 409 per write, 422 shapes, atomic publish with an injected batch failure (nothing changes), the audit of every write, the state machine table in §9, migration tests on fresh and 0001-populated D1, the down script, the rollback.test.ts updates |
 | **E** | Both 3D modes render studio models; fallback; Gate 3; responsive desktop + touch; reduced motion; accessibility                                                                                                                                                                                                         | render-3d: custom-layer unit tests (buffer building from `StudioMesh`, triangle winding), context-loss → extrusion fallback, lazy-chunk check, Gate 3 perf project (`*.perf.spec.ts`, 50 instances, 4× CDP throttle) with results in `docs/PERFORMANCE.md`. isometric: face projection, culling and painter order with studio meshes. E2E desktop + mobile with screenshots; axe scan of the Studio                                                                                                                                           |
@@ -827,15 +921,21 @@ The owner's lists are grouped as:
 
 ## 14. Ownership
 
-| Owner                        | Files                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **contract** (frozen)        | `docs/BUILDING_STUDIO_DESIGN.md`, `src/building-studio/schema.ts`, `src/building-studio/text.ts`, `src/building-studio/mesh/types.ts` (types + conventions; studio-core may add helpers, not change shapes), `migrations/0002_building_studio.sql`, `docs/db/0002_down.sql`, publication v2 in `src/community/schema.ts`, `tests/unit/building-studio/{schema,text,publication}.test.ts`, `tests/unit/building-studio/fixtures.ts`. Changes need the lead's approval                                               |
-| **studio-core**              | `src/building-studio/footprint.ts`, `src/building-studio/mesh/**` (replaces the stubs **behind the same exported signatures**), `src/building-studio/generators/**`, `src/building-studio/validate.ts`, `src/building-studio/asset-library.ts`, `src/building-studio/thumbnails.ts`, `src/building-studio/apply-template.ts`, `src/building-studio/command-stack.ts`, `src/building-studio/local-recovery.ts`, `src/building-studio/glb-validator.ts`, `tests/unit/building-studio/**` (except the contract tests) |
-| **studio-server**            | `server/db/studio-*.ts`, `server/domain/studio/**`, `server/handlers/admin/studio-*.ts` + their registration in `server/handlers/admin/routes.ts`, `server/domain/publication.ts` (the `buildings` field), the new error codes in `apiErrorSchema` + `server/errors.ts` + `server/http/errors.ts`, the studio permissions in `server/auth/authorize.ts`, `tests/server/studio/**`, the migration and down tests, the `tests/server/compat/rollback.test.ts` update                                                 |
-| **render-3d**                | `src/buildings3d/studio/**` (WebGL2 custom layer, lazy chunk, watchdog, context-loss fallback), the extrusion filter in `src/buildings3d/layers.ts`, the Gate 3 perf spec                                                                                                                                                                                                                                                                                                                                          |
-| **isometric**                | `src/isometric/**` studio-face drawing, culling and hit-testing via the footprint                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| **integrate**                | studio merge (`src/community/merge.ts` + `merge-studio.ts`), `/api/locations` fetch and the publication wiring in the app, `MapView`/`MapStage` wiring (`studioModels`, context-places layer toggle with `includeOffCampus`), changes C1–C3 below (with the lead's approval for lead-owned files), `tests/unit/community/**` (studio merge)                                                                                                                                                                        |
-| **later: admin-UI workflow** | `/admin` shell and Studio UI (`src/admin/**`): toolbar, library browser, inspector, mobile reticle, state badges, publish dialog with acknowledgements, `tests/unit/admin/**`, `tests/e2e/studio*.spec.ts`                                                                                                                                                                                                                                                                                                         |
+_Amended 2026-10-24 (actual file names):_ the command stack is `src/building-studio/history.ts` (tests in
+`tests/unit/building-studio/history.test.ts`), not `command-stack.ts`. "Apply template" is
+`src/building-studio/template-compat.ts` (tests in `template-compat.test.ts`), not `apply-template.ts`. The
+tables below and §13 now use the actual names. The server also has `server/handlers/admin/audit-spec.ts`
+(route audit targets, §7).
+
+| Owner                        | Files                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **contract** (frozen)        | `docs/BUILDING_STUDIO_DESIGN.md`, `src/building-studio/schema.ts`, `src/building-studio/text.ts`, `src/building-studio/mesh/types.ts` (types + conventions; studio-core may add helpers, not change shapes), `migrations/0002_building_studio.sql`, `docs/db/0002_down.sql`, publication v2 in `src/community/schema.ts`, `tests/unit/building-studio/{schema,text,publication}.test.ts`, `tests/unit/building-studio/fixtures.ts`. Changes need the lead's approval                                          |
+| **studio-core**              | `src/building-studio/footprint.ts`, `src/building-studio/mesh/**` (replaces the stubs **behind the same exported signatures**), `src/building-studio/generators/**`, `src/building-studio/validate.ts`, `src/building-studio/asset-library.ts`, `src/building-studio/thumbnails.ts`, `src/building-studio/template-compat.ts`, `src/building-studio/history.ts`, `src/building-studio/local-recovery.ts`, `src/building-studio/glb-validator.ts`, `tests/unit/building-studio/**` (except the contract tests) |
+| **studio-server**            | `server/db/studio-*.ts`, `server/domain/studio/**`, `server/handlers/admin/studio-*.ts` + their registration in `server/handlers/admin/routes.ts`, `server/domain/publication.ts` (the `buildings` field), the new error codes in `apiErrorSchema` + `server/errors.ts` + `server/http/errors.ts`, the studio permissions in `server/auth/authorize.ts`, `tests/server/studio/**`, the migration and down tests, the `tests/server/compat/rollback.test.ts` update                                            |
+| **render-3d**                | `src/buildings3d/studio/**` (WebGL2 custom layer, lazy chunk, watchdog, context-loss fallback), the extrusion filter in `src/buildings3d/layers.ts`, the Gate 3 perf spec                                                                                                                                                                                                                                                                                                                                     |
+| **isometric**                | `src/isometric/**` studio-face drawing, culling and hit-testing via the footprint                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| **integrate**                | studio merge (`src/community/merge.ts` + `merge-studio.ts`), `/api/locations` fetch and the publication wiring in the app, `MapView`/`MapStage` wiring (`studioModels`, context-places layer toggle with `includeOffCampus`), changes C1–C3 below (with the lead's approval for lead-owned files), `tests/unit/community/**` (studio merge)                                                                                                                                                                   |
+| **later: admin-UI workflow** | `/admin` shell and Studio UI (`src/admin/**`): toolbar, library browser, inspector, mobile reticle, state badges, publish dialog with acknowledgements, `tests/unit/admin/**`, `tests/e2e/studio*.spec.ts`                                                                                                                                                                                                                                                                                                    |
 
 ### Required changes in files this stage does not own
 
@@ -901,7 +1001,8 @@ The owner's lists are grouped as:
     `TemplateListing`, `StudioLibraryResponse`, `StudioErrorDetails`, `DeleteStudioBuildingResponse`,
     `StudioQualityResponse`.
 - **`src/building-studio/text.ts`:** `hasControlChars`, `isHttpUrl`, `PROHIBITED_SOURCE_MESSAGE`,
-  `isProhibitedSourceUrl`, `containsProhibitedSourceUrl`, `line`, `text`, `provenanceLine`, `provenanceText`.
+  `isProhibitedSourceUrl`, `containsProhibitedSourceUrl`, `line`, `text`, `provenanceLine`, `provenanceText`;
+  _added 2026-10-24:_ `hasInvisibleNameChars`, `nameLine`.
 - **`src/building-studio/footprint.ts`:** `EnuFrame`, `createEnuFrame`, `rotateToEnu`, `ringAreaM2`,
   `normalizeLocalPolygon`, `localPolygonAreaM2`, `localToLngLatPolygon`, `lngLatToLocalPolygon`,
   `outerVertexMean`, `FootprintResult`, `boxLocalFootprint`, `deriveFootprint`.
