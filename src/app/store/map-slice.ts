@@ -1,4 +1,5 @@
 import { LAYER_GROUPS, type LayerGroupId } from '../../config/categories.ts';
+import { APP_CONFIG } from '../../config/index.ts';
 import { isMapViewMode, mode3dFor, type MapViewMode, type ViewMode } from '../view-mode.ts';
 import type { MapSlice, SliceCreator } from './types.ts';
 
@@ -30,14 +31,19 @@ export const createMapSlice =
     viewMode: defaults.viewMode,
     lastMapMode: isMapViewMode(defaults.viewMode) ? defaults.viewMode : 'realistic3d',
     viewModeReason: null,
+    mapUnavailable: null,
     mode3d: mode3dFor(defaults.viewMode),
     showLabels: defaults.showLabels,
     visibleGroups: DEFAULT_VISIBLE_GROUPS,
+    showNearbyOutsideCampus: APP_CONFIG.optionalLayers.nearbyOutsideCampus.defaultVisible,
+    showDetectedFootprints: APP_CONFIG.optionalLayers.detectedFootprints.defaultVisible,
 
     setViewMode(mode, opts = {}) {
       const s = get();
       // The overview has no live GPS: refuse it while navigating (the switcher shows why).
       if (mode === 'isometric' && s.navigationActive) return false;
+      // Without WebGL only the overview can draw anything.
+      if (isMapViewMode(mode) && s.mapUnavailable !== null) return false;
       if (s.viewMode === mode && s.mode3d === mode3dFor(mode)) return true;
       set({
         viewMode: mode,
@@ -47,6 +53,14 @@ export const createMapSlice =
       });
       return true;
     },
+    setMapUnavailable(reason) {
+      set({
+        mapUnavailable: reason,
+        viewMode: 'isometric',
+        mode3d: false,
+        viewModeReason: 'fallback',
+      });
+    },
     setMode3d: (on) => {
       get().setViewMode(on ? 'realistic3d' : 'standard2d');
     },
@@ -54,6 +68,8 @@ export const createMapSlice =
       get().setViewMode(get().mode3d ? 'standard2d' : 'realistic3d');
     },
     setShowLabels: (showLabels) => set({ showLabels }),
+    setShowNearbyOutsideCampus: (showNearbyOutsideCampus) => set({ showNearbyOutsideCampus }),
+    setShowDetectedFootprints: (showDetectedFootprints) => set({ showDetectedFootprints }),
 
     setGroupVisible(id, visible) {
       const current = get().visibleGroups;
@@ -69,6 +85,11 @@ export const createMapSlice =
     },
 
     restoreDefaults() {
-      set({ visibleGroups: DEFAULT_VISIBLE_GROUPS, showLabels: true });
+      set({
+        visibleGroups: DEFAULT_VISIBLE_GROUPS,
+        showLabels: true,
+        showNearbyOutsideCampus: APP_CONFIG.optionalLayers.nearbyOutsideCampus.defaultVisible,
+        showDetectedFootprints: APP_CONFIG.optionalLayers.detectedFootprints.defaultVisible,
+      });
     },
   });

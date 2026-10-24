@@ -8,9 +8,15 @@ const PANEL_SPACE_PX = 16 + 384 + 16;
 /** Height of the mobile quick-actions bar under the map (the sheet overlaps it). */
 export const QUICKBAR_PX = 60;
 
+/** The right-hand control column (the 56px view-mode switcher) plus its 16px gutters. */
+const CONTROLS_SPACE_PX = 16 + 56 + 16;
+
 export function useDesktopPadding(): MapPadding {
   const open = useAppStore((s) => s.activePanel !== 'none' && !s.panelCollapsed);
-  return useMemo(() => ({ top: 80, right: 72, bottom: 32, left: open ? PANEL_SPACE_PX : 16 }), [open]);
+  return useMemo(
+    () => ({ top: 80, right: CONTROLS_SPACE_PX, bottom: 32, left: open ? PANEL_SPACE_PX : 16 }),
+    [open],
+  );
 }
 
 export function useViewportHeight(): number {

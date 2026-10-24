@@ -6,7 +6,12 @@
  */
 import type { BuildingProps, HeightSource } from '../../src/data/schema.ts';
 
-const FIDELITY: Record<HeightSource, 0 | 1 | 2> = { fallback: 0, 'osm-levels-estimate': 1, 'osm-height': 2 };
+const FIDELITY: Record<HeightSource, 0 | 1 | 2> = {
+  fallback: 0,
+  'osm-levels-estimate': 1,
+  'osm-height': 2,
+  'studio-model': 0,
+};
 
 export function syntheticBuildingProps(over: Partial<BuildingProps> & { id: string }): BuildingProps {
   const renderHeightSource = over.renderHeightSource ?? 'fallback';

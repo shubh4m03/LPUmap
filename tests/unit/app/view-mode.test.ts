@@ -2,7 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { createAppStore } from '../../../src/app/store/index.ts';
 import {
   buildViewUrl,
+  ISOMETRIC_DURING_NAVIGATION_REASON,
   isMapViewMode,
+  locationSwitchAnnouncement,
+  MAP_UNAVAILABLE_REASON,
+  supportsCanvas2D,
+  VIEW_MODE_NAMES,
+  viewModeBlockedReason,
   mode3dFor,
   navigationSwitchAnnouncement,
   parseViewParam,
@@ -109,5 +115,45 @@ describe('view-mode store state', () => {
     expect(s.getState().setViewMode('isometric')).toBe(false);
     expect(s.getState().viewMode).toBe('standard2d');
     expect(s.getState().setViewMode('realistic3d', { reason: 'navigation' })).toBe(true);
+  });
+});
+
+describe('map unavailable (no WebGL) and blocked reasons', () => {
+  it('switches to the overview and refuses the map modes, with the reason for each', () => {
+    const s = createAppStore({ map: { viewMode: 'realistic3d' } });
+    s.getState().setMapUnavailable(MAP_UNAVAILABLE_REASON);
+    expect(s.getState()).toMatchObject({ viewMode: 'isometric', mode3d: false, viewModeReason: 'fallback' });
+    expect(s.getState().setViewMode('standard2d')).toBe(false);
+    expect(s.getState().viewMode).toBe('isometric');
+    const state = { navigationActive: false, mapUnavailable: MAP_UNAVAILABLE_REASON };
+    expect(viewModeBlockedReason('realistic3d', state)).toBe(MAP_UNAVAILABLE_REASON);
+    expect(viewModeBlockedReason('isometric', state)).toBeNull();
+    expect(viewModeBlockedReason('isometric', { navigationActive: true, mapUnavailable: null })).toBe(
+      ISOMETRIC_DURING_NAVIGATION_REASON,
+    );
+    expect(viewModeBlockedReason('standard2d', { navigationActive: true, mapUnavailable: null })).toBeNull();
+  });
+
+  it('names every mode for the switcher and announces a location switch', () => {
+    expect(VIEW_MODES.map((m) => VIEW_MODE_NAMES[m])).toEqual(['3D map', 'Isometric overview', '2D map']);
+    expect(locationSwitchAnnouncement('realistic3d')).toBe(
+      'Live location uses the map view. Switched to 3D map.',
+    );
+  });
+
+  it('detects Canvas2D only where the browser has it (jsdom has none)', () => {
+    expect(supportsCanvas2D()).toBe(false);
+  });
+});
+
+describe('opt-in layer state', () => {
+  it('starts with both opt-in layers off (APP_CONFIG) and restores them with the defaults', () => {
+    const s = createAppStore();
+    expect(s.getState()).toMatchObject({ showNearbyOutsideCampus: false, showDetectedFootprints: false });
+    s.getState().setShowNearbyOutsideCampus(true);
+    s.getState().setShowDetectedFootprints(true);
+    expect(s.getState()).toMatchObject({ showNearbyOutsideCampus: true, showDetectedFootprints: true });
+    s.getState().restoreDefaults();
+    expect(s.getState()).toMatchObject({ showNearbyOutsideCampus: false, showDetectedFootprints: false });
   });
 });

@@ -185,6 +185,53 @@ snapshot A.
 - The next useful measurement is on a real mid-range Android phone over 4G: first load, a repeat
   load from the service worker, and time to first route. That has not been done.
 
+## View modes and the owner publication (2026-10-24)
+
+Measured by the integration agent on the same laptop (dataset `62e807e6d444`), while other agents were
+running tests. These are single-machine snapshots, not budgets. Gate 3 (the studio WebGL layer with 50
+instances under a 4× CPU throttle) belongs to the render-3d work package and is not repeated here.
+
+### Chunks (`npx vite build` into `dist/`)
+
+Raw bytes on disk; gzip is level 9 from Node `zlib` (Vite's own column is within about 1 %).
+
+| Chunk                 | Raw         | gzip      | Loaded                                                           |
+| --------------------- | ----------- | --------- | ---------------------------------------------------------------- |
+| `index-*.js` (entry)  | 225,003 B   | 70,844 B  | at start                                                         |
+| `AppShell-*.js`       | 81,467 B    | 26,654 B  | at start, in parallel with the dataset                           |
+| `services-*.js`       | 51,100 B    | 17,936 B  | at start: search index, router, directory, publication merge     |
+| `publication-*.js`    | 5,879 B     | 2,552 B   | at start: GET /api/locations loader (schemas load with it)       |
+| `MapStage-*.js`       | 1,076,435 B | 291,598 B | only in Realistic 3D and 2D (contains MapLibre GL)               |
+| `IsoStudioStage-*.js` | 44,039 B    | 16,463 B  | only in the isometric overview (Canvas2D; never loads MapLibre)  |
+| `generate-*.js`       | 12,723 B    | 5,033 B   | with the overview or the studio layer (procedural studio meshes) |
+| `runtime-*.js`        | 14,508 B    | 6,109 B   | only when a studio model is visible in 3D (WebGL2 custom layer)  |
+
+The overview and the map are separate chunks: a phone that opens `?view=iso` never downloads MapLibre,
+and the 3D/2D map never downloads the overview. The largest chunk is still `MapStage`, under the
+1,200 kB warning.
+
+### Publication (GET /api/locations)
+
+| What                                                                 | Value               | How                                         |
+| -------------------------------------------------------------------- | ------------------- | ------------------------------------------- |
+| Start-up wait for the network before using the saved copy            | 3,000 ms (setting)  | `PUBLICATION_TIMEOUT_MS`, not a measurement |
+| Request abandoned after                                              | 20,000 ms (setting) | `PUBLICATION_HARD_TIMEOUT_MS`               |
+| Parse the e2e fixture body (2 studio buildings, 1 location; 6,268 B) | 0.16 ms             | Node, median of 21 warm runs                |
+| `applyPublication` on the real dataset with that body                | 8.61 ms             | Node, median of 21 warm runs                |
+| `buildServices`, base dataset / with the publication applied         | 12.16 ms / 14.50 ms | Node, median of 21 warm runs                |
+
+The publication is fetched in parallel with the dataset, so on a working server it adds no start-up
+time; only a server slower than the dataset download delays start-up, by at most the 3 s timeout.
+Without an API (static hosting) the request ends at once and the base dataset is used.
+
+### Studio models in the browser (Playwright, headless Chromium, SwiftShader)
+
+`tests/e2e/view-modes.spec.ts` reads `window.__ATLAS_MAP__.getRealistic3D()` with the two synthetic
+fixture buildings published. In all five viewports the custom WebGL2 layer was used (`studio:
+"custom"`, no fallback): 2 instances, 2 draw calls, 88 triangles, 12,360 B of GPU buffers, and a
+last layer render of about 0.1 ms. This is a correctness check on a software renderer, not a
+frame-time measurement.
+
 ## How to reproduce
 
 The measurement scripts lived in the session's scratch directory, not in the repository. To repeat

@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { CATEGORIES } from '../../../src/config/categories.ts';
 import type { GraphFile, LngLat, Place } from '../../../src/data/schema.ts';
 import { haversineM } from '../../../src/distance/geodesic.ts';
+import { E2E_FACILITY, E2E_FACILITY_ID, E2E_FACILITY_NAME } from './publication.ts';
 import {
   createRouter,
   type RouteEndpoint,
@@ -117,7 +118,8 @@ export const ROUTE_PAIR = pickRoutablePair();
 /**
  * Workflow E: a quick-action category that has a named, located place to open,
  * or null when the dataset has none (the campus-only v2 data has no named,
- * routable food/finance/water/washroom/gate place). Callers skip with a reason.
+ * routable food/finance/water/washroom/gate place). Callers then use
+ * SYNTHETIC_FACILITY with the synthetic publication.
  */
 function pickFacility(): { categoryLabel: string; place: LocatedPlace } | null {
   for (const c of CATEGORIES.filter((cat) => cat.nearestAction)) {
@@ -130,8 +132,21 @@ function pickFacility(): { categoryLabel: string; place: LocatedPlace } | null {
 }
 
 export const FACILITY = pickFacility();
-export const NO_FACILITY_REASON =
-  'The dataset has no quick-action category with a named, routable place (campus-only data); needs synthetic e2e data.';
+
+/** What a facility test needs to know about its place. */
+export interface FacilityTarget {
+  categoryLabel: string;
+  place: { id: string; name: string; displayName: string };
+}
+
+/**
+ * The synthetic routable facility of fixtures/publication.ts (an owner location
+ * on a walkable node). Present only when the test enables `syntheticPublication`.
+ */
+export const SYNTHETIC_FACILITY: FacilityTarget = {
+  categoryLabel: E2E_FACILITY.categoryLabel,
+  place: { id: E2E_FACILITY_ID, name: E2E_FACILITY_NAME, displayName: E2E_FACILITY_NAME },
+};
 
 /** Interior point of a building footprint: the vertex average, nudged inside if needed. */
 export function footprintCentre(id: string): LngLat {

@@ -9,11 +9,13 @@
  *   window.__ATLAS_MAP__.getLayerVisibility(id)      → 'visible' | 'none' | null (no such layer)
  *   window.__ATLAS_MAP__.isUserLocationShown()       → boolean
  *   window.__ATLAS_MAP__.projectToViewport(lngLat)   → { x, y } viewport CSS px of a ground point, or null
+ *   window.__ATLAS_MAP__.getRealistic3D()            → studio render state, fallback reason, layer stats, or null
  *
  * Privacy: it deliberately exposes no user coordinates or accuracy — only
  * whether a location marker is shown. The camera centre is the map view, not
  * the user's position.
  */
+import type { Realistic3DDebug } from '../buildings3d/realistic3d.ts';
 import type { LngLat } from '../data/schema.ts';
 import type { MapCamera } from './types.ts';
 
@@ -27,6 +29,8 @@ export interface AtlasMapTestHooks {
   isUserLocationShown(): boolean;
   /** Where a caller-supplied ground coordinate is drawn (viewport CSS px), so a test can click it. */
   projectToViewport(lngLat: LngLat): { x: number; y: number } | null;
+  /** Realistic-3D state (studio custom layer or fallback, watchdog level, optional layers); null before load. */
+  getRealistic3D(): Realistic3DDebug | null;
 }
 
 declare global {

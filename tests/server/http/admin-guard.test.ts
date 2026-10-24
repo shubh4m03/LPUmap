@@ -24,6 +24,8 @@ const SAMPLE: Record<string, string> = {
   ':id': 'sug_aaaaaaaaaaaaaaaaaaaaaaaaaa',
   ':locationId': 'own:aaaaaaaaaaaaaaaaaaaaaaaaaa',
   ':targetId': encodeURIComponent('osm:way/123456'),
+  ':buildingId': 'stu:aaaaaaaaaaaaaaaaaaaaaaaaaa',
+  ':templateId': 'stv:aaaaaaaaaaaaaaaaaaaaaaaaaa',
 };
 const concrete = (pattern: string) => `/api/admin${pattern.replace(/:[a-zA-Z]+/g, (m) => SAMPLE[m]!)}`;
 const SAMPLE_BODY = { revision: 1 };

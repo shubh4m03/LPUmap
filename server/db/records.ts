@@ -74,7 +74,15 @@ export interface OverrideRecord {
 }
 
 export type AuditOutcome = 'success' | 'rejected' | 'failed';
-export type AuditEntityType = 'suggestion' | 'location' | 'override' | 'session' | 'system';
+export type AuditEntityType =
+  | 'suggestion'
+  | 'location'
+  | 'override'
+  | 'session'
+  | 'system'
+  // Building Studio (migration 0002).
+  | 'building'
+  | 'template';
 
 export interface AuditEvent {
   id: number;

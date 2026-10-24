@@ -48,6 +48,53 @@ export class Atlas {
     expect(box?.height ?? 0).toBeGreaterThan(0);
   }
 
+  /** Opens the app in e2e mode in the isometric overview (`?view=iso`) and waits until it has drawn. */
+  async openOverview(params: Record<string, string> = {}): Promise<void> {
+    const qs = new URLSearchParams({ e2e: '1', view: 'iso', ...params });
+    await this.page.goto(`/?${qs.toString()}`);
+    await this.waitForOverviewReady();
+  }
+
+  async waitForOverviewReady(): Promise<void> {
+    await this.page.waitForFunction(
+      () => (window.__ATLAS_ISO__?.getFrameStats().fullRedraws ?? 0) > 0,
+      null,
+      {
+        timeout: 30_000,
+      },
+    );
+    await expect(this.page.getByTestId('iso-view')).toBeVisible();
+  }
+
+  /** The view-mode radio group in the map controls. */
+  get viewModes(): Locator {
+    return this.page.getByRole('radiogroup', { name: 'View mode' });
+  }
+
+  /** Chooses a mode in the switcher and waits until that view is ready. */
+  async switchView(name: '3D map' | 'Isometric overview' | '2D map'): Promise<void> {
+    const radio = this.viewModes.getByRole('radio', { name });
+    await radio.click();
+    await expect(radio).toHaveAttribute('aria-checked', 'true');
+    if (name === 'Isometric overview') await this.waitForOverviewReady();
+    else await this.waitForMapReady();
+  }
+
+  isoSelectedId(): Promise<string | null> {
+    return this.page.evaluate(() => window.__ATLAS_ISO__!.getSelectedId());
+  }
+  isoDrawOrder(): Promise<string[]> {
+    return this.page.evaluate(() => window.__ATLAS_ISO__!.getDrawOrder());
+  }
+
+  /** Saves a full-page screenshot under test-results (for review) and attaches it to the report. */
+  async saveScreenshot(name: string): Promise<string> {
+    const path = this.testInfo.outputPath(`${name}.png`);
+    await this.page.screenshot({ path, animations: 'disabled' });
+    await this.testInfo.attach(name, { path, contentType: 'image/png' });
+    return path;
+  }
+
   get mapCanvas(): Locator {
     return this.page.getByTestId('atlas-map').locator('canvas');
   }

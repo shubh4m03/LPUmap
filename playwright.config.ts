@@ -3,7 +3,8 @@ import { defineConfig, devices } from '@playwright/test';
 // Viewports required by docs/QA_STRATEGY.md. The suite runs against the
 // production build (vite preview) so the service worker and data files are
 // exercised exactly as deployed: run `npx vite build` first.
-const PORT = 4173;
+// PW_PORT lets a run use its own preview server when another one already holds 4173.
+const PORT = Number(process.env.PW_PORT ?? 4173);
 
 export default defineConfig({
   testDir: 'tests/e2e',

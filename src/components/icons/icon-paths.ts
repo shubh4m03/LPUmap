@@ -82,6 +82,8 @@ export const ICON_PATHS = {
   heart: p(HEART),
   'heart-filled': [{ d: HEART, fill: true }],
   cube: p('m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z', 'm4 7.5 8 4.5 8-4.5', 'M12 12v9'),
+  // Isometric overview: a diamond ground plane with a block standing on it.
+  overview: p('m12 9 9 4.5-9 4.5-9-4.5L12 9Z', 'M9.5 12.2V7.5l2.5-1.2 2.5 1.2v4.7', 'M12 6.3v4.9'),
   'map-2d': p('M9 4 3 6.5V20l6-2.5 6 2.5 6-2.5V4l-6 2.5L9 4Z', 'M9 4v13.5', 'M15 6.5V20'),
   compass: [...p(circle(12, 12, 9)), { d: 'm15.5 8.5-2 5-5 2 2-5 5-2Z', fill: true }],
   plus: p('M12 5v14', 'M5 12h14'),

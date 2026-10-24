@@ -31,6 +31,7 @@ export const LAYER_IDS = {
   buildingFill: BUILDING_LAYER_IDS.fill,
   buildingOutline: BUILDING_LAYER_IDS.outline,
   buildingExtrusion: BUILDING_LAYER_IDS.extrusion,
+  studioPick: BUILDING_LAYER_IDS.studioPick,
   routeAlternative: 'route-alternative',
   routeCasing: 'route-casing',
   routeCompleted: 'route-completed',
@@ -52,4 +53,9 @@ export const GROUP_FILTERED_LAYER_IDS = [LAYER_IDS.poiCircle, LAYER_IDS.labelPoi
 
 /** Clickable layers, highest priority first. */
 export const POI_LAYER_IDS = [LAYER_IDS.poiCircle] as const;
-export const BUILDING_PICK_LAYER_IDS = [LAYER_IDS.buildingExtrusion, LAYER_IDS.buildingFill] as const;
+/** Studio models are picked through their invisible footprint extrusion, never the custom layer (S1). */
+export const BUILDING_PICK_LAYER_IDS = [
+  LAYER_IDS.buildingExtrusion,
+  LAYER_IDS.studioPick,
+  LAYER_IDS.buildingFill,
+] as const;

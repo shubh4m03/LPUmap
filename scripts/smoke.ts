@@ -97,6 +97,12 @@ function main(): number {
       if (!urls.includes(required))
         problems.push(`${required} is not precached; the app would not work offline.`);
     }
+    // API responses (the publication, anything under /api/admin) are never precached.
+    for (const url of urls.filter((u) => /^\/?api\//.test(u)))
+      problems.push(`${url} is precached; API responses must never be part of the precache.`);
+    const sw = readText('sw.js');
+    if (!sw.includes('/^\\/api\\//'))
+      problems.push('sw.js does not exclude /api/ from the navigation fallback (navigateFallbackDenylist).');
     const unique = new Set(urls).size;
     const dupes = urls.length - unique;
     precacheNote = `${unique} files, ${formatBytes(total)}${dupes > 0 ? ` (${dupes} duplicate entries in sw.js)` : ''}`;

@@ -1,4 +1,4 @@
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { LiveRegion } from '../../../src/accessibility/index.ts';
@@ -13,6 +13,7 @@ import { ToastProvider } from '../../../src/components/ui/index.ts';
 import { loadCampusData } from '../../../src/data/index.ts';
 import type * as DataModule from '../../../src/data/index.ts';
 import type * as Buildings3d from '../../../src/buildings3d/index.ts';
+import type * as ViewModeModule from '../../../src/app/view-mode.ts';
 import type { MapViewProps } from '../../../src/map/index.ts';
 import { resetAppStore } from '../app/render-helpers.tsx';
 import { syntheticCampus } from '../app/synthetic-campus.ts';
@@ -42,6 +43,21 @@ vi.mock('../../../src/map/index.ts', async () => {
   };
 });
 vi.mock('../../../src/app/maplibre-worker.ts', () => ({}));
+// The Canvas2D overview cannot draw in jsdom: a stub that shows what it was given.
+vi.mock('../../../src/app/IsoStudioStage.tsx', async () => {
+  const { useAppStore: store } = await import('../../../src/app/store/index.ts');
+  return {
+    IsoStudioStage() {
+      const selected = store((s) => s.selectedPlaceId);
+      return <div data-testid="mock-overview" data-selected={selected ?? ''} />;
+    },
+  };
+});
+const canvas = { supported: false };
+vi.mock('../../../src/app/view-mode.ts', async (orig) => ({
+  ...(await orig<typeof ViewModeModule>()),
+  supportsCanvas2D: () => canvas.supported,
+}));
 vi.mock('../../../src/buildings3d/index.ts', async (orig) => ({
   ...(await orig<typeof Buildings3d>()),
   supportsWebGL: vi.fn(() => true),
@@ -76,6 +92,7 @@ describe('App shell', () => {
     resetAppStore();
     vi.mocked(loadCampusData).mockResolvedValue(syntheticCampus());
     vi.mocked(supportsWebGL).mockReturnValue(true);
+    canvas.supported = false;
     window.history.replaceState(null, '', '/');
     mapProps.current = null;
     Object.values(controller).forEach((f) => f.mockClear());
@@ -213,17 +230,72 @@ describe('App shell', () => {
     );
   });
 
-  it('the 3D control reflects and toggles map-slice.mode3d', async () => {
-    useAppStore.setState({ mode3d: false });
+  it('the view-mode switcher reflects and switches the mode (3D ↔ 2D keep the same map)', async () => {
+    useAppStore.setState({ viewMode: 'standard2d', mode3d: false });
     renderApp();
     await screen.findByTestId('mock-map');
-    // Stable name + aria-pressed (the name must not also flip with the state).
-    const btn = screen.getByRole('button', { name: '3D buildings' });
-    expect(btn).toHaveAttribute('aria-pressed', 'false');
-    await userEvent.click(btn);
+    const group = screen.getByRole('radiogroup', { name: 'View mode' });
+    expect(within(group).getByRole('radio', { name: '2D map' })).toHaveAttribute('aria-checked', 'true');
+    await userEvent.click(within(group).getByRole('radio', { name: '3D map' }));
     expect(useAppStore.getState().mode3d).toBe(true);
     expect(mapProps.current!.mode3d).toBe(true);
-    expect(screen.getByRole('button', { name: '3D buildings' })).toHaveAttribute('aria-pressed', 'true');
+    expect(within(group).getByRole('radio', { name: '3D map' })).toHaveAttribute('aria-checked', 'true');
+    // Focus stays on the switcher and the change is announced.
+    expect(within(group).getByRole('radio', { name: '3D map' })).toHaveFocus();
+    expect(await screen.findByText('3D map shown')).toBeInTheDocument();
+    expect(window.location.search).toContain('view=3d');
+  });
+
+  it('switching to the overview mounts it in place of the map, keeping the selection', async () => {
+    renderApp();
+    await screen.findByTestId('mock-map');
+    act(() => useAppStore.getState().selectPlace('osm:node/1', { focus: false }));
+    await userEvent.click(screen.getByRole('radio', { name: 'Isometric overview' }));
+    expect(await screen.findByTestId('mock-overview')).toHaveAttribute('data-selected', 'osm:node/1');
+    expect(screen.queryByTestId('mock-map')).toBeNull();
+    expect(window.location.search).toContain('view=iso');
+    await userEvent.click(screen.getByRole('radio', { name: '2D map' }));
+    expect(await screen.findByTestId('mock-map')).toHaveAttribute('data-selected', 'osm:node/1');
+  });
+
+  it('live navigation disables the overview option with its reason, never hiding it', async () => {
+    renderApp();
+    await screen.findByTestId('mock-map');
+    act(() => useAppStore.setState({ navigationActive: true }));
+    const overview = screen.getByRole('radio', { name: 'Isometric overview' });
+    expect(overview).toHaveAttribute('aria-disabled', 'true');
+    expect(overview).toHaveAccessibleDescription('Not available during live navigation');
+    await userEvent.click(overview);
+    expect(useAppStore.getState().viewMode).not.toBe('isometric');
+    act(() => useAppStore.setState({ navigationActive: false }));
+  });
+
+  it('starting navigation in the overview switches to the last map mode and says so', async () => {
+    useAppStore.setState({ viewMode: 'isometric', lastMapMode: 'standard2d', mode3d: false });
+    renderApp();
+    await screen.findByTestId('mock-overview');
+    act(() => useAppStore.setState({ navigationActive: true }));
+    await waitFor(() => expect(useAppStore.getState().viewMode).toBe('standard2d'));
+    expect(
+      await screen.findByText('Live navigation uses the map view. Switched to 2D map.'),
+    ).toBeInTheDocument();
+    act(() => useAppStore.setState({ navigationActive: false }));
+  });
+
+  it('without WebGL but with Canvas2D, the overview replaces the map and the map modes say why', async () => {
+    vi.mocked(supportsWebGL).mockReturnValue(false);
+    canvas.supported = true;
+    renderApp();
+    expect(await screen.findByTestId('mock-overview')).toBeInTheDocument();
+    expect(screen.queryByText(/You are using the list view/)).toBeNull();
+    expect(useAppStore.getState().viewMode).toBe('isometric');
+    const map3d = screen.getByRole('radio', { name: '3D map' });
+    expect(map3d).toHaveAttribute('aria-disabled', 'true');
+    expect(map3d).toHaveAccessibleDescription(/no WebGL/);
+    await userEvent.click(map3d);
+    expect(useAppStore.getState().viewMode).toBe('isometric');
+    // A fallback is not written to the URL (a shared link must not force the overview elsewhere).
+    expect(window.location.search).not.toContain('view=');
   });
 
   it('the locate control names its action and exposes its state without aria-pressed', async () => {

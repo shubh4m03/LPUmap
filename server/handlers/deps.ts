@@ -1,6 +1,6 @@
 /** Dependencies every handler receives. Functions build them from the Pages context. */
 import type { FetchLike } from '../auth/access.ts';
-import type { BaseData } from '../base-data.ts';
+import type { BaseData, StudioBaseData } from '../base-data.ts';
 import type { Env, ParsedEnv } from '../env.ts';
 import { HttpError } from '../http/errors.ts';
 import type { Services } from './ports.ts';
@@ -28,6 +28,20 @@ export async function loadBaseFor(request: Request, env: ParsedEnv, deps: Handle
   if (!assets) throw new HttpError('unavailable', 'Base dataset is unavailable');
   const origin = new URL(request.url).origin;
   return deps.services.loadBase((path: string) =>
+    assets.fetch(new Request(new URL(`/${path.replace(/^\/+/, '')}`, origin).toString())),
+  );
+}
+
+/** Loads the studio view of the base dataset (same deployment, cached per datasetVersion). */
+export async function loadStudioBaseFor(
+  request: Request,
+  env: ParsedEnv,
+  deps: HandlerDeps,
+): Promise<StudioBaseData> {
+  const assets = env.assets;
+  if (!assets) throw new HttpError('unavailable', 'Base dataset is unavailable');
+  const origin = new URL(request.url).origin;
+  return deps.services.loadStudioBase((path: string) =>
     assets.fetch(new Request(new URL(`/${path.replace(/^\/+/, '')}`, origin).toString())),
   );
 }

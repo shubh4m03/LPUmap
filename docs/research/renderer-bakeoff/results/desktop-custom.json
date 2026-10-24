@@ -1,0 +1,108 @@
+{
+  "renderer": "custom",
+  "viewport": {
+    "name": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "deviceScaleFactor": 1,
+    "isMobile": false
+  },
+  "throttle": 4,
+  "orbitMs": 4000,
+  "heapMB": 11.18,
+  "frames": {
+    "frames": 114,
+    "p50": 66.7,
+    "p95": 83.4,
+    "max": 100,
+    "over50Pct": 96.5
+  },
+  "layerCpuMs": {
+    "frames": 116,
+    "p50": 1.6,
+    "p95": 4.5,
+    "max": 5.5,
+    "over50Pct": 0
+  },
+  "debug": {
+    "r3d": {
+      "studio": "custom",
+      "fallbackReason": null,
+      "degradeLevel": 0,
+      "excludedIds": [
+        "osm:way/1550425052",
+        "osm:way/354755644",
+        "osm:way/422437895",
+        "osm:way/422548297",
+        "stu:bakeoffharnessmodelaaa2",
+        "stu:bakeoffharnessmodelaaa3",
+        "stu:bakeoffharnessmodelaaa4",
+        "stu:bakeoffharnessmodelaaa5",
+        "stu:bakeoffharnessmodelaaa6",
+        "stu:bakeoffharnessmodelaaa7",
+        "stu:bakeoffharnessmodelaaae",
+        "stu:bakeoffharnessmodelaaaf",
+        "stu:bakeoffharnessmodelaaag",
+        "stu:bakeoffharnessmodelaaah",
+        "stu:bakeoffharnessmodelaaai",
+        "stu:bakeoffharnessmodelaaaj",
+        "stu:bakeoffharnessmodelaaak",
+        "stu:bakeoffharnessmodelaaal",
+        "stu:bakeoffharnessmodelaaam",
+        "stu:bakeoffharnessmodelaaan",
+        "stu:bakeoffharnessmodelaaao",
+        "stu:bakeoffharnessmodelaaap",
+        "stu:bakeoffharnessmodelaaaq",
+        "stu:bakeoffharnessmodelaaar",
+        "stu:bakeoffharnessmodelaaas",
+        "stu:bakeoffharnessmodelaaat",
+        "stu:bakeoffharnessmodelaaau",
+        "stu:bakeoffharnessmodelaaav",
+        "stu:bakeoffharnessmodelaaaw",
+        "stu:bakeoffharnessmodelaaax",
+        "stu:bakeoffharnessmodelaaay",
+        "stu:bakeoffharnessmodelaaaz",
+        "stu:bakeoffharnessmodelaaba",
+        "stu:bakeoffharnessmodelaabb",
+        "stu:bakeoffharnessmodelaabc",
+        "stu:bakeoffharnessmodelaabd",
+        "stu:bakeoffharnessmodelaabe",
+        "stu:bakeoffharnessmodelaabf",
+        "stu:bakeoffharnessmodelaabg",
+        "stu:bakeoffharnessmodelaabh",
+        "stu:bakeoffharnessmodelaabi",
+        "stu:bakeoffharnessmodelaabj",
+        "stu:bakeoffharnessmodelaabk",
+        "stu:bakeoffharnessmodelaabl",
+        "stu:bakeoffharnessmodelaabm",
+        "stu:bakeoffharnessmodelaabn",
+        "stu:bakeoffharnessmodelaabo",
+        "stu:bakeoffharnessmodelaabp",
+        "stu:bakeoffharnessmodelaabq",
+        "stu:bakeoffharnessmodelaabr"
+      ],
+      "layer": {
+        "instances": 50,
+        "meshes": 39,
+        "gpuBytes": 376076,
+        "uploads": 39,
+        "drawCalls": 50,
+        "triangles": 3946,
+        "lastRenderMs": 1.399999976158142
+      },
+      "detectionsShown": false,
+      "nearbyShown": false,
+      "modelUnavailable": []
+    },
+    "notices": []
+  },
+  "shots": [
+    "desktop-custom-overview.jpg",
+    "desktop-custom-A.jpg",
+    "desktop-custom-B.jpg",
+    "desktop-custom-C.jpg",
+    "desktop-custom-D.jpg"
+  ]
+}

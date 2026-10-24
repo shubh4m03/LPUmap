@@ -12,6 +12,7 @@ export const STATIC_TITLES: Record<OpenPanelId, string> = {
   about: 'About & data sources',
   info: 'Campus information',
   category: 'Category',
+  directory: 'Building directory',
 };
 
 /**

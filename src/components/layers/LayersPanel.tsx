@@ -3,8 +3,10 @@ import { groupCount } from '../../app/commands.ts';
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { useAppStore } from '../../app/store/index.ts';
 import { categoriesInGroup, LAYER_GROUPS, type LayerGroupId } from '../../config/categories.ts';
+import { APP_CONFIG } from '../../config/index.ts';
 import { Button, Icon, Switch, iconForCategory } from '../ui/index.ts';
 import { BuildingLegend } from './BuildingLegend.tsx';
+import { OPTIONAL_LAYER_TEXT } from './optional-layer-text.ts';
 
 /** "None mapped yet", or the total with a per-category breakdown, all derived from data. */
 function countText(group: LayerGroupId, counts: Record<string, number>): string {
@@ -16,9 +18,11 @@ function countText(group: LayerGroupId, counts: Record<string, number>): string 
   return parts.length > 1 ? `${n} on the map: ${parts.join(' · ')}` : `${n} on the map`;
 }
 
+const OPTIONAL = APP_CONFIG.optionalLayers;
+
 /** Layer toggles with counts derived from the dataset, label switch and height legend. */
 export function LayersPanel() {
-  const { locatedCounts } = useAtlas();
+  const { locatedCounts, studioModels } = useAtlas();
   const { resolved } = useTheme();
   const visibleGroups = useAppStore((s) => s.visibleGroups);
   const setGroupVisible = useAppStore((s) => s.setGroupVisible);
@@ -27,6 +31,11 @@ export function LayersPanel() {
   const mode3d = useAppStore((s) => s.mode3d);
   const setMode3d = useAppStore((s) => s.setMode3d);
   const restoreDefaults = useAppStore((s) => s.restoreDefaults);
+  const nearby = useAppStore((s) => s.showNearbyOutsideCampus);
+  const setNearby = useAppStore((s) => s.setShowNearbyOutsideCampus);
+  const detected = useAppStore((s) => s.showDetectedFootprints);
+  const setDetected = useAppStore((s) => s.setShowDetectedFootprints);
+  const overview = useAppStore((s) => s.viewMode === 'isometric');
 
   return (
     <div className="flex flex-col gap-5 p-4">
@@ -56,6 +65,27 @@ export function LayersPanel() {
         </ul>
       </section>
 
+      <section aria-labelledby="layers-optional" className="flex flex-col gap-3 border-t border-border pt-4">
+        <h3 id="layers-optional" className="text-sm font-semibold text-muted">
+          Optional layers (off by default)
+        </h3>
+        <Switch
+          checked={nearby}
+          onCheckedChange={setNearby}
+          label={OPTIONAL.nearbyOutsideCampus.label}
+          description={OPTIONAL_LAYER_TEXT.nearbyOutsideCampus}
+        />
+        <Switch
+          checked={detected}
+          onCheckedChange={setDetected}
+          label={OPTIONAL.detectedFootprints.label}
+          description={OPTIONAL_LAYER_TEXT.detectedFootprints}
+        />
+        {overview && (nearby || detected) ? (
+          <p className="text-sm text-muted">The isometric overview does not draw these layers.</p>
+        ) : null}
+      </section>
+
       <section aria-labelledby="layers-display" className="flex flex-col gap-3 border-t border-border pt-4">
         <h3 id="layers-display" className="text-sm font-semibold text-muted">
           Display
@@ -72,7 +102,7 @@ export function LayersPanel() {
         </Button>
       </section>
 
-      <BuildingLegend theme={resolved} />
+      <BuildingLegend theme={resolved} studioModels={studioModels.length > 0} detectedFootprints={detected} />
     </div>
   );
 }

@@ -1,0 +1,48 @@
+{
+  "renderer": "iso",
+  "viewport": {
+    "name": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "deviceScaleFactor": 2,
+    "isMobile": true
+  },
+  "throttle": 4,
+  "heapMB": 9.77,
+  "initial": {
+    "sceneBuildMs": 28.399999976158142,
+    "fullRedrawMs": 10.899999976158142,
+    "dynamicRedrawMs": 0.5,
+    "hitTestMs": 0,
+    "cycles": 0,
+    "faceCycles": 36,
+    "interleavedPairs": 11,
+    "buildings": 177,
+    "faces": 1611,
+    "fullRedraws": 1,
+    "dynamicRedraws": 1
+  },
+  "frames": {
+    "frames": 143,
+    "p50": 16.7,
+    "p95": 16.8,
+    "max": 133.4,
+    "over50Pct": 0.7
+  },
+  "afterRotate": {
+    "sceneBuildMs": 190,
+    "fullRedrawMs": 11.299999952316284,
+    "dynamicRedrawMs": 0.5,
+    "hitTestMs": 0,
+    "cycles": 0,
+    "faceCycles": 48,
+    "interleavedPairs": 13,
+    "buildings": 177,
+    "faces": 1638,
+    "fullRedraws": 5,
+    "dynamicRedraws": 1
+  },
+  "shots": ["mobile-iso-overview.jpg"]
+}

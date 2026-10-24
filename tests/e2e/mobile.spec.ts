@@ -1,6 +1,6 @@
 /** Workflow E — phone usability: search pill, bottom sheet, route action, layers, theme, layout fit. */
 import type { Locator, Page } from '@playwright/test';
-import { FACILITY, NO_FACILITY_REASON } from './fixtures/data.ts';
+import { FACILITY, SYNTHETIC_FACILITY, type FacilityTarget } from './fixtures/data.ts';
 import type { Atlas } from './fixtures/atlas.ts';
 import { expect, test } from './fixtures/test.ts';
 
@@ -86,61 +86,70 @@ test.describe('E · mobile usability', () => {
     await atlas.screenshot('mobile home');
   });
 
-  test('search pill → facility → sheet opens, closes by button and by Back; route action reachable', async ({
-    atlas,
-    page,
-  }) => {
-    test.skip(FACILITY === null, NO_FACILITY_REASON);
-    const { place, categoryLabel } = FACILITY!;
-    await atlas.open();
-    await atlas.searchAndChoose(place.name);
-    const sheet = page.locator('[data-snap]');
-    await expect(sheet).toBeVisible();
-    await expect(atlas.placeArticle(place.name).getByRole('heading', { name: place.name })).toBeVisible();
-    await expect.poll(() => atlas.selectedId()).toBe(place.id);
+  test.describe(() => {
+    // The campus-only dataset has no named, routable quick-action place: then the synthetic
+    // publication (route-intercepted, never shipped) supplies one.
+    const target: FacilityTarget = FACILITY ?? SYNTHETIC_FACILITY;
+    test.use({
+      syntheticPublication: FACILITY === null,
+      serviceWorkers: FACILITY === null ? 'block' : 'allow',
+    });
 
-    // Close with the sheet's own button.
-    await sheet.getByRole('button', { name: 'Close' }).click();
-    await expect(sheet).toBeHidden();
-    await expect.poll(() => atlas.selectedId()).toBeNull();
+    test('search pill → facility → sheet opens, closes by button and by Back; route action reachable', async ({
+      atlas,
+      page,
+    }) => {
+      const { place, categoryLabel } = target;
+      await atlas.open();
+      await atlas.searchAndChoose(place.name);
+      const sheet = page.locator('[data-snap]');
+      await expect(sheet).toBeVisible();
+      await expect(atlas.placeArticle(place.name).getByRole('heading', { name: place.name })).toBeVisible();
+      await expect.poll(() => atlas.selectedId()).toBe(place.id);
 
-    // Open again from the quick actions → category list, then close with the browser Back button.
-    await page
-      .getByRole('navigation', { name: 'Find nearby' })
-      .getByRole('button', { name: categoryLabel })
-      .click();
-    const categorySheet = atlas.panel(categoryLabel);
-    await expect(categorySheet).toBeVisible();
-    await categorySheet
-      .getByRole('button', { name: new RegExp(`^${place.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`) })
-      .first()
-      .click();
-    await expect(atlas.placeArticle(place.name)).toBeVisible();
-    await page.goBack();
-    await expect(atlas.placeArticle(place.name)).toBeHidden();
-    await expect.poll(() => atlas.selectedId()).toBeNull();
-    // Still inside the app (Back closed a layer, it did not leave the page).
-    await expect(page).toHaveURL(/e2e=1/);
-    await atlas.waitForMapReady();
+      // Close with the sheet's own button.
+      await sheet.getByRole('button', { name: 'Close' }).click();
+      await expect(sheet).toBeHidden();
+      await expect.poll(() => atlas.selectedId()).toBeNull();
 
-    // Peek state: the sheet sits low and covers no control; the route action stays reachable.
-    await atlas.searchAndChoose(place.name);
-    await expect(sheet).toBeVisible();
-    await snapSheetTo(sheet, 'peek');
-    await atlas.dismissToasts();
-    await expectControlsClear(atlas, sheet);
-    await expectNoHorizontalOverflow(page);
-    await atlas.screenshot('sheet at peek');
-    await snapSheetTo(sheet, 'half');
-    const directions = atlas.placeArticle(place.name).getByRole('button', { name: 'Directions to here' });
-    await directions.scrollIntoViewIfNeeded();
-    await expect(directions).toBeInViewport();
-    await directions.click();
-    await expect(atlas.panel('Directions')).toBeVisible();
-    await expect(atlas.panel('Directions').getByRole('region', { name: 'Destination' })).toContainText(
-      place.displayName,
-    );
-    await expectNoHorizontalOverflow(page);
+      // Open again from the quick actions → category list, then close with the browser Back button.
+      await page
+        .getByRole('navigation', { name: 'Find nearby' })
+        .getByRole('button', { name: categoryLabel })
+        .click();
+      const categorySheet = atlas.panel(categoryLabel);
+      await expect(categorySheet).toBeVisible();
+      await categorySheet
+        .getByRole('button', { name: new RegExp(`^${place.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`) })
+        .first()
+        .click();
+      await expect(atlas.placeArticle(place.name)).toBeVisible();
+      await page.goBack();
+      await expect(atlas.placeArticle(place.name)).toBeHidden();
+      await expect.poll(() => atlas.selectedId()).toBeNull();
+      // Still inside the app (Back closed a layer, it did not leave the page).
+      await expect(page).toHaveURL(/e2e=1/);
+      await atlas.waitForMapReady();
+
+      // Peek state: the sheet sits low and covers no control; the route action stays reachable.
+      await atlas.searchAndChoose(place.name);
+      await expect(sheet).toBeVisible();
+      await snapSheetTo(sheet, 'peek');
+      await atlas.dismissToasts();
+      await expectControlsClear(atlas, sheet);
+      await expectNoHorizontalOverflow(page);
+      await atlas.screenshot('sheet at peek');
+      await snapSheetTo(sheet, 'half');
+      const directions = atlas.placeArticle(place.name).getByRole('button', { name: 'Directions to here' });
+      await directions.scrollIntoViewIfNeeded();
+      await expect(directions).toBeInViewport();
+      await directions.click();
+      await expect(atlas.panel('Directions')).toBeVisible();
+      await expect(atlas.panel('Directions').getByRole('region', { name: 'Destination' })).toContainText(
+        place.displayName,
+      );
+      await expectNoHorizontalOverflow(page);
+    });
   });
 
   test('layers sheet opens and the theme switch applies data-theme', async ({ atlas, page }) => {

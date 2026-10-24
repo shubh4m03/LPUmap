@@ -98,6 +98,21 @@ describe('pwaOptions', () => {
     for (const spec of urlImports) expect(extensions).toContain(spec.split('.').pop());
   });
 
+  it('never serves index.html for /api/ (or data and font) requests', () => {
+    const deny = workbox?.navigateFallbackDenylist ?? [];
+    for (const path of ['/api/locations', '/api/admin/session', '/data/places.json', '/fonts/x/0-255.pbf'])
+      expect(
+        deny.some((re) => re.test(path)),
+        path,
+      ).toBe(true);
+    expect(deny.some((re) => re.test('/'))).toBe(false);
+  });
+
+  it('never precaches API responses (none can contain drafts): only build files are matched', () => {
+    for (const glob of PRECACHE_GLOBS) expect(glob).not.toMatch(/api/);
+    expect(JSON.stringify(workbox?.additionalManifestEntries ?? [])).not.toMatch(/api/);
+  });
+
   it('does no runtime caching (so never caches third-party origins)', () => {
     expect(workbox?.runtimeCaching ?? []).toEqual([]);
   });

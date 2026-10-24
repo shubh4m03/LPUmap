@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { Button, Icon } from '../components/ui/index.ts';
+import { ToastContext } from '../components/ui/toast-context.ts';
 import { APP_CONFIG } from '../config/index.ts';
-import type { LngLat } from '../data/index.ts';
+import type { DetectionsFile, LngLat } from '../data/index.ts';
 import { MAP_MESSAGES, MapView, type MapController, type MapPadding } from '../map/index.ts';
 import { useAtlas } from './data/atlas-context.ts';
 import { useNow } from './hooks/useNow.ts';
@@ -20,8 +21,34 @@ export interface MapStageProps {
 }
 
 /** MapView wired to the store. Subscribes only to the state the map draws. */
+export const DETECTIONS_LOAD_FAILED =
+  'Could not load the unverified detected footprints. Try the layer again later.';
+
+/** The detected-footprints file, fetched the first time the opt-in layer is turned on. */
+function useDetections(show: boolean): DetectionsFile | null {
+  const { optional } = useAtlas();
+  const toast = useContext(ToastContext);
+  const [detections, setDetections] = useState<DetectionsFile | null>(null);
+  useEffect(() => {
+    if (!show || detections || !optional) return;
+    let cancelled = false;
+    optional.detections().then(
+      (file) => {
+        if (!cancelled) setDetections(file);
+      },
+      () => {
+        if (!cancelled) toast?.show({ message: DETECTIONS_LOAD_FAILED, tone: 'warning' });
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [show, detections, optional, toast]);
+  return detections;
+}
+
 export function MapStage({ theme, reducedMotion, padding, onFatalError }: MapStageProps) {
-  const { data, getPlace } = useAtlas();
+  const { data, getPlace, studioModels, contextPlaces } = useAtlas();
   const [controller, setController] = useState<MapController | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
   const { mode3d, showLabels, visibleGroups, selectedPlaceId, focusRequest } = useAppStore(
@@ -33,6 +60,13 @@ export function MapStage({ theme, reducedMotion, padding, onFatalError }: MapSta
       focusRequest: s.focusRequest,
     })),
   );
+  const { showNearbyOutsideCampus, showDetectedFootprints } = useAppStore(
+    useShallow((s) => ({
+      showNearbyOutsideCampus: s.showNearbyOutsideCampus,
+      showDetectedFootprints: s.showDetectedFootprints,
+    })),
+  );
+  const detections = useDetections(showDetectedFootprints);
   const { alternatives, activeAlternative, progress, navigationActive, lastSample, followUser } = useAppStore(
     useShallow((s) => ({
       alternatives: s.alternatives,
@@ -144,6 +178,11 @@ export function MapStage({ theme, reducedMotion, padding, onFatalError }: MapSta
         selectedPlaceId={selectedPlaceId}
         route={route}
         userLocation={userLocation}
+        studioModels={studioModels}
+        showNearbyOutsideCampus={showNearbyOutsideCampus}
+        contextPlaces={contextPlaces}
+        showDetectedFootprints={showDetectedFootprints}
+        detections={detections}
         onSelectPlace={onSelectPlace}
         onMapClick={onMapClick}
         onUserPan={onUserPan}

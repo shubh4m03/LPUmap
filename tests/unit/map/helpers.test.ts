@@ -209,6 +209,7 @@ describe('e2e test hooks', () => {
     getLayerVisibility: () => null,
     isUserLocationShown: () => false,
     projectToViewport: () => null,
+    getRealistic3D: () => null,
   };
   afterEach(() => {
     delete window.__ATLAS_MAP__;
@@ -232,6 +233,7 @@ describe('e2e test hooks', () => {
       [
         'getCamera',
         'getLayerVisibility',
+        'getRealistic3D',
         'getRouteCoordinateCount',
         'getSelectedId',
         'isStyleLoaded',

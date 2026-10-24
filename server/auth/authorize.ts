@@ -12,6 +12,11 @@ export const PERMISSIONS = [
   'overrides:write',
   'audit:read',
   'audit:revert',
+  // Building Studio (docs/BUILDING_STUDIO_DESIGN.md §7).
+  'studio:write',
+  'studio:publish',
+  'studio:delete',
+  'studio:templates',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 

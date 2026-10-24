@@ -5,7 +5,11 @@
  */
 import type { FeatureCollection } from 'geojson';
 import type { LayerSpecification, StyleSpecification } from 'maplibre-gl';
-import { buildingExtrusionLayers, buildingFootprintLayers } from '../buildings3d/index.ts';
+import {
+  buildingExtrusionLayers,
+  buildingFootprintLayers,
+  lightSpecification,
+} from '../buildings3d/index.ts';
 import type { LayerGroupId } from '../config/categories.ts';
 import type { CampusData } from '../data/campus-data.ts';
 import { basemapLayers } from './basemap-layers.ts';
@@ -59,6 +63,8 @@ export function buildMapStyle(
     version: 8,
     name: 'LPU Campus Atlas',
     glyphs: opts.glyphs,
+    // Map-anchored light: façade shading stays tied to the ground while the camera rotates (D1).
+    light: lightSpecification(opts.theme),
     sources: {
       [SOURCE_IDS.boundary]: { type: 'geojson', data: data.boundary as FeatureCollection },
       [SOURCE_IDS.basemap]: { type: 'geojson', data: data.basemap as FeatureCollection },

@@ -3,6 +3,7 @@ import { useAppStore, type OpenPanelId } from '../../app/store/index.ts';
 import { Dialog, IconButton, Icon, cx, type IconName } from '../ui/index.ts';
 
 const ENTRIES: ReadonlyArray<{ panel: OpenPanelId; label: string; icon: IconName }> = [
+  { panel: 'directory', label: 'Building directory', icon: 'building' },
   { panel: 'favorites', label: 'Saved places', icon: 'heart' },
   { panel: 'layers', label: 'Map layers', icon: 'layers' },
   { panel: 'info', label: 'Campus information', icon: 'school' },

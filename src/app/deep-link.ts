@@ -5,7 +5,12 @@
 
 export const PLACE_PARAM = 'place';
 const MAX_ID_LENGTH = 200;
-const PLACE_ID_RE = /^(osm:(node|way|relation)\/\d{1,20}|cur:[a-z0-9][a-z0-9-]{0,150})$/;
+/**
+ * Base ids (osm:, cur:), published owner/community locations (own:, com:) and
+ * published studio buildings (stu:, docs/BUILDING_STUDIO_DESIGN.md S4).
+ */
+const PLACE_ID_RE =
+  /^(osm:(node|way|relation)\/\d{1,20}|cur:[a-z0-9][a-z0-9._-]{0,150}|(own|com):[A-Za-z0-9_-]{1,150}|stu:[a-z2-7]{20,32})$/;
 
 export function isPlaceIdLike(id: string): boolean {
   return id.length <= MAX_ID_LENGTH && PLACE_ID_RE.test(id);

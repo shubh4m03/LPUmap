@@ -121,7 +121,9 @@ export const locationsQuery = z.object({
 });
 
 export const auditQuery = z.object({
-  entity: z.enum(['suggestion', 'location', 'override', 'session', 'system']).optional(),
+  entity: z
+    .enum(['suggestion', 'location', 'override', 'session', 'system', 'building', 'template'])
+    .optional(),
   entityId: z.string().max(200).optional(),
   action: z.string().max(64).optional(),
   limit,

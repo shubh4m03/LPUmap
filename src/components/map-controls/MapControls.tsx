@@ -1,8 +1,9 @@
-import { useAnnounce, useTheme } from '../../accessibility/index.ts';
+import { useTheme } from '../../accessibility/index.ts';
 import { getMapController } from '../../app/map-controller.ts';
 import { useAppStore } from '../../app/store/index.ts';
 import { IconButton, cx } from '../ui/index.ts';
 import { LocateButton } from './LocateButton.tsx';
+import { ViewModeSwitcher } from './ViewModeSwitcher.tsx';
 
 const STACK = 'flex flex-col overflow-hidden rounded-lg border border-border bg-surface-raised shadow-2';
 /**
@@ -14,25 +15,22 @@ const IN_STACK =
   'rounded-none border-0 shadow-none focus-visible:-outline-offset-2 ' +
   'aria-pressed:bg-accent-soft aria-pressed:text-accent-text';
 
-/** Vertical map control stack (right side). `compact` is the phone variant. */
+/**
+ * Vertical map control stack (right side). `compact` is the phone variant.
+ * The controls drive whichever view is active (MapLibre map or the overview,
+ * both register a MapController); the view-mode switcher replaces the old 3D toggle.
+ */
 export function MapControls({ compact = false, className }: { compact?: boolean; className?: string }) {
-  const mode3d = useAppStore((s) => s.mode3d);
-  const toggleMode3d = useAppStore((s) => s.toggleMode3d);
+  const overview = useAppStore((s) => s.viewMode === 'isometric');
   const layersOpen = useAppStore((s) => s.activePanel === 'layers');
   const openPanel = useAppStore((s) => s.openPanel);
   const closePanel = useAppStore((s) => s.closePanel);
   const requestFocus = useAppStore((s) => s.requestFocus);
   const { resolved, setPreference } = useTheme();
-  const announce = useAnnounce();
   const size = compact ? 'sm' : 'md';
 
-  const toggle3d = () => {
-    toggleMode3d();
-    announce(mode3d ? 'Flat 2D map' : '3D buildings on');
-  };
-
   return (
-    <div role="group" aria-label="Map controls" className={cx('flex flex-col gap-2', className)}>
+    <div role="group" aria-label="Map controls" className={cx('flex flex-col items-end gap-2', className)}>
       {compact ? null : (
         <div className={STACK}>
           <IconButton
@@ -49,21 +47,14 @@ export function MapControls({ compact = false, className }: { compact?: boolean;
           />
         </div>
       )}
+      <ViewModeSwitcher compact={compact} />
       <div className={STACK}>
         <IconButton
           icon="compass"
-          label="Reset map to north"
+          label={overview ? 'Reset the overview rotation' : 'Reset map to north'}
           size={size}
           className={IN_STACK}
           onClick={() => getMapController()?.resetNorth()}
-        />
-        <IconButton
-          icon={mode3d ? 'cube' : 'map-2d'}
-          label="3D buildings"
-          aria-pressed={mode3d}
-          size={size}
-          className={IN_STACK}
-          onClick={toggle3d}
         />
         <IconButton
           icon="layers"

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { useAppStore, type PanelId } from '../../app/store/index.ts';
 import { CategoryPanel } from '../categories/CategoryPanel.tsx';
+import { DirectoryPanel } from '../directory/DirectoryPanel.tsx';
 import { LayersPanel } from '../layers/LayersPanel.tsx';
 import { PlaceDetails } from '../place/PlaceDetails.tsx';
 import { SearchResultsPanel } from '../search/SearchResultsPanel.tsx';
@@ -56,6 +57,8 @@ export function PanelBody({ panel }: { panel: PanelId }): ReactNode {
       );
     case 'category':
       return <CategoryPanel />;
+    case 'directory':
+      return <DirectoryPanel />;
     case 'none':
       return null;
   }

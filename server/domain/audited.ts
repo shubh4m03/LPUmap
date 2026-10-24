@@ -19,7 +19,8 @@ export interface AuditTarget {
 
 export async function audited<T>(
   db: SqlDatabase,
-  ctx: DomainContext,
+  /** Only the actor and the clock are used (studio contexts carry no BaseData). */
+  ctx: Pick<DomainContext, 'actor' | 'now'>,
   target: AuditTarget,
   fn: (actor: string) => Promise<T>,
 ): Promise<T> {

@@ -1,17 +1,24 @@
 /**
  * Server-assigned identifiers: 128 random bits from crypto.getRandomValues,
  * base32 (RFC 4648 alphabet, lower-case, no padding) → 26 characters.
- * Suggestions `sug_…`, owner locations `own:…`, community locations `com:…`.
+ * Suggestions `sug_…`, owner locations `own:…`, community locations `com:…`,
+ * Building Studio buildings `stu:…` and owner templates `stv:…`.
  */
 
-export type IdKind = 'suggestion' | 'owner' | 'community';
+export type IdKind = 'suggestion' | 'owner' | 'community' | 'studio' | 'template';
 
 export interface IdGenerator {
   next(kind: IdKind): string;
 }
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz234567';
-const PREFIX: Record<IdKind, string> = { suggestion: 'sug_', owner: 'own:', community: 'com:' };
+const PREFIX: Record<IdKind, string> = {
+  suggestion: 'sug_',
+  owner: 'own:',
+  community: 'com:',
+  studio: 'stu:',
+  template: 'stv:',
+};
 
 export function base32(bytes: Uint8Array): string {
   let out = '';
@@ -44,4 +51,6 @@ export const ID_PATTERNS: Record<IdKind, RegExp> = {
   suggestion: /^sug_[a-z2-7]{26}$/,
   owner: /^own:[a-z2-7]{26}$/,
   community: /^com:[a-z2-7]{26}$/,
+  studio: /^stu:[a-z2-7]{26}$/,
+  template: /^stv:[a-z2-7]{26}$/,
 };

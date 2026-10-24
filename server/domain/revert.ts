@@ -25,7 +25,16 @@ import { writeLocation } from './locations.ts';
 import { isEmptyOverride, writeOverride } from './overrides.ts';
 import { revalidateKeptAccess } from './validate.ts';
 
-const ENTITY_TYPES: readonly AuditEntityType[] = ['suggestion', 'location', 'override', 'session', 'system'];
+/** Every entity type the audit filter accepts (an unknown one is ignored); includes the studio types. */
+const ENTITY_TYPES: readonly AuditEntityType[] = [
+  'suggestion',
+  'location',
+  'override',
+  'session',
+  'system',
+  'building',
+  'template',
+];
 
 export function listAudit(db: SqlDatabase, filter: Record<string, unknown> = {}) {
   const f: AuditFilter = {};

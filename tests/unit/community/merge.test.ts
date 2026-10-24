@@ -212,12 +212,53 @@ describe('mergePublication', () => {
     expect(far.report.invalidAccess[0]).toMatchObject({ id: LIBRARY.id, reason: 'moved-too-far' });
   });
 
-  it('rule 3: moving outside the boundary recomputes campusZone', () => {
+  it('rule 4a: an override moving a place outside the boundary sends it to the context list only', () => {
+    // Regression (owner decision 2): the moved place used to stay in the campus places and counts.
     const r = mergePublication(
       syntheticCampus(),
-      pub({ overrides: [ov(FOOD_COURT.id, { fields: { location: [75.715, 31.26] } })] }),
+      pub({
+        overrides: [ov(FOOD_COURT.id, { fields: { location: [75.715, 31.26], name: 'Food Court (moved)' } })],
+      }),
     );
-    expect(byId(r.data.places, FOOD_COURT.id)?.campusZone).toBe('off-campus-nearby');
+    expect(byId(r.data.places, FOOD_COURT.id)).toBeUndefined();
+    expect(r.data.places.every((p) => p.campusZone === 'on-campus')).toBe(true);
+    expect(r.contextPlaces).toHaveLength(1);
+    expect(r.contextPlaces[0]).toMatchObject({
+      id: FOOD_COURT.id,
+      name: 'Food Court (moved)',
+      campusZone: 'off-campus-nearby',
+      location: [75.715, 31.26],
+      provenance: { sourceId: 'owner' },
+    });
+    expect(r.contextPlaces[0]).not.toHaveProperty('buildingId');
+    // Relations touching it leave the campus graph of relations.
+    expect(r.data.relations.map((x) => x.id)).toEqual(['r1']);
+    expect(r.report.droppedRelations).toBe(2);
+    expect(r.report.overriddenPlaces).toEqual([FOOD_COURT.id]);
+    expect(r.report.outsideCampus).toEqual([
+      expect.objectContaining({ id: FOOD_COURT.id, reason: 'override-moved-outside' }),
+    ]);
+    expect(r.data.manifest.counts).toMatchObject({
+      places: PLACES.length - 1,
+      'zone:off-campus-nearby': 0,
+      'category:food': 0,
+    });
+  });
+
+  it('rule 4a: an override never moves a building outside the boundary (the footprint is authoritative)', () => {
+    const r = mergePublication(
+      syntheticCampus(),
+      pub({ overrides: [ov(BLOCK_34.id, { fields: { location: [75.715, 31.26], name: 'Block 34 East' } })] }),
+    );
+    const b = byId(r.data.places, BLOCK_34.id)!;
+    expect(b).toMatchObject({ name: 'Block 34 East', location: BLOCK_34.location, campusZone: 'on-campus' });
+    expect(b.graphNodeId).toBe(BLOCK_34.graphNodeId);
+    expect(r.contextPlaces).toEqual([]);
+    expect(r.report.outsideCampus).toEqual([
+      expect.objectContaining({ id: BLOCK_34.id, reason: 'building-move-outside-ignored' }),
+    ]);
+    const feature = r.data.buildings.features.find((f) => f.properties.id === BLOCK_34.id);
+    expect(feature?.properties.name).toBe('Block 34 East');
   });
 
   it('rule 4: published locations become facility places; routable only with a validated access node', () => {
@@ -248,22 +289,29 @@ describe('mergePublication', () => {
         verificationStatus: 'unverified',
       },
     });
-    const mapOnly = byId(r.data.places, 'own:maponly')!;
+    // Rule 4a (owner decision 2): a location outside the boundary is never a campus place.
+    // Regression: it used to be appended to the campus places and counted.
+    expect(byId(r.data.places, 'own:maponly')).toBeUndefined();
+    const mapOnly = byId(r.contextPlaces, 'own:maponly')!;
     expect(mapOnly).toMatchObject({ campusZone: 'off-campus-nearby', provenance: { sourceId: 'owner' } });
     expect(mapOnly.graphNodeId).toBeUndefined();
+    expect(r.report.outsideCampus).toEqual([
+      expect.objectContaining({ id: 'own:maponly', reason: 'location-outside-campus' }),
+    ]);
     // Never auto-snapped, even though node 2 is only ~14 m from com:badnode.
     expect(byId(r.data.places, 'com:badnode')?.graphNodeId).toBeUndefined();
     expect(r.report.invalidAccess.map((i) => [i.id, i.reason])).toEqual([
       ['com:badnode', 'location-not-walkable'],
     ]);
-    expect(r.report.addedLocations).toEqual(['com:badnode', 'com:routable', 'own:maponly']);
+    expect(r.report.addedLocations).toEqual(['com:badnode', 'com:routable']);
     expect(r.data.manifest.sources.map((s) => s.id)).toEqual(['osm', 'owner', 'community']);
     expect(r.data.manifest.counts).toMatchObject({
-      places: PLACES.length + 3,
-      'kind:facility': 5,
+      places: PLACES.length + 2,
+      'kind:facility': 4,
       'category:water': 2,
-      'places:notConnected': 4,
-      'zone:off-campus-nearby': 1,
+      'category:printing': 0,
+      'places:notConnected': 3,
+      'zone:off-campus-nearby': 0,
     });
   });
 

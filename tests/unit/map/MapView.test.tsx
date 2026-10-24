@@ -1,9 +1,12 @@
-import { act, cleanup, render } from '@testing-library/react';
+import { act, cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { resetWebGLSupportCache } from '../../../src/buildings3d/index.ts';
+import type * as Realistic3DModule from '../../../src/buildings3d/realistic3d.ts';
+import type { Realistic3DHandle, Realistic3DOptions } from '../../../src/buildings3d/realistic3d.ts';
 import { APP_CONFIG } from '../../../src/config/index.ts';
 import { LAYER_GROUPS, type LayerGroupId } from '../../../src/config/categories.ts';
-import type { LngLat } from '../../../src/data/schema.ts';
+import type { DetectionsFile, LngLat, Place } from '../../../src/data/schema.ts';
+import { FOOTPRINT, model } from '../building-studio/fixtures.ts';
 import { LAYER_IDS, MAP_MESSAGES, MapView, SOURCE_IDS, type MapViewProps } from '../../../src/map/index.ts';
 import { syntheticCampusData } from './synthetic-campus-data.ts';
 
@@ -31,6 +34,22 @@ const fake = vi.hoisted(() => {
     setFeatureState = vi.fn();
     removeFeatureState = vi.fn();
     setLayerZoomRange = vi.fn();
+    setLight = vi.fn();
+    addLayer = vi.fn((layer: { id: string }) => {
+      this.layerIds.add(layer.id);
+    });
+    removeLayer = vi.fn((id: string) => {
+      this.layerIds.delete(id);
+    });
+    addSource = vi.fn((id: string) => {
+      this.sources[id] = { setData: vi.fn(() => Promise.resolve()) };
+    });
+    removeSource = vi.fn((id: string) => {
+      delete this.sources[id];
+    });
+    triggerRepaint = vi.fn();
+    off = vi.fn();
+    getLayersOrder = () => [...this.layerIds];
     queryRenderedFeatures = vi.fn((): unknown[] => []);
     project = vi.fn(([lng, lat]: [number, number]) => ({ x: (lng - 75.7) * 1e4, y: (31.26 - lat) * 1e4 }));
     easeTo = vi.fn();
@@ -89,6 +108,25 @@ const fake = vi.hoisted(() => {
 });
 
 vi.mock('maplibre-gl', () => ({ Map: fake.FakeMap }));
+
+// The real realistic-3D controller, with its options and handle captured for assertions.
+const r3d = vi.hoisted(() => ({ opts: [] as unknown[], handles: [] as unknown[] }));
+vi.mock('../../../src/buildings3d/realistic3d.ts', async (importOriginal) => {
+  const mod = await importOriginal<typeof Realistic3DModule>();
+  return {
+    ...mod,
+    attachRealistic3D: (map: Parameters<typeof mod.attachRealistic3D>[0], opts: Realistic3DOptions) => {
+      r3d.opts.push(opts);
+      const handle = mod.attachRealistic3D(map, opts);
+      r3d.handles.push(handle);
+      return handle;
+    },
+  };
+});
+const lastR3d = () => ({
+  opts: r3d.opts.at(-1) as Realistic3DOptions,
+  handle: r3d.handles.at(-1) as Realistic3DHandle,
+});
 
 type FakeMap = InstanceType<typeof fake.FakeMap>;
 const lastMap = () => fake.instances[fake.instances.length - 1] as unknown as FakeMap;
@@ -412,5 +450,142 @@ describe('MapView', () => {
     mount();
     load(lastMap());
     expect(window.__ATLAS_MAP__).toBeUndefined();
+  });
+});
+
+describe('MapView: realistic 3D', () => {
+  const offCampus: Place = {
+    id: 'osm:node/900',
+    name: 'Synthetic Outside Shop',
+    displayName: 'Synthetic Outside Shop',
+    aliases: [],
+    kind: 'facility',
+    categoryId: 'food',
+    location: [75.711, 31.27],
+    campusZone: 'off-campus-nearby',
+    wheelchair: 'unknown',
+    provenance: { sourceId: 'synthetic', verificationStatus: 'unverified' },
+  };
+  const placesData = (map: FakeMap) => {
+    const calls = map.sources[SOURCE_IDS.places]!.setData.mock.calls as unknown[][];
+    return calls.at(-1)?.[0] as
+      { features: Array<{ id: string; properties: { badge?: string } }> } | undefined;
+  };
+
+  it('caps the device pixel ratio at 2', () => {
+    const dpr = Object.getOwnPropertyDescriptor(window, 'devicePixelRatio');
+    Object.defineProperty(window, 'devicePixelRatio', { value: 3, configurable: true });
+    try {
+      mount();
+      expect(lastMap().options.pixelRatio).toBe(2);
+    } finally {
+      if (dpr) Object.defineProperty(window, 'devicePixelRatio', dpr);
+    }
+  });
+
+  it('puts the map-anchored light in the style', () => {
+    mount({ theme: 'dark' });
+    const style = lastMap().options.style as { light: { anchor: string; intensity: number } };
+    expect(style.light).toMatchObject({ anchor: 'map', intensity: 0.35 });
+  });
+
+  it('draws nearby off-campus places only while "Nearby, outside campus" is on, with the badge', () => {
+    const { rerender } = mount({ contextPlaces: [offCampus] });
+    const map = lastMap();
+    const initial = (
+      map.options.style as { sources: Record<string, { data: { features: Array<{ id: string }> } }> }
+    ).sources[SOURCE_IDS.places]!.data.features;
+    expect(initial.map((f) => f.id)).not.toContain(offCampus.id);
+    load(map);
+    rerender({ showNearbyOutsideCampus: true });
+    const shown = placesData(map)!.features.find((f) => f.id === offCampus.id);
+    expect(shown?.properties.badge).toBe(APP_CONFIG.optionalLayers.nearbyOutsideCampus.badge);
+    expect(map.addLayer).toHaveBeenCalledWith(expect.objectContaining({ id: 'poi-outside-badge' }));
+    rerender({ showNearbyOutsideCampus: false });
+    expect(placesData(map)!.features.map((f) => f.id)).not.toContain(offCampus.id);
+    expect(map.removeLayer).toHaveBeenCalledWith('poi-outside-badge');
+  });
+
+  it('adds the detections layer with the licensed sources’ attribution only when enabled and loaded', () => {
+    const data = {
+      ...DATA,
+      manifest: {
+        ...DATA.manifest,
+        sources: [
+          ...DATA.manifest.sources,
+          {
+            id: 'microsoft-ml-buildings',
+            name: 'Microsoft Global ML Building Footprints',
+            url: 'https://github.com/microsoft/GlobalMLBuildingFootprints',
+            license: 'CDLA-Permissive-2.0',
+            licenseUrl: 'https://cdla.dev/permissive-2-0/',
+            attribution: 'Building footprints © Microsoft, CDLA Permissive 2.0',
+            retrievedAt: '2026-10-23T21:50:45Z',
+          },
+        ],
+      },
+    };
+    const detections = { type: 'FeatureCollection', features: [] } as unknown as DetectionsFile;
+    const { rerender } = mount({ data });
+    const map = lastMap();
+    load(map);
+    rerender({ showDetectedFootprints: true }); // not loaded yet
+    expect(map.addSource).not.toHaveBeenCalled();
+    rerender({ detections });
+    expect(map.addSource).toHaveBeenCalledWith(
+      'detections',
+      expect.objectContaining({
+        attribution: expect.stringContaining('href="https://cdla.dev/permissive-2-0/"'),
+      }),
+    );
+    rerender({ showDetectedFootprints: false });
+    expect(map.removeSource).toHaveBeenCalledWith('detections');
+  });
+
+  it('passes studio models to the controller (lazy renderer) and leaves the buildings source alone', () => {
+    const { rerender } = mount();
+    const map = lastMap();
+    load(map);
+    expect(lastR3d().handle.debug().studio).toBe('idle');
+    rerender({
+      studioModels: [
+        {
+          publicId: 'osm:way/10',
+          recordId: 'stu:abcdefghijklmnopqrstuvwxyz',
+          version: 1,
+          footprint: FOOTPRINT,
+          model: model(),
+        },
+      ],
+    });
+    expect(lastR3d().handle.debug().studio).toBe('loading');
+    expect(map.sources[SOURCE_IDS.buildings]!.setData).not.toHaveBeenCalled();
+  });
+
+  it('shows a degradation notice inline (no toast provider, no handler) until dismissed', () => {
+    mount();
+    load(lastMap());
+    act(() => lastR3d().opts.onNotice({ id: 'studio-slow', message: 'Models are plain blocks now.' }));
+    expect(screen.getByRole('status')).toHaveTextContent('Models are plain blocks now.');
+    act(() => screen.getByRole('button', { name: 'Dismiss' }).click());
+    expect(screen.queryByRole('status')).toBeNull();
+  });
+
+  it('hands notices to onRenderNotice when given', () => {
+    const onRenderNotice = vi.fn();
+    mount({ onRenderNotice });
+    load(lastMap());
+    const notice = { id: 'suggest-overview' as const, message: 'Try the Overview.' };
+    act(() => lastR3d().opts.onNotice(notice));
+    expect(onRenderNotice).toHaveBeenCalledWith(notice);
+    expect(screen.queryByRole('status')).toBeNull();
+  });
+
+  it('disposes the controller on unmount', () => {
+    const { unmount } = mount();
+    load(lastMap());
+    const map = lastMap();
+    unmount();
+    expect(map.off).toHaveBeenCalledWith('webglcontextlost', expect.any(Function));
   });
 });

@@ -4,9 +4,12 @@ import { LIMITS } from '../../../src/community/schema.ts';
 import type { Actor, Permission } from '../../auth/authorize.ts';
 import type { SqlDatabase } from '../../db/types.ts';
 import type { ParsedEnv } from '../../env.ts';
+import { STUDIO_LIMITS } from '../../../src/building-studio/schema.ts';
+import type { StudioContext } from '../../domain/studio/context.ts';
 import { parseWith, readJsonBody } from '../../http/body.ts';
+import { assertJsonBounds } from '../../http/json-bounds.ts';
 import type { Params, Route } from '../../http/router.ts';
-import { loadBaseFor } from '../deps.ts';
+import { loadBaseFor, loadStudioBaseFor } from '../deps.ts';
 import type { HandlerDeps } from '../deps.ts';
 import type { DomainCtx, DomainPort } from '../ports.ts';
 import { queryObject } from './schemas.ts';
@@ -58,6 +61,22 @@ export class AdminCtx {
     return parseWith(schema, await readJsonBody(this.request, LIMITS.adminBodyBytes));
   }
 
+  /**
+   * Studio body: JSON content type, <= STUDIO_LIMITS.bodyBytes, finite numbers
+   * and bounded depth/arrays. Returned RAW: the studio domain parses it with
+   * the strict schemas inside its audit wrapper.
+   */
+  async rawStudioBody(): Promise<unknown> {
+    const raw = await readJsonBody(this.request, STUDIO_LIMITS.bodyBytes);
+    assertJsonBounds(raw);
+    return raw;
+  }
+
+  /** Query string as a plain object (repeated keys rejected); parsed by the domain. */
+  rawQuery(): Record<string, string> {
+    return queryObject(this.url);
+  }
+
   query<S extends z.ZodType>(schema: S): z.infer<S> {
     return parseWith(schema, queryObject(this.url), 'Query');
   }
@@ -67,6 +86,13 @@ export class AdminCtx {
     if (!this.actor) throw new Error('domainCtx requires an authenticated actor');
     const base = await loadBaseFor(this.request, this.env, this.deps);
     return { now: this.now, actor: this.actor.id, base };
+  }
+
+  /** Studio context: the authenticated actor and the studio view of the base dataset. */
+  async studioCtx(): Promise<StudioContext> {
+    if (!this.actor) throw new Error('studioCtx requires an authenticated actor');
+    const studio = await loadStudioBaseFor(this.request, this.env, this.deps);
+    return { now: this.now, actor: this.actor.id, studio };
   }
 }
 

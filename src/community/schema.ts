@@ -8,10 +8,18 @@
  * schemas and assigns all status/actor/provenance fields itself.
  */
 import { z } from 'zod';
+import { publishedStudioBuildingSchema } from '../building-studio/schema.ts';
 import { CATEGORIES } from '../config/categories.ts';
 import { lngLatSchema, wheelchairSchema, verificationStatusSchema } from '../data/schema.ts';
 
-export const PUBLICATION_SCHEMA_VERSION = 1;
+/**
+ * Version 2 (Building Studio, docs/BUILDING_STUDIO_DESIGN.md §9) = version 1
+ * + `buildings` (published, non-archived studio buildings); v1 fields are
+ * unchanged. Readers accept both, so a server rolled back to v1 still feeds
+ * current clients (a v1 body simply has no `buildings`).
+ */
+export const PUBLICATION_SCHEMA_VERSION = 2;
+export const SUPPORTED_PUBLICATION_SCHEMA_VERSIONS = [1, 2] as const;
 
 /** Categories a contributor or the owner may assign (excludes generic placeholders). */
 export const ASSIGNABLE_CATEGORY_IDS = CATEGORIES.filter((c) => c.id !== 'building' && c.id !== 'other').map(
@@ -153,6 +161,9 @@ export const apiErrorSchema = z.object({
       'not-found',
       'conflict',
       'invalid-transition',
+      // Building Studio (STUDIO_ERROR_STATUS, docs/BUILDING_STUDIO_DESIGN.md §7).
+      'validation-failed',
+      'unsupported-model',
       'unavailable',
       'not-configured',
       'internal',
@@ -235,14 +246,20 @@ export const publishedOverrideSchema = z.object({
 });
 export type PublishedOverride = z.infer<typeof publishedOverrideSchema>;
 
-/** GET /api/locations response. */
+/** GET /api/locations response (v1 or v2). */
 export const publicationSchema = z.object({
-  schemaVersion: z.literal(PUBLICATION_SCHEMA_VERSION),
+  schemaVersion: z.union([z.literal(1), z.literal(PUBLICATION_SCHEMA_VERSION)]),
   /** Monotonic counter bumped on every publicly visible change (drives the ETag). */
   publicationVersion: z.number().int().nonnegative(),
   generatedAt: z.string(),
   locations: z.array(publishedLocationSchema),
   overrides: z.array(publishedOverrideSchema),
+  /**
+   * v2: published, non-archived studio buildings in id order (no notes,
+   * actors or drafts). A v2 server always sends the array (possibly empty);
+   * it is optional only so a v1 body still parses. Absent = none.
+   */
+  buildings: z.array(publishedStudioBuildingSchema).optional(),
 });
 export type Publication = z.infer<typeof publicationSchema>;
 
@@ -252,6 +269,7 @@ export const EMPTY_PUBLICATION: Publication = {
   generatedAt: '1970-01-01T00:00:00.000Z',
   locations: [],
   overrides: [],
+  buildings: [],
 };
 
 /** Allowed moderation transitions (server-enforced). `approved` is terminal except via unpublish+reopen. */

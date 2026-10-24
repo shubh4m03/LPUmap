@@ -1,8 +1,18 @@
 import type { Manifest } from '../../data/index.ts';
+import { safeExternalUrl } from '../../utils/safe-url.ts';
 import { ExternalLink, formatDate } from '../place/index.ts';
 import { PanelSection } from '../settings/PanelSection.tsx';
 import { Icon } from '../ui/index.ts';
 import { OSM_ATTRIBUTION, OSM_COPYRIGHT_URL, groupSources, shortUrl } from './about-model.ts';
+
+/**
+ * A shipped licence text (manifest `licenseTextPath`, relative to the app root), or null when the path
+ * is not a plain relative file path. Resolved against the deployment base so it works under a sub-path.
+ */
+function shippedLicenceHref(path: string | undefined, base: string): string | null {
+  if (!path || !/^[A-Za-z0-9][A-Za-z0-9._/-]*$/.test(path) || path.split('/').includes('..')) return null;
+  return `${base.endsWith('/') ? base : `${base}/`}${path}`;
+}
 
 /** Data sources and licences, straight from manifest.sources. */
 export function SourcesSection({ manifest }: { manifest: Manifest }) {
@@ -54,13 +64,41 @@ export function SourcesSection({ manifest }: { manifest: Manifest }) {
 
       {other.length > 0 ? (
         <ul className="flex flex-col gap-1 text-sm">
-          {other.map((s) => (
-            <li key={s.id}>
-              <span className="font-medium">{s.name}</span>
-              {s.license ? <span className="text-muted"> · {s.license}</span> : null}
-              {s.attribution ? <span className="block text-muted">{s.attribution}</span> : null}
-            </li>
-          ))}
+          {other.map((s) => {
+            const sourceUrl = safeExternalUrl(s.url);
+            const licenceUrl = safeExternalUrl(s.licenseUrl);
+            const licenceText = shippedLicenceHref(s.licenseTextPath, import.meta.env.BASE_URL);
+            return (
+              <li key={s.id} className="flex flex-col gap-0.5">
+                <span className="font-medium">
+                  {sourceUrl ? <ExternalLink href={sourceUrl}>{s.name}</ExternalLink> : s.name}
+                </span>
+                {s.license ? (
+                  <span className="text-muted">
+                    Licence:{' '}
+                    {licenceUrl ? <ExternalLink href={licenceUrl}>{s.license}</ExternalLink> : s.license}
+                    {licenceText ? (
+                      <>
+                        {' · '}
+                        <a
+                          href={licenceText}
+                          className="text-accent-text underline underline-offset-2 hover:no-underline"
+                        >
+                          Full licence text
+                        </a>
+                      </>
+                    ) : null}
+                  </span>
+                ) : null}
+                {s.attribution ? <span className="text-muted">{s.attribution}</span> : null}
+                {s.retrievedAt ? (
+                  <span className="text-xs text-muted">
+                    Retrieved {formatDate(s.retrievedAt) ?? s.retrievedAt}
+                  </span>
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
       ) : null}
     </PanelSection>

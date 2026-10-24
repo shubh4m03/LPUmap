@@ -1,0 +1,43 @@
+{
+  "renderer": "baseline",
+  "viewport": {
+    "name": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "deviceScaleFactor": 2,
+    "isMobile": true
+  },
+  "throttle": 4,
+  "orbitMs": 4000,
+  "heapMB": 9.46,
+  "frames": {
+    "frames": 135,
+    "p50": 66.6,
+    "p95": 66.8,
+    "max": 83.4,
+    "over50Pct": 65.2
+  },
+  "layerCpuMs": {
+    "frames": 0,
+    "p50": 0,
+    "p95": 0,
+    "max": 0,
+    "over50Pct": 0
+  },
+  "debug": {
+    "r3d": {
+      "studio": "idle",
+      "fallbackReason": null,
+      "degradeLevel": 0,
+      "excludedIds": [],
+      "layer": null,
+      "detectionsShown": false,
+      "nearbyShown": false,
+      "modelUnavailable": []
+    },
+    "notices": []
+  },
+  "shots": ["mobile-baseline-overview.jpg"]
+}

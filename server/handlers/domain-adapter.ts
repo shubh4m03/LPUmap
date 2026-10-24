@@ -4,7 +4,8 @@
  * against the port; the only translation is the typed suggestion filter.
  */
 import * as domain from '../domain/index.ts';
-import type { DomainPort, Filter } from './ports.ts';
+import * as studio from '../domain/studio/index.ts';
+import type { DomainPort, Filter, StudioPort } from './ports.ts';
 
 const str = (v: unknown): string | undefined => (typeof v === 'string' && v !== '' ? v : undefined);
 const num = (v: unknown): number | undefined => (typeof v === 'number' && Number.isFinite(v) ? v : undefined);
@@ -48,4 +49,26 @@ export const domainAdapter: DomainPort = {
   getPublication: domain.getPublication,
   getOverview: domain.getOverview,
   getQualityWarnings: domain.getQualityWarnings,
+};
+
+/** Building Studio operations (server/domain/studio). */
+export const studioAdapter: StudioPort = {
+  getLibrary: studio.getStudioLibrary,
+  createTemplate: studio.createOwnerTemplate,
+  updateTemplate: studio.updateOwnerTemplate,
+  retireTemplate: studio.retireOwnerTemplate,
+  unretireTemplate: studio.unretireOwnerTemplate,
+  listBuildings: studio.listStudioBuildings,
+  getBuilding: studio.getStudioBuilding,
+  createBuilding: studio.createStudioBuilding,
+  saveDraft: studio.saveStudioDraft,
+  discardDraft: studio.discardStudioDraft,
+  validate: studio.validateStudioRequest,
+  publish: studio.publishStudioBuilding,
+  archive: studio.archiveStudioBuilding,
+  restore: studio.restoreStudioBuilding,
+  deleteBuilding: studio.deleteStudioBuilding,
+  duplicate: studio.duplicateStudioBuilding,
+  applyTemplate: studio.applyStudioTemplate,
+  getQuality: studio.getStudioQuality,
 };

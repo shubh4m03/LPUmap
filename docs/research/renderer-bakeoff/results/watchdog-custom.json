@@ -1,0 +1,13 @@
+{
+  "r3d": {
+    "studio": "fallback",
+    "fallbackReason": "slow-frames",
+    "degradeLevel": 2,
+    "excludedIds": [],
+    "layer": null,
+    "detectionsShown": false,
+    "nearbyShown": false,
+    "modelUnavailable": []
+  },
+  "notices": ["studio-slow", "suggest-overview"]
+}

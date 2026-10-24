@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { useAppStore } from '../../../src/app/store/index.ts';
 import { CategoryPanel } from '../../../src/components/categories/CategoryPanel.tsx';
 import { LayersPanel } from '../../../src/components/layers/LayersPanel.tsx';
+import { OPTIONAL_LAYER_TEXT } from '../../../src/components/layers/optional-layer-text.ts';
 import { renderWithAtlas, resetAppStore } from './render-helpers.tsx';
 
 describe('LayersPanel', () => {
@@ -41,6 +42,33 @@ describe('LayersPanel', () => {
     renderWithAtlas(<LayersPanel />);
     expect(screen.getByText('Measured height')).toBeInTheDocument();
     expect(screen.getByText('Height unknown (placeholder)')).toBeInTheDocument();
+    // Classes that are not drawn are not in the key.
+    expect(screen.queryByText('Owner-placed model')).toBeNull();
+    expect(screen.queryByText('Unverified detected footprint')).toBeNull();
+  });
+
+  it('offers the two opt-in layers, off by default, explaining what they are', async () => {
+    renderWithAtlas(<LayersPanel />);
+    const nearby = screen.getByRole('switch', { name: 'Nearby, outside campus' });
+    const detected = screen.getByRole('switch', { name: 'Unverified detected footprints' });
+    expect(nearby).toHaveAttribute('aria-checked', 'false');
+    expect(detected).toHaveAttribute('aria-checked', 'false');
+    expect(nearby).toHaveAccessibleDescription(OPTIONAL_LAYER_TEXT.nearbyOutsideCampus);
+    expect(nearby).toHaveAccessibleDescription(/“Outside campus”/);
+    expect(detected).toHaveAccessibleDescription(/not checked on the ground/);
+    await userEvent.click(detected);
+    expect(useAppStore.getState().showDetectedFootprints).toBe(true);
+    // The legend now explains the dashed outlines it draws.
+    expect(screen.getByText('Unverified detected footprint')).toBeInTheDocument();
+    await userEvent.click(nearby);
+    expect(useAppStore.getState().showNearbyOutsideCampus).toBe(true);
+    act(() => useAppStore.setState({ viewMode: 'isometric' }));
+    expect(screen.getByText('The isometric overview does not draw these layers.')).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Restore defaults' }));
+    expect(useAppStore.getState()).toMatchObject({
+      showNearbyOutsideCampus: false,
+      showDetectedFootprints: false,
+    });
   });
 });
 

@@ -50,7 +50,7 @@ describe('FavoritesPanel', () => {
     // A saved off-campus place (from the opt-in nearby layer) keeps its zone label.
     renderWithAtlas(<FavoritesPanel />, buildServices(withOffCampusNamed()));
     expect(screen.getByText('Library & study · No verified map position')).toBeInTheDocument();
-    expect(screen.getByText(/Off campus \(nearby\)/)).toBeInTheDocument();
+    expect(screen.getByText(/Outside campus/)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Directions to Synthetic Library' })).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /^Synthetic Food Point/ }));

@@ -71,7 +71,7 @@ export function CategoryPanel() {
                 place.location === null
                   ? 'No verified map position'
                   : place.campusZone === 'off-campus-nearby'
-                    ? 'Off campus (nearby)'
+                    ? APP_CONFIG.optionalLayers.nearbyOutsideCampus.badge
                     : 'On campus'
               }
               meta={distanceText ?? undefined}

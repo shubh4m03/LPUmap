@@ -62,8 +62,9 @@ export const pwaOptions: Partial<VitePWAOptions> = {
     // The dataset files are large GeoJSON; fail the build rather than silently skip one.
     maximumFileSizeToCacheInBytes: 8 * MB,
     navigateFallback: 'index.html',
-    // Generated data/fonts are never HTML navigations.
-    navigateFallbackDenylist: [/^\/data\//, /^\/fonts\//],
+    // Generated data/fonts are never HTML navigations, and neither is the API: without
+    // /api/ here, an API URL opened as a navigation would get index.html, not the server.
+    navigateFallbackDenylist: [/^\/data\//, /^\/fonts\//, /^\/api\//],
     cleanupOutdatedCaches: true,
     // The data loader appends `?v=<datasetVersion>` to every dataset file (an HTTP
     // cache-buster). The precache stores those files without a query string, so `v`
@@ -74,7 +75,9 @@ export const pwaOptions: Partial<VitePWAOptions> = {
     ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^v$/],
     cacheId: APP_CONFIG.storage.prefix,
     // No runtime caching: the app makes no third-party requests, and everything
-    // first-party is already in the versioned precache.
+    // first-party is already in the versioned precache. The owner publication
+    // (/api/locations) is never handled here: the app fetches it network-first and keeps
+    // its own last good copy (src/app/data/publication.ts); /api/admin/** is never cached.
     runtimeCaching: [],
   },
   devOptions: { enabled: false },

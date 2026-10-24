@@ -6,6 +6,7 @@
  */
 import type { JSX } from 'react';
 import { useAtlas } from '../../app/data/atlas-context.ts';
+import { publicationStatusText } from '../../app/data/publication-status.ts';
 import { useAppStore } from '../../app/store/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
 import { formatDate, ExternalLink } from '../place/index.ts';
@@ -16,7 +17,7 @@ import { QualitySummary } from './QualitySummary.tsx';
 import { SourcesSection } from './SourcesSection.tsx';
 
 export function AboutPanel(): JSX.Element {
-  const { data } = useAtlas();
+  const { data, publication, studioSkipped } = useAtlas();
   const openReport = useAppStore((s) => s.openReport);
   const m = data.manifest;
   const stats = placeStats(data.places);
@@ -36,6 +37,8 @@ export function AboutPanel(): JSX.Element {
           items={[
             ['Dataset version', m.datasetVersion],
             ['Sources retrieved', formatDate(m.builtFrom) ?? 'Not recorded'],
+            // The owner's published corrections, additions and placed buildings (GET /api/locations).
+            ['Owner updates', publicationStatusText(publication, studioSkipped)],
           ]}
         />
       </PanelSection>

@@ -74,7 +74,7 @@ export function createDirectory(input: DirectoryInput): CampusDirectory {
   const entries: DirectoryEntry[] = [];
   for (const f of input.buildings.features) {
     const p = f.properties;
-    if (!p.inCampusInventory || seen.has(p.id)) continue;
+    if (!p.inCampusInventory || seen.has(p.id) || input.exclude?.has(p.id)) continue;
     if (p.campusStatus !== 'inside' && p.campusStatus !== 'crossing') continue;
     seen.add(p.id);
     const place = placesById.get(p.id);
@@ -84,7 +84,8 @@ export function createDirectory(input: DirectoryInput): CampusDirectory {
       key: p.directoryKey,
       cell: p.directoryCell,
       title: p.name ?? (p.directoryKey ? `Building ${p.directoryKey}` : p.displayName),
-      subtitle: subtitleFor(p),
+      // An owner-placed studio building carries its public S3 label (e.g. 'Illustrative model … not verified').
+      subtitle: p.geometrySource === 'studio' ? (place?.provenance.notes ?? p.displayName) : subtitleFor(p),
       name: p.name,
       displayName: p.displayName,
       officialBlock:

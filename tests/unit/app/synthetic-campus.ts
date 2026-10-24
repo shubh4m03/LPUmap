@@ -170,7 +170,7 @@ export function syntheticCampus(): CampusData {
 
 /**
  * The same data with NAMED as an off-campus place, as the opt-in "Nearby, outside campus" layer would
- * show it (owner decision 2). Used to check its 'Off campus (nearby)' labelling and that campus search
+ * show it (owner decision 2). Used to check its 'Outside campus' labelling and that campus search
  * does not offer it.
  */
 export function withOffCampusNamed(): CampusData {

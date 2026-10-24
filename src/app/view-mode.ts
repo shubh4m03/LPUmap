@@ -18,6 +18,13 @@ export const VIEW_MODE_LABELS: Record<ViewMode, string> = {
   standard2d: '2D',
 };
 
+/** Accessible names of the mode switcher options (the visible labels stay short). */
+export const VIEW_MODE_NAMES: Record<ViewMode, string> = {
+  realistic3d: '3D map',
+  isometric: 'Isometric overview',
+  standard2d: '2D map',
+};
+
 export const isMapViewMode = (m: ViewMode): m is MapViewMode => m !== 'isometric';
 /** Backward-compatible `mode3d`: true only in Realistic 3D. */
 export const mode3dFor = (m: ViewMode): boolean => m === 'realistic3d';
@@ -126,7 +133,43 @@ export const supports = (mode: ViewMode, cap: ViewCapability): CapabilitySupport
 /** Shown on the disabled overview option while live navigation runs. */
 export const ISOMETRIC_DURING_NAVIGATION_REASON = 'Not available during live navigation';
 
+/** Why the map modes are disabled when this browser cannot draw the map (no WebGL). */
+export const MAP_UNAVAILABLE_REASON =
+  'This browser cannot draw the interactive map (no WebGL). The overview works without it.';
+
+/** Announcement when the overview replaces a map that cannot run. */
+export const OVERVIEW_FALLBACK_ANNOUNCEMENT =
+  'The interactive map cannot run in this browser. Showing the isometric overview instead.';
+
+/** Announcement when live location starts in the overview (it has no live GPS, §8.2). */
+export function locationSwitchAnnouncement(to: MapViewMode): string {
+  return `Live location uses the map view. Switched to ${to === 'realistic3d' ? '3D map' : '2D map'}.`;
+}
+
 /** Announcement when navigation forces a map mode. */
 export function navigationSwitchAnnouncement(to: MapViewMode): string {
   return `Live navigation uses the map view. Switched to ${to === 'realistic3d' ? '3D map' : '2D map'}.`;
+}
+
+/**
+ * True when this browser can draw the Canvas2D overview (the fallback when
+ * WebGL is missing). False in non-browser environments.
+ */
+export function supportsCanvas2D(): boolean {
+  if (typeof document === 'undefined' || typeof CanvasRenderingContext2D === 'undefined') return false;
+  try {
+    return document.createElement('canvas').getContext('2d') !== null;
+  } catch {
+    return false;
+  }
+}
+
+/** Why `mode` cannot be chosen right now, or null when it can (shown, never silently hidden). */
+export function viewModeBlockedReason(
+  mode: ViewMode,
+  state: { navigationActive: boolean; mapUnavailable: string | null },
+): string | null {
+  if (mode === 'isometric' && state.navigationActive) return ISOMETRIC_DURING_NAVIGATION_REASON;
+  if (isMapViewMode(mode) && state.mapUnavailable !== null) return state.mapUnavailable;
+  return null;
 }

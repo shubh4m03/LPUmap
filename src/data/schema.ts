@@ -59,7 +59,12 @@ export const provenanceSchema = z.object({
 
 export const campusZoneSchema = z.enum(['on-campus', 'off-campus-nearby']);
 export const wheelchairSchema = z.enum(['yes', 'limited', 'no', 'unknown']);
-export const heightSourceSchema = z.enum(['osm-height', 'osm-levels-estimate', 'fallback']);
+/**
+ * How a render height was chosen. 'studio-model' is an owner-placed Building Studio model
+ * (docs/BUILDING_STUDIO_DESIGN.md change C1): illustrative, never a measurement. The data
+ * pipeline never emits it; only the client merge of published studio buildings does.
+ */
+export const heightSourceSchema = z.enum(['osm-height', 'osm-levels-estimate', 'fallback', 'studio-model']);
 
 export const placeKindSchema = z.enum([
   'building', // has (or is) a mapped footprint
@@ -277,6 +282,7 @@ export const membershipDecisionSchema = z.enum(['auto', 'curated']);
 export const geometrySourceSchema = z.enum([
   'osm', // OpenStreetMap way/relation
   'curated', // dated curated trace/survey in data/curated
+  'studio', // owner-placed Building Studio footprint (client merge only, change C1)
 ]);
 
 /** 0 outline only (placeholder height); 1 + levels estimate; 2 + tagged height; 3 surveyed/verified. */
@@ -422,8 +428,13 @@ export function buildingPropsProblems(p: BuildingPropsV2Raw): string[] {
     out.push("'osm-height' needs osmHeightM");
   if (p.renderHeightSource === 'osm-levels-estimate' && p.levels === null)
     out.push("'osm-levels-estimate' needs levels");
+  // An illustrative studio model is fidelity 0 (3 only when surveyed and verified, below).
   const expectedFidelity =
-    p.renderHeightSource === 'fallback' ? 0 : p.renderHeightSource === 'osm-levels-estimate' ? 1 : 2;
+    p.renderHeightSource === 'fallback' || p.renderHeightSource === 'studio-model'
+      ? 0
+      : p.renderHeightSource === 'osm-levels-estimate'
+        ? 1
+        : 2;
   if (p.fidelityLevel === 3) {
     if (p.verificationStatus !== 'verified') out.push('fidelityLevel 3 requires verificationStatus verified');
   } else if (p.fidelityLevel !== expectedFidelity) {

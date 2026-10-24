@@ -17,6 +17,12 @@
  *   ADMIN_SMOKE_PASSWORD="$PW" node scripts/admin-http-smoke.ts http://127.0.0.1:8790
  *   # then stop wrangler (and its workerd child) and delete .dev.vars
  *
+ * After the community flow it runs the Building Studio flow (create draft →
+ * save → validate → publish with an acknowledgement → public publication v2
+ * → archive → gone → restore), which needs public/data served at /data/
+ * (the vite build output includes it; for the API alone, a directory holding
+ * a copy of public/data under data/ is enough).
+ *
  * baseUrl defaults to http://127.0.0.1:8790. Use a FRESH local D1 state: the
  * script expects the login rate-limit bucket to be empty and asserts exact
  * publication-version deltas. It prints one line per step (status codes and
@@ -346,6 +352,11 @@ async function main(): Promise<void> {
   check(!auditText.includes(PASSWORD) && !auditText.includes(csrf), 'audit leaks', 'secret found in audit');
   report('audit contains no password/CSRF token', `${events.length} events`);
 
+  // 10b. Building Studio: login session → draft → save → validate → publish (warning needs an
+  // acknowledgement) → public v2 → archive → gone → restore. The fixture is a generic illustrative
+  // box on an empty on-campus spot; its private note must never reach the public publication.
+  await studioFlow(auth.cookie, csrf, Number(pub4.body.publicationVersion));
+
   // 11. Logout → 401 afterwards (cookie replay rejected)
   const logout = await call('DELETE', '/api/admin/session', { ...auth, csrf });
   check(
@@ -359,6 +370,219 @@ async function main(): Promise<void> {
   report('replayed cookie after logout', `401 ${errCode(after)}`);
 
   stdout.write(`ALL ${step} STEPS PASSED against ${BASE}\n`);
+}
+
+/** An empty spot inside the campus boundary (tests/server/studio/helpers.ts SITE_A). */
+const STUDIO_SITE = [75.7015, 31.2495];
+const STUDIO_NOTE = 'SMOKE-PRIVATE-NOTE: never public';
+const ACK = { code: 'height-floors-conflict', reason: 'Smoke test: tall ground floor on purpose' };
+
+function studioDraft(heightM: number): Json {
+  return {
+    identity: {
+      name: `Smoke Studio Pavilion ${Date.now().toString(36)}`,
+      aliases: [],
+      categoryId: 'building',
+      subtype: null,
+      description: null,
+      notes: STUDIO_NOTE,
+      directoryVisible: true,
+    },
+    model: {
+      modelConfigVersion: 1,
+      generatorId: 'box',
+      generatorVersion: 1,
+      anchor: STUDIO_SITE,
+      rotationDeg: 0,
+      widthM: 20,
+      lengthM: 20,
+      heightM,
+      floors: 3,
+      floorHeightM: 3.2,
+      baseOffsetM: 0,
+      shape: { kind: 'box' },
+      roof: { shape: 'flat', colour: '#8a8a8a', material: 'concrete' },
+      facade: {
+        material: 'plaster',
+        wallColour: '#d9d4c7',
+        windowPattern: 'punched',
+        windowDensity: 0.4,
+        balconies: false,
+        entranceSide: 'front',
+      },
+      detailLevel: 'facade',
+    },
+    verification: { status: 'unverified' },
+    accessNodeId: null,
+    templateRef: null,
+    positionCorrection: null,
+  };
+}
+
+const buildingIds = (r: Res): string[] =>
+  ((r.body.buildings as Json[] | undefined) ?? []).map((b) => String(b.id));
+const head = (r: Res): Json => ((r.body.building as Json | undefined)?.head ?? r.body.head ?? {}) as Json;
+
+async function studioFlow(cookie: string, csrf: string, v: number): Promise<void> {
+  const auth = { cookie };
+  const lib = await call('GET', '/api/admin/studio/library', auth);
+  const templates = (lib.body.templates as Json[] | undefined) ?? [];
+  check(lib.status === 200 && templates.length >= 17, 'studio library', `status ${lib.status}`);
+  report('studio library', `200 ${templates.length} templates`);
+
+  const noCsrf = await call('POST', '/api/admin/studio/buildings', {
+    ...auth,
+    body: { targetId: null, draft: studioDraft(9.6) },
+  });
+  check(noCsrf.status === 403, 'studio create without CSRF', `status ${noCsrf.status}`);
+  report('studio create without CSRF token', `403 ${errCode(noCsrf)}`);
+
+  const footprint = await call('POST', '/api/admin/studio/buildings', {
+    ...auth,
+    csrf,
+    body: {
+      targetId: null,
+      draft: { ...studioDraft(9.6), footprint: { type: 'Polygon', coordinates: [] } },
+    },
+  });
+  check(footprint.status === 400, 'client footprint rejected', `status ${footprint.status}`);
+  report(
+    'studio create with a client footprint',
+    `400 ${errCode(footprint)} (footprints are server-derived)`,
+  );
+
+  const created = await call('POST', '/api/admin/studio/buildings', {
+    ...auth,
+    csrf,
+    body: { targetId: null, draft: studioDraft(9.6) },
+  });
+  const id = String(head(created).id ?? '');
+  check(
+    created.status === 201 && /^stu:[a-z2-7]{20,32}$/.test(id),
+    'studio create',
+    `status ${created.status}`,
+  );
+  report('studio create draft', `201 ${id} status=${String(head(created).status)} rev=1`);
+
+  const saved = await call('PUT', `/api/admin/studio/buildings/${id}/draft`, {
+    ...auth,
+    csrf,
+    body: { revision: 1, draft: studioDraft(15) },
+  });
+  check(saved.status === 200 && head(saved).draftRevision === 2, 'studio save', `status ${saved.status}`);
+  report('studio save draft', `200 draftRevision=2 revision=${String(head(saved).revision)}`);
+
+  const validated = await call('POST', '/api/admin/studio/validate', {
+    ...auth,
+    csrf,
+    body: { targetId: null, recordId: id, draft: studioDraft(15) },
+  });
+  const required = (validated.body.requiredAcknowledgements as string[] | undefined) ?? [];
+  check(
+    validated.status === 200 && validated.body.errorCount === 0 && required.includes(ACK.code),
+    'studio validate',
+    `status ${validated.status} ${JSON.stringify(validated.body).slice(0, 200)}`,
+  );
+  report('studio validate (dry run)', `200 errors=0 warnings needing acknowledgement=${required.join(',')}`);
+
+  const unacked = await call('POST', `/api/admin/studio/buildings/${id}/publish`, {
+    ...auth,
+    csrf,
+    body: { revision: 2, acknowledgements: [], changeSummary: 'Smoke test publication' },
+  });
+  check(
+    unacked.status === 422 && errCode(unacked) === 'validation-failed',
+    'publish without acknowledgement',
+    `status ${unacked.status}`,
+  );
+  report('studio publish without acknowledgement', `422 ${errCode(unacked)}`);
+
+  const pub = await call('POST', `/api/admin/studio/buildings/${id}/publish`, {
+    ...auth,
+    csrf,
+    body: { revision: 2, acknowledgements: [ACK], changeSummary: 'Smoke test publication' },
+  });
+  check(
+    pub.status === 200 && Number(pub.body.publicationVersion) === v + 1,
+    'studio publish',
+    `status ${pub.status} ${JSON.stringify(pub.body).slice(0, 200)}`,
+  );
+  report('studio publish with acknowledgement', `200 version=1 publicationVersion=${v + 1}`);
+
+  const live = await call('GET', '/api/locations');
+  const liveText = JSON.stringify(live.body);
+  check(
+    live.status === 200 &&
+      live.body.schemaVersion === 2 &&
+      buildingIds(live).includes(id) &&
+      !liveText.includes(STUDIO_NOTE) &&
+      !liveText.includes(ACK.reason),
+    'public publication v2',
+    `status ${live.status}`,
+  );
+  report(
+    'GET /api/locations after studio publish',
+    `200 schemaVersion=2 buildings include ${id}; private note and acknowledgement absent; ETag=${live.headers.get('ETag')}`,
+  );
+
+  const archived = await call('POST', `/api/admin/studio/buildings/${id}/archive`, {
+    ...auth,
+    csrf,
+    body: { revision: 3, reason: 'Smoke test archive' },
+  });
+  check(
+    archived.status === 200 && head(archived).status === 'archived',
+    'studio archive',
+    `status ${archived.status}`,
+  );
+  const gone = await call('GET', '/api/locations');
+  check(
+    !buildingIds(gone).includes(id) && Number(gone.body.publicationVersion) === v + 2,
+    'archived gone',
+    buildingIds(gone).join(','),
+  );
+  report('studio archive', `200; GET /api/locations: ${id} absent, version=${v + 2}`);
+
+  const restored = await call('POST', `/api/admin/studio/buildings/${id}/restore`, {
+    ...auth,
+    csrf,
+    body: { revision: 4, acknowledgements: [ACK] },
+  });
+  check(
+    restored.status === 200 && head(restored).status === 'published',
+    'studio restore',
+    `status ${restored.status}`,
+  );
+  const back = await call('GET', '/api/locations');
+  check(
+    buildingIds(back).includes(id) && Number(back.body.publicationVersion) === v + 3,
+    'restored back',
+    buildingIds(back).join(','),
+  );
+  report('studio restore', `200 status=published; GET /api/locations: ${id} present, version=${v + 3}`);
+
+  const audit = await call(
+    'GET',
+    `/api/admin/audit?entity=building&entityId=${encodeURIComponent(id)}`,
+    auth,
+  );
+  const actions = ((audit.body.items as Json[] | undefined) ?? [])
+    .map((e) => `${String(e.action)}:${String(e.outcome)}`)
+    .reverse();
+  const expected = [
+    'building.create:success',
+    'building.save-draft:success',
+    'building.publish:rejected',
+    'building.publish:success',
+    'building.archive:success',
+    'building.restore:success',
+  ];
+  check(
+    audit.status === 200 && JSON.stringify(actions) === JSON.stringify(expected),
+    'studio audit',
+    actions.join(','),
+  );
+  report('studio audit trail', actions.join(' → '));
 }
 
 main().catch((err: unknown) => {

@@ -16,7 +16,7 @@ describe('PlaceDetails', () => {
     renderWithAtlas(<PlaceDetails placeId="osm:node/1" />, buildServices(withOffCampusNamed()));
     expect(screen.getByRole('heading', { name: 'Synthetic Food Point' })).toBeInTheDocument();
     expect(screen.getByText('Food & drink')).toBeInTheDocument();
-    expect(screen.getByText('Off campus (nearby)')).toBeInTheDocument();
+    expect(screen.getByText('Outside campus')).toBeInTheDocument();
     expect(screen.getByText('Open')).toBeInTheDocument();
     expect(screen.getAllByText(/per published hours/i).length).toBeGreaterThan(0);
     expect(screen.getByRole('list', { name: 'Weekly published hours' })).toHaveTextContent('Every day');

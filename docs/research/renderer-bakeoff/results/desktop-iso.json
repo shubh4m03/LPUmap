@@ -1,0 +1,54 @@
+{
+  "renderer": "iso",
+  "viewport": {
+    "name": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "deviceScaleFactor": 1,
+    "isMobile": false
+  },
+  "throttle": 4,
+  "heapMB": 9.75,
+  "initial": {
+    "sceneBuildMs": 27.600000023841858,
+    "fullRedrawMs": 11,
+    "dynamicRedrawMs": 0.5,
+    "hitTestMs": 0,
+    "cycles": 0,
+    "faceCycles": 36,
+    "interleavedPairs": 11,
+    "buildings": 177,
+    "faces": 1611,
+    "fullRedraws": 1,
+    "dynamicRedraws": 1
+  },
+  "frames": {
+    "frames": 170,
+    "p50": 16.7,
+    "p95": 16.8,
+    "max": 216.7,
+    "over50Pct": 0.6
+  },
+  "afterRotate": {
+    "sceneBuildMs": 173.79999995231628,
+    "fullRedrawMs": 28.600000023841858,
+    "dynamicRedrawMs": 0.5,
+    "hitTestMs": 0,
+    "cycles": 0,
+    "faceCycles": 48,
+    "interleavedPairs": 13,
+    "buildings": 177,
+    "faces": 1638,
+    "fullRedraws": 9,
+    "dynamicRedraws": 1
+  },
+  "shots": [
+    "desktop-iso-overview.jpg",
+    "desktop-iso-A.jpg",
+    "desktop-iso-B.jpg",
+    "desktop-iso-C.jpg",
+    "desktop-iso-D.jpg"
+  ]
+}

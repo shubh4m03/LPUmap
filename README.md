@@ -39,14 +39,28 @@ listed under [Known limitations](#known-limitations).
 - A MapLibre GL map drawn entirely from the project's own GeoJSON: campus boundary, roads, paths,
   green areas, water and building footprints. There are no third-party tiles and no API key. The map
   glyphs (Noto Sans) are self-hosted.
-- A 3D building mode that extrudes footprints. The legend separates three height sources: measured
-  heights (`height` tag, none in the current snapshot), heights estimated from `building:levels`, and
-  placeholder heights for buildings with no height data. It starts in 3D on screens 768 px and wider
-  and in 2D on phones, and can be switched either way.
+- Three view modes, chosen with the "View mode" switcher in the map controls or the `?view=3d|iso|2d`
+  deep link: **3D map** (extruded footprints), **Isometric overview** (a Canvas2D drawing of the
+  campus that needs no WebGL) and **2D map**. Selection, search, saved places and the planned route
+  are shared: switching keeps the selected building and opens on the same ground point. The app
+  starts in 3D on screens 768 px and wider and in 2D on phones. What a mode cannot do is said, never
+  hidden: live location and navigation use a map mode (starting either from the overview switches to
+  the last map mode and announces it), and the overview option is disabled with its reason while
+  live navigation runs.
+- The 3D legend separates the height sources: measured heights (`height` tag, none in the current
+  snapshot), heights estimated from `building:levels`, placeholder heights, and owner-placed models.
 - Layer groups (academic, residences, food, study, health, ATMs, sports, transport and others), a
   label toggle, and a building-height legend.
-- A list-based layout when WebGL2 is unavailable or the map fails. Search, details, categories and
-  directions still work in that mode.
+- Without WebGL the isometric overview replaces the map (the map modes say why they are
+  unavailable). Only when the browser cannot draw a canvas either, or the map fails, does the
+  list-based layout take over; search, details, categories and directions still work there.
+- Two opt-in layers in "Map layers", both off by default: **Nearby, outside campus** (places just
+  outside the boundary, always marked "Outside campus", searchable only while the layer is on, never
+  counted as campus places) and **Unverified detected footprints** (machine-detected outlines, drawn
+  flat and dashed, never part of the campus building list).
+- A **Building directory** (menu → Building directory, or <kbd>D</kbd> in the overview): the accessible
+  list of every drawn building with its map key, searchable and filterable by category, shared by
+  all three modes.
 
 **Search and places**
 
@@ -58,7 +72,9 @@ listed under [Known limitations](#known-limitations).
 - Place details: category, on- or off-campus zone, opening hours evaluated in IST (shown as unknown
   when absent, or with a freshness warning when old), provenance (source, retrieval date,
   verification status), related places, and actions (directions, save, share, report a correction).
-- Deep links: `?place=<id>` opens a place. The id is validated before use.
+- Deep links: `?place=<id>` opens a place (base ids, published owner locations and owner-placed
+  buildings), and `?view=3d|iso|2d` picks the mode. Ids are validated before use.
+- Unnamed buildings with a map key are searchable by that key (for example `D4-01`).
 - A "Campus information" panel. It lists official LPU schools and facilities, which have no map
   position, and explains which student services (mess menus, transport timetable, events, faculty
   directory) have no public source.
@@ -88,7 +104,21 @@ listed under [Known limitations](#known-limitations).
 - Offline use after one online visit. App and data are precached together and updated together, and
   an update prompt never reloads the page without asking.
 
-There is no backend, no account, no analytics and no third-party request at runtime.
+**Owner updates**
+
+- When the site runs with its Cloudflare Pages Functions, the app fetches the owner's publication
+  (`GET /api/locations`) next to the dataset: owner corrections, approved locations and buildings
+  placed in the Building Studio. They are merged into the same places, buildings, directory and
+  search in every view mode, with one id per building. An owner-placed building is always labelled
+  as such ("Illustrative model placed by the site owner — not verified" unless it carries a cited
+  source or a survey); drafts and archived records are never published.
+- The publication is fetched network-first with a 3 s start-up timeout; the last good copy is kept in
+  the browser for offline or slow starts, and About & data sources says when it was last updated or
+  why only the base dataset is shown. On a host without the API (static hosting) the base dataset is
+  used and the app shows no error. Hosts with a single-page fallback answer quietly; a host that
+  answers 404 instead leaves one network line in the browser console, which the app cannot suppress.
+
+There is no account for visitors, no analytics and no third-party request at runtime.
 
 ## Screenshots
 
@@ -142,9 +172,15 @@ First-time setup for end-to-end tests:
 npx playwright install chromium
 ```
 
-Load the app with `?e2e=1` to expose a read-only test hook, `window.__ATLAS_MAP__`. It reports
-camera, selection, route and layer state, and never user coordinates. See
-[docs/QA_STRATEGY.md](docs/QA_STRATEGY.md).
+Load the app with `?e2e=1` to expose read-only test hooks: `window.__ATLAS_MAP__` (camera,
+selection, route, layer and Realistic-3D state) and, in the overview, `window.__ATLAS_ISO__`. They
+never report user coordinates. See [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md).
+
+The e2e suite never talks to a live backend. Specs that need owner data enable the
+`syntheticPublication` option (`tests/e2e/fixtures/publication.ts`), which serves a clearly synthetic
+publication ("E2E fixture hall (synthetic)", a synthetic canteen, leaked draft/archived records that
+must never appear) through route interception; it is never shipped. Set `PW_PORT` to run the
+preview server on another port when 4173 is taken.
 
 ## Campus data
 

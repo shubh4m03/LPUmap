@@ -1,4 +1,5 @@
 /** Pure derivations for the About panel. Every number comes from the loaded data. */
+import { APP_CONFIG } from '../../config/index.ts';
 import type { Manifest, Place, SourceRecord } from '../../data/index.ts';
 import { safeExternalUrl } from '../../utils/safe-url.ts';
 
@@ -32,7 +33,10 @@ export function coverageFacts(m: Manifest): CoverageFact[] {
     },
     { label: 'Places and records', value: fmt(count(m, 'places')) },
     { label: 'On campus', value: fmt(count(m, 'zone:on-campus')) },
-    { label: 'Off campus (nearby)', value: fmt(count(m, 'zone:off-campus-nearby')) },
+    {
+      label: APP_CONFIG.optionalLayers.nearbyOutsideCampus.badge,
+      value: fmt(count(m, 'zone:off-campus-nearby')),
+    },
     { label: 'Without a map position', value: fmt(count(m, 'places:withoutLocation')) },
     { label: 'Not connected to paths', value: fmt(count(m, 'places:notConnected')) },
     {

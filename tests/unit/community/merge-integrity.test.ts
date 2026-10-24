@@ -210,12 +210,17 @@ describe('merge integrity on the real dataset', () => {
         i % 5 === 0 ? null : i % 7 === 0 ? 999_999 : candidates[(i * 37 + (i % 3)) % candidates.length]!;
       locations.push(loc(`com:l${i}`, [nodes[n]![0], nodes[n]![1] + offset], { accessNodeId }));
     }
-    const { data, report } = mergePublication(base, pub({ locations }));
+    const { data, contextPlaces, report } = mergePublication(base, pub({ locations }));
     const dir = createFacilityDirectory(data.places, data.relations);
     const invalid = new Set(report.invalidAccess.map((i) => i.id));
+    const polygons = boundaryPolygons(base.boundary);
     let routed = 0;
     for (const l of locations) {
-      const p = data.places.find((x) => x.id === l.id)!;
+      // Owner decision 2: an off-campus location is a context place, never a campus place.
+      const onCampus = campusZoneFor(l.location, polygons) === 'on-campus';
+      expect(data.places.some((x) => x.id === l.id)).toBe(onCampus);
+      expect(contextPlaces.some((x) => x.id === l.id)).toBe(!onCampus);
+      const p = [...data.places, ...contextPlaces].find((x) => x.id === l.id)!;
       const check = l.accessNodeId === null ? null : checkAccessNode(nodes, foot, l.accessNodeId, l.location);
       if (check?.ok) {
         routed++;

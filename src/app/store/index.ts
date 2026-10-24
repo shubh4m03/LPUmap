@@ -4,7 +4,7 @@
  * unrelated updates — e.g. a new GPS fix — never re-render the map shell.
  */
 import { create, type StoreApi, type UseBoundStore } from 'zustand';
-import type { ViewMode } from '../view-mode.ts';
+import { parseViewParam, type ViewMode } from '../view-mode.ts';
 import { createMapSlice, defaultViewMode, type MapDefaults } from './map-slice.ts';
 import { createNavSlice, type WatcherFactory } from './nav-slice.ts';
 import { createRouteSlice } from './route-slice.ts';
@@ -22,6 +22,11 @@ export interface AppStoreOptions {
 const legacyViewMode = (mode3d: boolean | undefined): ViewMode | undefined =>
   mode3d === undefined ? undefined : mode3d ? 'realistic3d' : 'standard2d';
 
+/** `?view=3d|iso|2d` of the page URL (docs/ISOMETRIC_AND_3D_DESIGN.md §8.3), so the first render is already in that mode. */
+function viewModeFromUrl(): ViewMode | null {
+  return typeof window === 'undefined' ? null : parseViewParam(window.location.search);
+}
+
 export function createAppStore(opts: AppStoreOptions = {}): UseBoundStore<StoreApi<AppState>> {
   const mapDefaults: MapDefaults = {
     viewMode: opts.map?.viewMode ?? legacyViewMode(opts.map?.mode3d) ?? defaultViewMode(),
@@ -36,7 +41,12 @@ export function createAppStore(opts: AppStoreOptions = {}): UseBoundStore<StoreA
   }));
 }
 
-export const useAppStore = createAppStore();
+export const useAppStore = (() => {
+  const fromUrl = viewModeFromUrl();
+  const store = createAppStore(fromUrl ? { map: { viewMode: fromUrl } } : {});
+  if (fromUrl) store.setState({ viewModeReason: 'deep-link' });
+  return store;
+})();
 
 export * from './selectors.ts';
 export type * from './types.ts';

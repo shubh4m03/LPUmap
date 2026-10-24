@@ -3,6 +3,8 @@ import { commandIcon, commandNeedsMap } from '../../app/commands.ts';
 import { getCategory, LAYER_GROUPS, categoriesInGroup } from '../../config/categories.ts';
 import type { Place } from '../../data/index.ts';
 import { highlightSegments, type SearchDocKind, type SearchHit } from '../../search/index.ts';
+import { APP_CONFIG } from '../../config/index.ts';
+import { studioModelLabel } from '../place/place-format.ts';
 import { iconForCategory, type IconName, type TitleSegment } from '../ui/index.ts';
 
 export type SectionId = 'recent' | 'favorites' | 'places' | 'categories' | 'commands';
@@ -52,7 +54,12 @@ function layerIcon(groupId: string): IconName {
 /** `qualifier` tells same-named places apart (SearchDoc.qualifier), e.g. 'Facility'. */
 export function placeItem(place: Place, key: string, qualifier?: string): PaletteItem {
   const category = getCategory(place.categoryId);
-  const zone = place.campusZone === 'off-campus-nearby' ? ' · Off campus (nearby)' : '';
+  const zone =
+    place.campusZone === 'off-campus-nearby'
+      ? ` · ${APP_CONFIG.optionalLayers.nearbyOutsideCampus.badge}`
+      : studioModelLabel(place)
+        ? ` · ${studioModelLabel(place)}`
+        : '';
   const base =
     place.location === null ? `${category.label} · No verified map position` : `${category.label}${zone}`;
   return {

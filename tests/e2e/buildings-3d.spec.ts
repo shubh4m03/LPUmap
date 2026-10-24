@@ -1,4 +1,4 @@
-/** Workflow B — 3D buildings: tilt, rotate, pick an extruded building, back to 2D. */
+/** Workflow B — 3D buildings: switch to the 3D map, rotate, pick an extruded building, back to 2D. */
 import { LAYER_IDS } from '../../src/map/ids.ts';
 import { CAMPUS_BUILDING, footprintCentre } from './fixtures/data.ts';
 import { expect, test } from './fixtures/test.ts';
@@ -11,17 +11,19 @@ test.describe('B · 3D buildings', () => {
     page,
   }) => {
     await atlas.open();
-    const toggle = page
+    const modes = page
       .getByRole('group', { name: 'Map controls' })
-      .getByRole('button', { name: '3D buildings' });
+      .getByRole('radiogroup', { name: 'View mode' });
+    const map3d = modes.getByRole('radio', { name: '3D map' });
+    const map2d = modes.getByRole('radio', { name: '2D map' });
 
     // Start from 2D whatever the viewport default is, then switch 3D on.
-    if ((await toggle.getAttribute('aria-pressed')) === 'true') await toggle.click();
-    await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    await map2d.click();
+    await expect(map2d).toHaveAttribute('aria-checked', 'true');
     await expect.poll(async () => (await atlas.camera()).pitch).toBe(0);
 
-    await toggle.click();
-    await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+    await map3d.click();
+    await expect(map3d).toHaveAttribute('aria-checked', 'true');
     await expect.poll(async () => (await atlas.camera()).pitch).toBeGreaterThan(0);
     await expect.poll(() => atlas.layerVisibility(LAYER_IDS.buildingExtrusion)).toBe('visible');
 
@@ -50,8 +52,8 @@ test.describe('B · 3D buildings', () => {
     await atlas.screenshot('3D building selected');
 
     // Back to 2D: flat camera, and the app still searches.
-    await toggle.click();
-    await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    await map2d.click();
+    await expect(map2d).toHaveAttribute('aria-checked', 'true');
     await expect.poll(async () => (await atlas.camera()).pitch).toBe(0);
     expect((await atlas.camera()).bearing).toBe(0);
     await expect.poll(() => atlas.layerVisibility(LAYER_IDS.buildingExtrusion)).toBe('none');

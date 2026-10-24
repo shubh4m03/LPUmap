@@ -8,7 +8,8 @@ export const KIND_LABELS: Record<PlaceKind, string> = PLACE_KIND_LABELS;
 
 export const ZONE_LABELS: Record<CampusZone, string> = {
   'on-campus': 'On campus',
-  'off-campus-nearby': 'Off campus (nearby)',
+  // One label for off-campus things everywhere: the opt-in layer badge.
+  'off-campus-nearby': APP_CONFIG.optionalLayers.nearbyOutsideCampus.badge,
 };
 
 export const WHEELCHAIR_LABELS: Record<Wheelchair, string> = {
@@ -20,8 +21,21 @@ export const WHEELCHAIR_LABELS: Record<Wheelchair, string> = {
 
 const roundM = (m: number) => (m >= 10 ? Math.round(m) : Math.round(m * 10) / 10);
 
+/**
+ * The public S3 label of a place drawn from an owner-placed studio model (its provenance note, e.g.
+ * "Illustrative model placed by the site owner — not verified"): a new `stu:` building, or a base
+ * building the owner modelled (heightSource 'studio-model'). Null for any other place.
+ */
+export function studioModelLabel(place: Place): string | null {
+  const modelled = place.id.startsWith('stu:') || place.heightSource === 'studio-model';
+  return modelled && place.provenance.notes ? place.provenance.notes : null;
+}
+
 /** Height wording by source; null when the place has no height information at all. */
 export function heightText(place: Place): string | null {
+  // An owner-placed model is drawn at an illustrative height; it is never a measurement.
+  if (studioModelLabel(place))
+    return 'Height not recorded — drawn at the illustrative height of an owner-placed model';
   const src = place.heightSource ?? (place.kind === 'building' ? 'fallback' : undefined);
   if (src === undefined) return null;
   if (src === 'osm-height' && place.heightM !== undefined)

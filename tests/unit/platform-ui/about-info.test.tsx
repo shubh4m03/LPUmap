@@ -72,7 +72,7 @@ describe('AboutPanel', () => {
     expect(coverage).toHaveTextContent('Building outlines4,321 (4,111 without a name)');
     expect(coverage).toHaveTextContent('Places and records9,876');
     expect(coverage).toHaveTextContent('On campus1,234');
-    expect(coverage).toHaveTextContent('Off campus (nearby)8,642');
+    expect(coverage).toHaveTextContent('Outside campus8,642');
     expect(coverage).toHaveTextContent('Without a map position77');
     expect(coverage).toHaveTextContent('3,333 points, 4,444 segments, 13 separate parts');
     expect(screen.getByText(/\(4,111 of 4,321 outlines\)/)).toBeInTheDocument();

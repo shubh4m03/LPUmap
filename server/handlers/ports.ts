@@ -5,7 +5,8 @@
  * Return values are passed through to the client as JSON (admin) — the
  * domain owns their shape.
  */
-import type { BaseData } from '../base-data.ts';
+import type { BaseData, StudioBaseData } from '../base-data.ts';
+import type { StudioContext } from '../domain/studio/context.ts';
 import type { SqlDatabase } from '../db/types.ts';
 import type { IdGenerator } from '../ids.ts';
 import type { RateLimitRepo, SaltRepo, SessionRepo } from '../auth/ports.ts';
@@ -146,12 +147,41 @@ export interface DomainPort {
   getQualityWarnings(db: SqlDatabase, ctx: DomainCtx): Promise<unknown>;
 }
 
+/**
+ * Building Studio operations (docs/BUILDING_STUDIO_DESIGN.md §7). Bodies and
+ * queries are passed RAW (already size- and structure-bounded): the domain
+ * parses them inside its audit wrapper, so rejected writes are audited too.
+ */
+export interface StudioPort {
+  getLibrary(db: SqlDatabase, ctx: StudioContext): Promise<unknown>;
+  createTemplate(db: SqlDatabase, body: unknown, ctx: StudioContext): Promise<unknown>;
+  updateTemplate(db: SqlDatabase, id: string, body: unknown, ctx: StudioContext): Promise<unknown>;
+  retireTemplate(db: SqlDatabase, id: string, body: unknown, ctx: StudioContext): Promise<unknown>;
+  unretireTemplate(db: SqlDatabase, id: string, body: unknown, ctx: StudioContext): Promise<unknown>;
+  listBuildings(db: SqlDatabase, query: unknown, ctx: StudioContext): Promise<unknown>;
+  getBuilding(db: SqlDatabase, id: string, ctx: StudioContext): Promise<unknown>;
+  createBuilding(db: SqlDatabase, body: unknown, ctx: StudioContext): Promise<unknown>;
+  saveDraft(db: SqlDatabase, id: string, body: unknown, ctx: StudioContext): Promise<unknown>;
+  discardDraft(db: SqlDatabase, id: string, body: unknown, ctx: StudioContext): Promise<unknown>;
+  validate(db: SqlDatabase, body: unknown, ctx: StudioContext): Promise<unknown>;
+  publish(db: SqlDatabase, id: string, body: unknown, ctx: StudioContext): Promise<unknown>;
+  archive(db: SqlDatabase, id: string, body: unknown, ctx: StudioContext): Promise<unknown>;
+  restore(db: SqlDatabase, id: string, body: unknown, ctx: StudioContext): Promise<unknown>;
+  deleteBuilding(db: SqlDatabase, id: string, body: unknown, ctx: StudioContext): Promise<unknown>;
+  duplicate(db: SqlDatabase, id: string, body: unknown, ctx: StudioContext): Promise<unknown>;
+  applyTemplate(db: SqlDatabase, id: string, body: unknown, ctx: StudioContext): Promise<unknown>;
+  getQuality(db: SqlDatabase, ctx: StudioContext): Promise<unknown>;
+}
+
 export type FetchAsset = (path: string) => Promise<Response>;
 
 export interface Services {
   domain: DomainPort;
+  studio: StudioPort;
   sessions: SessionRepo;
   rateLimits: RateLimitRepo;
   salts: SaltRepo;
   loadBase: (fetchAsset: FetchAsset) => Promise<BaseData>;
+  /** Studio view of the base dataset (buildings, graph, exact boundary, review sections), cached per version. */
+  loadStudioBase: (fetchAsset: FetchAsset) => Promise<StudioBaseData>;
 }

@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import type { z } from 'zod';
 import { mergePublication } from '../../../src/community/merge.ts';
-import { footNodeSet } from '../../../src/community/geo.ts';
+import { boundaryPolygons, campusZoneFor, footNodeSet } from '../../../src/community/geo.ts';
 import {
   EMPTY_PUBLICATION,
   type Publication,
@@ -112,9 +112,22 @@ describe('mergePublication on the real dataset', () => {
     expect(data.manifest.counts.relations).toBe(base.relations.length - report.droppedRelations);
   });
 
+  /** A walkable node whose point dLat° north stays on campus (off-campus locations go to contextPlaces). */
+  const campusNode = (dLat: number) => {
+    const polygons = boundaryPolygons(base.boundary);
+    return [...foot]
+      .sort((a, b) => a - b)
+      .find((n) => {
+        const [lon, lat] = base.graph.nodes[n]!;
+        return (
+          insideContributionArea([lon, lat]) && campusZoneFor([lon, lat + dLat], polygons) === 'on-campus'
+        );
+      })!;
+  };
+
   it('a published location is routable only with a validated access node', () => {
-    // Pick a walkable node inside the contribution area, and put the location ~11 m north of it.
-    const nodeId = [...foot].sort((a, b) => a - b).find((n) => insideContributionArea(base.graph.nodes[n]!))!;
+    // Pick a walkable node on campus, and put the location ~11 m north of it (still on campus).
+    const nodeId = campusNode(0.0001);
     const node = base.graph.nodes[nodeId]!;
     const at: LngLat = [node[0], node[1] + 0.0001];
     const pub: Publication = {
@@ -154,7 +167,7 @@ describe('mergePublication on the real dataset', () => {
   });
 
   it('an access node farther than maxPlaceConnectorM is rejected (not routable, never snapped)', () => {
-    const nodeId = [...foot].sort((a, b) => a - b).find((n) => insideContributionArea(base.graph.nodes[n]!))!;
+    const nodeId = campusNode(0.0018);
     const n = base.graph.nodes[nodeId]!;
     // ~200 m north of the node: other nodes may be closer, but nothing is ever snapped.
     const { data, report } = mergePublication(base, {

@@ -22,7 +22,7 @@ the data pipeline must add. Section 11 lists the parallel work packages.
 | #   | Decision                                                                                                                                                                                                                                                                                       | Section |
 | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | D1  | **Realistic 3D stays on MapLibre `fill-extrusion`.** Improve it with campus-membership LOD, map-anchored lighting and honest colour classes. Add no custom layer now.                                                                                                                          | §5      |
-| D2  | **No pitched-roof renderer.** The snapshot has 2 `roof:shape` tags in total and none on a pitched campus building.                                                                                                                                                                             | §5.4    |
+| D2  | **No pitched-roof renderer.** The snapshot has 2 `roof:shape` tags in total and none on a pitched campus building. _Amended 2026-10-24: owner-authored studio models only (S1)._                                                                                                               | §5.4    |
 | D3  | **Do not add Three.js now.** The GLB model registry is empty. Define the seam (a lazy custom layer that loads only when the registry is non-empty) and the conditions for adopting it.                                                                                                         | §5.5    |
 | D4  | **The isometric overview gets its own Canvas2D renderer** (`src/isometric/`). It projects the real footprints from `public/data` with a parallel 2:1 dimetric transform, orders prisms with a depth graph, and does its own hit-testing. It works without WebGL.                               | §6      |
 | D5  | **A building directory service** (`src/directory/`) is the single source for both modes and for the accessible list: eligibility, stable ids, honest names, facilities, routability and **map keys**.                                                                                          | §7      |
@@ -251,6 +251,23 @@ gables and hips, or stacked "generated prisms" that fake slopes. Both are **reje
 
 **Revisit when** at least 10 % of campus buildings carry a non-flat `roof:shape`, or a survey supplies roof
 data. The data contract still records `roofShape` so the decision can be re-evaluated from the data.
+
+> **Amendment 2026-10-24 (Building Studio, decision S1 in `docs/BUILDING_STUDIO_DESIGN.md` §1).**
+>
+> - **OSM/base buildings: unchanged.** They stay flat-roofed `fill-extrusion`s. There is still no roof data
+>   for them, so the reasoning above still holds.
+> - **Owner-authored studio models are a different case.** Their roof shape is an explicit parameter that
+>   the owner chooses, and it is labelled as an illustrative model. It is not inferred from OSM.
+> - **One shared mesh module draws them in both modes.** `src/building-studio/mesh/` (`StudioMesh`) feeds a
+>   raw-WebGL2 MapLibre `CustomLayerInterface` in Realistic 3D and the Canvas2D renderer in the isometric
+>   overview. The custom layer is a lazy chunk with no new dependency. Picking and the 2D view use the
+>   derived footprint. If the custom layer fails, the model is drawn as footprint × body height in
+>   `fill-extrusion`.
+> - **This is final only after the Gate 3 bake-off passes.** Gate 3 measures the chunk size (gzip), frame
+>   time with 50 instances under a 4× CDP CPU throttle and context-loss recovery, and compares models side
+>   by side on real structures. If the budget fails, studio models ship as extrusions only.
+> - **D3 is unchanged.** No Three.js and no GLB rendering. GLB import is validated but not stored or rendered
+>   (S11).
 
 ### 5.5 Decision D3: GLB models through a lazy Three.js custom layer, not now
 

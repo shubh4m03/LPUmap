@@ -73,6 +73,11 @@ export interface DirectoryInput {
   /** Campus places (places.json); context places are never passed here. */
   places: readonly Place[];
   relations: readonly Relation[];
+  /**
+   * Ids left out of the directory although drawn on the map: published studio
+   * buildings with directoryVisible false (docs/BUILDING_STUDIO_DESIGN.md change C2).
+   */
+  exclude?: ReadonlySet<string>;
 }
 
 export interface CampusDirectory {

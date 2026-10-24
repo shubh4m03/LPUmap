@@ -24,6 +24,9 @@ export const STATUS_BY_CODE: Record<ErrorCode, number> = {
   'not-found': 404,
   conflict: 409,
   'invalid-transition': 409,
+  // Building Studio (STUDIO_ERROR_STATUS in src/building-studio/schema.ts).
+  'validation-failed': 422,
+  'unsupported-model': 422,
   unavailable: 503,
   'not-configured': 503,
   internal: 500,

@@ -1,7 +1,11 @@
 import { Map as MapLibreMap } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { setBuildingMode, supportsWebGL } from '../buildings3d/index.ts';
+import { detectionAttributionHtml } from '../buildings3d/optional-layers.ts';
+import { attachRealistic3D, type Realistic3DHandle, type RenderNotice } from '../buildings3d/realistic3d.ts';
+import type { StudioRenderSource } from '../building-studio/render/maplibre/index.ts';
+import { ToastContext } from '../components/ui/toast-context.ts';
 import { APP_CONFIG } from '../config/index.ts';
 import { isValidLngLat } from '../distance/geodesic.ts';
 import {
@@ -29,6 +33,11 @@ import { buildMapStyle, glyphsUrl, OSM_ATTRIBUTION_HTML } from './style.ts';
 import { installMapTestHooks } from './test-hooks.ts';
 import type { MapViewProps } from './types.ts';
 
+const NO_STUDIO_MODELS: readonly StudioRenderSource[] = [];
+
+/** Device pixel ratio cap: phones with DPR 3 would otherwise render 2.25× the pixels of DPR 2 (D1 item 6). */
+export const MAX_PIXEL_RATIO = 2;
+
 export const MAP_ARIA_LABEL =
   'Interactive campus map. Use arrow keys to pan and plus or minus to zoom. Every place on it can also be found with search and the place list.';
 
@@ -49,9 +58,18 @@ export function MapView(props: MapViewProps) {
     selectedPlaceId,
     route,
     userLocation,
+    studioModels = NO_STUDIO_MODELS,
+    studioOpen = false,
+    showDetectedFootprints = false,
+    detections = null,
+    showNearbyOutsideCampus = false,
+    contextPlaces,
   } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<MapLibreMap | null>(null);
+  const [r3d, setR3d] = useState<Realistic3DHandle | null>(null);
+  const [inlineNotice, setInlineNotice] = useState<RenderNotice | null>(null);
+  const toast = useContext(ToastContext);
 
   const footprintIds = useMemo(
     () => new Set(data.buildings.features.map((f) => f.properties.id)),
@@ -61,9 +79,20 @@ export function MapView(props: MapViewProps) {
     () => anchoredOrganizations(data.places, data.relations),
     [data.places, data.relations],
   );
+  // Off-campus places join the markers only while "Nearby, outside campus" is on (owner decision 2).
   const places = useMemo(
-    () => poiCollection(data.places, footprintIds, anchored),
-    [data.places, footprintIds, anchored],
+    () =>
+      poiCollection(
+        showNearbyOutsideCampus && contextPlaces ? [...data.places, ...contextPlaces] : data.places,
+        footprintIds,
+        anchored,
+        { includeOffCampus: showNearbyOutsideCampus },
+      ),
+    [data.places, contextPlaces, showNearbyOutsideCampus, footprintIds, anchored],
+  );
+  const detectionAttribution = useMemo(
+    () => detectionAttributionHtml(data.manifest.sources),
+    [data.manifest.sources],
   );
   const poiIds = useMemo(() => new Set(places.features.map((f) => f.properties.id)), [places]);
   // Selecting a place without its own marker highlights the building / place it is in.
@@ -76,10 +105,18 @@ export function MapView(props: MapViewProps) {
   const userGeo = useMemo(() => userLocationCollection(userLocation), [userLocation]);
   const groupKey = groupsKey(visibleGroups);
 
+  // Realistic-3D degradation notices: the parent's handler, else a toast, else an inline notice.
+  const showNotice = (notice: RenderNotice) => {
+    const p = latest.current.props;
+    if (p.onRenderNotice) p.onRenderNotice(notice);
+    else if (toast) toast.show({ message: notice.message, tone: 'warning', durationMs: 10000 });
+    else setInlineNotice(notice);
+  };
+
   // Latest props/derivations for event handlers registered once at creation.
-  const latest = useRef({ props, places, routeGeo, userGeo });
+  const latest = useRef({ props, places, routeGeo, userGeo, showNotice });
   useEffect(() => {
-    latest.current = { props, places, routeGeo, userGeo };
+    latest.current = { props, places, routeGeo, userGeo, showNotice };
   });
 
   // What the live map currently shows, so each effect only touches the map on a real change.
@@ -139,6 +176,7 @@ export function MapView(props: MapViewProps) {
         minZoom: APP_CONFIG.map.minZoom,
         maxZoom: APP_CONFIG.map.maxZoom,
         maxBounds: APP_CONFIG.map.maxBounds,
+        pixelRatio: Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO),
         pitch: p.mode3d ? APP_CONFIG.map.pitch3d : 0,
         bearing: p.mode3d ? APP_CONFIG.map.bearing3d : 0,
         dragRotate: p.mode3d,
@@ -186,7 +224,13 @@ export function MapView(props: MapViewProps) {
     });
 
     let uninstallHooks = () => {};
+    let realistic: Realistic3DHandle | null = null;
     instance.once('load', () => {
+      realistic = attachRealistic3D(instance, {
+        theme: latest.current.props.theme,
+        mode3d: latest.current.props.mode3d,
+        onNotice: (n) => latest.current.showNotice(n),
+      });
       const controller = createMapController(instance, {
         reducedMotion: () => latest.current.props.reducedMotion,
         mode3d: () => latest.current.props.mode3d,
@@ -213,13 +257,17 @@ export function MapView(props: MapViewProps) {
           const rect = instance.getCanvas().getBoundingClientRect();
           return { x: rect.left + point.x, y: rect.top + point.y };
         },
+        getRealistic3D: () => realistic?.debug() ?? null,
       });
+      setR3d(realistic);
       setMap(instance);
       latest.current.props.onReady?.(controller);
     });
 
     return () => {
       uninstallHooks();
+      realistic?.dispose();
+      setR3d(null);
       setMap(null);
       instance.remove();
     };
@@ -247,8 +295,9 @@ export function MapView(props: MapViewProps) {
     const a = applied.current;
     if (!map || a.theme === theme) return;
     applyTheme(map, theme);
+    r3d?.setTheme(theme);
     a.theme = theme;
-  }, [map, theme]);
+  }, [map, r3d, theme]);
 
   useEffect(() => {
     const a = applied.current;
@@ -269,8 +318,26 @@ export function MapView(props: MapViewProps) {
     const a = applied.current;
     if (!map || a.mode3d === mode3d) return;
     setBuildingMode(map, mode3d, { reducedMotion });
+    r3d?.setMode3d(mode3d);
     a.mode3d = mode3d;
-  }, [map, mode3d, reducedMotion]);
+  }, [map, r3d, mode3d, reducedMotion]);
+
+  // Realistic 3D: studio models, opt-in layers, selection highlight on the custom layer.
+  useEffect(() => {
+    r3d?.setStudioModels(studioModels);
+  }, [r3d, studioModels]);
+  useEffect(() => {
+    r3d?.setStudioOpen(studioOpen);
+  }, [r3d, studioOpen]);
+  useEffect(() => {
+    r3d?.setSelected(selectedPlaceId);
+  }, [r3d, selectedPlaceId]);
+  useEffect(() => {
+    r3d?.setDetections(showDetectedFootprints && detections !== null, detections, detectionAttribution);
+  }, [r3d, showDetectedFootprints, detections, detectionAttribution]);
+  useEffect(() => {
+    r3d?.setNearbyOutsideCampus(showNearbyOutsideCampus);
+  }, [r3d, showNearbyOutsideCampus]);
 
   useEffect(() => {
     if (!map) return;
@@ -281,5 +348,24 @@ export function MapView(props: MapViewProps) {
     a.selection = next;
   }, [map, selectedPlaceId, footprintIds, poiIds, containingBuilding]);
 
-  return <div ref={containerRef} className={props.className ?? 'h-full w-full'} data-testid="atlas-map" />;
+  return (
+    <div className={props.className ?? 'relative h-full w-full'}>
+      <div ref={containerRef} className="h-full w-full" data-testid="atlas-map" />
+      {inlineNotice ? (
+        <div
+          role="status"
+          className="absolute inset-x-3 top-3 z-(--ds-z-controls) mx-auto flex max-w-md items-start gap-2 rounded-lg border border-border bg-surface-raised p-3 text-sm text-text shadow-2"
+        >
+          <p className="min-w-0 flex-1">{inlineNotice.message}</p>
+          <button
+            type="button"
+            className="min-h-11 rounded-md px-2 font-medium text-muted focus-visible:outline-2 focus-visible:outline-focus"
+            onClick={() => setInlineNotice(null)}
+          >
+            Dismiss
+          </button>
+        </div>
+      ) : null}
+    </div>
+  );
 }

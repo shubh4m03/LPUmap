@@ -5,6 +5,7 @@
  * Parameters are matched per path segment and percent-decoded, so base place
  * ids containing '/' (osm:way/123) must be sent encoded (osm%3Away%2F123).
  */
+import { OWNER_TEMPLATE_ID_RE, STUDIO_ID_RE } from '../../src/building-studio/schema.ts';
 import { ID_PATTERNS } from '../ids.ts';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -20,6 +21,10 @@ export const PARAM_PATTERNS = {
   id: ID_PATTERNS.suggestion,
   locationId: /^(own|com):[a-z2-7]{26}$/,
   targetId: /^(osm:(node|way|relation)\/\d{1,20}|cur:[a-z0-9][a-z0-9-]{0,150})$/,
+  /** Building Studio record (`stu:…`). */
+  buildingId: STUDIO_ID_RE,
+  /** Owner template (`stv:…`); starter templates live in code and have no write routes. */
+  templateId: OWNER_TEMPLATE_ID_RE,
 } as const;
 
 export type ParamName = keyof typeof PARAM_PATTERNS;

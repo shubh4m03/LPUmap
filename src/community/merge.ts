@@ -14,6 +14,14 @@
  *     the same check;
  *  4. published locations are appended (kind 'facility', campusZone from the
  *     boundary), routable only with a validated accessNodeId, never auto-snapped;
+ *  4a. owner decision 2 — the campus list holds campus places only: a
+ *     published location outside the boundary, and a non-building place an
+ *     override moves outside it, go to `contextPlaces` (the opt-in "Nearby,
+ *     outside campus" layer), never to campus places, counts, categories,
+ *     relations or the directory. A building's footprint is authoritative,
+ *     so an override that would move a building place outside is not applied
+ *     (the place keeps its base position); all three are reported in
+ *     `outsideCampus`;
  *  5. overrides of ids missing from the base → ignored, reported as orphans;
  *  6. published ids that collide with base ids (or repeat) → ignored, reported;
  *  7. manifest counts recomputed; datasetVersion stays the base version and the
@@ -50,12 +58,26 @@ export interface MergeReport {
   shadowedLocations: string[];
   /** Places/locations whose access node failed validation (they are not routable). */
   invalidAccess: MergeIssue[];
+  /**
+   * Owner decision 2 (rule 4a). Reasons: 'location-outside-campus' and
+   * 'override-moved-outside' (routed to contextPlaces), 'building-move-outside-ignored'
+   * (the override's location was not applied).
+   */
+  outsideCampus: MergeIssue[];
   removedBuildings: string[];
   droppedRelations: number;
 }
 
 export interface MergeResult {
+  /** Campus data only: every place is on campus (as in places.json). */
   data: CampusData;
+  /**
+   * Off-campus places produced by the publication (rule 4a), for the opt-in
+   * "Nearby, outside campus" layer only: shown, searched and counted only
+   * while that layer is on, always with its badge. Never routed through the
+   * campus directory. kind is never 'building' and buildingId is never set.
+   */
+  contextPlaces: Place[];
   report: MergeReport;
 }
 
@@ -249,6 +271,7 @@ export function mergePublication(base: CampusData, pub: Publication): MergeResul
     addedLocations: [],
     shadowedLocations: [],
     invalidAccess: [],
+    outsideCampus: [],
     removedBuildings: [],
     droppedRelations: 0,
   };
@@ -278,8 +301,11 @@ export function mergePublication(base: CampusData, pub: Publication): MergeResul
   const hidden = new Set([...overrides.values()].filter((o) => o.hidden).map((o) => o.targetId));
 
   const places: Place[] = [];
+  const contextPlaces: Place[] = [];
+  const movedOutside = new Set<string>();
   const seen = new Set<string>();
   const overridden = new Set<string>();
+  const footprintIds = new Set(base.buildings.features.map((f) => f.properties.id));
   for (const p of base.places) {
     if (seen.has(p.id)) continue;
     seen.add(p.id);
@@ -288,11 +314,35 @@ export function mergePublication(base: CampusData, pub: Publication): MergeResul
       continue;
     }
     const o = overrides.get(p.id);
-    if (o) {
-      overridden.add(p.id);
-      report.overriddenPlaces.push(p.id);
-      places.push(applyOverride(p, o, ctx));
-    } else places.push(p);
+    if (!o) {
+      places.push(p);
+      continue;
+    }
+    overridden.add(p.id);
+    report.overriddenPlaces.push(p.id);
+    const next = applyOverride(p, o, ctx);
+    if (next.campusZone === 'on-campus' || p.campusZone !== 'on-campus') {
+      places.push(next);
+    } else if (p.kind === 'building' || footprintIds.has(p.id)) {
+      // Rule 4a: the footprint is authoritative — keep the building where its footprint is.
+      const { location: _l, ...fields } = o.fields;
+      places.push(applyOverride(p, { ...o, fields }, ctx));
+      report.outsideCampus.push({
+        id: p.id,
+        reason: 'building-move-outside-ignored',
+        message: 'The override moves a building outside the campus boundary; its position was not applied.',
+      });
+    } else {
+      const { buildingId: _b, ...rest } = next;
+      contextPlaces.push(rest);
+      movedOutside.add(p.id);
+      report.outsideCampus.push({
+        id: p.id,
+        reason: 'override-moved-outside',
+        message:
+          'The override moves this place outside the campus boundary; it is shown only in the "Nearby, outside campus" layer.',
+      });
+    }
   }
 
   const placesById = new Map(places.map((p) => [p.id, p]));
@@ -306,7 +356,8 @@ export function mergePublication(base: CampusData, pub: Publication): MergeResul
     }
   }
 
-  const relations = base.relations.filter((r) => !hidden.has(r.from) && !hidden.has(r.to));
+  const gone = (id: string) => hidden.has(id) || movedOutside.has(id);
+  const relations = base.relations.filter((r) => !gone(r.from) && !gone(r.to));
   report.droppedRelations = base.relations.length - relations.length;
 
   const origins = new Set<string>();
@@ -316,9 +367,20 @@ export function mergePublication(base: CampusData, pub: Publication): MergeResul
       continue;
     }
     seen.add(l.id);
-    places.push(locationToPlace(l, ctx));
-    report.addedLocations.push(l.id);
+    const place = locationToPlace(l, ctx);
     origins.add(l.origin);
+    if (place.campusZone === 'on-campus') {
+      places.push(place);
+      report.addedLocations.push(l.id);
+    } else {
+      contextPlaces.push(place);
+      report.outsideCampus.push({
+        id: l.id,
+        reason: 'location-outside-campus',
+        message:
+          'This location is outside the campus boundary; it is shown only in the "Nearby, outside campus" layer.',
+      });
+    }
   }
 
   const sourceIds = new Set(base.manifest.sources.map((s) => s.id));
@@ -334,5 +396,5 @@ export function mergePublication(base: CampusData, pub: Publication): MergeResul
     sources: [...base.manifest.sources, ...extraSources],
     counts: recount(base.manifest, places, buildings, relations),
   };
-  return { data: { ...base, manifest, places, buildings, relations }, report };
+  return { data: { ...base, manifest, places, buildings, relations }, contextPlaces, report };
 }

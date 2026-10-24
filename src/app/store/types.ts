@@ -22,7 +22,9 @@ export type PanelId =
   | 'settings'
   | 'about'
   | 'info'
-  | 'category';
+  | 'category'
+  /** The building directory (docs/ISOMETRIC_AND_3D_DESIGN.md §7.5): the accessible list of every drawn building. */
+  | 'directory';
 export type OpenPanelId = Exclude<PanelId, 'none'>;
 
 /** What the correction dialog is about. `{}` = a general report not tied to a place. */
@@ -103,22 +105,36 @@ export interface MapSlice {
   /** Why the last change happened; null before any change. */
   viewModeReason: ViewModeChangeReason | null;
   /**
+   * Non-null when the map modes cannot run in this browser (no WebGL): the
+   * user-facing reason the switcher shows; only the overview is offered.
+   */
+  mapUnavailable: string | null;
+  /**
    * Derived, kept in sync by the slice: true iff viewMode === 'realistic3d'.
    * Kept for existing callers; new code reads viewMode.
    */
   mode3d: boolean;
   showLabels: boolean;
   visibleGroups: ReadonlySet<LayerGroupId>;
+  /** Opt-in "Nearby, outside campus" layer (APP_CONFIG.optionalLayers.nearbyOutsideCampus; off by default). */
+  showNearbyOutsideCampus: boolean;
+  /** Opt-in "Unverified detected footprints" layer (APP_CONFIG.optionalLayers.detectedFootprints; off by default). */
+  showDetectedFootprints: boolean;
   /**
    * Switches mode. Returns false (and changes nothing) when the mode is not
-   * allowed now: 'isometric' while live navigation is active.
+   * allowed now: 'isometric' while live navigation is active, a map mode while
+   * `mapUnavailable` is set.
    */
   setViewMode(mode: ViewMode, opts?: { reason?: ViewModeChangeReason }): boolean;
+  /** Marks the map modes unavailable (no WebGL) and switches to the overview. */
+  setMapUnavailable(reason: string): void;
   /** Back-compat: true → realistic3d, false → standard2d. */
   setMode3d(on: boolean): void;
   /** Back-compat: realistic3d ↔ standard2d (from the overview, goes to realistic3d). */
   toggleMode3d(): void;
   setShowLabels(on: boolean): void;
+  setShowNearbyOutsideCampus(on: boolean): void;
+  setShowDetectedFootprints(on: boolean): void;
   setGroupVisible(id: LayerGroupId, visible: boolean): void;
   toggleGroup(id: LayerGroupId): void;
   restoreDefaults(): void;

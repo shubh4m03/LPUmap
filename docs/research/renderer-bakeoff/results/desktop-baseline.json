@@ -1,0 +1,43 @@
+{
+  "renderer": "baseline",
+  "viewport": {
+    "name": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "deviceScaleFactor": 1,
+    "isMobile": false
+  },
+  "throttle": 4,
+  "orbitMs": 4000,
+  "heapMB": 10.01,
+  "frames": {
+    "frames": 147,
+    "p50": 50,
+    "p95": 66.7,
+    "max": 83.3,
+    "over50Pct": 43.5
+  },
+  "layerCpuMs": {
+    "frames": 0,
+    "p50": 0,
+    "p95": 0,
+    "max": 0,
+    "over50Pct": 0
+  },
+  "debug": {
+    "r3d": {
+      "studio": "idle",
+      "fallbackReason": null,
+      "degradeLevel": 0,
+      "excludedIds": [],
+      "layer": null,
+      "detectionsShown": false,
+      "nearbyShown": false,
+      "modelUnavailable": []
+    },
+    "notices": []
+  },
+  "shots": ["desktop-baseline-overview.jpg"]
+}

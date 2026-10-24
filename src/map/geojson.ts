@@ -4,6 +4,7 @@
  */
 import type { Feature, FeatureCollection, LineString, Point, Polygon } from 'geojson';
 import { getCategory } from '../config/categories.ts';
+import { APP_CONFIG } from '../config/index.ts';
 import type { LngLat, Place, Relation } from '../data/schema.ts';
 import { destinationPoint, isValidLngLat } from '../distance/geodesic.ts';
 import type { MapRouteOverlay, MapUserLocation } from './types.ts';
@@ -18,6 +19,17 @@ export interface PoiProps {
   /** Source name only; unnamed places get no map label (never an invented one). */
   name?: string;
   offCampus: boolean;
+  /** The "Nearby, outside campus" layer badge, set on every off-campus marker. */
+  badge?: string;
+}
+
+export interface PoiCollectionOptions {
+  /**
+   * Draw off-campus places (owner decision 2: only while the opt-in
+   * "Nearby, outside campus" layer is on). Default: that layer's default
+   * visibility (off).
+   */
+  includeOffCampus?: boolean;
 }
 
 export interface RouteProps {
@@ -55,25 +67,33 @@ export function anchoredOrganizations(
 
 /**
  * Point markers for every place with a dependable location, except buildings
- * that already render as footprints (they are selected via the footprint) and
- * places drawn by their host instead (`hidden`, e.g. anchored organisations).
+ * that already render as footprints (they are selected via the footprint),
+ * places drawn by their host instead (`hidden`, e.g. anchored organisations)
+ * and — unless `includeOffCampus` — off-campus places, whatever list they
+ * arrive in (owner decision 2).
  */
 export function poiCollection(
   places: readonly Place[],
   footprintIds: ReadonlySet<string>,
   hidden: ReadonlySet<string> | ReadonlyMap<string, string> = new Set<string>(),
+  opts: PoiCollectionOptions = {},
 ): FeatureCollection<Point, PoiProps> {
+  const nearby = APP_CONFIG.optionalLayers.nearbyOutsideCampus;
+  const includeOffCampus = opts.includeOffCampus ?? nearby.defaultVisible;
   const features: Array<Feature<Point, PoiProps>> = [];
   for (const p of places) {
     if (!p.location || !isValidLngLat(p.location) || footprintIds.has(p.id) || hidden.has(p.id)) continue;
+    const offCampus = p.campusZone === 'off-campus-nearby';
+    if (offCampus && !includeOffCampus) continue;
     const cat = getCategory(p.categoryId);
     const props: PoiProps = {
       id: p.id,
       categoryId: p.categoryId,
       group: cat.group,
       color: cat.color,
-      offCampus: p.campusZone === 'off-campus-nearby',
+      offCampus,
     };
+    if (offCampus) props.badge = nearby.badge;
     if (p.name) props.name = p.name;
     features.push({
       type: 'Feature',

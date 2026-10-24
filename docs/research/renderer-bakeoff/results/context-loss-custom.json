@@ -1,0 +1,292 @@
+{
+  "before": {
+    "r3d": {
+      "studio": "custom",
+      "fallbackReason": null,
+      "degradeLevel": 0,
+      "excludedIds": [
+        "osm:way/1550425052",
+        "osm:way/354755644",
+        "osm:way/422437895",
+        "osm:way/422548297",
+        "stu:bakeoffharnessmodelaaa2",
+        "stu:bakeoffharnessmodelaaa3",
+        "stu:bakeoffharnessmodelaaa4",
+        "stu:bakeoffharnessmodelaaa5",
+        "stu:bakeoffharnessmodelaaa6",
+        "stu:bakeoffharnessmodelaaa7",
+        "stu:bakeoffharnessmodelaaae",
+        "stu:bakeoffharnessmodelaaaf",
+        "stu:bakeoffharnessmodelaaag",
+        "stu:bakeoffharnessmodelaaah",
+        "stu:bakeoffharnessmodelaaai",
+        "stu:bakeoffharnessmodelaaaj",
+        "stu:bakeoffharnessmodelaaak",
+        "stu:bakeoffharnessmodelaaal",
+        "stu:bakeoffharnessmodelaaam",
+        "stu:bakeoffharnessmodelaaan",
+        "stu:bakeoffharnessmodelaaao",
+        "stu:bakeoffharnessmodelaaap",
+        "stu:bakeoffharnessmodelaaaq",
+        "stu:bakeoffharnessmodelaaar",
+        "stu:bakeoffharnessmodelaaas",
+        "stu:bakeoffharnessmodelaaat",
+        "stu:bakeoffharnessmodelaaau",
+        "stu:bakeoffharnessmodelaaav",
+        "stu:bakeoffharnessmodelaaaw",
+        "stu:bakeoffharnessmodelaaax",
+        "stu:bakeoffharnessmodelaaay",
+        "stu:bakeoffharnessmodelaaaz",
+        "stu:bakeoffharnessmodelaaba",
+        "stu:bakeoffharnessmodelaabb",
+        "stu:bakeoffharnessmodelaabc",
+        "stu:bakeoffharnessmodelaabd",
+        "stu:bakeoffharnessmodelaabe",
+        "stu:bakeoffharnessmodelaabf",
+        "stu:bakeoffharnessmodelaabg",
+        "stu:bakeoffharnessmodelaabh",
+        "stu:bakeoffharnessmodelaabi",
+        "stu:bakeoffharnessmodelaabj",
+        "stu:bakeoffharnessmodelaabk",
+        "stu:bakeoffharnessmodelaabl",
+        "stu:bakeoffharnessmodelaabm",
+        "stu:bakeoffharnessmodelaabn",
+        "stu:bakeoffharnessmodelaabo",
+        "stu:bakeoffharnessmodelaabp",
+        "stu:bakeoffharnessmodelaabq",
+        "stu:bakeoffharnessmodelaabr"
+      ],
+      "layer": {
+        "instances": 50,
+        "meshes": 39,
+        "gpuBytes": 376076,
+        "uploads": 39,
+        "drawCalls": 50,
+        "triangles": 3946,
+        "lastRenderMs": 0
+      },
+      "detectionsShown": false,
+      "nearbyShown": false,
+      "modelUnavailable": []
+    },
+    "notices": []
+  },
+  "events": [
+    {
+      "step": "lost",
+      "ms": 323,
+      "state": {
+        "r3d": {
+          "studio": "fallback",
+          "fallbackReason": "context-lost",
+          "degradeLevel": 0,
+          "excludedIds": [
+            "osm:way/1550425052",
+            "osm:way/354755644",
+            "osm:way/422437895",
+            "osm:way/422548297",
+            "stu:bakeoffharnessmodelaaa2",
+            "stu:bakeoffharnessmodelaaa3",
+            "stu:bakeoffharnessmodelaaa4",
+            "stu:bakeoffharnessmodelaaa5",
+            "stu:bakeoffharnessmodelaaa6",
+            "stu:bakeoffharnessmodelaaa7",
+            "stu:bakeoffharnessmodelaaae",
+            "stu:bakeoffharnessmodelaaaf",
+            "stu:bakeoffharnessmodelaaag",
+            "stu:bakeoffharnessmodelaaah",
+            "stu:bakeoffharnessmodelaaai",
+            "stu:bakeoffharnessmodelaaaj",
+            "stu:bakeoffharnessmodelaaak",
+            "stu:bakeoffharnessmodelaaal",
+            "stu:bakeoffharnessmodelaaam",
+            "stu:bakeoffharnessmodelaaan",
+            "stu:bakeoffharnessmodelaaao",
+            "stu:bakeoffharnessmodelaaap",
+            "stu:bakeoffharnessmodelaaaq",
+            "stu:bakeoffharnessmodelaaar",
+            "stu:bakeoffharnessmodelaaas",
+            "stu:bakeoffharnessmodelaaat",
+            "stu:bakeoffharnessmodelaaau",
+            "stu:bakeoffharnessmodelaaav",
+            "stu:bakeoffharnessmodelaaaw",
+            "stu:bakeoffharnessmodelaaax",
+            "stu:bakeoffharnessmodelaaay",
+            "stu:bakeoffharnessmodelaaaz",
+            "stu:bakeoffharnessmodelaaba",
+            "stu:bakeoffharnessmodelaabb",
+            "stu:bakeoffharnessmodelaabc",
+            "stu:bakeoffharnessmodelaabd",
+            "stu:bakeoffharnessmodelaabe",
+            "stu:bakeoffharnessmodelaabf",
+            "stu:bakeoffharnessmodelaabg",
+            "stu:bakeoffharnessmodelaabh",
+            "stu:bakeoffharnessmodelaabi",
+            "stu:bakeoffharnessmodelaabj",
+            "stu:bakeoffharnessmodelaabk",
+            "stu:bakeoffharnessmodelaabl",
+            "stu:bakeoffharnessmodelaabm",
+            "stu:bakeoffharnessmodelaabn",
+            "stu:bakeoffharnessmodelaabo",
+            "stu:bakeoffharnessmodelaabp",
+            "stu:bakeoffharnessmodelaabq",
+            "stu:bakeoffharnessmodelaabr"
+          ],
+          "layer": null,
+          "detectionsShown": false,
+          "nearbyShown": false,
+          "modelUnavailable": []
+        },
+        "notices": []
+      }
+    },
+    {
+      "step": "restored",
+      "ms": 882,
+      "state": {
+        "r3d": {
+          "studio": "custom",
+          "fallbackReason": null,
+          "degradeLevel": 0,
+          "excludedIds": [
+            "osm:way/1550425052",
+            "osm:way/354755644",
+            "osm:way/422437895",
+            "osm:way/422548297",
+            "stu:bakeoffharnessmodelaaa2",
+            "stu:bakeoffharnessmodelaaa3",
+            "stu:bakeoffharnessmodelaaa4",
+            "stu:bakeoffharnessmodelaaa5",
+            "stu:bakeoffharnessmodelaaa6",
+            "stu:bakeoffharnessmodelaaa7",
+            "stu:bakeoffharnessmodelaaae",
+            "stu:bakeoffharnessmodelaaaf",
+            "stu:bakeoffharnessmodelaaag",
+            "stu:bakeoffharnessmodelaaah",
+            "stu:bakeoffharnessmodelaaai",
+            "stu:bakeoffharnessmodelaaaj",
+            "stu:bakeoffharnessmodelaaak",
+            "stu:bakeoffharnessmodelaaal",
+            "stu:bakeoffharnessmodelaaam",
+            "stu:bakeoffharnessmodelaaan",
+            "stu:bakeoffharnessmodelaaao",
+            "stu:bakeoffharnessmodelaaap",
+            "stu:bakeoffharnessmodelaaaq",
+            "stu:bakeoffharnessmodelaaar",
+            "stu:bakeoffharnessmodelaaas",
+            "stu:bakeoffharnessmodelaaat",
+            "stu:bakeoffharnessmodelaaau",
+            "stu:bakeoffharnessmodelaaav",
+            "stu:bakeoffharnessmodelaaaw",
+            "stu:bakeoffharnessmodelaaax",
+            "stu:bakeoffharnessmodelaaay",
+            "stu:bakeoffharnessmodelaaaz",
+            "stu:bakeoffharnessmodelaaba",
+            "stu:bakeoffharnessmodelaabb",
+            "stu:bakeoffharnessmodelaabc",
+            "stu:bakeoffharnessmodelaabd",
+            "stu:bakeoffharnessmodelaabe",
+            "stu:bakeoffharnessmodelaabf",
+            "stu:bakeoffharnessmodelaabg",
+            "stu:bakeoffharnessmodelaabh",
+            "stu:bakeoffharnessmodelaabi",
+            "stu:bakeoffharnessmodelaabj",
+            "stu:bakeoffharnessmodelaabk",
+            "stu:bakeoffharnessmodelaabl",
+            "stu:bakeoffharnessmodelaabm",
+            "stu:bakeoffharnessmodelaabn",
+            "stu:bakeoffharnessmodelaabo",
+            "stu:bakeoffharnessmodelaabp",
+            "stu:bakeoffharnessmodelaabq",
+            "stu:bakeoffharnessmodelaabr"
+          ],
+          "layer": {
+            "instances": 50,
+            "meshes": 39,
+            "gpuBytes": 376076,
+            "uploads": 39,
+            "drawCalls": 50,
+            "triangles": 3946,
+            "lastRenderMs": 0.5
+          },
+          "detectionsShown": false,
+          "nearbyShown": false,
+          "modelUnavailable": []
+        },
+        "notices": []
+      }
+    },
+    {
+      "step": "second-restore",
+      "ms": 5295,
+      "state": {
+        "r3d": {
+          "studio": "fallback",
+          "fallbackReason": "context-lost",
+          "degradeLevel": 0,
+          "excludedIds": [],
+          "layer": null,
+          "detectionsShown": false,
+          "nearbyShown": false,
+          "modelUnavailable": []
+        },
+        "notices": ["studio-unavailable"]
+      }
+    }
+  ],
+  "recoveredMs": 882,
+  "pickAfterRestore": {
+    "correct": 3,
+    "total": 4,
+    "results": [
+      {
+        "key": "A",
+        "expected": "osm:way/354755644",
+        "got": "osm:way/354755644"
+      },
+      {
+        "key": "B",
+        "expected": "osm:way/422548297",
+        "got": "osm:way/422548297"
+      },
+      {
+        "key": "C",
+        "expected": "osm:way/1550425052",
+        "got": "osm:way/422437896"
+      },
+      {
+        "key": "D",
+        "expected": "osm:way/422437895",
+        "got": "osm:way/422437895"
+      }
+    ]
+  },
+  "pickOnFallback": {
+    "correct": 3,
+    "total": 4,
+    "results": [
+      {
+        "key": "A",
+        "expected": "osm:way/354755644",
+        "got": "osm:way/354755644"
+      },
+      {
+        "key": "B",
+        "expected": "osm:way/422548297",
+        "got": "osm:way/422548297"
+      },
+      {
+        "key": "C",
+        "expected": "osm:way/1550425052",
+        "got": "osm:way/422437896"
+      },
+      {
+        "key": "D",
+        "expected": "osm:way/422437895",
+        "got": "osm:way/422437895"
+      }
+    ]
+  },
+  "notices": ["studio-unavailable"],
+  "shots": ["desktop-custom-after-context-restore.jpg", "desktop-custom-fallback-after-second-loss.jpg"]
+}

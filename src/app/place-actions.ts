@@ -11,14 +11,21 @@ export function routeBlockReason(place: Place, directory: FacilityDirectory): st
   return null;
 }
 
+/**
+ * The route endpoint of a place, or null when it is not routable: a place is
+ * routed to only through its validated path node, never by snapping its
+ * drawn position to the nearest path (S7). Every caller, including picking a
+ * place on the map, gets the same answer as routeBlockReason.
+ */
 export function placeEndpoint(place: Place): RouteEndpoint | null {
-  if (place.location === null) return null;
+  // Same predicate as isRoutablePlace (src/facilities/directory.ts).
+  if (place.location === null || place.graphNodeId === undefined) return null;
   return {
     kind: 'place',
     placeId: place.id,
     label: place.displayName,
     location: place.location,
-    ...(place.graphNodeId !== undefined ? { nodeId: place.graphNodeId } : {}),
+    nodeId: place.graphNodeId,
   };
 }
 

@@ -1,0 +1,43 @@
+{
+  "renderer": "extrusion",
+  "viewport": {
+    "name": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "deviceScaleFactor": 1,
+    "isMobile": false
+  },
+  "throttle": 1,
+  "orbitMs": 4000,
+  "heapMB": 9.98,
+  "frames": {
+    "frames": 196,
+    "p50": 33.4,
+    "p95": 50.1,
+    "max": 50.1,
+    "over50Pct": 6.6
+  },
+  "layerCpuMs": {
+    "frames": 0,
+    "p50": 0,
+    "p95": 0,
+    "max": 0,
+    "over50Pct": 0
+  },
+  "debug": {
+    "r3d": {
+      "studio": "idle",
+      "fallbackReason": null,
+      "degradeLevel": 0,
+      "excludedIds": [],
+      "layer": null,
+      "detectionsShown": false,
+      "nearbyShown": false,
+      "modelUnavailable": []
+    },
+    "notices": []
+  },
+  "shots": []
+}

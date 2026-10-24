@@ -5,9 +5,14 @@
  *   promise rejections and failed local requests (/data/, /fonts/, /assets/)
  *   during the test, and fails the test at the end if any occurred.
  * - `atlas`: the page object in fixtures/atlas.ts.
+ * - `syntheticPublication` (option, default false): serve the synthetic
+ *   owner publication of fixtures/publication.ts at /api/locations through
+ *   route interception (never a live backend). Off: /api/locations is
+ *   whatever the preview server answers (no API, as on static hosting).
  */
 import { test as base, expect } from '@playwright/test';
 import { Atlas } from './atlas.ts';
+import { syntheticPublicationBody } from './publication.ts';
 
 /** Same-origin paths whose failure means the deployed app is broken. */
 const LOCAL_ASSET_PATH = /^\/(data|fonts|assets)\//;
@@ -17,7 +22,31 @@ export interface Health {
   readonly problems: readonly string[];
 }
 
-export const test = base.extend<{ health: Health; atlas: Atlas }>({
+export const test = base.extend<{
+  health: Health;
+  atlas: Atlas;
+  syntheticPublication: boolean;
+  publicationRoute: void;
+}>({
+  syntheticPublication: [false, { option: true }],
+
+  // Context-level, so a request made by a service worker would be intercepted too (Chromium).
+  publicationRoute: [
+    async ({ context, syntheticPublication }, provide) => {
+      if (syntheticPublication)
+        await context.route('**/api/locations', (route) =>
+          route.fulfill({
+            status: 200,
+            contentType: 'application/json; charset=utf-8',
+            headers: { 'Cache-Control': 'no-cache' },
+            body: JSON.stringify(syntheticPublicationBody()),
+          }),
+        );
+      await provide();
+    },
+    { auto: true },
+  ],
+
   health: [
     async ({ page, baseURL }, provide, testInfo) => {
       const problems: string[] = [];

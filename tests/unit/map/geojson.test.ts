@@ -20,10 +20,22 @@ describe('poiCollection', () => {
   const pois = poiCollection(data.places, footprints);
   const byId = new Map(pois.features.map((f) => [f.properties.id, f]));
 
-  it('includes located places, skipping footprint buildings and places without a position', () => {
-    expect([...byId.keys()].sort()).toEqual(['osm:node/30', 'osm:node/31', 'osm:node/32', 'osm:node/33']);
+  it('includes located campus places, skipping footprint buildings and places without a position', () => {
+    expect([...byId.keys()].sort()).toEqual(['osm:node/30', 'osm:node/31', 'osm:node/33']);
     expect(byId.has('osm:way/10')).toBe(false);
     expect(byId.has('cur:test-office')).toBe(false);
+  });
+
+  it('never draws an off-campus place unless the "Nearby, outside campus" layer is on (owner decision 2)', () => {
+    // Regression: off-campus places (e.g. merged owner locations outside the boundary) were drawn always.
+    expect(byId.has('osm:node/32')).toBe(false);
+    expect(
+      poiCollection(data.places, footprints, new Set(), { includeOffCampus: false }).features,
+    ).toHaveLength(3);
+    const withLayer = poiCollection(data.places, footprints, new Set(), { includeOffCampus: true });
+    const lodge = withLayer.features.find((f) => f.properties.id === 'osm:node/32');
+    expect(lodge?.properties).toMatchObject({ offCampus: true, badge: 'Outside campus' });
+    expect(withLayer.features.filter((f) => f.properties.badge !== undefined)).toHaveLength(1);
   });
 
   it('labels only source names — unnamed places get no invented label', () => {
@@ -37,9 +49,9 @@ describe('poiCollection', () => {
     expect(byId.get('osm:node/33')?.properties).toMatchObject({ group: 'services', color: '#64748b' });
   });
 
-  it('flags off-campus places and uses the place id as the feature id', () => {
-    expect(byId.get('osm:node/32')?.properties.offCampus).toBe(true);
+  it('flags campus places as on campus and uses the place id as the feature id', () => {
     expect(byId.get('osm:node/30')?.properties.offCampus).toBe(false);
+    expect(byId.get('osm:node/30')?.properties).not.toHaveProperty('badge');
     expect(byId.get('osm:node/30')?.id).toBe('osm:node/30');
   });
 
