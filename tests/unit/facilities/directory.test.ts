@@ -84,4 +84,9 @@ describe('createFacilityDirectory', () => {
     expect(dir.isRoutable(places[1]!)).toBe(false); // no graph node
     expect(dir.isRoutable(places[6]!)).toBe(false); // graph node but no location
   });
+
+  it('an off-campus place is never routable, even with a location and a graph node', () => {
+    // Owner rule (map spec Phase 6): off-campus places are never LPU facilities or routing destinations.
+    expect(dir.isRoutable({ ...places[0]!, campusZone: 'off-campus-nearby' })).toBe(false);
+  });
 });

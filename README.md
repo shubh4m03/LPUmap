@@ -159,8 +159,13 @@ in the public bundle.
   owner templates, versions and retirement. Published models are labelled "Illustrative model placed
   by the site owner — not verified" unless they carry a cited source or survey.
 
-There is no account for visitors and no analytics. Without the optional satellite imagery there is
-no third-party request at runtime.
+There is no account for visitors and no analytics. **The app makes no third-party request** unless
+`VITE_ARCGIS_API_KEY` (Esri World Imagery) or `VITE_EOX_BACKDROP` (EOX Sentinel-2 backdrop) is set at
+build time (see [Map providers](#map-providers-free-sources-only)). Map data, glyphs, icons and the
+community layer all come from the site itself. The Content Security Policy in `public/_headers`
+enforces this: `connect-src` allows only the site and those two imagery hosts, and images, fonts and
+scripts may come only from the site. Links to OpenStreetMap or a source page are only followed when you
+open them.
 
 ## Screenshots
 
@@ -344,6 +349,18 @@ saved); "Publish" shows the change summary and every unresolved warning, which n
 acknowledgement with a reason. Published models appear in the 3D map, the isometric overview, search
 and the directory, always labelled as owner-placed. Archive hides a model and can be undone; delete
 needs the typed id.
+
+**Where to read more (owner tools):**
+
+| Topic                                                                           | Document                                                                                                                                  |
+| ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| First-time setup, sign-in modes, moderation, recovery, credentials, privacy     | [docs/ADMIN_OPERATIONS.md](docs/ADMIN_OPERATIONS.md) (§1 setup, §2 moderation, §6 recovery, §7 credentials, §8 rate limits and IP hashes) |
+| Hosting, headers, D1 migrations and rollback                                    | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                                                                                                  |
+| Building Studio: records, templates, validation, publishing, text rules         | [docs/BUILDING_STUDIO_DESIGN.md](docs/BUILDING_STUDIO_DESIGN.md)                                                                          |
+| Suggestions, moderation, honeypot, merge rules (off-campus places never routed) | [docs/COMMUNITY_MODULE_CONTRACTS.md](docs/COMMUNITY_MODULE_CONTRACTS.md)                                                                  |
+| Optional imagery keys and what each one contacts                                | [docs/MAP_PROVIDER_CONFIGURATION.md](docs/MAP_PROVIDER_CONFIGURATION.md)                                                                  |
+| Security and privacy model                                                      | [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md)                                                                              |
+| What is built, tested and still open                                            | [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md)                                                                            |
 
 ## Deployment
 

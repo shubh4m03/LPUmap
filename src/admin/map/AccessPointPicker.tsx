@@ -6,12 +6,15 @@
  * validates the choice again.
  */
 import { useId } from 'react';
+import { Button } from '../../components/ui/Button.tsx';
 import { TextInput } from '../../components/ui/TextInput.tsx';
 import { APP_CONFIG } from '../../config/index.ts';
 import type { LngLat } from '../../data/schema.ts';
 import type { AccessCandidate } from './access-points.ts';
 import { formatMetres } from '../ui/format.ts';
 import type { AccessChoice } from './access-choice.ts';
+import { ACCESS_PICK_RADIUS_M, nearClickSummary } from './access-pick.ts';
+import type { AccessMapPick } from './useAccessMapPick.ts';
 
 export interface AccessPointPickerProps {
   location: LngLat | null;
@@ -28,6 +31,8 @@ export interface AccessPointPickerProps {
   /** Wording of the "none" option (overrides: fall back to the base place's routing). */
   noneLabel?: string;
   noneDetail?: string;
+  /** "Choose on the map" (the editor's map reports clicks to it while active). */
+  mapPick?: AccessMapPick;
 }
 
 export const NOTE_MAX = 300;
@@ -43,6 +48,7 @@ export function AccessPointPicker({
   error,
   noneLabel,
   noneDetail = 'The place will not be routable until one is chosen.',
+  mapPick,
 }: AccessPointPickerProps) {
   const name = useId();
   const max = APP_CONFIG.routing.maxPlaceConnectorM;
@@ -92,6 +98,15 @@ export function AccessPointPicker({
           No walkable path node is within {max} m of this position, so no access point can be chosen here.
         </p>
       ) : null}
+      {mapPick && location && candidates && candidates.length > 0 ? (
+        <MapPickControls
+          pick={mapPick}
+          onChoose={(nodeId) => {
+            onChange({ kind: 'node', nodeId, note: value.kind === 'node' ? value.note : '' });
+            mapPick.cancel();
+          }}
+        />
+      ) : null}
       <ul className="flex flex-col">
         {current
           ? radio(
@@ -136,5 +151,54 @@ export function AccessPointPicker({
         </p>
       ) : null}
     </fieldset>
+  );
+}
+
+function MapPickControls({ pick, onChoose }: { pick: AccessMapPick; onChoose(nodeId: number): void }) {
+  if (!pick.active)
+    return (
+      <div className="flex flex-wrap items-center gap-2">
+        <Button size="sm" icon="locate" onClick={pick.start} data-testid="access-pick-start">
+          Choose on the map
+        </Button>
+        <span className="text-sm text-muted">Click near the place to list the valid path nodes there.</span>
+      </div>
+    );
+  return (
+    <div
+      role="group"
+      aria-label="Choose the access point on the map"
+      data-testid="access-pick"
+      className="flex flex-col gap-2 rounded-md border border-accent bg-accent-soft/40 p-2.5"
+    >
+      <p role="status" className="text-sm text-text">
+        {pick.nearby === null
+          ? `Click or tap on the map near the place. The highlighted path nodes are the valid ones; a click lists those within ${ACCESS_PICK_RADIUS_M} m of it, and nothing is chosen until you pick one.`
+          : nearClickSummary(pick.nearby.length)}
+      </p>
+      {pick.nearby && pick.nearby.length > 0 ? (
+        <ul className="flex flex-col gap-1.5" aria-label="Path nodes near the click">
+          {pick.nearby.map((c) => (
+            <li key={c.nodeId} className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <Button size="sm" variant="primary" onClick={() => onChoose(c.nodeId)}>
+                Use path node {c.nodeId}
+              </Button>
+              <span className="text-sm text-muted">
+                {formatMetres(c.distanceM)} from the place · {formatMetres(c.fromClickM)} from the click
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <Button
+        size="sm"
+        variant="ghost"
+        className="w-fit"
+        onClick={pick.cancel}
+        data-testid="access-pick-cancel"
+      >
+        Stop choosing on the map
+      </Button>
+    </div>
   );
 }

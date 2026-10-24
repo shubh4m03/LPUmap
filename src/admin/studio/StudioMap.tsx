@@ -8,7 +8,9 @@
  *    translucent preview (its published copy and its old extrusion are left
  *    out meanwhile, so nothing is drawn twice);
  *  - desktop: handles + click-to-place; mobile: a centre reticle while
- *    placing, step buttons afterwards.
+ *    placing, step buttons afterwards;
+ *  - choosing the access point on the map: the valid path nodes are drawn,
+ *    handles are hidden and a click only lists the nodes near it.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Button, Icon } from '../../components/ui/index.ts';
@@ -22,6 +24,7 @@ import { applyHandleDrag, editHandles, type HandleSet } from '../../building-stu
 import { previewCollection, previewRenderSource } from '../../building-studio/ui/preview.ts';
 import { currentValidation } from '../../building-studio/ui/store.ts';
 import { nearestDetection } from '../../building-studio/ui/snap-targets.ts';
+import { accessPickFeatures, useStudioAccessCandidates } from './access-pick-data.ts';
 import { useStudioServices, useStudioState } from './studio-context.ts';
 import '../../app/maplibre-worker.ts';
 
@@ -71,7 +74,11 @@ export function StudioMap(props: StudioMapProps) {
     proposal: s.proposal?.model ?? null,
     issues: currentValidation(s)?.issues ?? null,
     selectedId: s.editor.selectedId,
+    pick: s.accessPick,
+    accessNodeId: currentDraft(s.editor)?.accessNodeId ?? null,
   }));
+  const accessCandidates = useStudioAccessCandidates();
+  const picking = v.pick !== null && accessCandidates !== null;
   const editingPublicId = v.open || v.placement ? (v.targetId ?? v.recordId) : null;
   const base = useMemo(() => (v.targetId ? baseFootprint(v.targetId) : null), [v.targetId, baseFootprint]);
 
@@ -114,20 +121,36 @@ export function StudioMap(props: StudioMapProps) {
       .map((f) => ({ id: f.properties.id, coordinates: f.geometry.coordinates as LngLat[][] }));
   }, [v.issues, data.buildings]);
 
-  const preview = useMemo(
-    () =>
-      v.model
-        ? previewCollection({
-            model: v.model,
-            baseFootprint: base,
-            invalid: v.invalid,
-            proposal: v.proposal,
-            guide,
-            warnings: warningOutlines,
-          })
-        : null,
-    [v.model, base, v.invalid, v.proposal, guide, warningOutlines],
-  );
+  const preview = useMemo(() => {
+    if (!v.model) return null;
+    const c = previewCollection({
+      model: v.model,
+      baseFootprint: base,
+      invalid: v.invalid,
+      proposal: v.proposal,
+      guide,
+      warnings: warningOutlines,
+    });
+    if (!picking || !accessCandidates) return c;
+    return {
+      ...c,
+      features: [
+        ...c.features,
+        ...accessPickFeatures(accessCandidates, v.accessNodeId, v.pick?.click ?? null),
+      ],
+    };
+  }, [
+    v.model,
+    base,
+    v.invalid,
+    v.proposal,
+    guide,
+    warningOutlines,
+    picking,
+    accessCandidates,
+    v.accessNodeId,
+    v.pick,
+  ]);
   const previewModel = useMemo(
     () =>
       v.model
@@ -142,8 +165,8 @@ export function StudioMap(props: StudioMapProps) {
   const handleSet: HandleSet =
     v.placement && !v.open ? 'all' : v.open && !v.archived ? (HANDLES_FOR_TOOL[v.tool] ?? 'none') : 'none';
   const handles = useMemo(
-    () => (v.model && !isMobile ? editHandles(v.model, handleSet) : []),
-    [v.model, handleSet, isMobile],
+    () => (v.model && !isMobile && !picking ? editHandles(v.model, handleSet) : []),
+    [v.model, handleSet, isMobile, picking],
   );
 
   // Drag: every move recomputes from the model at drag start (one undo command per drag, S9).
@@ -183,6 +206,11 @@ export function StudioMap(props: StudioMapProps) {
   const onPointer = useCallback(
     (e: EditPointerEvent) => {
       const s = store.getState();
+      // Choosing the access point: a click only lists the valid nodes near it (never moves or selects).
+      if (s.accessPick && s.editor.history) {
+        store.setState({ accessPick: { click: [e.lngLat[0], e.lngLat[1]] } });
+        return;
+      }
       if (s.editor.placement && !s.editor.history) {
         store.dispatch({ type: 'placement/move', anchor: e.lngLat });
         return;

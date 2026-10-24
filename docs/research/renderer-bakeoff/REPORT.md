@@ -151,6 +151,94 @@ What they show (I looked at them):
 
 The first shader version had the north–south sign of the light inverted, and this check caught it.
 
+### Addendum 2026-10-24: re-measure on a quieter machine
+
+This was one frame-time run of the harness, made later on 2026-10-24 (12:43–12:46 IST) by the
+performance agent. Only the frame-time tests were rerun. Picking, context loss, lighting, chunks and
+the watchdog were not, and their results above stand. The tables above are left as they were.
+
+**Conditions:**
+
+- Same laptop and Chromium (SwiftShader).
+- Code: working tree on top of `2407afe` (committed), with small uncommitted edits by other agents
+  that do not touch `src/buildings3d/**` or the harness.
+- No other agent's tests or builds were running. The owner's preview on 4410 was idle and was not
+  touched.
+- CPU load (`\Processor(_Total)\% Processor Time`, 2 s samples, share of all 16 logical CPUs):
+  - In the 20 s before the run, with nothing from this measurement running: 17–30 % (median 28 %).
+    Mostly the WMI provider host, Defender and the IDE.
+  - During the 4× tests: 26–86 % (median 61 %).
+  - During the 1× tests: 34–99 % (median 84 %).
+  - The load during the tests is SwiftShader drawing on the CPU, not other work.
+- Results went to a scratch folder (`BAKEOFF_RESULTS`/`BAKEOFF_SHOTS`), so `results/` and
+  `screenshots/` still hold the original run. Port 4472.
+
+Commands:
+
+```
+BAKEOFF_OUT=<tmp> npx vite build -c docs/research/renderer-bakeoff/harness/vite.config.ts
+BAKEOFF_OUT=<tmp> BAKEOFF_PORT=4472 BAKEOFF_RESULTS=<tmp>/r BAKEOFF_SHOTS=<tmp>/s npx playwright test -c docs/research/renderer-bakeoff/harness/playwright.config.ts --grep "frames at|gesture frames"
+(same, plus BAKEOFF_THROTTLE=1) --grep "desktop.*(baseline|extrusion|custom): frames"
+node docs/research/renderer-bakeoff/harness/summarize.mjs <tmp>/r
+```
+
+All 8 + 3 tests passed. In both viewports the custom path ran as `studio: "custom"` with no fallback
+(watchdog off).
+
+**Frames (rAF ms at 4×):**
+
+| Viewport           | Path      | Frames |  p50 |  p95 |  max | > 50 ms | Layer CPU p95 | Heap MB |
+| ------------------ | --------- | -----: | ---: | ---: | ---: | ------: | ------------: | ------: |
+| desktop 1440×900   | baseline  |    163 | 50.0 | 66.7 | 83.3 |  34.4 % |             — |    10.0 |
+| desktop            | extrusion |    151 | 50.0 | 66.7 | 83.3 |  39.1 % |             — |    10.0 |
+| desktop            | custom    |    147 | 50.0 | 66.7 | 83.2 |  44.2 % |           4.4 |    11.1 |
+| mobile 390×844 @2× | baseline  |    174 | 50.0 | 66.7 | 66.8 |  22.4 % |             — |     9.4 |
+| mobile             | extrusion |    167 | 50.0 | 66.7 | 83.4 |  26.3 % |             — |     9.4 |
+| mobile             | custom    |    157 | 50.0 | 66.7 | 83.4 |  31.8 % |           3.5 |    10.7 |
+
+**Unthrottled reference, desktop** (rAF p50 / p95 / share of frames over 50 ms):
+
+- baseline: 33.3 / 33.4 ms, 0 %
+- extrusion: 33.3 / 49.9 ms, 0.4 %
+- custom: 33.3 / 50.0 ms, 3.9 %; layer CPU p95 0.3 ms
+
+**Overview, path (c), with 50 models** (1,611 faces, 177 buildings):
+
+| Viewport | Gesture rAF p95 / max / > 50 ms at 4× | Scene build | Full redraw | Scene build at 4× (rotate) | Full redraw at 4× |
+| -------- | ------------------------------------: | ----------: | ----------: | -------------------------: | ----------------: |
+| desktop  |                  16.7 / 100.0 / 0.7 % |     17.7 ms |  **9.4 ms** |                    70.0 ms |            9.7 ms |
+| mobile   |                   16.7 / 66.6 / 0.8 % |     20.2 ms |  **9.4 ms** |                    89.5 ms |            2.9 ms |
+
+**What changed against the final run above:**
+
+- **Custom against extrusion (frame-time criterion: p95 within one 16.7 ms step).** They were equal at
+  p50 and at p95 in both viewports. That removes the one-step mobile gap seen before.
+  - The share of frames over 50 ms is still ordered baseline < extrusion < custom: 34 / 39 / 44 % on
+    desktop and 22 / 26 / 32 % on mobile. This is the same small extra cost noted before.
+- **Absolute frame time.** p95 was 66.7 ms at 4× on every path, including the scene with no studio
+  models. That is still over the 33 ms device budget. SwiftShader does the drawing on the CPU, so it
+  is still not a device number, and D8 stays **open**.
+  - The fallbacks that cover this are §9.3's "Realistic 3D too slow" (the watchdog drops to the
+    extrusion fallback, then suggests the overview; tested in watchdog-custom.json) and this report's
+    condition of switching phones to extrusion.
+  - Here extrusion and custom tie at p95, so on this proxy that switch would not change p95. Only a
+    device run can decide it.
+- **Layer CPU p95 at 4×** was 4.4 ms on desktop and 3.5 ms on mobile: still within the 5 ms budget.
+- **Overview with 50 models:**
+  - The scene build at 4× is now within its 120 ms budget: 70.0 and 89.5 ms, against 173.8 and
+    190.0 ms before.
+  - The desktop full redraw at 4× is now within 25 ms: 9.7 ms, against 28.6 ms before.
+  - **Still exceeded:** the unthrottled full redraw, 9.4 ms against the ≤ 8 ms budget in both
+    viewports. That is one sample per viewport, at DPR 1 on desktop and DPR 2 on mobile; before it
+    was 11.0 and 10.9 ms.
+  - The §9.3 fallback that applies is "lower the DPR cap to 1.5, then 1", but it only reduces fill
+    cost on screens above DPR 1. Hiding labels during gestures and moving the scene build to a worker
+    do not shorten a static redraw.
+  - The gesture budgets, which those fallbacks protect, pass.
+  - Without the 50 models, the overview meets every D8 budget in three runs (docs/PERFORMANCE.md,
+    "Re-measure").
+  - Open item 2 below is therefore narrowed to the unthrottled full redraw with 50 models.
+
 ## 4. Engineering notes the bake-off produced
 
 - Front-face winding is read from the sign of the live matrix's determinant. The first version drew every model inside-out.

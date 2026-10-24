@@ -44,6 +44,25 @@ async function publicDuplicates(db: SqlDatabase, ctx: DomainContext, input: Cont
   );
 }
 
+/**
+ * Honeypot decoy (docs/COMMUNITY_MODULE_CONTRACTS.md): the same validation,
+ * area check, duplicate lookup and id generation as createSuggestion, so the
+ * answer is indistinguishable from a real one — but nothing is written (no
+ * suggestion, no audit event). The reference is a fresh random id that no
+ * record will ever have.
+ */
+export async function decoySuggestion(
+  db: SqlDatabase,
+  raw: unknown,
+  ctx: DomainContext,
+): Promise<{ reference: string; possibleDuplicates: DuplicateCandidate[] }> {
+  const input = parseOrThrow(contributionInputSchema, raw, 'Suggestion');
+  assertInArea(input.location);
+  const reference = idsOf(ctx).next('suggestion');
+  const possibleDuplicates = await publicDuplicates(db, ctx, input);
+  return { reference, possibleDuplicates };
+}
+
 export async function createSuggestion(
   db: SqlDatabase,
   raw: unknown,

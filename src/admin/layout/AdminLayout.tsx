@@ -1,9 +1,13 @@
 /**
  * Admin shell layout with three slots:
- *  - `nav`: section navigation (a left column on desktop, a scrollable tab row on phones; collapsible);
+ *  - `nav`: section navigation (a left column from 1024 px, collapsible; a scrollable tab row on
+ *    phones and tablets, so a tablet's width goes to the section — the Studio map);
  *  - `main`: the active section (full-bleed, so the Studio can host a map);
  *  - aside: filled by the active section through <AdminAside> (a portal), shown only while used.
  * The header shows who is signed in and the sign-out control.
+ *
+ * Phones: the header is one compact row and the tabs one 44 px row, so the
+ * section below (the Studio map) keeps most of the screen height.
  */
 import { useCallback, useMemo, useState, type ReactNode } from 'react';
 import { cx, FOCUS_RING } from '../../components/ui/cx.ts';
@@ -35,11 +39,14 @@ export function AdminLayout({ header, nav, main, asideLabel = 'Details' }: Admin
   return (
     <AdminLayoutContext value={api}>
       <div className="flex h-dvh min-h-0 flex-col bg-surface text-text">
-        <header className="flex shrink-0 items-center gap-3 border-b border-border bg-surface-raised px-4 py-2">
+        <header
+          data-testid="admin-header"
+          className="flex shrink-0 items-center gap-3 border-b border-border bg-surface-raised px-3 py-1 md:px-4 md:py-2"
+        >
           <button
             type="button"
             className={cx(
-              'hidden size-9 items-center justify-center rounded-md text-muted hover:bg-surface-hover md:inline-flex',
+              'hidden size-9 items-center justify-center rounded-md text-muted hover:bg-surface-hover lg:inline-flex',
               FOCUS_RING,
             )}
             aria-label={navCollapsed ? 'Show navigation' : 'Hide navigation'}
@@ -51,13 +58,13 @@ export function AdminLayout({ header, nav, main, asideLabel = 'Details' }: Admin
           </button>
           {header}
         </header>
-        <div className="flex min-h-0 flex-1 flex-col md:flex-row">
+        <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
           <nav
             id="admin-nav"
             aria-label="Admin sections"
             className={cx(
-              'shrink-0 border-b border-border bg-surface-raised md:w-56 md:border-r md:border-b-0',
-              navCollapsed && 'md:hidden',
+              'shrink-0 border-b border-border bg-surface-raised lg:w-56 lg:border-r lg:border-b-0',
+              navCollapsed && 'lg:hidden',
             )}
           >
             {nav}
@@ -69,7 +76,7 @@ export function AdminLayout({ header, nav, main, asideLabel = 'Details' }: Admin
             ref={setAsideEl}
             aria-label={asideLabel}
             hidden={asideUsers === 0}
-            className="min-h-0 shrink-0 overflow-auto border-t border-border bg-surface-raised md:w-80 md:border-t-0 md:border-l"
+            className="min-h-0 shrink-0 overflow-auto border-t border-border bg-surface-raised lg:w-80 lg:border-t-0 lg:border-l"
           />
         </div>
       </div>

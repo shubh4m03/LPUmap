@@ -1,28 +1,35 @@
 # Implementation status
 
-**As of 2026-10-24.** This covers the working tree on top of commit `e8f313a`: the final UI wave
-(owner specs A, B and C) plus server hardening and QA fixes. **None of it is committed yet**; the
+**As of 2026-10-24.** Commit `2407afe` holds the final UI wave (owner specs A, B and C), server
+hardening and the first QA fixes. On top of it, the working tree holds a **fix wave** (§1.9): D3
+off-campus routing, D4, D5, the honeypot decoy, the Zod CSP violation, the Studio leave prompt,
+access-point picking on the map and new e2e coverage. **The fix wave is not committed yet**; the
 project lead commits.
 
 Every result in this file is from a real run. The gate in [§2](#2-how-it-was-verified) was re-run in
-full after the last code change. Anything that was not run, or could not be tested, says so.
+full by the verification agent after the fixers finished. Anything that was not run, or could not be
+tested, says so.
 
 ## At a glance
 
-| Area                                       | State                                                                                                                  |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| Community: "Suggest a missing place"       | Built, tested end to end against the real server handlers                                                              |
-| Owner admin (`/admin`): moderation, editor | Built, tested end to end against the real server handlers                                                              |
-| Building Studio (Creative Mode)            | Built, tested end to end (save, reload, second browser, publish, archive, restore)                                     |
-| Map engine (free sources only)             | Built: five view modes, optional Esri imagery, optional EOX backdrop, fallbacks. Tested with synthetic tiles only      |
-| Photorealistic 3D                          | **Not implemented, by owner decision** (no billing). Shown as unavailable with the reason                              |
-| Full gate (types, lint, format, all tests) | **All green** (see [§2](#2-how-it-was-verified))                                                                       |
-| Acceptance checklist                       | **55 PASS, 1 FAIL, 1 NOT TESTABLE** of 57 items (see [§3](#3-acceptance-checklist-summary))                            |
-| Open decision                              | Off-campus places can be routed to when the opt-in layer is on (D3). Needs an owner/lead decision before it is changed |
+| Area                                       | State                                                                                                                                |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Community: "Suggest a missing place"       | Built, tested end to end against the real server handlers                                                                            |
+| Owner admin (`/admin`): moderation, editor | Built, tested end to end against the real server handlers                                                                            |
+| Building Studio (Creative Mode)            | Built, tested end to end (save, reload, second browser, publish, archive, restore, model existing, template, duplicate, delete, 409) |
+| Map engine (free sources only)             | Built: five view modes, optional Esri imagery, optional EOX backdrop, fallbacks. Tested with synthetic tiles only                    |
+| Photorealistic 3D                          | **Not implemented, by owner decision** (no billing). Shown as unavailable with the reason                                            |
+| Full gate (types, lint, format, all tests) | **All green** on the fix-wave tree (see [§2](#2-how-it-was-verified))                                                                |
+| Acceptance checklist                       | **56 PASS** (one of them, D3, after a fix), **0 FAIL, 1 NOT TESTABLE** of 57 items (see [§3](#3-acceptance-checklist-summary))       |
+| Off-campus routing (D3)                    | **Fixed**: off-campus places are never routing endpoints; verified in the real app                                                   |
+| Performance (D8)                           | Overview budgets met in 3 of 3 runs; one heavy-scene budget still over (§4); phone numbers still missing (owner action 4)            |
 
 ## 1. What exists
 
 Paths are relative to the repository root.
+
+§1.1 was committed in `e8f313a`; §1.2–§1.8 were committed in `2407afe`; §1.9 is the uncommitted fix
+wave.
 
 ### 1.1 Already committed in `e8f313a` (unchanged in scope)
 
@@ -163,12 +170,102 @@ rejected in names; an optional global login cap (`ADMIN_LOGIN_GLOBAL_LIMIT`).
 - New unit test folders: `tests/unit/admin/`, `tests/unit/suggest/`, `tests/unit/studio-ui/`,
   `tests/unit/map-providers/`, plus `tests/unit/map/MapView-editing.test.tsx`,
   `tests/unit/map/edit-reticle.test.tsx`, `tests/unit/app/map-picking.test.tsx`.
+- Fix wave (§1.9): new e2e specs `csp`, `studio-records` and `admin-approve-map`; `studio-workflow`
+  and `studio-records` also run on the tablet project.
+
+### 1.9 Fix wave on top of `2407afe` (uncommitted)
+
+Each fix has a regression test. The fixers proved each test fails without its fix by reverting the fix
+temporarily. Not proven by a revert: the new e2e flows in `studio-records.spec.ts` and
+`admin-approve-map.spec.ts` (they cover flows that already worked or depend on the new picker) and the
+unit tests of new pure helpers (they cannot exist without the new code). The verification agent
+repeated the revert check on 12 fix files (D3, the decoy, the Zod CSP fix, the name rule, the
+unnamed-building wording, D4, the toast part of D5 and `StudioSection.tsx`) and restored each one byte
+for byte (checked with `cmp`).
+
+- **D3, off-campus routing (fixed).** `isRoutablePlace` (`src/facilities/directory.ts`) and
+  `placeEndpoint` (`src/app/place-actions.ts`) now require `campusZone === 'on-campus'`.
+  `routeBlockReason` returns "Outside campus — directions cover campus paths only." The place panel,
+  saved places, the search palette and the directions endpoint search use it. Map picking
+  (`src/app/map-picking.ts`, `MapStage.tsx`, `IsoStage.tsx`) has a new `outside-campus` outcome with
+  its own message, and picking stays on. "Choose a nearby point on the map" is hidden for off-campus
+  places. Off-campus places keep their `graphNodeId` in the data, so the owner still sees the validated
+  access node. `tests/unit/community/merge-integrity.test.ts` now cites the rule and checks that none
+  of the real context places with a path node is routable. The verification agent checked it in the
+  real app at 1440 px and 390 px: "Green valley main gate" (`osm:node/12031088561`, graph node 965)
+  shows "Directions to here" disabled with that reason, and no "nearby point" button. Every code path
+  that sets a route endpoint goes through `placeEndpoint` or `routeBlockReason`.
+- **D4, approve dialog outside the boundary (fixed).** `src/admin/map/OutsideCampusNotice.tsx` shows
+  "Outside the campus boundary" above "Approve and publish" (and in the location editor) when the point
+  is off campus. It says the place appears only in the opt-in "Nearby, outside campus" layer and is not
+  routable. The check (`src/admin/map/campus-zone.ts`) is the boundary test the public merge uses.
+  For an off-campus point the approve dialog no longer offers path nodes: it states that no access point
+  is saved and approves without one (regression test in `tests/unit/admin/outside-campus.test.tsx`,
+  shown to fail without the fix). The decoy timing test now asserts only the lower bound (decoy not
+  visibly faster than a real write); the upper side is bounded by `DECOY_TIMING.maxMs`, which is
+  unit-tested, so the test no longer fails on loaded hosts.
+- **D5, phone clipping (fixed, except the icon-only switcher).** The Studio state chip wraps instead
+  of truncating (`StateBadge.tsx`). Toasts sit above the measured top edge of the map attribution
+  (`src/components/layout/toast-offset.ts`, `MobileLayout.tsx`, `DesktopLayout.tsx`), so a three-line
+  Esri credit is no longer covered. The admin header and tab row on a 390×844 phone are about 105 px
+  (122 px on the build without the fix). The phone view-mode switcher is still icons only.
+- **Tablet Studio layout (found and fixed).** At 768 px the section links, library and inspector left
+  the Studio map almost no width. Below 1024 px the section links are now a tab row, the two Studio
+  side panels open one at a time, and Appearance and Info open the inspector.
+- **Honeypot decoy (fixed).** The decoy used to differ from a real acceptance in four ways (202 instead
+  of 201, no duplicates, a 202 even for invalid bodies, about 5× faster). It now runs the same
+  validation and area check, does the same reads through `decoySuggestion` (which writes nothing), and
+  answers 201 with the same headers, body shape, real duplicates and a `sug_` id. It then waits to
+  about the moving average of recent real acceptances in that isolate (±15 % jitter, 2 s cap).
+  Measured locally, n = 200 each: real median 42.8 ms vs decoy 51.9 ms (before: 40.5 vs 7.8 ms).
+  Documented in [`COMMUNITY_MODULE_CONTRACTS.md`](COMMUNITY_MODULE_CONTRACTS.md) §"Honeypot decoy".
+  Accepted difference: the decoy never checks or counts rate limits (§4).
+- **Zod CSP violation (fixed).** Zod's `new Function` probe broke `script-src` (1 violation on each of
+  `/`, `/?view=2d`, `/admin` and `/admin/studio` at 1440 and 390 px, 8 in total, under the real
+  `public/_headers` CSP). `vite.config.ts` aliases the bare `zod` import to `src/csp/zod.ts`, which
+  first sets `jitless` (`src/csp/zod-jitless.ts`); the server still imports Zod directly. Fixed build:
+  0 violations. Bundle: +20 bytes of JS. Regression: `tests/e2e/csp.spec.ts` (failed 4 of 4 on a build
+  without the alias, in the fixer's and the verifier's runs) and `tests/unit/csp/zod-jitless.test.ts`.
+- **Studio name rule.** Studio names, aliases, template and variant names reject more than 5 combining
+  marks in a row (`MARK_FLOOD_MESSAGE` now in `src/building-studio/text.ts`, reused by
+  `src/community/schema.ts`). Documented in `BUILDING_STUDIO_DESIGN.md` §5 and the contracts' "Text
+  rules".
+- **Wording of unnamed buildings (fixed).** The place panel wording depends on the record's source: an
+  unnamed `stu:` building says the site owner added it without a name because none is confirmed; OSM
+  records keep the OpenStreetMap wording.
+- **Leave prompt in the Studio (fixed).** In-app navigation to another admin section with unsaved
+  changes asks "Leave the Building Studio?" (Keep editing / Leave without saving). Leaving saves the
+  edits to crash recovery first (`setAdminNavigationGuard` in `src/admin/router.ts`). Moving between
+  Studio records is not held.
+- **Access point picked on the map (new).** In the Studio, the approve dialog and the location editor,
+  "Choose on the map" highlights the valid walkable nodes. A click lists the valid nodes within 25 m
+  (at most 4) with distances; nothing is chosen until the owner presses "Use path node N", and the
+  place or building never moves. On phones the properties sheet steps aside while picking.
+- **README.** States that the app makes no third-party request unless `VITE_ARCGIS_API_KEY` or
+  `VITE_EOX_BACKDROP` is set (enforced by the CSP), and links the admin, deployment, studio, community,
+  map-provider, security and status docs.
+- **New e2e** (real-handler backend): model an existing building (same public id); apply a template
+  with the server's preview diff; access point chosen on the map, duplicate, archive and permanent
+  delete with a typed id; the 409 conflict flow across two browsers; the approve-dialog notice and
+  map picking on every viewport; phone layout, leave prompt and tap picking.
+- **Performance re-measure** (no code change): see [`PERFORMANCE.md`](PERFORMANCE.md) §"Isometric
+  overview budgets (D8)", "Re-measure", and the
+  [bake-off report addendum](research/renderer-bakeoff/REPORT.md#addendum-2026-10-24-re-measure-on-a-quieter-machine).
+  All D8 overview budgets were met in 3 of 3 runs (hit-test max 0.3–0.4 ms; full redraw at 4× p95
+  6.7–16.0 ms; gesture p95 16.8 ms, 0 % of frames over 50 ms; mode switch 147–197 ms; heap growth
+  2.19 MB). The machine was not fully idle (17–30 % CPU before the runs). In the bake-off, the overview
+  with 50 studio models now builds within budget at 4× (70.0 / 89.5 ms, desktop / mobile; before
+  173.8 / 190.0 ms). The custom 3D layer's own CPU p95 at 4× is 4.4 / 3.5 ms (≤ 5 ms). Two numbers are
+  still over budget; see §4.
 
 ## 2. How it was verified
 
-I re-ran the whole gate on 2026-10-24 after the last code change, from the repository root. Builds went
-to a scratch directory, never `dist/`, and the owner's preview on port 4410 was not touched. No
-`.env.local` and no `VITE_*` variable was set for the default build.
+The verification agent re-ran the whole gate on 2026-10-24 (13:47–14:03 IST) on the shared working
+tree (`2407afe` plus the fix wave), from the repository root. Builds went to a scratch directory,
+never `dist/`. Per the agents' reports, the owner's preview on port 4410 was not touched. No
+`.env.local` and no `VITE_*` variable was set for the default build. After the gate, the verifier
+reverted some fixes temporarily to re-check their regression tests and restored each file byte for
+byte (checked with `cmp`).
 
 | Command                                                                                                            | Result                                                                                                                                                           |
 | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -176,60 +273,64 @@ to a scratch directory, never `dist/`, and the owner's preview on port 4410 was 
 | `npx tsc --noEmit -p tsconfig.server.json`                                                                         | exit 0, no output                                                                                                                                                |
 | `npx eslint . --max-warnings=0`                                                                                    | exit 0                                                                                                                                                           |
 | `npx prettier --check .`                                                                                           | exit 0, "All matched files use Prettier code style!"                                                                                                             |
-| `npx vitest run`                                                                                                   | **171 files passed, 2234 tests passed, 0 failed**                                                                                                                |
-| `npx vitest run -c vitest.server.config.ts`                                                                        | **36 files passed, 1 skipped; 1443 tests passed, 4 skipped, 0 failed** (the skips are the opt-in rollback drill in `tests/server/compat/rollback-drill.test.ts`) |
+| `npx vitest run`                                                                                                   | **175 files passed, 2261 tests passed, 0 failed**                                                                                                                |
+| `npx vitest run -c vitest.server.config.ts`                                                                        | **36 files passed, 1 skipped; 1447 tests passed, 4 skipped, 0 failed** (the skips are the opt-in rollback drill in `tests/server/compat/rollback-drill.test.ts`) |
 | `npm run data:check`                                                                                               | exit 0; "0 warnings, 0 errors"; dataset `62e807e6d444`; `git status public/data docs/DATA_QUALITY_REPORT.md` empty afterwards                                    |
-| `npx vite build --outDir <scratch> --emptyOutDir`                                                                  | exit 0; public entry `index-DxpDBkj1.js` 261.43 kB (84.26 kB gzip)                                                                                               |
-| `node scripts/smoke.ts --dist <scratch>`                                                                           | "Smoke OK: 10 checks passed" (precache 96 files, 4.6 MiB; no secrets in dist, 161 text files scanned; real search and real route)                                |
-| Admin strings in the public entry                                                                                  | 0 matches each for "X-CSRF-Token", "/api/admin", "Owner password", "Moderation queue", "cdn-cgi/access", "Approve and publish"                                   |
-| `npx playwright test` (all specs, 5 projects: desktop 1440, laptop 1280, tablet 768, mobile 390, mobile-small 360) | **226 passed, 69 skipped, 0 failed** (5.9 min). Skips are viewport- or configuration-specific by design                                                          |
-| `npx playwright test tests/e2e/map-modes.spec.ts` on a build with the spec's fake Esri key (synthetic tiles)       | **53 passed, 12 skipped, 0 failed**                                                                                                                              |
-| `npx playwright test tests/e2e/map-modes.spec.ts` on a build with `VITE_EOX_BACKDROP=true` (synthetic tiles)       | **23 passed, 42 skipped, 0 failed**                                                                                                                              |
+| `npx vite build --outDir <scratch> --emptyOutDir`                                                                  | exit 0; public entry `index-Bv6Ek_2J.js` 261.46 kB (84.28 kB gzip)                                                                                               |
+| `node scripts/smoke.ts --dist <scratch>`                                                                           | "Smoke OK: 10 checks passed" (precache 99 files, 4.6 MiB; no secrets in dist, 167 text files scanned; real search and real route)                                |
+| Admin strings in the public entry of that build                                                                    | 0 matches each for "X-CSRF-Token", "/api/admin", "Owner password", "Moderation queue", "cdn-cgi/access", "Approve and publish"                                   |
+| `npx playwright test` (all specs, 5 projects: desktop 1440, laptop 1280, tablet 768, mobile 390, mobile-small 360) | **340 tests: 261 passed, 79 skipped, 0 failed** (8.8 min). Skips are viewport- or configuration-specific by design                                               |
+| `tests/e2e/csp.spec.ts` on a build **without** the Zod alias                                                       | failed 4 of 4 (desktop and mobile; `"blocked": "eval"`, `"directive": "script-src"`), as expected; it passed in the full run above on the fixed build            |
+| `npx playwright test tests/e2e/map-modes.spec.ts` on a build with the spec's fake Esri key (synthetic tiles)       | **53 passed, 12 skipped, 0 failed** (previous wave, on the tree committed as `2407afe`; not re-run for the fix wave)                                             |
+| `npx playwright test tests/e2e/map-modes.spec.ts` on a build with `VITE_EOX_BACKDROP=true` (synthetic tiles)       | **23 passed, 42 skipped, 0 failed** (previous wave, on the tree committed as `2407afe`; not re-run for the fix wave)                                             |
 
 Notes:
 
-- The Playwright runs used `E2E_DIST=<scratch build>` and their own ports (5451–5453 for the preview,
-  4471–4473 for the real-handler backend). All of those ports were free afterwards; only 4410 was still
-  listening. The fake-key and EOX builds were deleted after the runs.
+- The Playwright runs used scratch builds and their own ports, not the owner's preview on 4410. The
+  verifier's manual checks (off-campus place panel, decoy curl) ran against a real-handler backend on
+  port 4493 serving its scratch build.
 - The imagery e2e runs intercept every request to the providers and answer with synthetic tiles; no real
   Esri or EOX imagery was fetched in these runs.
+- The verifier also checked the decoy with curl against the real handlers: a real submission and a
+  decoy both got 201 with the same headers apart from `Date`, the same body shape, the same real
+  duplicates and a `sug_` reference of the same format; a too-short name got the same 400 and a Delhi
+  location the same 422 with or without the honeypot.
 - Earlier, a QA pass looked at screenshots for every checklist item and ran extra scratch specs (axe on
   Studio and Templates, studio handle drags, moderation conflicts, off-campus behaviour). Those results
-  are summarised in §3; I did not re-run the scratch QA specs.
+  are summarised in §3; the scratch QA specs were not re-run for the fix wave. The fixers looked at the
+  screenshots of their new e2e specs (the 409 conflict screen on desktop only).
 
 ## 3. Acceptance checklist summary
 
 Source: the QA acceptance checklist of 2026-10-24 (57 items, tested on the real app with the
-real-handler backend).
+real-handler backend), updated with the fix-wave results.
 
 | Section                           | PASS   | FAIL  | NOT TESTABLE |
 | --------------------------------- | ------ | ----- | ------------ |
 | Building Studio (owner lists A–E) | 26     | 0     | 0            |
-| Community                         | 8      | 1     | 0            |
+| Community                         | 9      | 0     | 0            |
 | Map engine (free sources)         | 8      | 0     | 1            |
 | Regression list                   | 8      | 0     | 0            |
 | Earlier gates                     | 5      | 0     | 0            |
-| **Total**                         | **55** | **1** | **1**        |
+| **Total**                         | **56** | **0** | **1**        |
 
-Some PASS items carry a qualification: "Numeric fields and limits" and "Accessibility of Studio and
-Templates" pass after fixes D1 and D2 below; "Both 3D modes render studio models" passes, but Gate 3
-frame times were not re-measured; Esri Satellite 2D and the EOX backdrop pass with synthetic tiles
-only; "Attribution always visible" passes with the D5 note.
+Some PASS items carry a qualification: "Off-campus never a routing destination" passes after fix D3;
+"Numeric fields and limits" and "Accessibility of Studio and Templates" pass after fixes D1 and D2
+below; "Both 3D modes render studio models" passes, and the Gate 3 frame times were re-measured once
+(§1.9) but the device criterion D8 is still open; Esri Satellite 2D and the EOX backdrop pass with
+synthetic tiles only; "Attribution always visible" passes, and the D5 toast overlap is fixed. The
+original QA scratch specs were not re-run for the fix wave; the D3 item was re-checked in the real app
+by the verification agent and by the repo e2e and unit tests listed in §1.9.
 
-### FAIL
+### Fixed in the fix wave (was FAIL)
 
 - **Off-campus never a routing destination (defect D3).** With the opt-in "Nearby, outside campus"
   layer on, base context places (for example "Green valley main gate", `osm:node/12031088561`) and
-  approved off-campus community locations show an enabled "Directions to here" / "From here".
-  Cause: `isRoutablePlace` (`src/facilities/directory.ts`), `placeEndpoint` and `routeBlockReason`
-  (`src/app/place-actions.ts`) check only `graphNodeId`, which all 261 context places have, and
-  `mergePublication` keeps it for outside locations (`src/community/merge.ts`). This is a **contract
-  conflict**: `tests/unit/community/merge-integrity.test.ts` deliberately asserts that an off-campus
-  location with a valid access node is routable, so QA did not change it. Suggested fix, if you confirm
-  that off-campus places must never be routed to: require `campusZone === 'on-campus'` in
-  `isRoutablePlace` and `placeEndpoint`, give `routeBlockReason` the reason "Outside the campus:
-  directions cover campus places only", give map-picking an outside-campus message, stop offering
-  "Choose a nearby point" for off-campus places, and update that test.
+  approved off-campus community locations showed an enabled "Directions to here" / "From here",
+  because the routing checks looked only at `graphNodeId`. They now also require
+  `campusZone === 'on-campus'`; see §1.9 for the fix and how it was verified.
+  `tests/unit/community/merge-integrity.test.ts`, which used to assert the old behaviour, now asserts
+  the rule.
 
 ### NOT TESTABLE
 
@@ -237,7 +338,7 @@ only; "Attribution always visible" passes with the D5 note.
   no free Esri key set up), so only synthetic tiles were used. This needs a look with a real free-tier
   key (see owner action 3).
 
-### Defects found and fixed during QA
+### Defects fixed (D1 and D2 during QA, D3–D5 in the fix wave)
 
 - **D1** (Studio coordinate fields rounded to 0.001°, about 100 m; an arrow key moved a model about
   45 m): fixed in `src/admin/studio/controls.tsx`; regression tests in
@@ -245,14 +346,19 @@ only; "Attribution always visible" passes with the D5 note.
 - **D2** (axe `label-content-name-mismatch` on step buttons): fixed in
   `src/admin/studio/GeometryPanel.tsx`; axe re-run gave 0 violations on Studio and Templates (desktop
   and phone).
+- **D3** (off-campus places were routable): fixed in the fix wave, see above and §1.9.
+- **D4** (the moderation approve dialog did not warn that a suggestion is outside the campus
+  boundary): fixed in the fix wave; the dialog and the location editor show "Outside the campus
+  boundary" before publishing. Regression: `tests/unit/admin/outside-campus.test.tsx` and
+  `tests/e2e/admin-approve-map.spec.ts`.
+- **D5** (phone clipping): the state chip now wraps and toasts clear the attribution (fix wave).
+  Regression: `tests/unit/shell/toast-attribution.test.tsx` and the chip and chrome-height checks in
+  `tests/e2e/studio-mobile.spec.ts`.
 
 ### Open low-severity notes
 
-- **D4**: the moderation approve dialog does not warn that a suggestion is outside the campus boundary;
-  it is reported only afterwards on the Quality page.
-- **D5**: on phones the Studio state chip is truncated ("Unsaved local changes (not…"); the "Ready to
-  work offline" toast briefly covers the bottom attribution line until dismissed; the phone view-mode
-  switcher shows icons only (names and reasons are in accessible labels and the toast).
+- **D5, remainder**: the phone view-mode switcher shows icons only (names and reasons are in
+  accessible labels and the toast). Unchanged.
 
 ## 4. Known gaps
 
@@ -264,23 +370,44 @@ only; "Attribution always visible" passes with the D5 note.
   malformed token with normal tiles, so a bad key may not be caught by the probe. Esri's answer when the
   free tier is exhausted has not been observed.
 - **Device frame-time criterion (D8)** for 3D studio models is still open: headless Chromium draws WebGL
-  on the CPU, so no phone numbers exist (`docs/3D_BUILDING_FIDELITY.md` §6).
+  on the CPU, so no phone numbers exist (`docs/3D_BUILDING_FIDELITY.md` §6). In the re-measure the 3D
+  map's p95 at 4× CPU throttle was 66.7 ms on every path (baseline, extrusion, custom layer), over the
+  33 ms device budget; this is a CPU-rendering proxy, not a phone verdict. Extrusion and the custom
+  layer tie at p95 on this proxy, so only a phone run can decide whether phones should switch to the
+  extrusion path.
+- **Overview with 50 studio models: unthrottled full redraw is over budget**: 9.4 ms against ≤ 8 ms on
+  desktop (DPR 1) and mobile (DPR 2), one sample each (before: 11.0 / 10.9 ms). The applicable
+  fallback ("lower the DPR cap to 1.5, then 1") helps only on high-density screens; there is no specific
+  fallback for DPR 1 desktops yet. The gesture budgets it would protect all pass.
 - **E2E covers password mode only.** Cloudflare Access mode and its logout redirect are covered by unit
   tests only. The e2e backend runs the handlers in Node with miniflare's D1, not inside workerd.
-- **Not covered by e2e** (unit/RTL tests only): Studio "model existing building" (QA did it by hand),
-  apply template, duplicate, permanent delete, 409 conflict flow; orphaned overrides (cannot be created
-  through the UI).
-- **Studio**: no confirm dialog when navigating to another admin section with unsaved changes (edits are
-  kept in crash recovery and the beforeunload prompt covers reloads); access point cannot be picked on
-  the map yet; neither studio spec runs on the tablet project.
-- **Wording**: the public place panel says "OpenStreetMap has no name for this building yet…" for an
-  unnamed owner-placed studio building; the overlap message can show a `stu:` id twice when the other
-  building has no name; in the isometric overview some studio models appear grey rather than in their
-  chosen wall colour.
+- **Not covered by e2e**: orphaned overrides (cannot be created through the UI). The Studio record
+  flows (model existing, apply template, duplicate, delete, 409) are now covered by
+  `tests/e2e/studio-records.spec.ts` on desktop, laptop and tablet, not on the phone projects.
+- **Studio leave prompt covers in-app navigation only.** Browser Back/Forward and Sign out are not
+  intercepted; Sign out deletes the recovery copy on purpose. With Back, edits reach crash recovery only
+  after the existing 400 ms debounce, so a change made just before Back can be lost.
+- **Phone and tablet Studio chrome**: on a phone the admin header and tabs are about 105 px, but the
+  Studio's own bar adds about 57 px (about 163 px above the map in all), and a transient notice banner
+  adds about 80 px for up to 10 s. On a 768 px tablet the Studio toolbar wraps into three rows (about
+  150 px). (This file earlier said "about 240 px"; the UI fixer measured the header and tabs at 122 px
+  on the build without the fix, and about 105 px with it, read from a 2× screenshot at 390×844. The new
+  e2e check fails above 120 px.)
+- **Honeypot decoy**: it never checks or counts rate limits, so a bot sending more than 5 decoys in
+  10 minutes never sees a 429 (accepted and documented). Its timing match was measured only locally
+  (Node and miniflare D1 on Windows; the decoy was about 20 % slower at the median); real Cloudflare D1
+  latency was not measured, and a fresh isolate starts from a 60 ms default.
+- **Stricter Studio name rule**: a stored draft or version whose name or alias has more than 5
+  combining marks in a row would no longer parse in the admin (`readDraft` returns null), as with any
+  schema tightening (documented in `BUILDING_STUDIO_DESIGN.md` §5).
+- **Wording**: the overlap message can show a `stu:` id twice when the other building has no name; in
+  the isometric overview some studio models appear grey rather than in their chosen wall colour. (The
+  unnamed studio-building wording is fixed, §1.9.)
 - **Admin chunks are precached** by the service worker for every public visitor (no secrets, wasted
   bytes), and `public/_headers` has no `X-Robots-Tag` for `/admin` (the page adds a `noindex` meta at
   runtime only). `src/app/App.tsx` prefetches the public shell chunk, so `/admin` downloads it too.
-- On phones the admin header and tab row take about 240 of 844 px, which leaves the Studio map small.
+- **Bake-off report §6** (open item 2) is left as written; its addendum says the item is now narrowed
+  to the unthrottled full redraw.
 
 ## 5. Owner actions
 
@@ -303,14 +430,17 @@ only; "Attribution always visible" passes with the D5 note.
 4. **Device performance check** on a mid-range phone: open the 3D map with studio models, move the
    camera for a few seconds, and note whether the app falls back to plain blocks or suggests the
    Overview (the watchdog triggers at rAF p95 > 50 ms; the device budget is 33 ms). This closes D8.
-5. **Decide D3**: may off-campus places (opt-in layer) be routing destinations? See §3.
+   The laptop proxy numbers from the re-measure are in §1.9 and §4.
+5. **D3 is fixed, no decision needed**: off-campus places (opt-in layer) are never routing
+   destinations, following the rule in the QA brief (§1.9). Tell the lead only if you want off-campus
+   routing after all.
 6. **Google photoreal is not implemented**, by your decision of 2026-10-24 (no billing; Google 3D
    coverage at LPU unverified and likely absent). Nothing to do unless that decision changes.
 7. **GLB import is not enabled.** Enabling it needs an R2 binding and a decision on the Three.js
    dependency; nothing to do unless you want imported models.
 8. **Delete `C:\lpuw014438`.** It is a leftover folder outside the repository (about 2.2 MB, holding a
    `v3` directory). The project does not use it. I did not delete it.
-9. **Commit**: the lead commits the working tree; nothing is committed yet.
+9. **Commit**: the lead commits the working tree; the fix wave (§1.9) is not committed yet.
 
 ## 6. Decisions made autonomously
 
@@ -333,7 +463,12 @@ These were made by the build agents within the owner's rules, not by the owner. 
 | The Studio's server check runs on its own request and counts only for the exact draft it checked      | A check must never block a save, and a stale result must not count for a changed draft               |
 | "Apply template" previews on the server for a saved record and applies locally for a draft with edits | Keeps unsaved edits; the server stays the authority for saved records                                |
 | E2E runs the real handlers over an in-memory local D1                                                 | Tests the real server without mocks and without touching any remote database                         |
-| D3 (off-campus routing) left unchanged                                                                | An existing test asserts the current behaviour on purpose; the change needs an owner/lead decision   |
+| Off-campus places are never routing endpoints; they keep their `graphNodeId` in the data (D3)         | The QA brief's rule; the owner can still see the validated access node                               |
+| The honeypot decoy mirrors a real acceptance (201, real duplicates, padded timing), no rate limits    | A bot must not tell a decoy from a real answer; counting decoys against limits was left out          |
+| The bare `zod` import in the client is aliased to a shim that sets `jitless` first                    | Removes the CSP `script-src` eval violation without loosening the CSP; the server is unchanged       |
+| The Studio leave prompt saves the edits to crash recovery before leaving                              | Leaving should never lose work silently; moving between Studio records is not held                   |
+| Access points picked on the map only from validated walkable nodes within 25 m; nothing moves         | A click must never invent an access point or move the place                                          |
+| Below 1024 px the admin section links are a tab row and the Studio side panels open one at a time     | At 768 px the side columns left the Studio map almost no width                                       |
 
 ## 7. Deployment checklist
 

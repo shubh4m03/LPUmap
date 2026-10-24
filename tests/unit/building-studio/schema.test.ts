@@ -40,6 +40,7 @@ import {
   verificationSchema,
   WARNING_CODES,
 } from '../../../src/building-studio/schema.ts';
+import { MARK_FLOOD_MESSAGE, MAX_COMBINING_MARKS } from '../../../src/building-studio/text.ts';
 import { ANCHOR, clone, draft, identity, model, published, STU_ID, template } from './fixtures.ts';
 
 /** Parses `value`; when `path` is given, some issue must start with that path. */
@@ -282,6 +283,28 @@ describe('identity', () => {
     accepts(studioIdentitySchema, { ...identity(), categoryId: 'building' });
     rejects(studioIdentitySchema, { ...identity(), categoryId: 'other' }, ['categoryId']);
     rejects(studioIdentitySchema, { ...identity(), categoryId: 'castle' }, ['categoryId']);
+  });
+
+  it('names and aliases refuse a stacked combining-mark flood (> 5 in a row), like public suggestions', () => {
+    const acute = '́';
+    const flood = `A${acute.repeat(MAX_COMBINING_MARKS + 1)}ula`;
+    const atLimit = `A${acute.repeat(MAX_COMBINING_MARKS)}ula`;
+    expect(MAX_COMBINING_MARKS).toBe(5);
+    for (const [field, value] of [
+      ['name', flood],
+      ['aliases', [flood]],
+    ] as const) {
+      const r = studioIdentitySchema.safeParse({ ...identity(), [field]: value });
+      expect(r.success, field).toBe(false);
+      expect(r.error?.issues.map((i) => i.message)).toContain(MARK_FLOOD_MESSAGE);
+    }
+    // Format characters between the marks do not reset the run.
+    rejects(studioIdentitySchema, { ...identity(), name: `A${`${acute}‍`.repeat(6)}` }, ['name']);
+    accepts(studioIdentitySchema, { ...identity(), name: atLimit, aliases: [atLimit, 'Tiếng Việt'] });
+    // Real scripts stay well below the limit.
+    accepts(studioIdentitySchema, { ...identity(), name: 'क्षेत्र भवन', aliases: ['שָׁלוֹם'] });
+    // Template names are names too.
+    rejects(templateDefinitionSchema, { ...template(), name: flood }, ['name']);
   });
 
   it('private notes have a length limit', () => {

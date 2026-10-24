@@ -20,13 +20,12 @@ import {
 import {
   draftSchemaIssues,
   issuesAt,
-  nearestWalkableNode,
   parseAliases,
   prohibitedSourceProblem,
   STUDIO_CATEGORY_OPTIONS,
   withVerificationStatus,
 } from '../../building-studio/ui/fields.ts';
-import { previewFootprint } from '../../building-studio/ui/preview.ts';
+import { useStudioAccessCandidates } from './access-pick-data.ts';
 import { CheckField, NumberField, PanelSection, SelectField, TextField } from './controls.tsx';
 import { useStudioServices, useStudioState } from './studio-context.ts';
 import { useDraftEdit } from './useDraftEdit.ts';
@@ -132,14 +131,12 @@ export function IdentitySection() {
 }
 
 function AccessField({ draft }: { draft: StudioDraft }) {
-  const { data } = useStudioServices();
+  const { store } = useStudioServices();
   const { editable, edit, blur } = useDraftEdit();
   const maxM = APP_CONFIG.routing.maxPlaceConnectorM;
-  const suggestion = useMemo(() => {
-    if (!data) return null;
-    const fp = previewFootprint(draft.model, null);
-    return fp.ok ? nearestWalkableNode(data.graph, fp.footprint.coordinates, maxM) : null;
-  }, [data, draft.model, maxM]);
+  const candidates = useStudioAccessCandidates();
+  const picking = useStudioState((s) => s.accessPick !== null);
+  const suggestion = candidates?.[0] ?? null;
   return (
     <div className="flex flex-col gap-2 rounded-md border border-border p-2.5">
       <p className="text-xs font-medium text-muted">Access point (routing)</p>
@@ -162,6 +159,18 @@ function AccessField({ draft }: { draft: StudioDraft }) {
         hint={draft.accessNodeId === null ? 'None: the building is not routable.' : undefined}
       />
       <div className="flex flex-wrap gap-2">
+        {candidates && candidates.length > 0 ? (
+          <Button
+            size="sm"
+            icon="locate"
+            disabled={!editable || picking}
+            title="Show the valid path nodes on the map and pick one near where you click"
+            onClick={() => store.setState({ accessPick: { click: null } })}
+            data-testid="studio-access-pick-start"
+          >
+            {picking ? 'Choosing on the map…' : 'Choose on the map'}
+          </Button>
+        ) : null}
         {suggestion && suggestion.nodeId !== draft.accessNodeId ? (
           <Button
             size="sm"

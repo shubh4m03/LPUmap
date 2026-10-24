@@ -9,7 +9,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { routeBlockReason } from '../../../src/app/place-actions.ts';
+import { OUTSIDE_CAMPUS_REASON, placeEndpoint, routeBlockReason } from '../../../src/app/place-actions.ts';
 import {
   boundaryPolygons,
   campusZoneFor,
@@ -25,7 +25,7 @@ import {
   type PublishedOverride,
 } from '../../../src/community/schema.ts';
 import type { CampusData } from '../../../src/data/campus-data.ts';
-import type { LngLat, Place } from '../../../src/data/schema.ts';
+import { contextPlacesFileSchema, DATA_FILES, type LngLat, type Place } from '../../../src/data/schema.ts';
 import { createFacilityDirectory } from '../../../src/facilities/directory.ts';
 import { createRouter } from '../../../src/routing/index.ts';
 import { createSearchIndex, docsFromPlaces } from '../../../src/search/index.ts';
@@ -215,6 +215,7 @@ describe('merge integrity on the real dataset', () => {
     const invalid = new Set(report.invalidAccess.map((i) => i.id));
     const polygons = boundaryPolygons(base.boundary);
     let routed = 0;
+    let offCampusWithNode = 0;
     for (const l of locations) {
       // Owner decision 2: an off-campus location is a context place, never a campus place.
       const onCampus = campusZoneFor(l.location, polygons) === 'on-campus';
@@ -223,17 +224,43 @@ describe('merge integrity on the real dataset', () => {
       const p = [...data.places, ...contextPlaces].find((x) => x.id === l.id)!;
       const check = l.accessNodeId === null ? null : checkAccessNode(nodes, foot, l.accessNodeId, l.location);
       if (check?.ok) {
-        routed++;
         expect(p.graphNodeId).toBe(l.accessNodeId);
-        expect(routeBlockReason(p, dir)).toBeNull();
+        if (onCampus) {
+          routed++;
+          expect(routeBlockReason(p, dir)).toBeNull();
+          expect(placeEndpoint(p)).toMatchObject({ kind: 'place', placeId: l.id, nodeId: l.accessNodeId });
+        } else {
+          // Owner rule (map spec Phase 6): an off-campus location is never an LPU facility or a
+          // routing destination, as origin or destination, even with a valid access node.
+          offCampusWithNode++;
+          expect(routeBlockReason(p, dir)).toBe(OUTSIDE_CAMPUS_REASON);
+          expect(placeEndpoint(p)).toBeNull();
+        }
       } else {
         expect(p.graphNodeId).toBeUndefined();
-        expect(routeBlockReason(p, dir)).toBe(NOT_CONNECTED);
+        expect(routeBlockReason(p, dir)).toBe(onCampus ? NOT_CONNECTED : OUTSIDE_CAMPUS_REASON);
+        expect(placeEndpoint(p)).toBeNull();
         expect(invalid.has(l.id)).toBe(l.accessNodeId !== null);
       }
     }
     expect(routed).toBeGreaterThan(0);
+    expect(offCampusWithNode).toBeGreaterThan(0);
     expect(invalid.size).toBeGreaterThan(0);
+  });
+
+  it('no real context place ("Nearby, outside campus" layer) is a route endpoint, even with a path node', () => {
+    // Owner rule (map spec Phase 6): off-campus places are never routing destinations or origins.
+    const file = contextPlacesFileSchema.parse(
+      JSON.parse(readFileSync(join(DATA_DIR, DATA_FILES.contextPlaces), 'utf8')),
+    );
+    const dir = createFacilityDirectory(base.places, base.relations);
+    const withNode = file.places.filter((p) => p.graphNodeId !== undefined && p.location !== null);
+    expect(withNode.length).toBeGreaterThan(0);
+    for (const p of file.places) {
+      expect(dir.isRoutable(p)).toBe(false);
+      expect(placeEndpoint(p)).toBeNull();
+      if (p.location !== null) expect(routeBlockReason(p, dir)).toBe(OUTSIDE_CAMPUS_REASON);
+    }
   });
 
   it('never touches the routing graph: same object, same file bytes, same routes', () => {

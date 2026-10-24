@@ -28,9 +28,12 @@ import { useAction } from '../../hooks/useAction.ts';
 import { UNSAVED_CONFIRM, useUnsavedGuard } from '../../hooks/useUnsavedGuard.ts';
 import { accessPointBody, type AccessChoice } from '../../map/access-choice.ts';
 import { AccessPointPicker } from '../../map/AccessPointPicker.tsx';
+import { useCampusZone } from '../../map/campus-zone.ts';
 import { MapPanel } from '../../map/MapPanel.tsx';
+import { OutsideCampusNotice } from '../../map/OutsideCampusNotice.tsx';
 import { PositionFields } from '../../map/PositionFields.tsx';
 import { useAccessCandidates } from '../../map/useAccessCandidates.ts';
+import { useAccessMapPick } from '../../map/useAccessMapPick.ts';
 import { usePointEditing } from '../../map/usePointEditing.ts';
 import type { AdminNavigate } from '../../router.ts';
 import { adminHref } from '../../routes.ts';
@@ -84,6 +87,7 @@ export function LocationEditor({
   const busy = save.busy || status.busy;
 
   const { candidates, note, problemFor } = useAccessCandidates(campus, values.location);
+  const zone = useCampusZone(campus, values.location);
   const current =
     record && record.accessNodeId !== null
       ? { nodeId: record.accessNodeId, problem: values.location ? problemFor(record.accessNodeId) : null }
@@ -102,6 +106,7 @@ export function LocationEditor({
     [others, record?.id],
   );
   const setPoint = (p: LngLat) => setValues((v) => ({ ...v, location: p }));
+  const pick = useAccessMapPick(candidates);
   const { editing, reticleCenter } = usePointEditing({
     point: values.location,
     editable: !busy,
@@ -111,6 +116,8 @@ export function LocationEditor({
     candidates: candidates ?? undefined,
     selectedNodeId:
       choice.kind === 'node' ? choice.nodeId : choice.kind === 'keep' ? record?.accessNodeId : null,
+    pickAccess: pick.active ? pick.onMapClick : null,
+    pickClick: pick.click,
     handleLabel: 'Drag to move the location',
   });
   // The camera follows positions set from the form (typed, centre pin, steps); map clicks/drags are already in view.
@@ -228,9 +235,11 @@ export function LocationEditor({
           disabled={busy}
           error={fieldErrors.location ?? null}
         />
+        <OutsideCampusNotice zone={zone} />
         <PlaceFieldsForm values={values} onChange={setValues} errors={fieldErrors} disabled={busy} />
         <AccessPointPicker
           location={values.location}
+          mapPick={pick}
           candidates={candidates}
           candidatesNote={note}
           value={choice}

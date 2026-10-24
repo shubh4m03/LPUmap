@@ -304,12 +304,88 @@ The spec therefore failed on its soft hit-test assertion in this run (one sample
 median was 0 ms at the timer's 0.1 ms resolution). Earlier runs measured 0.2–1.0 ms. One run on a
 shared laptop is not a verdict either way; re-measure on an idle machine.
 
+#### Re-measure, 2026-10-24 12:41–12:42 IST (three runs, quieter machine)
+
+Run by the performance agent with the same command,
+`npx playwright test -c tests/perf/playwright.iso.config.ts --project=perf`, three times back to back
+(07:11:07, 07:11:41 and 07:12:10 UTC). The harness built its own production page and served it on its
+own port, 4420. Each run's `test-results/perf/iso.json` was copied aside before the next run.
+
+**Conditions:**
+
+- Same laptop, Chromium, viewport and 4× CDP throttle as above.
+- Code: working tree on top of `2407afe`. Other agents had small uncommitted edits, including 4 lines
+  in `src/isometric/IsoStage.tsx`: a toast condition in the selection handler, not drawing code.
+- No other agent's tests or builds were running. The only other Node processes were the owner's idle
+  preview on 4410, which was not touched, and the chrome-devtools MCP servers.
+- CPU load was sampled every 2 s from `\Processor(_Total)\% Processor Time`, as a share of all 16
+  logical CPUs:
+  - In the 20 s before the runs, with nothing from this measurement running, it was 17–30 %
+    (median 28 %). The busiest process was the WMI provider host (`wmiprvse`, about 2.4 cores), then
+    Defender and the IDE. So the machine was not idle. The earlier runs recorded no load figure to
+    compare with; they only note that other agents were running tests.
+  - During the three runs it was 25–48 % (median 40 %). That includes the harness build and its own
+    Chromium.
+
+| Metric (budget)                                          | Run 1           | Run 2           | Run 3           | Verdict       |
+| -------------------------------------------------------- | --------------- | --------------- | --------------- | ------------- |
+| Scene build, unthrottled max (≤ 30 ms)                   | 7.6 ms          | 6.7 ms          | 8.0 ms          | met           |
+| Full redraw, unthrottled p95 (≤ 8 ms)                    | 1.4 ms          | 1.4 ms          | 1.3 ms          | met           |
+| Scene build at 4×, max (≤ 120 ms)                        | 31.4 ms         | 31.9 ms         | 33.2 ms         | met           |
+| Full redraw at 4×, p95 of 14 (≤ 25 ms)                   | 6.7 ms          | 16.0 ms         | 12.4 ms         | met           |
+| Gesture frames at 4× (p95 ≤ 20 ms; ≤ 2 % over 50 ms)     | 16.8 ms; 0 %    | 16.8 ms; 0 %    | 16.8 ms; 0 %    | met           |
+| Hit-test at 4×, max of 10 (≤ 1 ms)                       | 0.3 ms          | 0.4 ms          | 0.3 ms          | met           |
+| Mode switch → first frame at 4×, chunk cached (≤ 300 ms) | 147 ms          | 197 ms          | 190 ms          | met           |
+| JS heap growth after opening the overview (≤ 8 MB)       | 2.19 MB         | 2.19 MB         | 2.19 MB         | met           |
+| Depth cycles                                             | 0               | 0               | 0               | met           |
+| Spec result                                              | passed (24.5 s) | passed (23.9 s) | passed (24.3 s) | 3 of 3 passed |
+
+**Verdict:** on the quieter machine, every D8 overview budget was met in all three runs.
+
+- The hit-test miss in the earlier single run (1.2 ms) did not recur: the worst sample was 0.4 ms.
+- The 4× full-redraw misses in the earlier shared-machine runs did not recur either: the worst p95 was
+  16.0 ms against 25 ms.
+- Run-to-run spread is largest for the 4× full redraw (6.7–16.0 ms) and the mode switch (147–197 ms).
+- The scene had 131 buildings and 794 faces.
+- The spec also records a diagnostic with no budget: wheel zoom driven through CDP, which commits a
+  redraw on each step. Its p95 was 49.9–50.0 ms, with 2.2–3.7 % of frames over 50 ms. The budgeted
+  gesture path (pan and wheel over the cached bitmap) stayed at a 16.8 ms p95.
+
+These are still 4× CPU-throttle proxy numbers on a laptop, not phone numbers. The overview with 50
+studio models is a heavier scene. It is measured by the bake-off harness, in the next subsection and in
+[REPORT.md §3, addendum](research/renderer-bakeoff/REPORT.md#addendum-2026-10-24-re-measure-on-a-quieter-machine).
+There, one budget is still exceeded: the unthrottled full redraw.
+
 ### 3D renderer bake-off
 
 The decision on how to draw owner-placed models in Realistic 3D (raw-WebGL2 custom layer, guarded,
 with fill-extrusion as the automatic fallback) and its measurements are in
 [research/renderer-bakeoff/REPORT.md](research/renderer-bakeoff/REPORT.md). In headless Chromium WebGL
 runs on SwiftShader (CPU), so its frame times are not device frame times.
+
+**Re-measure, 2026-10-24 12:43–12:45 IST.** One frame-time run of the harness: 4×, desktop and mobile,
+baseline, extrusion, custom and overview, plus the 1× desktop reference. Conditions were as in the
+overview re-measure above: before the run, CPU load was 17–30 % (median 28 %) with no other agent's
+tests running. During the run, SwiftShader itself loaded the CPU: median 61 % at 4× and 84 % at 1×.
+Full numbers are in the
+[report addendum](research/renderer-bakeoff/REPORT.md#addendum-2026-10-24-re-measure-on-a-quieter-machine).
+
+- **Map paths at 4×.** p50 was 50.0 ms and p95 66.7 ms on every path in both viewports. That includes
+  the scene with no studio models, so the custom layer equalled the extrusion path at p50 and p95.
+  This is still over the 33 ms device budget. SwiftShader does the drawing on the CPU, so this is not
+  a device verdict, and D8 on a phone stays open.
+- **Custom layer CPU p95 at 4×.** 4.4 ms on desktop and 3.5 ms on mobile, within its 5 ms budget.
+- **Overview with 50 studio models** (1,611 faces):
+  - Gesture p95 was 16.7 ms.
+  - Scene build at 4× after a rotation was 70.0 ms on desktop and 89.5 ms on mobile. The earlier run
+    measured 173.8 and 190.0 ms, over budget; this run is now within 120 ms.
+  - Full redraw at 4× was 9.7 ms on desktop and 2.9 ms on mobile, within 25 ms.
+  - **The unthrottled full redraw is still over its 8 ms budget**: 9.4 ms in both viewports. It is one
+    sample per viewport, at DPR 1 on desktop and DPR 2 on mobile.
+  - The applicable §9.3 fallback is "lower the DPR cap to 1.5, then 1", but that cuts fill cost only
+    on DPR > 1 screens. §9.3's other overview fallbacks do not target a static redraw: hiding labels
+    during gestures, and a worker that takes only the scene build. Gesture frames, which §9.3 guards,
+    are within budget.
 
 ### Gaps (not measured)
 

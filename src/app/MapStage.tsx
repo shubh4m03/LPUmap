@@ -121,9 +121,9 @@ export function MapStage({ theme, reducedMotion, padding, onFatalError }: MapSta
   const onSelectPlace = useCallback(
     (id: string | null) => {
       // While choosing on the map: an empty-map click is handled by onMapClick; an
-      // unconnected place explains itself and keeps picking on (src/app/map-picking.ts).
+      // unconnected or off-campus place explains itself and keeps picking on (src/app/map-picking.ts).
       const picked = pickPlaceOnMap(id ? getPlace(id) : undefined);
-      if (picked.kind === 'not-connected')
+      if (picked.kind === 'not-connected' || picked.kind === 'outside-campus')
         pickToast?.show({ message: picked.message, tone: 'warning', durationMs: 9000 });
       if (picked.kind !== 'not-picking') return;
       const s = useAppStore.getState();

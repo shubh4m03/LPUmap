@@ -74,9 +74,9 @@ export function IsoStage({
   const onSelect = useCallback(
     (id: string | null) => {
       // Same rules as MapStage (src/app/map-picking.ts): empty ground is onGroundClick;
-      // an unconnected place explains itself and keeps picking on.
+      // an unconnected or off-campus place explains itself and keeps picking on.
       const picked = pickPlaceOnMap(id ? getPlace(id) : undefined);
-      if (picked.kind === 'not-connected')
+      if (picked.kind === 'not-connected' || picked.kind === 'outside-campus')
         toast?.show({ message: picked.message, tone: 'warning', durationMs: 9000 });
       if (picked.kind !== 'not-picking') return;
       const s = useAppStore.getState();

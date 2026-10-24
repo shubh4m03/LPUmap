@@ -11,7 +11,7 @@ import type { AdminApi } from '../../../src/admin/api/index.ts';
 import type { AdminSectionProps } from '../../../src/admin/sections/types.ts';
 import { starterLibrary } from '../../../src/building-studio/asset-library.ts';
 import { createEnuFrame } from '../../../src/building-studio/geometry.ts';
-import { saveRecovery } from '../../../src/building-studio/local-recovery.ts';
+import { loadRecovery, recoveryKey, saveRecovery } from '../../../src/building-studio/local-recovery.ts';
 import type { MapEditingProps } from '../../../src/map/editing/types.ts';
 import type { MapViewProps } from '../../../src/map/types.ts';
 import { ANCHOR, draft, STU_ID } from '../building-studio/fixtures.ts';
@@ -51,6 +51,7 @@ vi.mock('../../../src/admin/studio/useStudioMapData.ts', () => ({
 }));
 
 const { AdminContext } = await import('../../../src/admin/context.ts');
+const { navigateAdmin } = await import('../../../src/admin/router.ts');
 const { default: StudioSection } = await import('../../../src/admin/studio/StudioSection.tsx');
 
 function setup(id: string | null = null, configure?: (studio: ReturnType<typeof fakeStudioApi>) => void) {
@@ -303,6 +304,132 @@ describe('Studio workspace (desktop)', () => {
   });
 });
 
+describe('Choosing the access point on the map', () => {
+  const nodeFeatures = () =>
+    (editing().preview?.features ?? []).filter(
+      (f) => typeof f.properties.id === 'string' && f.properties.id.startsWith('node:'),
+    );
+
+  it('shows only valid nodes, lists those near a click, and changes nothing until one is picked', async () => {
+    const t = setup(STU_ID, (api) =>
+      api.getBuilding.mockResolvedValue(ok(detail({ validation: EMPTY_VALIDATION }))),
+    );
+    await waitFor(() => expect(state()).toHaveTextContent('Saved draft (rev 1)'));
+    expect(nodeFeatures()).toHaveLength(0);
+    await t.user.click(screen.getByTestId('studio-access-pick-start'));
+    const card = screen.getByTestId('studio-access-pick');
+    expect(card).toHaveTextContent('Nothing is chosen until you pick one.');
+    // The valid candidates are drawn; handles are hidden while picking.
+    const nodes = nodeFeatures();
+    expect(nodes.length).toBeGreaterThan(0);
+    expect(editing().handles).toEqual([]);
+    const anchor0 = (editing().previewModel?.model as unknown as { anchor: number[] }).anchor;
+
+    // A click far away (about 300 m east) lists nothing and explains why.
+    act(() =>
+      editing().onPointer?.({
+        type: 'click',
+        lngLat: createEnuFrame(ANCHOR).toLngLat([300, 0]),
+        placeId: null,
+      }),
+    );
+    expect(within(card).getByRole('status')).toHaveTextContent('No valid path node within 25 m');
+
+    // A click on a drawn node lists it (and only valid nodes).
+    const target = nodes[0]!;
+    const id = Number(String(target.properties.id).slice(5));
+    const at = (target.geometry as unknown as { coordinates: [number, number] }).coordinates;
+    act(() => editing().onPointer?.({ type: 'click', lngLat: at, placeId: 'osm:way/1' }));
+    const valid = new Set(nodes.map((f) => String(f.properties.id)));
+    const listed = within(card)
+      .getAllByRole('button', { name: /^Use path node / })
+      .map((b) => `node:${b.textContent!.replace('Use path node ', '')}`);
+    expect(listed.length).toBeGreaterThan(0);
+    expect(listed.every((n) => valid.has(n))).toBe(true);
+    // Nothing chosen, nothing moved, nothing selected.
+    expect(state()).toHaveTextContent('Saved draft (rev 1)');
+    expect((editing().previewModel?.model as unknown as { anchor: number[] }).anchor).toEqual(anchor0);
+    expect(mapProps.current?.selectedPlaceId).toBeNull();
+
+    await t.user.click(within(card).getByTestId(`studio-access-choose-${id}`));
+    expect(screen.queryByTestId('studio-access-pick')).toBeNull();
+    expect(state()).toHaveTextContent('Unsaved local changes');
+    expect(screen.getByTestId('studio-undo')).toHaveAttribute(
+      'title',
+      'Undo: Access point (chosen on the map)',
+    );
+    expect(screen.getByLabelText('Path node id')).toHaveValue(String(id));
+    // Picking is over: the handles are back.
+    expect(editing().handles.length).toBeGreaterThan(0);
+  });
+
+  it('Escape stops picking without a change', async () => {
+    const t = setup(STU_ID, (api) =>
+      api.getBuilding.mockResolvedValue(ok(detail({ validation: EMPTY_VALIDATION }))),
+    );
+    await waitFor(() => expect(state()).toHaveTextContent('Saved draft (rev 1)'));
+    await t.user.click(screen.getByTestId('studio-access-pick-start'));
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByTestId('studio-access-pick')).toBeNull();
+    expect(state()).toHaveTextContent('Saved draft (rev 1)');
+  });
+});
+
+describe('Leaving the Studio with unsaved changes (in-app navigation)', () => {
+  afterEach(() => window.history.replaceState(null, '', '/'));
+
+  async function openDirty() {
+    window.history.replaceState(null, '', `/admin/studio/${encodeURIComponent(STU_ID)}`);
+    const t = setup(STU_ID, (api) =>
+      api.getBuilding.mockResolvedValue(ok(detail({ validation: EMPTY_VALIDATION }))),
+    );
+    await waitFor(() => expect(state()).toHaveTextContent('Saved draft (rev 1)'));
+    await t.user.click(screen.getByRole('button', { name: 'Move 1 m north' }));
+    expect(state()).toHaveTextContent('Unsaved local changes');
+    return t;
+  }
+
+  it('asks before going to another section; Keep editing stays with the changes', async () => {
+    const t = await openDirty();
+    const here = window.location.pathname;
+    act(() => navigateAdmin('/admin/queue'));
+    const dialog = await screen.findByRole('dialog', { name: 'Leave the Building Studio?' });
+    expect(window.location.pathname).toBe(here);
+    expect(dialog).toHaveTextContent('A copy stays in this browser only');
+    await t.user.click(within(dialog).getByTestId('studio-leave-keep'));
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(window.location.pathname).toBe(here);
+    expect(state()).toHaveTextContent('Unsaved local changes');
+    // Moving between Studio records is not "leaving" (that has its own discard prompt).
+    act(() => navigateAdmin('/admin/studio'));
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(window.location.pathname).toBe('/admin/studio');
+  });
+
+  it('Leave without saving navigates and keeps the edits in crash recovery', async () => {
+    const t = await openDirty();
+    act(() => navigateAdmin({ section: 'audit' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Leave the Building Studio?' });
+    await t.user.click(within(dialog).getByTestId('studio-leave-confirm'));
+    // The section continues past the guard through its navigate prop (navigateAdmin in the app).
+    expect(t.navigate).toHaveBeenCalledWith('/admin/audit', { force: true });
+    expect(screen.queryByRole('dialog')).toBeNull();
+    const kept = loadRecovery(recoveryKey(STU_ID, null));
+    expect(kept?.draft.model.anchor[1]).toBeGreaterThan(ANCHOR[1]);
+  });
+
+  it('a clean Studio never holds navigation, and the guard goes with the Studio', async () => {
+    window.history.replaceState(null, '', '/admin/studio');
+    const view = setup();
+    await screen.findByRole('list', { name: 'Templates' });
+    act(() => navigateAdmin('/admin/queue'));
+    expect(window.location.pathname).toBe('/admin/queue');
+    view.unmount();
+    act(() => navigateAdmin('/admin/audit'));
+    expect(window.location.pathname).toBe('/admin/audit');
+  });
+});
+
 describe('Studio workspace (narrow desktop)', () => {
   it('a tablet-width window starts with the side panels collapsed; they open on request', async () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, writable: true, value: 800 });
@@ -311,6 +438,31 @@ describe('Studio workspace (narrow desktop)', () => {
     expect(document.getElementById('studio-inspector')).not.toBeVisible();
     await t.user.click(screen.getByRole('button', { name: 'Show the library panel' }));
     expect(document.getElementById('studio-left-panel')).toBeVisible();
+  });
+
+  it('shows one side panel at a time, so the map keeps its width; Info opens the inspector', async () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, writable: true, value: 768 });
+    const t = setup(STU_ID, (api) =>
+      api.getBuilding.mockResolvedValue(ok(detail({ validation: EMPTY_VALIDATION }))),
+    );
+    await waitFor(() => expect(state()).toHaveTextContent('Saved draft (rev 1)'));
+    const left = () => document.getElementById('studio-left-panel');
+    const right = () => document.getElementById('studio-inspector');
+    await t.user.click(screen.getByRole('button', { name: 'Show the library panel' }));
+    expect(left()).toBeVisible();
+    await t.user.click(screen.getByRole('button', { name: 'Show the inspector' }));
+    expect(right()).toBeVisible();
+    expect(left()).not.toBeVisible();
+    await t.user.click(screen.getByRole('button', { name: 'Show the library panel' }));
+    expect(right()).not.toBeVisible();
+    // A tool that edits in the inspector brings it back (and scrolls to its section: jsdom has no scrolling).
+    const scroll = vi.fn();
+    Object.defineProperty(Element.prototype, 'scrollIntoView', { configurable: true, value: scroll });
+    await t.user.click(screen.getByTestId('studio-tool-info'));
+    expect(right()).toBeVisible();
+    expect(left()).not.toBeVisible();
+    await waitFor(() => expect(scroll).toHaveBeenCalled());
+    delete (Element.prototype as { scrollIntoView?: unknown }).scrollIntoView;
   });
 });
 
@@ -351,6 +503,23 @@ describe('Studio workspace (phone)', () => {
     const lat1 = Number((editing().previewModel?.model as unknown as { anchor: number[] }).anchor[1]);
     expect(lat1).toBeGreaterThan(lat0);
     await t.user.click(within(dock).getByTestId('studio-open-properties'));
+    expect(await screen.findByRole('region', { name: 'Properties' })).toBeInTheDocument();
+  });
+
+  it('choosing the access point on the map makes room: the properties sheet steps aside, then returns', async () => {
+    mockMobile(true);
+    const t = setup(STU_ID, (api) =>
+      api.getBuilding.mockResolvedValue(ok(detail({ validation: EMPTY_VALIDATION }))),
+    );
+    await waitFor(() => expect(state()).toHaveTextContent('Saved draft (rev 1)'));
+    await t.user.click(screen.getByTestId('studio-open-properties'));
+    const sheet = await screen.findByRole('region', { name: 'Properties' });
+    await t.user.click(within(sheet).getByTestId('studio-access-pick-start'));
+    expect(screen.getByTestId('studio-access-pick')).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByRole('region', { name: 'Properties' })).toBeNull());
+    // Taps reach the picker (pointer input, no handles on a phone).
+    expect(editing().input).toBe('pointer');
+    await t.user.click(screen.getByTestId('studio-access-pick-cancel'));
     expect(await screen.findByRole('region', { name: 'Properties' })).toBeInTheDocument();
   });
 });

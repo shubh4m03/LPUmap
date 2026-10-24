@@ -73,3 +73,17 @@ export function formatDate(raw: string | undefined): string | null {
 export function isUnnamed(place: Place): boolean {
   return place.name === null;
 }
+
+/**
+ * Why an unnamed place shows no name, worded for where the record comes from. A new
+ * owner-placed studio building (`stu:`) is not an OpenStreetMap record, so it must not
+ * say that OpenStreetMap has no name for it.
+ */
+export function unnamedNote(place: Place): string {
+  const thing = place.kind === 'building' ? 'building' : 'place';
+  if (place.id.startsWith('stu:'))
+    return `The site owner added this ${thing} to the map without a name, because no name has been confirmed for it yet. None is shown — we never guess names. If you know it, report a correction below.`;
+  if (place.id.startsWith('osm:'))
+    return `OpenStreetMap has no name for this ${thing} yet, so none is shown — we never guess names. If you know it, report a correction below or add the name on OpenStreetMap.`;
+  return `No name is recorded for this ${thing} yet, so none is shown — we never guess names. If you know it, report a correction below.`;
+}

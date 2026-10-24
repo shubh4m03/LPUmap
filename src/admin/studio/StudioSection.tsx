@@ -9,8 +9,10 @@
  * inspector and large Save / Cancel buttons.
  *
  * Guards: the state badge is always visible; a `beforeunload` prompt is
- * active while changes are unsaved, and unsaved edits are also kept in this
- * browser for crash recovery (cleared on save, discard and logout).
+ * active while changes are unsaved, in-app navigation to another admin
+ * section asks first (keep editing / leave without saving), and unsaved edits
+ * are also kept in this browser for crash recovery (cleared on save, discard
+ * and logout; kept when the owner leaves without saving).
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useIsMobile, useReducedMotion, useTheme } from '../../accessibility/index.ts';
@@ -40,7 +42,10 @@ import type { TemplateDefinition } from '../../building-studio/schema.ts';
 import type { BoundaryReviewFile, DetectionsFile, LngLat } from '../../data/index.ts';
 import { describeAdminError } from '../api/errors.ts';
 import { useAdminApi } from '../context.ts';
+import { setAdminNavigationGuard } from '../router.ts';
+import { parseAdminRoute } from '../routes.ts';
 import type { AdminSectionProps } from '../sections/types.ts';
+import { AccessPickCard } from './AccessPick.tsx';
 import { AssetBrowser } from './AssetBrowser.tsx';
 import { StepControls } from './GeometryPanel.tsx';
 import { Inspector } from './Inspector.tsx';
@@ -188,6 +193,25 @@ export default function StudioSection({ route, navigate }: AdminSectionProps) {
     return () => window.removeEventListener('beforeunload', onBeforeUnload);
   }, [guard, actions]);
 
+  // --- in-app navigation to another admin section while changes are unsaved: ask first ---
+  const [leaveTarget, setLeaveTarget] = useState<string | null>(null);
+  useEffect(() => {
+    if (!guard) return;
+    return setAdminNavigationGuard((href) => {
+      if (!leavesStudio(href)) return false;
+      setLeaveTarget(href);
+      return true;
+    });
+  }, [guard]);
+  const leaveStudio = () => {
+    const href = leaveTarget;
+    if (!href) return;
+    // The edits stay in this browser's crash recovery (offered again when the building is reopened).
+    actions.persistRecovery();
+    setLeaveTarget(null);
+    navigate(href, { force: true });
+  };
+
   // --- keyboard: undo / redo / cancel placement ---
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -234,8 +258,38 @@ export default function StudioSection({ route, navigate }: AdminSectionProps) {
         reducedMotion={reducedMotion}
         onOpenRecord={(id) => navigate({ section: 'studio', id })}
       />
+      {leaveTarget ? (
+        <Dialog
+          open
+          onClose={() => setLeaveTarget(null)}
+          title="Leave the Building Studio?"
+          description="Your latest changes are not saved on the server."
+          footer={
+            <>
+              <Button variant="ghost" onClick={() => setLeaveTarget(null)} data-testid="studio-leave-keep">
+                Keep editing
+              </Button>
+              <Button variant="danger" onClick={leaveStudio} data-testid="studio-leave-confirm">
+                Leave without saving
+              </Button>
+            </>
+          }
+        >
+          <p className="text-sm">
+            If you leave, they are not saved. A copy stays in this browser only: the Studio offers to restore
+            it when you open this building again. Signing out deletes that copy.
+          </p>
+        </Dialog>
+      ) : null}
     </StudioContext>
   );
+}
+
+/** True when an admin href leads out of the Building Studio (any other section). */
+function leavesStudio(href: string): boolean {
+  const q = href.indexOf('?');
+  const route = parseAdminRoute(q < 0 ? href : href.slice(0, q), q < 0 ? '' : href.slice(q));
+  return route?.section !== 'studio';
 }
 
 interface WorkspaceProps {
@@ -251,6 +305,15 @@ function StudioWorkspace({ map, theme, reducedMotion, onOpenRecord }: WorkspaceP
   // Narrow desktop layouts (tablets) start with the side panels collapsed so the map keeps its room.
   const [leftOpen, setLeftOpen] = useState(() => viewportWidth() >= WIDE_PANELS_PX);
   const [rightOpen, setRightOpen] = useState(() => viewportWidth() >= INSPECTOR_PX);
+  // Below WIDE_PANELS_PX both panels together would leave (almost) no map: one at a time there.
+  const showLeft = (open: boolean) => {
+    setLeftOpen(open);
+    if (open && viewportWidth() < WIDE_PANELS_PX) setRightOpen(false);
+  };
+  const showRight = (open: boolean) => {
+    setRightOpen(open);
+    if (open && viewportWidth() < WIDE_PANELS_PX) setLeftOpen(false);
+  };
   const [leftTab, setLeftTab] = useState<LeftTab>('library');
   const [mobilePanel, setMobilePanel] = useState<'library' | 'buildings' | 'inspector' | 'steps' | null>(
     null,
@@ -299,7 +362,11 @@ function StudioWorkspace({ map, theme, reducedMotion, onOpenRecord }: WorkspaceP
     templateRef: s.editor.placement?.templateRef ?? null,
     pending: s.editor.pending !== null,
     loading: s.editor.pending?.op === 'load',
+    accessPick: s.accessPick !== null,
   }));
+
+  // Choosing the access point on a phone: the sheets make room for the map (and come back after).
+  const sheetPanel = v.accessPick ? null : mobilePanel;
 
   // Fly to a record when it is opened (not on every edit).
   useEffect(() => {
@@ -398,9 +465,10 @@ function StudioWorkspace({ map, theme, reducedMotion, onOpenRecord }: WorkspaceP
           <div className="absolute start-2 top-2 z-(--ds-z-controls)">
             <ToolRail
               onOpenLibrary={() => {
-                setLeftOpen(true);
+                showLeft(true);
                 setLeftTab('library');
               }}
+              onOpenInspector={() => showRight(true)}
             />
           </div>
         ) : null}
@@ -430,7 +498,8 @@ function StudioWorkspace({ map, theme, reducedMotion, onOpenRecord }: WorkspaceP
             </Button>
           </div>
         ) : null}
-        {picked && !v.placing ? (
+        {v.accessPick ? <AccessPickCard /> : null}
+        {picked && !v.placing && !v.accessPick ? (
           <PickedCard
             picked={picked}
             blocked={v.dirty}
@@ -532,7 +601,7 @@ function StudioWorkspace({ map, theme, reducedMotion, onOpenRecord }: WorkspaceP
           />
         ) : null}
         <BottomSheet
-          open={mobilePanel === 'library' || mobilePanel === 'buildings'}
+          open={sheetPanel === 'library' || sheetPanel === 'buildings'}
           onClose={() => setMobilePanel(null)}
           title={mobilePanel === 'library' ? 'Template library' : 'Your buildings'}
           defaultSnap="full"
@@ -542,7 +611,7 @@ function StudioWorkspace({ map, theme, reducedMotion, onOpenRecord }: WorkspaceP
           </div>
         </BottomSheet>
         <BottomSheet
-          open={mobilePanel === 'inspector'}
+          open={sheetPanel === 'inspector'}
           onClose={() => setMobilePanel(null)}
           title="Properties"
           defaultSnap="half"
@@ -568,7 +637,7 @@ function StudioWorkspace({ map, theme, reducedMotion, onOpenRecord }: WorkspaceP
           size="sm"
           aria-expanded={leftOpen}
           aria-controls="studio-left-panel"
-          onClick={() => setLeftOpen((o) => !o)}
+          onClick={() => showLeft(!leftOpen)}
         />
         <div className="min-w-0 shrink">
           <StateBadge />
@@ -582,7 +651,7 @@ function StudioWorkspace({ map, theme, reducedMotion, onOpenRecord }: WorkspaceP
           size="sm"
           aria-expanded={rightOpen}
           aria-controls="studio-inspector"
-          onClick={() => setRightOpen((o) => !o)}
+          onClick={() => showRight(!rightOpen)}
         />
       </div>
       <div className="flex min-h-0 flex-1">

@@ -6,7 +6,7 @@ import { APP_CONFIG } from '../../config/index.ts';
 import type { Place } from '../../data/index.ts';
 import { formatDistance, haversineM } from '../../distance/index.ts';
 import { Badge, Icon, iconForCategory } from '../ui/index.ts';
-import { isUnnamed, KIND_LABELS, ZONE_LABELS } from './place-format.ts';
+import { isUnnamed, KIND_LABELS, unnamedNote, ZONE_LABELS } from './place-format.ts';
 
 /** Name, category, kind, zone, honest notes for unnamed / unlocated places, distance. */
 export function PlaceSummary({ place }: { place: Place }) {
@@ -48,11 +48,7 @@ export function PlaceSummary({ place }: { place: Place }) {
       ) : null}
 
       {isUnnamed(place) ? (
-        <p className="rounded-md bg-surface-sunken p-3 text-sm text-muted">
-          OpenStreetMap has no name for this {place.kind === 'building' ? 'building' : 'place'} yet, so none
-          is shown — we never guess names. If you know it, report a correction below or add the name on
-          OpenStreetMap.
-        </p>
+        <p className="rounded-md bg-surface-sunken p-3 text-sm text-muted">{unnamedNote(place)}</p>
       ) : null}
 
       {place.location === null ? (

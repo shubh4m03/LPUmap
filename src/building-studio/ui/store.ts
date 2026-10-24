@@ -28,6 +28,7 @@ import {
 import { canRedo, canUndo, currentMarker, initHistory, nextLabels } from '../history.ts';
 import type { RecoveryEntry } from '../local-recovery.ts';
 import type { SnapProposal } from '../geometry.ts';
+import type { LngLat } from '../../data/schema.ts';
 import { placementDraft } from './fields.ts';
 import type {
   StudioBuildingDetail,
@@ -71,6 +72,12 @@ export interface StudioUiState {
   placementCategoryId: string;
   /** Inspector view. */
   inspectorTab: 'properties' | 'checks';
+  /**
+   * Choosing the access point on the map: map clicks are recorded here (they
+   * list the valid path nodes near the click; nothing is chosen until the owner
+   * picks one). null when not picking.
+   */
+  accessPick: { click: LngLat | null } | null;
 }
 
 export const initialStudioUiState: StudioUiState = {
@@ -88,6 +95,7 @@ export const initialStudioUiState: StudioUiState = {
   notice: null,
   placementCategoryId: 'building',
   inspectorTab: 'properties',
+  accessPick: null,
 };
 
 export interface StudioStore extends StoreApi<StudioUiState> {
@@ -109,6 +117,7 @@ export function createStudioStore(initial: Partial<StudioUiState> = {}): StudioS
       patch.proposal = null;
       patch.proposalNote = null;
       patch.recovery = null;
+      patch.accessPick = null;
       if (action.type === 'exit') {
         patch.detail = null;
         patch.baseline = null;

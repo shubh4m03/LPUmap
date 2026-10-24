@@ -36,8 +36,15 @@ export interface FacilityDirectory {
   isRoutable(place: Place): boolean;
 }
 
+/**
+ * A place is a route endpoint only when it is on the campus, has a map position
+ * and a validated path node. Off-campus places (the opt-in "Nearby, outside
+ * campus" layer and owner/community locations outside the boundary) are never
+ * LPU facilities or routing destinations (owner rule, map spec Phase 6), even
+ * when a path node is recorded for them.
+ */
 export function isRoutablePlace(place: Place): boolean {
-  return place.location !== null && place.graphNodeId !== undefined;
+  return place.campusZone === 'on-campus' && place.location !== null && place.graphNodeId !== undefined;
 }
 
 function pushTo<K, V>(map: Map<K, V[]>, key: K, value: V): void {

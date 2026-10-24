@@ -9,6 +9,7 @@ import {
   heightFloorsConflict,
   issuesAt,
   nearestWalkableNode,
+  walkableNodesNearFootprint,
   normalizeColour,
   outsidePublishRange,
   parseAliases,
@@ -184,5 +185,13 @@ describe('access point suggestion (S7: offered, never applied by itself)', () =>
     // Node 2 is nearer but not walkable; node 1 is 4 m from the north edge.
     expect(s).toEqual({ nodeId: 1, distanceM: 4 });
     expect(nearestWalkableNode(graph, fp.footprint.coordinates, 3)).toBeNull();
+    // Every candidate (for choosing on the map): walkable only, within the limit, nearest first.
+    const all = walkableNodesNearFootprint(graph, fp.footprint.coordinates, 25);
+    expect(all.map((c) => [c.nodeId, c.distanceM])).toEqual([
+      [1, 4],
+      [0, 20],
+    ]);
+    expect(all[0]!.position).toEqual(f.toLngLat([0, 14]));
+    expect(walkableNodesNearFootprint(graph, fp.footprint.coordinates, 10).map((c) => c.nodeId)).toEqual([1]);
   });
 });

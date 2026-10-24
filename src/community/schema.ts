@@ -9,11 +9,7 @@
  */
 import { z } from 'zod';
 import { publishedStudioBuildingSchema } from '../building-studio/schema.ts';
-import {
-  MAX_COMBINING_MARKS,
-  hasCombiningMarkFlood,
-  hasInvisibleNameChars,
-} from '../building-studio/text.ts';
+import { MARK_FLOOD_MESSAGE, hasCombiningMarkFlood, hasInvisibleNameChars } from '../building-studio/text.ts';
 import { CATEGORIES } from '../config/categories.ts';
 import { lngLatSchema, wheelchairSchema, verificationStatusSchema } from '../data/schema.ts';
 
@@ -71,9 +67,6 @@ function hasControlChars(s: string, allowed: readonly number[] = []): boolean {
   }
   return false;
 }
-
-/** Stacked combining marks ("Zalgo" text) paint over the surrounding UI; see hasCombiningMarkFlood. */
-const MARK_FLOOD_MESSAGE = `Too many combining marks (accents) on one character (at most ${MAX_COMBINING_MARKS})`;
 
 /** Single-line text: trimmed, no control characters, no stacked-mark floods. */
 const line = (max: number) =>

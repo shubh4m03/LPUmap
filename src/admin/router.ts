@@ -2,6 +2,10 @@
  * History-API routing inside /admin (no router dependency). `navigate`
  * pushes (or replaces) a URL and notifies subscribers; Back/Forward work via
  * `popstate`. Sections receive the parsed route and the navigate function.
+ *
+ * A section with unsaved work (the Building Studio) registers a navigation
+ * guard: in-app navigation then asks the guard first, and the guard may hold
+ * it (to ask the owner) and later continue with `{ force: true }`.
  */
 import { useCallback, useMemo, useSyncExternalStore } from 'react';
 import { adminHref, parseAdminRoute, type AdminRoute, type AdminSection } from './routes.ts';
@@ -13,7 +17,29 @@ export type AdminRouteTarget = {
   id?: string | null;
   query?: Readonly<Record<string, string>>;
 };
-export type AdminNavigate = (to: AdminRouteTarget | string, opts?: { replace?: boolean }) => void;
+export interface AdminNavigateOptions {
+  replace?: boolean;
+  /** Skip the navigation guard (the owner already confirmed leaving). */
+  force?: boolean;
+}
+export type AdminNavigate = (to: AdminRouteTarget | string, opts?: AdminNavigateOptions) => void;
+
+/**
+ * Called with the target href before an in-app navigation. Returns true to HOLD
+ * it (the guard then owns what happens next, e.g. a confirmation dialog that
+ * calls `navigateAdmin(href, { force: true })`); false lets it proceed.
+ */
+export type AdminNavigationGuard = (href: string) => boolean;
+
+let navigationGuard: AdminNavigationGuard | null = null;
+
+/** Installs the guard (one at a time); the returned function removes it if it is still installed. */
+export function setAdminNavigationGuard(guard: AdminNavigationGuard): () => void {
+  navigationGuard = guard;
+  return () => {
+    if (navigationGuard === guard) navigationGuard = null;
+  };
+}
 
 function subscribe(listener: () => void): () => void {
   window.addEventListener('popstate', listener);
@@ -27,10 +53,11 @@ function subscribe(listener: () => void): () => void {
 const locationKey = () => `${window.location.pathname}${window.location.search}`;
 
 /** Pushes or replaces the URL (same-origin /admin paths only) and notifies the router. */
-export function navigateAdmin(to: AdminRouteTarget | string, opts: { replace?: boolean } = {}): void {
+export function navigateAdmin(to: AdminRouteTarget | string, opts: AdminNavigateOptions = {}): void {
   const href = typeof to === 'string' ? to : adminHref(to);
   if (!href.startsWith('/admin')) throw new Error(`Not an admin path: ${href}`);
   if (href === locationKey()) return;
+  if (!opts.force && navigationGuard?.(href)) return;
   try {
     if (opts.replace) window.history.replaceState(null, '', href);
     else window.history.pushState(null, '', href);

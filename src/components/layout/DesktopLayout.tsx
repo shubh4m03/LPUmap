@@ -8,7 +8,13 @@ import { PanelBackButton, PanelBody } from './PanelContent.tsx';
 import { usePanelLabel, usePanelTitle } from './panel-titles.ts';
 import { MoreMenu } from './MoreMenu.tsx';
 import { PickingBanner } from './PickingBanner.tsx';
-import { ATTRIBUTION_CLEARANCE_PX, useToastOffset } from './toast-offset.ts';
+import { useViewportHeight } from './map-padding.ts';
+import {
+  ATTRIBUTION_CLEARANCE_PX,
+  toastOffsetPx,
+  useAttributionTop,
+  useToastOffset,
+} from './toast-offset.ts';
 import { usePanelFocusRescue } from './usePanelFocusRescue.ts';
 
 /** ≥ 768px: full-bleed map, floating search, left side panel, right control stack. */
@@ -21,12 +27,15 @@ export function DesktopLayout({ map }: { map: ReactNode }) {
   const label = usePanelLabel(activePanel);
   const panelRef = useRef<HTMLDivElement>(null);
   usePanelFocusRescue(panelRef);
-  // Toasts sit bottom-right, directly above the map attribution.
-  useToastOffset(ATTRIBUTION_CLEARANCE_PX);
+  // Toasts sit bottom-right, directly above the map attribution (measured: it can wrap).
+  const viewportH = useViewportHeight();
+  const mainRef = useRef<HTMLElement>(null);
+  const attributionTop = useAttributionTop(mainRef, viewportH);
+  useToastOffset(toastOffsetPx(ATTRIBUTION_CLEARANCE_PX, viewportH, attributionTop));
 
   return (
     <div className="relative h-full w-full overflow-hidden">
-      <main id="main" aria-label="Campus map" className="absolute inset-0">
+      <main ref={mainRef} id="main" aria-label="Campus map" className="absolute inset-0">
         {map}
       </main>
       <div className="pointer-events-none absolute top-4 left-4 z-(--ds-z-panels) flex flex-col gap-2">

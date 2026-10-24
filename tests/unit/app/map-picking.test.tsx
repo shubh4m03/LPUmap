@@ -10,10 +10,13 @@ import { useRouteSolver } from '../../../src/app/hooks/useRouteSolver.ts';
 import {
   nearbyPointPrompt,
   notConnectedPickMessage,
+  outsideCampusPickMessage,
   PICKED_POINT_LABEL,
   pickPlaceOnMap,
   pickPointOnMap,
 } from '../../../src/app/map-picking.ts';
+import { buildServices } from '../../../src/app/data/services.ts';
+import { OUTSIDE_CAMPUS_REASON, placeEndpoint } from '../../../src/app/place-actions.ts';
 import { useAppStore } from '../../../src/app/store/index.ts';
 import { pickFallbackRoles } from '../../../src/components/directions/directions-model.ts';
 import { DirectionsPanel } from '../../../src/components/directions/DirectionsPanel.tsx';
@@ -23,7 +26,7 @@ import { PlaceDetails } from '../../../src/components/place/PlaceDetails.tsx';
 import { BottomSheet, type SheetSnap } from '../../../src/components/ui/index.ts';
 import type { RouteResult } from '../../../src/routing/index.ts';
 import { renderWithAtlas, resetAppStore } from './render-helpers.tsx';
-import { BANK, NAMED } from './synthetic-campus.ts';
+import { BANK, NAMED, withOffCampusNamed } from './synthetic-campus.ts';
 
 describe('choose on map: places not connected to the path network', () => {
   beforeEach(resetAppStore);
@@ -76,6 +79,39 @@ describe('choose on map: places not connected to the path network', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Choose a nearby point on the map' }));
     expect(useAppStore.getState()).toMatchObject({ activePanel: 'directions', pickingOnMap: 'destination' });
     expect(await screen.findByText(nearbyPointPrompt('Synthetic Bank'))).toBeInTheDocument();
+  });
+
+  it('an off-campus place is never an endpoint, even with a path node; picking stays on', () => {
+    // Owner rule (map spec Phase 6): off-campus places are never routing destinations or origins.
+    const outside = { ...NAMED, campusZone: 'off-campus-nearby' as const };
+    expect(outside.graphNodeId).toBe(0);
+    expect(placeEndpoint(outside)).toBeNull();
+    for (const role of ['origin', 'destination'] as const) {
+      act(() => useAppStore.getState().setPickingOnMap(role));
+      expect(pickPlaceOnMap(outside)).toEqual({
+        kind: 'outside-campus',
+        message: outsideCampusPickMessage('Synthetic Food Point', role),
+      });
+      expect(useAppStore.getState()).toMatchObject({ pickingOnMap: role, origin: null, destination: null });
+    }
+    expect(outsideCampusPickMessage('Synthetic Food Point', 'destination')).toBe(
+      "“Synthetic Food Point” is outside the campus, so it can't be the destination. Directions cover campus paths only.",
+    );
+    // An arbitrary map point can still be picked.
+    pickPointOnMap([75.7012, 31.2501]);
+    expect(useAppStore.getState()).toMatchObject({
+      pickingOnMap: null,
+      destination: { kind: 'point', label: PICKED_POINT_LABEL },
+    });
+  });
+
+  it('the place panel of an off-campus place: directions disabled with the reason, no nearby point', () => {
+    renderWithAtlas(<PlaceDetails placeId={NAMED.id} />, buildServices(withOffCampusNamed()));
+    expect(screen.getByRole('button', { name: 'Directions to here' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'From here' })).toBeDisabled();
+    expect(screen.getByText(`Directions unavailable: ${OUTSIDE_CAMPUS_REASON}`)).toBeVisible();
+    expect(OUTSIDE_CAMPUS_REASON).toBe('Outside campus — directions cover campus paths only.');
+    expect(screen.queryByRole('button', { name: 'Choose a nearby point on the map' })).toBeNull();
   });
 
   it('no nearby-point offer without a map (list mode) or for a connected place', () => {

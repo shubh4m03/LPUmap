@@ -36,7 +36,12 @@ export function StateBadge({ compact = false }: { compact?: boolean }) {
       className="flex min-w-0 flex-wrap items-center gap-1.5"
     >
       <span data-testid="studio-state-label" className="inline-flex min-w-0">
-        <Badge tone={placement ? 'accent' : TONE[kind]} icon={kind === 'unsaved' ? 'warning' : undefined}>
+        <Badge
+          tone={placement ? 'accent' : TONE[kind]}
+          icon={kind === 'unsaved' ? 'warning' : undefined}
+          // Compact (phones): the label wraps instead of being cut off, so it is always readable.
+          className={compact ? 'rounded-lg leading-4 [&>span]:whitespace-normal' : undefined}
+        >
           {text}
         </Badge>
       </span>

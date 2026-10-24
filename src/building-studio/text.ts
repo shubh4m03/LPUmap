@@ -249,9 +249,18 @@ export const text = (max: number) =>
 const INVISIBLE_NAME_MESSAGE =
   'Invisible characters (zero-width spaces, joiners outside a non-Latin word, line or paragraph separators) are not allowed in names';
 
-/** A name or alias: a single line that additionally rejects invisible characters (hasInvisibleNameChars). */
+/** Stacked combining marks ("Zalgo" text) paint over the surrounding UI; see hasCombiningMarkFlood. */
+export const MARK_FLOOD_MESSAGE = `Too many combining marks (accents) on one character (at most ${MAX_COMBINING_MARKS})`;
+
+/**
+ * A name or alias: a single line that additionally rejects invisible characters
+ * (hasInvisibleNameChars) and stacked combining-mark floods (more than
+ * MAX_COMBINING_MARKS in a row, the same rule as public suggestions).
+ */
 export const nameLine = (max: number) =>
-  line(max).refine((s) => !hasInvisibleNameChars(s), { message: INVISIBLE_NAME_MESSAGE });
+  line(max)
+    .refine((s) => !hasInvisibleNameChars(s), { message: INVISIBLE_NAME_MESSAGE })
+    .refine((s) => !hasCombiningMarkFlood(s), { message: MARK_FLOOD_MESSAGE });
 
 /**
  * A field that documents provenance (or is free text that can cite a source,

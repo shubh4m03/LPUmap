@@ -15,6 +15,8 @@ export interface PointPreviewInput {
   candidates?: readonly AccessCandidate[];
   /** The chosen access node (drawn as a line from the point). */
   selectedNodeId?: number | null;
+  /** Access-point picking: where the owner clicked (a guide mark; candidates near it are listed). */
+  pickClick?: LngLat | null;
 }
 
 const pointFeature = (
@@ -47,6 +49,7 @@ export function pointPreview(input: PointPreviewInput): EditPreviewCollection {
       });
     }
   }
+  if (input.pickClick) features.push(pointFeature(input.pickClick, 'guide', 'pick-click'));
   if (input.point) features.push(pointFeature(input.point, 'point', 'edited'));
   return { type: 'FeatureCollection', features };
 }

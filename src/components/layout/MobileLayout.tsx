@@ -10,7 +10,7 @@ import { MoreMenu } from './MoreMenu.tsx';
 import { PanelBackButton, PanelBody } from './PanelContent.tsx';
 import { usePanelLabel, usePanelTitle } from './panel-titles.ts';
 import { QuickActions } from './QuickActions.tsx';
-import { useMobileToastOffset } from './toast-offset.ts';
+import { useAttributionTop, useMobileToastOffset } from './toast-offset.ts';
 import { usePanelFocusRescue } from './usePanelFocusRescue.ts';
 
 /** < 768px: map with a top search pill, compact controls, quick actions bar and a bottom sheet. */
@@ -28,12 +28,16 @@ export function MobileLayout({ map }: { map: ReactNode }) {
   // (`.maplibregl-ctrl-bottom-right { bottom: 0 }`) would otherwise always win.
   const viewportH = useViewportHeight();
   const coverPx = useSheetCoverPx(viewportH);
-  useMobileToastOffset(viewportH);
+  // Toasts sit above the attribution's measured top edge (an imagery credit can wrap over lines).
+  const mainRef = useRef<HTMLElement>(null);
+  const attributionTop = useAttributionTop(mainRef, `${coverPx}:${viewportH}`);
+  useMobileToastOffset(viewportH, attributionTop);
   const mainStyle = { '--atlas-attrib-offset': `${coverPx}px` } as CSSProperties;
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden">
       <main
+        ref={mainRef}
         id="main"
         aria-label="Campus map"
         style={mainStyle}

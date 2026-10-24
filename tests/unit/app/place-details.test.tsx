@@ -5,7 +5,7 @@ import { useAppStore } from '../../../src/app/store/index.ts';
 import { PlaceDetails } from '../../../src/components/place/PlaceDetails.tsx';
 import { buildServices } from '../../../src/app/data/services.ts';
 import { renderWithAtlas, resetAppStore } from './render-helpers.tsx';
-import { withOffCampusNamed } from './synthetic-campus.ts';
+import { syntheticCampus, withOffCampusNamed } from './synthetic-campus.ts';
 
 describe('PlaceDetails', () => {
   beforeEach(resetAppStore);
@@ -53,6 +53,34 @@ describe('PlaceDetails', () => {
     expect(screen.getByText(/OpenStreetMap has no name for this building/)).toBeInTheDocument();
     expect(screen.getByText(/Estimated from 4 floors \(×3.2 m\)/)).toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Related places' })).toHaveTextContent('Contains');
+  });
+
+  it('unnamed owner-placed studio building: owner wording, never "OpenStreetMap has no name"', () => {
+    const data = syntheticCampus();
+    const stu = {
+      ...data.places.find((p) => p.id === 'osm:way/2')!,
+      id: 'stu:abcdefghijklmnopqrstuvwx',
+      displayName: 'Unnamed building',
+      buildingId: 'stu:abcdefghijklmnopqrstuvwx',
+      heightSource: 'studio-model' as const,
+      provenance: {
+        sourceId: 'owner',
+        sourceRef: 'stu:abcdefghijklmnopqrstuvwx',
+        verificationStatus: 'unverified' as const,
+        notes: 'Illustrative model placed by the site owner — not verified',
+      },
+    };
+    renderWithAtlas(
+      <PlaceDetails placeId={stu.id} />,
+      buildServices({ ...data, places: [...data.places, stu] }),
+    );
+    expect(screen.getByRole('heading', { name: 'Unnamed building' })).toBeInTheDocument();
+    expect(screen.queryByText(/OpenStreetMap has no name/)).toBeNull();
+    expect(
+      screen.getByText(
+        'The site owner added this building to the map without a name, because no name has been confirmed for it yet. None is shown — we never guess names. If you know it, report a correction below.',
+      ),
+    ).toBeInTheDocument();
   });
 
   it('organization without a location: no-position note, routing disabled with a reason, no zoom', () => {

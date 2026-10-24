@@ -10,6 +10,7 @@ export type { DomainContext } from './context.ts';
 export { PUBLIC_ACTOR } from './context.ts';
 export {
   createSuggestion,
+  decoySuggestion,
   listSuggestions,
   getSuggestion,
   editSuggestion,

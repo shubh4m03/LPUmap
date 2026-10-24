@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { nearbyPointPrompt } from '../../app/map-picking.ts';
-import { placeEndpoint, routeBlockReason, shareUrlFor } from '../../app/place-actions.ts';
+import { isOffCampus, placeEndpoint, routeBlockReason, shareUrlFor } from '../../app/place-actions.ts';
 import { useAppStore } from '../../app/store/index.ts';
 import type { Place } from '../../data/index.ts';
 import { useFavorites } from '../../favorites/index.ts';
@@ -85,9 +85,10 @@ export function PlaceActions({ place, mapAvailable }: { place: Place; mapAvailab
           Directions unavailable: {blocked}
         </p>
       ) : null}
-      {blocked && mapAvailable && place.location !== null ? (
-        // Point fallback for a place with a position but no path connection: the user picks a
+      {blocked && mapAvailable && place.location !== null && !isOffCampus(place) ? (
+        // Point fallback for a campus place with a position but no path connection: the user picks a
         // nearby point on a path; the route ends there and is never presented as the place's own.
+        // Never offered off campus (owner rule, map spec Phase 6): directions cover campus paths only.
         <Button
           size="sm"
           variant="secondary"

@@ -484,6 +484,18 @@ _Amended 2026-10-24 (what the implementation matches, and the fields it covers):
   listed in S6.
 - Names and aliases use `nameLine` (§3.5).
 
+_Amended 2026-10-24 (combining-mark flood, the 5-mark rule):_ `nameLine` also rejects a run of more than
+`MAX_COMBINING_MARKS` = **5** combining marks (`\p{M}`) in a row (`hasCombiningMarkFlood`). Format characters
+(`\p{Cf}`: ZWJ, ZWNJ, LRM, …) between the marks do not end the run. The message is `MARK_FLOOD_MESSAGE`: "Too
+many combining marks (accents) on one character (at most 5)". This covers the identity `name`, each alias, and
+template and variant names. These are owner-only fields; the rule is applied for consistency with public
+suggestions, owner locations and overrides, which already follow it (COMMUNITY_MODULE_CONTRACTS.md, "Text
+rules"). Real text stays below the limit (Indic conjuncts, pointed Hebrew and Vietnamese use 3–4 at most). A
+longer run ("Zalgo" text) stacks glyphs over the surrounding UI. Read shapes (`publicStudioIdentitySchema`, the
+publication) are not re-checked, so a publication written before this rule still loads. A stored draft or
+version record whose name or alias breaks the rule would no longer parse in the admin (`readDraft` in
+`server/domain/studio/records.ts` returns null), as with any tightening of the draft schema.
+
 ---
 
 ## 6. Validation (S6)

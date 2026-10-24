@@ -6,10 +6,14 @@
  * picked as an endpoint; instead of swallowing that click silently, the user is
  * told why and picking stays on, so the next click on a nearby path sets a plain
  * map point. The point is labelled as a picked point, never as the place.
+ *
+ * An off-campus place (owner rule, map spec Phase 6) is never a route endpoint
+ * and gets no "nearby point" suggestion: directions cover campus paths only.
+ * Picking stays on, so the user can still pick an arbitrary map point.
  */
 import type { LngLat, Place } from '../data/index.ts';
 import type { RouteEndpoint } from '../routing/index.ts';
-import { placeEndpoint } from './place-actions.ts';
+import { isOffCampus, placeEndpoint } from './place-actions.ts';
 import { useAppStore, type PickTarget } from './store/index.ts';
 
 export const PICKED_POINT_LABEL = 'Point picked on map';
@@ -19,6 +23,11 @@ const roleWord = (role: PickTarget) => (role === 'origin' ? 'start' : 'destinati
 /** Toast shown when a picked place is not connected to the mapped paths. */
 export function notConnectedPickMessage(name: string, role: PickTarget): string {
   return `“${name}” is not connected to the mapped paths, so it can't be the ${roleWord(role)}. Choose a point on a nearby path instead.`;
+}
+
+/** Toast shown when a picked place is outside the campus. No nearby-point suggestion. */
+export function outsideCampusPickMessage(name: string, role: PickTarget): string {
+  return `“${name}” is outside the campus, so it can't be the ${roleWord(role)}. Directions cover campus paths only.`;
 }
 
 /** Toast shown when the user asks for a nearby point instead of an unconnected place. */
@@ -33,6 +42,8 @@ export type PickOutcome =
   | { kind: 'set'; endpoint: RouteEndpoint }
   /** A place without a path connection was clicked; picking stays on. */
   | { kind: 'not-connected'; message: string }
+  /** An off-campus place was clicked; it is never an endpoint. Picking stays on. */
+  | { kind: 'outside-campus'; message: string }
   /** Nothing usable under the click (the ground click is handled separately). */
   | { kind: 'ignored' };
 
@@ -52,6 +63,8 @@ export function pickPlaceOnMap(place: Place | undefined): PickOutcome {
   if (!endpoint) {
     // No verified position at all: nothing to say beyond "pick a point", which the banner says.
     if (place.location === null) return { kind: 'ignored' };
+    if (isOffCampus(place))
+      return { kind: 'outside-campus', message: outsideCampusPickMessage(place.displayName, role) };
     return { kind: 'not-connected', message: notConnectedPickMessage(place.displayName, role) };
   }
   setEndpoint(endpoint);

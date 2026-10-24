@@ -40,6 +40,12 @@ export interface DomainPort {
     input: ContributionInput,
     ctx: DomainCtx,
   ): Promise<{ reference: string; possibleDuplicates: DuplicateCandidate[] }>;
+  /** Honeypot decoy: createSuggestion's checks, lookup and id format, but nothing is stored. */
+  decoySuggestion(
+    db: SqlDatabase,
+    input: ContributionInput,
+    ctx: DomainCtx,
+  ): Promise<{ reference: string; possibleDuplicates: DuplicateCandidate[] }>;
   listSuggestions(db: SqlDatabase, filter: Filter): Promise<unknown>;
   getSuggestion(db: SqlDatabase, id: string, ctx: DomainCtx): Promise<unknown>;
   editSuggestion(

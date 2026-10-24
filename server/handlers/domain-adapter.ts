@@ -12,6 +12,7 @@ const num = (v: unknown): number | undefined => (typeof v === 'number' && Number
 
 export const domainAdapter: DomainPort = {
   createSuggestion: domain.createSuggestion,
+  decoySuggestion: domain.decoySuggestion,
   listSuggestions: (db, f: Filter) =>
     domain.listSuggestions(db, {
       status: str(f.status),

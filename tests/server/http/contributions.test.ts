@@ -4,13 +4,19 @@ import { enforceRateLimits } from '../../../server/auth/rate-limit.ts';
 import { resetSaltMemo, d1SaltRepo } from '../../../server/auth/salt.ts';
 import type { Env } from '../../../server/env.ts';
 import { handleAdmin } from '../../../server/handlers/admin/index.ts';
-import { PENDING_MESSAGE, handleContribution } from '../../../server/handlers/contributions.ts';
+import {
+  DECOY_TIMING,
+  PENDING_MESSAGE,
+  decoyWaitMs,
+  handleContribution,
+  resetDecoyTiming,
+} from '../../../server/handlers/contributions.ts';
 import { handlePublication } from '../../../server/handlers/publication.ts';
 import { d1RateLimits } from '../../../server/handlers/repos.ts';
 import { contributionResponseSchema, publicationSchema } from '../../../src/community/schema.ts';
 import { accessEnvVars, claims, jwksFetch, makeKey, sign } from '../auth/jwt-fixtures.ts';
 import type { TestKey } from '../auth/jwt-fixtures.ts';
-import { RATE_KEY, errorCode, fileAssets, makeDeps, req, validSuggestion } from './fixtures.ts';
+import { RATE_KEY, countingDb, errorCode, fileAssets, makeDeps, req, validSuggestion } from './fixtures.ts';
 import { createTestDb, resetTables } from './harness.ts';
 import type { TestDb } from './harness.ts';
 
@@ -28,6 +34,7 @@ afterAll(async () => t.dispose());
 beforeEach(async () => {
   await resetTables(t.db);
   resetSaltMemo();
+  resetDecoyTiming();
   resetJwksCache();
   clock = new Date('2026-10-24T06:00:00.000Z');
 });
@@ -97,10 +104,10 @@ describe('POST /api/contributions/locations', () => {
     expect(pub.locations).toEqual([]);
   });
 
-  it('honeypot filled → 202 with an indistinguishable decoy; nothing stored, no rate-limit row', async () => {
+  it('honeypot filled → a decoy indistinguishable from a real 201; nothing stored, no rate-limit row', async () => {
     const audit = await t.count('audit_events');
     const res = await submit(validSuggestion({ website: 'http://spam.example' }));
-    expect(res.status).toBe(202);
+    expect(res.status).toBe(201);
     const body = contributionResponseSchema.parse(await res.json());
     expect(Object.keys(body).sort()).toEqual(['message', 'possibleDuplicates', 'reference', 'status']);
     expect(body).toMatchObject({ status: 'pending', message: PENDING_MESSAGE, possibleDuplicates: [] });
@@ -108,6 +115,86 @@ describe('POST /api/contributions/locations', () => {
     expect(await t.count('suggestions')).toBe(0);
     expect(await t.count('rate_limits')).toBe(0);
     expect(await t.count('audit_events')).toBe(audit);
+
+    // Same status, headers and body shape as a real acceptance from another client.
+    const real = await submit(validSuggestion(), { ip: '192.0.2.99' });
+    expect(real.status).toBe(res.status);
+    const headers = (r: Response) => [...r.headers].filter(([k]) => k.toLowerCase() !== 'date');
+    expect(headers(res)).toEqual(headers(real));
+    const realBody = contributionResponseSchema.parse(await real.json());
+    expect(Object.keys(realBody).sort()).toEqual(Object.keys(body).sort());
+    expect(realBody.reference).toMatch(/^sug_[a-z2-7]{26}$/);
+    expect(realBody.reference).not.toBe(body.reference);
+    expect(await t.count('suggestions')).toBe(1);
+  });
+
+  it('the decoy does the same read work as a real submission (duplicates) and prepares no write', async () => {
+    // A real campus place, so the duplicate lookup has something to find.
+    const dup = validSuggestion({
+      name: 'School of Design',
+      categoryId: 'academic',
+      location: [75.7070146, 31.2566354],
+    });
+    const counting = countingDb(t.db);
+    const decoyDeps = makeDeps({ env: { ...env, DB: counting.db }, now: () => clock });
+    const decoy = await handleContribution(
+      req('POST', '/api/contributions/locations', { body: { ...dup, website: 'x' }, ip: '192.0.2.50' }),
+      decoyDeps,
+    );
+    expect(decoy.status).toBe(201);
+    const decoyBody = contributionResponseSchema.parse(await decoy.json());
+    expect(counting.prepared.length).toBeGreaterThan(0);
+    for (const sql of counting.prepared) expect(sql).not.toMatch(/\b(INSERT|UPDATE|DELETE|REPLACE)\b/i);
+
+    const real = contributionResponseSchema.parse(await (await submit(dup, { ip: '192.0.2.51' })).json());
+    expect(real.possibleDuplicates.length).toBeGreaterThan(0);
+    expect(decoyBody.possibleDuplicates).toEqual(real.possibleDuplicates);
+    expect(await t.count('suggestions')).toBe(1);
+  });
+
+  it('decoy wait: tracks real acceptances (memory only), with jitter, never beyond the cap', () => {
+    resetDecoyTiming();
+    const { initialMs, jitter, maxMs } = DECOY_TIMING;
+    expect(decoyWaitMs(0, 0.5)).toBe(initialMs);
+    expect(decoyWaitMs(0, 0)).toBe(Math.round(initialMs * (1 - jitter)));
+    expect(decoyWaitMs(10, 0.5)).toBe(initialMs - 10);
+    expect(decoyWaitMs(10_000, 0.5)).toBe(0);
+    expect(decoyWaitMs(0, 0.999_999)).toBeLessThanOrEqual(maxMs);
+  });
+
+  it('a decoy takes about as long as a real acceptance (median within ±40 %)', async () => {
+    resetDecoyTiming();
+    const time = async (body: unknown, ip: string) => {
+      const s = performance.now();
+      const res = await submit(body, { ip });
+      expect(res.status).toBe(201);
+      return performance.now() - s;
+    };
+    const real: number[] = [];
+    const decoy: number[] = [];
+    for (let i = 0; i < 24; i++) {
+      // A fresh client per real request so the per-client limit is never reached.
+      real.push(await time(validSuggestion({ name: `Timing spot ${i}` }), `198.51.100.${i + 1}`));
+      decoy.push(await time(validSuggestion({ name: `Timing spot ${i}`, website: 'x' }), '192.0.2.77'));
+    }
+    const median = (a: number[]) => [...a].sort((x, y) => x - y)[Math.floor(a.length / 2)]!;
+    // The first half warms the estimate; compare the second half.
+    const ratio = median(decoy.slice(12)) / median(real.slice(12));
+    // The property that matters is "a decoy is not visibly faster than a real write"
+    // (the pre-fix decoy ran at ~0.2×). The upper side is bounded by DECOY_TIMING.maxMs,
+    // unit-tested above; a wall-clock upper bound made this test fail on loaded CI hosts.
+    expect(ratio).toBeGreaterThan(0.6);
+    expect(await t.count('suggestions')).toBe(24);
+  });
+
+  it('with the honeypot filled, invalid or outside-area input gets the same error as without it', async () => {
+    for (const over of [{ name: 'x' }, { categoryId: 'secret-lab' }, { location: [77.209, 28.6139] }]) {
+      const plain = await submit(validSuggestion(over));
+      const trapped = await submit(validSuggestion({ ...over, website: 'http://spam.example' }));
+      expect(trapped.status).toBe(plain.status);
+      expect(await trapped.json()).toEqual(await plain.json());
+    }
+    expect(await t.count('suggestions')).toBe(0);
   });
 
   it('an empty honeypot is treated as a normal submission', async () => {

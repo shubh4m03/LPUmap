@@ -52,7 +52,14 @@ function useToolbarState() {
   });
 }
 
-export function ToolRail({ onOpenLibrary }: { onOpenLibrary(): void }) {
+export function ToolRail({
+  onOpenLibrary,
+  onOpenInspector,
+}: {
+  onOpenLibrary(): void;
+  /** Appearance and Info edit in the inspector: it is shown if it was collapsed. */
+  onOpenInspector?(): void;
+}) {
   const { store } = useStudioServices();
   const v = useToolbarState();
   const archived = v.status === 'archived';
@@ -88,6 +95,7 @@ export function ToolRail({ onOpenLibrary }: { onOpenLibrary(): void }) {
             data-testid={`studio-tool-${t.tool}`}
             onClick={() => {
               if (t.tool === 'add') onOpenLibrary();
+              if (t.tool === 'appearance' || t.tool === 'info') onOpenInspector?.();
               selectTool(store, t.tool);
             }}
             className={cx(

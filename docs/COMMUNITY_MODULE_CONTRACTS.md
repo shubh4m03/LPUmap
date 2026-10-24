@@ -57,11 +57,49 @@ makes double publication impossible.
 
 Public (no auth; JSON only; same-origin; `Cache-Control` as noted):
 
-| Method & path                       | Behaviour                                                                                                                                                                                                                                                                                                                                                                                                       |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `POST /api/contributions/locations` | Body ≤ 8 KB, `contributionInputSchema`. Honeypot filled → respond 202 with a decoy reference and store nothing. Location must be inside `APP_CONFIG.contributions.area`. Rate limit 5 / 10 min and 20 / day per hashed IP + global 500 / day. Status always `pending`, server-assigned. Response 201 `contributionResponseSchema` (reference = suggestion id, `possibleDuplicates`). `Cache-Control: no-store`. |
-| `GET /api/locations`                | `publicationSchema` — active locations + overrides only; no notes, actors, suggestions. `ETag: W/"pub-v<schemaVersion>-<publicationVersion>"` (amended 2026-10-24; see BUILDING_STUDIO_DESIGN.md §10), honours `If-None-Match` (304, answered before the body is built), `Cache-Control: no-cache` (always revalidate → no stale publication after edits).                                                      |
-| `GET /api/health`                   | `{ ok, db: 'ok'                                                                                                                                                                                                                                                                                                                                                                                                 | 'unavailable', auth: 'access' | 'password' | 'not-configured' }` — no secrets. |
+| Method & path                       | Behaviour                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `POST /api/contributions/locations` | Body ≤ 8 KB, `contributionInputSchema`. Honeypot filled → a decoy that looks exactly like an acceptance and stores nothing (see "Honeypot decoy" below). Location must be inside `APP_CONFIG.contributions.area`. Rate limit 5 / 10 min and 20 / day per hashed IP + global 500 / day. Status always `pending`, server-assigned. Response 201 `contributionResponseSchema` (reference = suggestion id, `possibleDuplicates`). `Cache-Control: no-store`. |
+| `GET /api/locations`                | `publicationSchema` — active locations + overrides only; no notes, actors, suggestions. `ETag: W/"pub-v<schemaVersion>-<publicationVersion>"` (amended 2026-10-24; see BUILDING_STUDIO_DESIGN.md §10), honours `If-None-Match` (304, answered before the body is built), `Cache-Control: no-cache` (always revalidate → no stale publication after edits).                                                                                               |
+| `GET /api/health`                   | `{ ok, db: 'ok'                                                                                                                                                                                                                                                                                                                                                                                                                                          | 'unavailable', auth: 'access' | 'password' | 'not-configured' }` — no secrets. |
+
+### Honeypot decoy (amended 2026-10-24)
+
+A body whose hidden `website` field is non-empty after trimming is a bot submission. The client
+must not be able to tell it apart from a real acceptance (`server/handlers/contributions.ts`,
+`decoySuggestion` in `server/domain/suggestions.ts`):
+
+- **Same checks first.** The body is validated with `contributionInputSchema` and the area check
+  exactly as for a real submission, so invalid or outside-area input gets the identical 400/422.
+- **Same answer.** Status **201** (it was 202 before this amendment), the same headers
+  (`Cache-Control: no-store`, JSON content type) and the same `contributionResponseSchema` body:
+  `status: 'pending'`, the same message, a fresh `sug_` reference from the same generator (26
+  base32 characters) that no record will ever have, and `possibleDuplicates` computed by the same
+  read-only lookup against the base data and active locations.
+- **Similar timing.** A real acceptance also writes, so the decoy then waits until about as long
+  as recent real acceptances took in that isolate (a moving average, ±15 % jitter, capped at 2 s).
+  The estimate lives in memory only; it holds no request data and is never stored, logged or sent.
+- **Nothing is stored.** No suggestion row, no audit event, no rate-limit row (the decoy never
+  consumes or checks the rate limits). Only the ordinary request log line is written (status 201).
+
+Residual difference, accepted on purpose: because the decoy counts nothing, a bot that sends more
+than five decoys from one address in ten minutes never sees the 429 a real client would.
+
+### Text rules (amended 2026-10-24)
+
+Every text field in `src/community/schema.ts` is trimmed and rejects control characters, bidi
+embedding/override/isolate controls and unpaired surrogates. Names also reject invisible characters
+(`hasInvisibleNameChars`, see BUILDING_STUDIO_DESIGN.md §3.5).
+
+**Combining-mark flood (5-mark rule).** A field is rejected when more than
+`MAX_COMBINING_MARKS` = **5** combining marks (`\p{M}`) follow one another. Format characters
+(`\p{Cf}`: ZWJ, ZWNJ, LRM, …) between the marks do not end the run, so they cannot be used to get
+around the limit. Real text stays at 3–4 or fewer (Indic conjuncts, pointed Hebrew, Vietnamese);
+longer runs ("Zalgo" text) paint over the surrounding UI, such as the owner's moderation queue. The
+message is "Too many combining marks (accents) on one character (at most 5)" (`MARK_FLOOD_MESSAGE`,
+`src/building-studio/text.ts`). The rule applies to the text inputs of suggestions, owner locations and overrides (every
+field built with `line`, `text` or `nameLine`; read shapes are not re-checked). It also applies to Building Studio names: identity `name`, each
+alias, and template and variant names (BUILDING_STUDIO_DESIGN.md §5).
 
 Admin (`/api/admin/**`, every request authenticated + authorized server-side;
 state-changing requests also require same-origin `Origin` header,
@@ -144,6 +182,18 @@ Deterministic precedence (documented & tested):
    ignored + reported (cannot shadow base).
 7. Manifest counts are recomputed from the merged data; `datasetVersion`
    stays the base version and `publicationVersion` is exposed separately.
+
+_Amended 2026-10-24 (owner rule, map spec Phase 6):_ an off-campus place is
+never an LPU facility or a routing endpoint, as origin or destination. This
+covers the base context places (the opt-in "Nearby, outside campus" layer)
+and owner/community locations outside the boundary (rule 4a), even when they
+keep a validated `graphNodeId`. `isRoutablePlace` (`src/facilities/directory.ts`)
+and `placeEndpoint` require `campusZone === 'on-campus'`. `routeBlockReason`
+(`src/app/place-actions.ts`) gives the user-facing reason "Outside campus —
+directions cover campus paths only." The place panel, saved places, search
+and directions disable directions with that reason. Choosing on the map
+refuses such a place and does not offer the "nearby point" fallback.
+Choosing a plain map point stays possible.
 
 Determinism: the result depends only on the set of input records, never on
 their order. Records sharing an id (never produced by the server, but not

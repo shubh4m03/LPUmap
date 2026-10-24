@@ -77,8 +77,8 @@ function AdminShell({ session }: { session: SessionInfo }) {
       header={
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1">
           <div className="flex min-w-0 flex-1 flex-col sm:flex-row sm:items-baseline sm:gap-3">
-            <p className="font-semibold">Campus Atlas admin</p>
-            <p className="min-w-0 truncate text-sm text-muted">
+            <p className="text-sm leading-5 font-semibold md:text-base">Campus Atlas admin</p>
+            <p className="min-w-0 truncate text-xs leading-4 text-muted md:text-sm md:leading-5">
               Signed in as <span className="font-medium text-text">{session.actor}</span>
               {session.mode === 'access' ? ' (Cloudflare Access)' : ''}
             </p>
@@ -96,7 +96,7 @@ function AdminShell({ session }: { session: SessionInfo }) {
         </div>
       }
       nav={
-        <ul className="flex gap-1 overflow-x-auto p-2 md:flex-col md:overflow-visible">
+        <ul className="flex gap-1 overflow-x-auto px-2 py-1 lg:flex-col lg:overflow-visible lg:p-2">
           {ADMIN_SECTIONS.map((s) => {
             const current = route?.section === s;
             return (

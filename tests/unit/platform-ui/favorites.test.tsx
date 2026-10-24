@@ -47,15 +47,22 @@ describe('FavoritesPanel', () => {
   it('selecting a row opens the place; directions only for routable places', async () => {
     const user = userEvent.setup();
     favorite('osm:node/1', 'cur:synthetic-library');
-    // A saved off-campus place (from the opt-in nearby layer) keeps its zone label.
-    renderWithAtlas(<FavoritesPanel />, buildServices(withOffCampusNamed()));
+    // A saved off-campus place (from the opt-in nearby layer) keeps its zone label and, by the owner
+    // rule (map spec Phase 6), gets no directions shortcut even though it has a path node.
+    const offCampus = renderWithAtlas(<FavoritesPanel />, buildServices(withOffCampusNamed()));
     expect(screen.getByText('Library & study · No verified map position')).toBeInTheDocument();
     expect(screen.getByText(/Outside campus/)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Directions to Synthetic Library' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Directions to Synthetic Food Point' }),
+    ).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /^Synthetic Food Point/ }));
     expect(useAppStore.getState().selectedPlaceId).toBe('osm:node/1');
+    offCampus.unmount();
 
+    // The same place on campus is routable.
+    renderWithAtlas(<FavoritesPanel />);
     await user.click(screen.getByRole('button', { name: 'Directions to Synthetic Food Point' }));
     const s = useAppStore.getState();
     expect(s.destination).toMatchObject({ kind: 'place', placeId: 'osm:node/1' });

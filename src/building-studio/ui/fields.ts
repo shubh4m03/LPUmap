@@ -259,6 +259,48 @@ export interface AccessSuggestion {
   distanceM: number;
 }
 
+/** A walkable path node within the access-point limit of a footprint (a candidate, never a choice). */
+export interface FootprintAccessCandidate extends AccessSuggestion {
+  position: LngLat;
+}
+
+/**
+ * Every walkable path node within `maxM` of a footprint — exactly the nodes
+ * the server accepts as an access point (walkable, distance to the footprint,
+ * 0 inside it) — nearest first, ties by node id. Candidates the owner may
+ * choose from; nothing here chooses.
+ */
+export function walkableNodesNearFootprint(
+  graph: Pick<GraphFile, 'nodes' | 'edges'>,
+  footprint: readonly (readonly LngLat[])[],
+  maxM: number,
+  limit = Number.POSITIVE_INFINITY,
+): FootprintAccessCandidate[] {
+  const anchor = footprint[0]?.[0];
+  if (!anchor) return [];
+  const frame = createEnuFrame(anchor);
+  const poly = lngLatToLocalPolygon(footprint, frame);
+  const foot = new Set<number>();
+  for (const e of graph.edges)
+    if (e.foot) {
+      foot.add(e.from);
+      foot.add(e.to);
+    }
+  const out: (FootprintAccessCandidate & { exactM: number })[] = [];
+  for (const id of foot) {
+    const node = graph.nodes[id];
+    if (!node) continue;
+    const local = frame.toLocal(node);
+    // Cheap reject before the exact distance.
+    if (Math.hypot(local[0], local[1]) > maxM + 500) continue;
+    const d = pointToPolygonM(local, poly);
+    if (d <= maxM)
+      out.push({ nodeId: id, distanceM: Math.round(d * 10) / 10, position: [node[0], node[1]], exactM: d });
+  }
+  out.sort((a, b) => (Math.abs(a.exactM - b.exactM) <= 1e-9 ? a.nodeId - b.nodeId : a.exactM - b.exactM));
+  return out.slice(0, limit).map(({ exactM: _e, ...c }) => c);
+}
+
 /**
  * The walkable path node nearest to a footprint, as a SUGGESTION the owner
  * may accept (the server validates it; nothing is connected automatically).
@@ -269,29 +311,6 @@ export function nearestWalkableNode(
   footprint: readonly (readonly LngLat[])[],
   maxM: number,
 ): AccessSuggestion | null {
-  const anchor = footprint[0]?.[0];
-  if (!anchor) return null;
-  const frame = createEnuFrame(anchor);
-  const poly = lngLatToLocalPolygon(footprint, frame);
-  const foot = new Set<number>();
-  for (const e of graph.edges)
-    if (e.foot) {
-      foot.add(e.from);
-      foot.add(e.to);
-    }
-  let best: AccessSuggestion | null = null;
-  for (const id of foot) {
-    const node = graph.nodes[id];
-    if (!node) continue;
-    const local = frame.toLocal(node);
-    // Cheap reject before the exact distance.
-    if (Math.hypot(local[0], local[1]) > maxM + 500) continue;
-    const d = pointToPolygonM(local, poly);
-    if (
-      d <= maxM &&
-      (!best || d < best.distanceM - 1e-9 || (Math.abs(d - best.distanceM) <= 1e-9 && id < best.nodeId))
-    )
-      best = { nodeId: id, distanceM: Math.round(d * 10) / 10 };
-  }
-  return best;
+  const best = walkableNodesNearFootprint(graph, footprint, maxM, 1)[0];
+  return best ? { nodeId: best.nodeId, distanceM: best.distanceM } : null;
 }

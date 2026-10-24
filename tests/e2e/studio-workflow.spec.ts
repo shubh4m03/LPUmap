@@ -24,7 +24,18 @@ const state = (page: Page) => page.getByTestId('studio-state-label');
 const SPOTS: Record<string, readonly [number, number]> = {
   desktop: [75.7032, 31.2533],
   laptop: [75.70385, 31.25355],
+  tablet: [75.7029, 31.2536],
 };
+
+/** Narrow layouts (tablet) start with the side panels collapsed: open them when needed. */
+async function showPanel(page: Page, which: 'library' | 'inspector'): Promise<void> {
+  const id = which === 'library' ? 'studio-left-panel' : 'studio-inspector';
+  // The toggle states whether its panel is open (aria-expanded); wait for the workspace first.
+  const toggle = page.locator(`button[aria-controls="${id}"]`);
+  await expect(toggle).toBeVisible();
+  if ((await toggle.getAttribute('aria-expanded')) !== 'true') await toggle.click();
+  await expect(page.locator(`#${id}`)).toBeVisible();
+}
 
 async function signedInContext(
   browser: Browser,
@@ -50,8 +61,8 @@ async function acknowledgeAll(scope: Page | ReturnType<Page['getByRole']>): Prom
   for (let i = 0; i < n; i++) await fields.nth(i).fill('E2E check: acknowledged for the automated test');
 }
 
-test.describe('Building Studio (desktop)', () => {
-  test.skip(({ page }) => isPhone(page) || (page.viewportSize()?.width ?? 0) < 1200, 'desktop layout');
+test.describe('Building Studio (desktop, laptop, tablet)', () => {
+  test.skip(({ page }) => isPhone(page), 'desktop and tablet layouts (phones: studio-mobile.spec.ts)');
   test.setTimeout(240_000);
 
   test('unauthenticated visitors reach no Studio control, and the API refuses them', async ({
@@ -87,6 +98,7 @@ test.describe('Building Studio (desktop)', () => {
     await expect(state(page)).toHaveText('Nothing open');
 
     // --- template selection ---
+    await showPanel(page, 'library');
     await page.getByRole('searchbox', { name: 'Search templates' }).fill('hostel');
     await page.getByTestId('studio-template-hostel-multistorey').click();
     const preview = page.getByTestId('studio-template-preview');
@@ -119,6 +131,7 @@ test.describe('Building Studio (desktop)', () => {
     await expect(state(page)).toHaveText('Unsaved local changes (not on the server yet)');
 
     // --- customise: name (test data), appearance preset, a step move with undo/redo ---
+    await showPanel(page, 'inspector');
     await page.getByTestId('studio-tool-info').click();
     await page.getByTestId('studio-name').fill(name);
     await page.getByTestId('studio-tool-appearance').click();
@@ -146,6 +159,7 @@ test.describe('Building Studio (desktop)', () => {
     await expect(state(page)).toHaveText('Saved draft (rev 1)');
     // Undo + redo ended exactly at the saved state: no stale crash-recovery offer.
     await expect(page.getByTestId('studio-recovery')).toHaveCount(0);
+    await showPanel(page, 'inspector');
     await page.getByTestId('studio-tool-info').click();
     await expect(page.getByTestId('studio-name')).toHaveValue(name);
     // The reopened draft is drawn again (not just listed) before the screenshot.
@@ -156,6 +170,7 @@ test.describe('Building Studio (desktop)', () => {
       .toBeGreaterThan(0);
     await shot('studio-4-saved-draft');
     // The Buildings list shows the saved draft (the owner's list of studio records).
+    await showPanel(page, 'library');
     await page.locator('#studio-left-panel').getByText('Buildings', { exact: true }).click();
     await expect(page.getByTestId(`studio-record-${id}`)).toBeVisible();
     await shot('studio-4b-buildings-list');

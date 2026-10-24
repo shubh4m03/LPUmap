@@ -20,9 +20,12 @@ import { PlaceFieldsForm } from '../../forms/PlaceFieldsForm.tsx';
 import { useAction } from '../../hooks/useAction.ts';
 import { accessPointBody, type AccessChoice } from '../../map/access-choice.ts';
 import { AccessPointPicker } from '../../map/AccessPointPicker.tsx';
+import { useCampusZone } from '../../map/campus-zone.ts';
 import { MapPanel } from '../../map/MapPanel.tsx';
+import { OutsideCampusNotice } from '../../map/OutsideCampusNotice.tsx';
 import { PositionFields } from '../../map/PositionFields.tsx';
 import { useAccessCandidates } from '../../map/useAccessCandidates.ts';
+import { useAccessMapPick } from '../../map/useAccessMapPick.ts';
 import { usePointEditing } from '../../map/usePointEditing.ts';
 import { ErrorNotice } from '../../ui/ErrorNotice.tsx';
 import { issueFieldErrors, type FieldErrors } from '../../ui/form-errors.ts';
@@ -45,13 +48,18 @@ export function ApprovePanel({ suggestion, campus, onApproved, onCancel, onReloa
   const [accessError, setAccessError] = useState<string | null>(null);
   const action = useAction();
   const { candidates, note } = useAccessCandidates(campus, values.location);
+  const zone = useCampusZone(campus, values.location);
 
-  // A moved point invalidates a node chosen for the old position.
-  const choice: AccessChoice =
-    access.kind === 'node' && candidates && !candidates.some((c) => c.nodeId === access.nodeId)
+  // Off-campus places are never routable (owner rule), so an access point would have no
+  // effect: send "No access point". A moved point invalidates a node chosen for the old position.
+  const outside = zone === 'outside';
+  const choice: AccessChoice = outside
+    ? { kind: 'none' }
+    : access.kind === 'node' && candidates && !candidates.some((c) => c.nodeId === access.nodeId)
       ? { kind: 'unset' }
       : access;
 
+  const pick = useAccessMapPick(candidates);
   const { editing, reticleCenter } = usePointEditing({
     point: values.location,
     editable: !action.busy,
@@ -59,6 +67,8 @@ export function ApprovePanel({ suggestion, campus, onApproved, onCancel, onReloa
     onPoint: (p) => setValues((v) => ({ ...v, location: p })),
     candidates: candidates ?? undefined,
     selectedNodeId: choice.kind === 'node' ? choice.nodeId : null,
+    pickAccess: pick.active ? pick.onMapClick : null,
+    pickClick: pick.click,
     handleLabel: 'Drag to move the place',
   });
   const [focus, setFocus] = useState(() => ({ lngLat: suggestion.location, zoom: 18 }));
@@ -119,20 +129,28 @@ export function ApprovePanel({ suggestion, campus, onApproved, onCancel, onReloa
             disabled={action.busy}
             error={fieldErrors.location ?? null}
           />
-          <AccessPointPicker
-            location={values.location}
-            candidates={candidates}
-            candidatesNote={note}
-            value={choice}
-            onChange={(c) => {
-              setAccess(c);
-              setAccessError(null);
-            }}
-            disabled={action.busy}
-            error={accessError ?? serverErrors.accessPoint ?? null}
-          />
+          {outside ? (
+            <p className="text-sm text-muted" data-testid="access-point-off-campus">
+              No access point: places outside the campus are not routable, so none is saved.
+            </p>
+          ) : (
+            <AccessPointPicker
+              location={values.location}
+              mapPick={pick}
+              candidates={candidates}
+              candidatesNote={note}
+              value={choice}
+              onChange={(c) => {
+                setAccess(c);
+                setAccessError(null);
+              }}
+              disabled={action.busy}
+              error={accessError ?? serverErrors.accessPoint ?? null}
+            />
+          )}
         </div>
         <div className="flex flex-col gap-3 lg:col-span-2">
+          <OutsideCampusNotice zone={zone} />
           {action.error ? (
             <ErrorNotice
               error={action.error}
