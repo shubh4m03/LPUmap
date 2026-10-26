@@ -127,6 +127,14 @@ describe('ResultRow', () => {
     expect(screen.getByRole('option')).toHaveAttribute('aria-selected', 'true');
   });
 
+  it('keeps a printed double space in the title visible (white-space: pre, still one line)', () => {
+    render(<ResultRow title="CAMPUS CAFE  &" />);
+    const title = screen.getByText('CAMPUS CAFE  &', { normalizer: (t) => t });
+    expect(title.className.split(' ')).toContain('whitespace-pre');
+    expect(title.className).toMatch(/text-ellipsis/);
+    expect(title.className.split(' ')).not.toContain('truncate');
+  });
+
   it('ignores segments that do not reproduce the title instead of showing wrong text', () => {
     render(<ResultRow title="School of Design" segments={[{ text: 'Something else', match: true }]} />);
     expect(screen.getByRole('button', { name: 'School of Design' })).toBeInTheDocument();

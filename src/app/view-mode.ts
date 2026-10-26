@@ -14,6 +14,10 @@
  *   realistic3d   3d          MapLibre   optional (when available) always (WebGL)
  *   isometric     iso         Canvas2D   none                      always
  *   standard2d    2d          MapLibre   none                      always (WebGL)
+ *
+ * The isometric mode has two variants (`&iso=art|map`, see "Isometric
+ * variants" below): the owner's illustration (default; schematic, not
+ * geographically exact) and the map-accurate drawing from real footprints.
  */
 import { PHOTOREAL_UNAVAILABLE_REASON, SATELLITE_NOT_CONFIGURED_REASON } from '../map/providers/types.ts';
 
@@ -262,6 +266,137 @@ export const VIEW_MODE_SUPPORT: Readonly<
 
 export const supports = (mode: ViewMode, cap: ViewCapability): CapabilitySupport =>
   VIEW_MODE_SUPPORT[mode][cap];
+
+// ---------------------------------------------------------------------------
+// Isometric variants: ?view=iso[&iso=art|map]
+// (docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md §3)
+// ---------------------------------------------------------------------------
+
+/**
+ * The isometric mode has two clearly labelled variants, synchronized by
+ * stable building ids through artwork associations:
+ *  - 'illustrated' (DEFAULT): the owner's campus illustration with clickable
+ *    hotspots. A 2D schematic illustration: not geographically exact, not
+ *    rotatable, no routes or picked points drawn on it.
+ *  - 'map-accurate': the existing isometric drawing generated from the mapped
+ *    footprints (VIEW_MODE_SUPPORT.isometric describes it).
+ */
+export type IsometricVariant = 'illustrated' | 'map-accurate';
+export const ISOMETRIC_VARIANTS: readonly IsometricVariant[] = ['illustrated', 'map-accurate'];
+export const DEFAULT_ISOMETRIC_VARIANT: IsometricVariant = 'illustrated';
+
+export const ISOMETRIC_VARIANT_LABELS: Record<IsometricVariant, string> = {
+  illustrated: 'Illustrated overview',
+  'map-accurate': 'Map-accurate isometric',
+};
+
+export const ISOMETRIC_VARIANT_DESCRIPTIONS: Record<IsometricVariant, string> = {
+  illustrated:
+    'The illustrated campus map supplied by the owner, with clickable buildings. A schematic illustration, not geographically exact.',
+  'map-accurate': 'An isometric drawing generated from the mapped building footprints, to scale.',
+};
+
+/** Second query parameter, read only together with ?view=iso. */
+export const ISO_VARIANT_PARAM = 'iso';
+const ISO_PARAM_TO_VARIANT: Record<string, IsometricVariant> = { art: 'illustrated', map: 'map-accurate' };
+const ISO_VARIANT_TO_PARAM: Record<IsometricVariant, string> = { illustrated: 'art', 'map-accurate': 'map' };
+
+/**
+ * The isometric variant a query string asks for, or null when absent,
+ * unknown, or `view` is not `iso` (an `iso=` without `view=iso` is ignored).
+ */
+export function parseIsometricVariantParam(search: string): IsometricVariant | null {
+  if (parseViewParam(search) !== 'isometric') return null;
+  let value: string | null;
+  try {
+    value = new URLSearchParams(search).get(ISO_VARIANT_PARAM);
+  } catch {
+    return null;
+  }
+  if (value === null) return null;
+  return ISO_PARAM_TO_VARIANT[value.trim().toLowerCase()] ?? null;
+}
+
+export const isometricVariantToParam = (v: IsometricVariant): string => ISO_VARIANT_TO_PARAM[v];
+
+/**
+ * `href` with `?view=iso&iso=<variant>`; null removes `iso=` (the default
+ * variant applies). Other params and the hash are kept.
+ */
+export function buildIsometricViewUrl(href: string, variant: IsometricVariant | null): string {
+  const url = new URL(buildViewUrl(href, 'isometric'));
+  if (variant === null) url.searchParams.delete(ISO_VARIANT_PARAM);
+  else url.searchParams.set(ISO_VARIANT_PARAM, isometricVariantToParam(variant));
+  return url.toString();
+}
+
+/** What the illustrated variant cannot do (reasons are shown or announced, never silently hidden). */
+export const ILLUSTRATED_ROUTE_REASON =
+  'Routes are drawn on the map views: the illustration is not geographically exact. Directions switch to the map.';
+export const ILLUSTRATED_PICK_REASON =
+  'Pick a start or end point on a map view: points on the illustration are not real positions.';
+
+/**
+ * Why the app must leave the Illustrated overview after a store change, or
+ * null: a route was newly found ('route-plan') or map picking started
+ * ('pick-endpoint'). Pure; `illustratedShown` says whether the illustration is
+ * on screen (the map-accurate variant draws routes and picks points itself).
+ */
+export function illustratedHandoffReason(
+  s: { viewMode: ViewMode; result: { ok: boolean } | null; pickingOnMap: unknown },
+  prev: { result: { ok: boolean } | null; pickingOnMap: unknown },
+  illustratedShown: boolean,
+): string | null {
+  if (!illustratedShown || s.viewMode !== 'isometric') return null;
+  if (s.result !== prev.result && s.result?.ok === true)
+    return supportsIsometric('illustrated', 'route-plan').reason;
+  if (s.pickingOnMap && !prev.pickingOnMap) return supportsIsometric('illustrated', 'pick-endpoint').reason;
+  return null;
+}
+
+/** Capability overrides of a variant on top of VIEW_MODE_SUPPORT.isometric. */
+export const ISOMETRIC_VARIANT_SUPPORT: Readonly<
+  Record<IsometricVariant, Partial<Readonly<Record<ViewCapability, CapabilitySupport>>>>
+> = {
+  illustrated: {
+    'route-plan': no(ILLUSTRATED_ROUTE_REASON),
+    'pick-endpoint': no(ILLUSTRATED_PICK_REASON),
+    'free-rotate': no('The illustration is a fixed 2D drawing. It cannot be rotated.'),
+    pitch: no('The illustration is a fixed 2D drawing. It cannot be tilted.'),
+  },
+  'map-accurate': {},
+};
+
+/** Capability of the isometric mode in a given variant. */
+export function supportsIsometric(variant: IsometricVariant, cap: ViewCapability): CapabilitySupport {
+  return ISOMETRIC_VARIANT_SUPPORT[variant][cap] ?? VIEW_MODE_SUPPORT.isometric[cap];
+}
+
+export interface IsometricVariantState {
+  /** null when the illustration (manifest + images) loaded; else the user-facing reason it did not. */
+  artworkUnavailable: string | null;
+}
+
+export interface ResolvedIsometricVariant {
+  variant: IsometricVariant;
+  fallbackFrom: IsometricVariant | null;
+  reason: string | null;
+}
+
+/**
+ * The variant to show: the requested one (default 'illustrated'), or the
+ * map-accurate drawing when the illustration could not be loaded — announced
+ * with the reason, never a blank canvas.
+ */
+export function resolveIsometricVariant(
+  requested: IsometricVariant | null,
+  state: IsometricVariantState,
+): ResolvedIsometricVariant {
+  const want = requested ?? DEFAULT_ISOMETRIC_VARIANT;
+  if (want === 'illustrated' && state.artworkUnavailable !== null)
+    return { variant: 'map-accurate', fallbackFrom: 'illustrated', reason: state.artworkUnavailable };
+  return { variant: want, fallbackFrom: null, reason: null };
+}
 
 /** Shown on the disabled overview option while live navigation runs. */
 export const ISOMETRIC_DURING_NAVIGATION_REASON = 'Not available during live navigation';

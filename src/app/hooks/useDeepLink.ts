@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react';
 import { useToast } from '../../components/ui/index.ts';
 import { useRecents } from '../../favorites/index.ts';
 import { useAtlas } from '../data/atlas-context.ts';
-import { parsePlaceParam, writePlaceParam } from '../deep-link.ts';
+import { selectDirectoryItem } from '../artwork-selection.ts';
+import { isArtworkId, parsePlaceParam, writePlaceParam } from '../deep-link.ts';
 import { useAppStore } from '../store/index.ts';
 
 /**
@@ -11,7 +12,7 @@ import { useAppStore } from '../store/index.ts';
  * selection is added to recents (useRecents honours the privacy setting).
  */
 export function useDeepLink(): void {
-  const { getPlace } = useAtlas();
+  const { getPlace, buildingDirectory } = useAtlas();
   const toast = useToast();
   const handled = useRef(false);
 
@@ -25,9 +26,17 @@ export function useDeepLink(): void {
       useAppStore.getState().selectPlace(id, { focus: true });
       return;
     }
+    // An item of the campus illustration: a verified one opens its building, any other its own details.
+    const art = id && isArtworkId(id) ? buildingDirectory.item(id) : undefined;
+    if (art) {
+      selectDirectoryItem(art, { focus: true });
+      // A verified item IS its building: the address bar names the building from now on.
+      if (art.id !== id) writePlaceParam(art.id);
+      return;
+    }
     writePlaceParam(null);
     toast.show({ message: 'The linked place is not in the current campus dataset.', tone: 'warning' });
-  }, [getPlace, toast]);
+  }, [getPlace, buildingDirectory, toast]);
 
   useEffect(
     () =>

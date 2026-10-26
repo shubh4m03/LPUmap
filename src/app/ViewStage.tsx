@@ -9,6 +9,10 @@ const MapStage = lazy(() => import('./MapStage.tsx').then((m) => ({ default: m.M
 const IsoStudioStage = lazy(() =>
   import('./IsoStudioStage.tsx').then((m) => ({ default: m.IsoStudioStage })),
 );
+// The isometric mode: the owner's illustration (default) or the map-accurate drawing (?iso=map).
+const IsometricModeStage = lazy(() =>
+  import('../isometric-art/IsometricModeStage.tsx').then((m) => ({ default: m.IsometricModeStage })),
+);
 
 export interface ViewStageProps extends MapStageProps {
   /** Draw the overview whatever the stored mode (no WebGL, before the store has caught up). */
@@ -32,7 +36,13 @@ export function ViewStage({ forceOverview = false, ...props }: ViewStageProps) {
       }
     >
       {overview ? (
-        <IsoStudioStage theme={props.theme} reducedMotion={props.reducedMotion} padding={props.padding} />
+        <IsometricModeStage
+          reducedMotion={props.reducedMotion}
+          padding={props.padding}
+          renderMapAccurate={(padding) => (
+            <IsoStudioStage theme={props.theme} reducedMotion={props.reducedMotion} padding={padding} />
+          )}
+        />
       ) : (
         <MapStage {...props} />
       )}

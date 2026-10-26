@@ -6,6 +6,7 @@
  * ids containing '/' (osm:way/123) must be sent encoded (osm%3Away%2F123).
  */
 import { OWNER_TEMPLATE_ID_RE, STUDIO_ID_RE } from '../../src/building-studio/schema.ts';
+import { ART_SUBJECT_ID_MAX, ART_SUBJECT_ID_RE } from '../../src/isometric-art/schema.ts';
 import { ID_PATTERNS } from '../ids.ts';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -25,6 +26,8 @@ export const PARAM_PATTERNS = {
   buildingId: STUDIO_ID_RE,
   /** Owner template (`stv:…`); starter templates live in code and have no write routes. */
   templateId: OWNER_TEMPLATE_ID_RE,
+  /** Artwork subject (`art:num-25`, `art:scene-091`, `art:area-…`), length-bounded. */
+  subjectId: new RegExp(`^(?=.{1,${ART_SUBJECT_ID_MAX}}$)${ART_SUBJECT_ID_RE.source.slice(1)}`),
 } as const;
 
 export type ParamName = keyof typeof PARAM_PATTERNS;

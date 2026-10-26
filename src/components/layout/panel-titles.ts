@@ -33,12 +33,18 @@ export function usePanelTitle(panel: PanelId): string {
  * screen-reader users hear which place the region is about), else the header text.
  */
 export function usePanelLabel(panel: PanelId): string {
-  const { getPlace } = useAtlas();
+  const { getPlace, buildingDirectory } = useAtlas();
   const selectedPlaceId = useAppStore((s) => s.selectedPlaceId);
   const title = usePanelTitle(panel);
   if (panel === 'details' && selectedPlaceId) {
     const name = getPlace(selectedPlaceId)?.displayName;
     if (name) return `${name}, ${STATIC_TITLES.details.toLowerCase()}`;
+    // An item of the campus illustration (`art:` id): its exact printed title.
+    const art = buildingDirectory.artwork?.byId.get(selectedPlaceId);
+    if (art) return `${art.title}, ${ILLUSTRATION_DETAILS_LABEL}`;
   }
   return title;
 }
+
+/** Landmark name suffix of the details panel for an item of the campus illustration. */
+export const ILLUSTRATION_DETAILS_LABEL = 'campus illustration item details';

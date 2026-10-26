@@ -28,6 +28,7 @@ import {
   updateLocationBody,
 } from './schemas.ts';
 import { getSessionRoute, loginRoute, logoutRoute } from './session.ts';
+import { ARTWORK_ROUTES } from './artwork-routes.ts';
 import { STUDIO_ROUTES } from './studio-routes.ts';
 
 const ok = (body: unknown, status = 200) => json(body, { status, cache: 'no-store' });
@@ -307,6 +308,8 @@ export const ADMIN_ROUTES: readonly AdminRoute[] = [
     },
   },
 
+  // Artwork verification (/artwork/**): additive; no path overlaps another route.
+  ...ARTWORK_ROUTES,
   // Building Studio (/studio/**): additive; the routes above are unchanged.
   ...STUDIO_ROUTES,
 ];

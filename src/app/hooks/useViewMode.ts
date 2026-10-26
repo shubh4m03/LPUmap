@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useAnnounce } from '../../accessibility/index.ts';
+import { isIllustratedShown } from '../../isometric-art/variant-state.ts';
 import { carryCamera } from '../map-controller.ts';
 import { useAppStore } from '../store/index.ts';
 import { useImageryRuntimeSync } from './useImageryRuntime.ts';
 import {
   buildViewUrl,
   deepLinkViewMode,
+  illustratedHandoffReason,
   isMapViewMode,
   locationSwitchAnnouncement,
   navigationSwitchAnnouncement,
@@ -33,6 +35,9 @@ export function writeViewParam(mode: Parameters<typeof buildViewUrl>[1]): void {
  *    ground point, equivalent scale) instead of re-flying to an old focus;
  *  - live navigation or live location started in the overview switches to the
  *    last map mode and says so (the overview has no live GPS, §8.2);
+ *  - while the Illustrated overview is shown, a newly found route or "choose
+ *    on map" switches to the last map mode with the stated reason (the
+ *    illustration is not geographically exact: no route or point is drawn on it);
  *  - imagery availability follows the connection (useImageryRuntimeSync).
  */
 export function useViewModeSync(): void {
@@ -58,6 +63,12 @@ export function useViewModeSync(): void {
           if (s.viewModeReason !== 'fallback') writeViewParam(s.viewMode);
         }
         if (s.viewMode !== 'isometric') return;
+        const handoff = illustratedHandoffReason(s, prev, isIllustratedShown());
+        if (handoff) {
+          const to = s.lastMapMode;
+          if (s.setViewMode(to, { reason: 'user' })) announce(handoff);
+          return;
+        }
         if (s.navigationActive && !prev.navigationActive) {
           const to = s.lastMapMode;
           if (s.setViewMode(to, { reason: 'navigation' })) announce(navigationSwitchAnnouncement(to));

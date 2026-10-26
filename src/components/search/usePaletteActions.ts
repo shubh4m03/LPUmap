@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { selectDirectoryItem } from '../../app/artwork-selection.ts';
 import { isCommandId } from '../../app/commands.ts';
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { useCommandRunner } from '../../app/hooks/useCommandRunner.ts';
@@ -17,7 +18,7 @@ export interface PaletteActions {
 }
 
 export function usePaletteActions(): PaletteActions {
-  const { getPlace, directory } = useAtlas();
+  const { getPlace, directory, buildingDirectory } = useAtlas();
   const runCommand = useCommandRunner();
 
   const activate = useCallback(
@@ -28,6 +29,11 @@ export function usePaletteActions(): PaletteActions {
         case 'place': {
           const place = getPlace(item.ref);
           if (place) s.selectPlace(place.id, { focus: place.location !== null && !s.listMode });
+          return;
+        }
+        case 'artwork': {
+          const row = buildingDirectory.item(item.ref);
+          if (row) selectDirectoryItem(row);
           return;
         }
         case 'category':
@@ -42,11 +48,16 @@ export function usePaletteActions(): PaletteActions {
           return;
       }
     },
-    [getPlace, runCommand],
+    [getPlace, buildingDirectory, runCommand],
   );
 
   const routeTo = useCallback(
     (item: PaletteItem) => {
+      if (item.kind === 'artwork')
+        return (
+          buildingDirectory.artwork?.byId.get(item.ref)?.routableNote ??
+          'Items of the campus illustration cannot be routed to.'
+        );
       const place = item.kind === 'place' ? getPlace(item.ref) : undefined;
       if (!place) return 'Only places can be routed to.';
       const reason = routeBlockReason(place, directory);
@@ -58,7 +69,7 @@ export function usePaletteActions(): PaletteActions {
       s.openPanel('directions');
       return null;
     },
-    [getPlace, directory],
+    [getPlace, directory, buildingDirectory],
   );
 
   return { activate, routeTo };

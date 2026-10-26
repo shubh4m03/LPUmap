@@ -9,6 +9,14 @@ export {
   CATEGORY_DOC_PREFIX,
   type PlaceDocOptions,
 } from './docs.ts';
+export {
+  ARTWORK_DOC_PREFIX,
+  ARTWORK_STATUS_TEXT,
+  artworkNumberCodes,
+  artworkTermsOf,
+  docsFromArtwork,
+  type ArtworkTerms,
+} from './artwork-docs.ts';
 export { highlightSegments, type HighlightSegment } from './highlight.ts';
 export { normalize, tokenize, STOPWORDS, GENERIC_WORDS } from './normalize.ts';
 export { MAX_QUERY_LENGTH } from './query.ts';

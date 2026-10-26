@@ -113,8 +113,41 @@ describe('pwaOptions', () => {
     expect(JSON.stringify(workbox?.additionalManifestEntries ?? [])).not.toMatch(/api/);
   });
 
-  it('does no runtime caching (so never caches third-party origins)', () => {
-    expect(workbox?.runtimeCaching ?? []).toEqual([]);
+  it('runtime-caches only same-origin artwork files (so never third-party origins, API or data)', () => {
+    const routes = workbox?.runtimeCaching ?? [];
+    expect(routes).toHaveLength(1);
+    const match = routes[0]?.urlPattern as (o: { url: URL; sameOrigin: boolean }) => boolean;
+    const at = (path: string, sameOrigin = true) =>
+      match({ url: new URL(path, 'https://atlas.example'), sameOrigin });
+    expect(at('/isometric-art/derived/iso-art-001/tiles/2/1-1.webp')).toBe(true);
+    expect(at('/isometric-art/derived/iso-art-001/web-full.webp')).toBe(true);
+    expect(at('/isometric-art/original/1-lpu-isometric-map-design-3371.jpg')).toBe(true);
+    expect(at('/isometric-art/original/11-lpu-isometric-map-design-961.png')).toBe(true);
+    expect(at('/isometric-art/derived/iso-art-001/tiles/0/0-0.webp', false)).toBe(false);
+    for (const p of [
+      '/api/locations',
+      '/api/admin/session',
+      '/data/places.json',
+      '/isometric-art/manifest.json',
+      '/',
+    ])
+      expect(at(p), p).toBe(false);
+    expect(routes[0]?.handler).toBe('StaleWhileRevalidate');
+    expect(routes[0]?.options?.cacheName).toBe(`${APP_CONFIG.storage.prefix}-isometric-art`);
+    expect(routes[0]?.options?.expiration?.maxEntries).toBeLessThanOrEqual(128);
+  });
+
+  it('precaches only the light artwork (manifest, preview); originals, web-full and tiles are runtime-cached', () => {
+    expect(PRECACHE_GLOBS).toContain('isometric-art/manifest.json');
+    expect(PRECACHE_GLOBS).toContain('isometric-art/derived/*/preview-*.webp');
+    const ignores = workbox?.globIgnores ?? [];
+    for (const g of [
+      'isometric-art/original/**',
+      'isometric-art/derived/*/tiles/**',
+      'isometric-art/derived/*/web-full.*',
+    ])
+      expect(ignores).toContain(g);
+    expect(ignores).toContain('**/node_modules/**/*');
   });
 
   it('only imports config and types, so vite.config.ts can load it in Node', () => {

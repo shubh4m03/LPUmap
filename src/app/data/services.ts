@@ -9,11 +9,14 @@
 import type { StudioRenderModel } from '../../building-studio/merge.ts';
 import { CATEGORIES } from '../../config/categories.ts';
 import type { CampusData, OptionalDataLoaders, Place, Relation } from '../../data/index.ts';
-import { createDirectory, type CampusDirectory } from '../../directory/index.ts';
+import { createDirectory, directoryBuildingIds, type CampusDirectory } from '../../directory/index.ts';
+import { artworkUrl, type PublishedArtworkAssociation } from '../../isometric-art/index.ts';
 import { createFacilityDirectory, type FacilityDirectory } from '../../facilities/index.ts';
 import { createRouter, type Router } from '../../routing/index.ts';
 import {
+  artworkTermsOf,
   createSearchIndex,
+  docsFromArtwork,
   docsFromCategories,
   docsFromPlaces,
   PLACE_DOC_PREFIX,
@@ -22,6 +25,7 @@ import {
 } from '../../search/index.ts';
 import { commandDocs, layerDocs } from '../commands.ts';
 import { applyPublication } from './apply-publication.ts';
+import { buildArtwork, NO_ARTWORK, type ArtworkLoad, type AtlasArtwork } from './artwork.ts';
 import type { PublicationLoad } from './publication.ts';
 import type { PublicationStatus } from './publication-status.ts';
 
@@ -57,6 +61,12 @@ export interface AtlasServices {
   contextPlaces: readonly Place[];
   /** Published studio buildings not shown because their campus membership could not be re-checked. */
   studioSkipped: number;
+  /**
+   * The owner's campus illustration: manifest + effective associations (or why
+   * it is unavailable). Its verified subjects are joined into
+   * `buildingDirectory`; the illustrated overview renderer reads it from here.
+   */
+  artwork: AtlasArtwork;
 }
 
 export interface ServiceExtras {
@@ -66,6 +76,10 @@ export interface ServiceExtras {
   publication?: PublicationStatus;
   optional?: OptionalDataLoaders | null;
   studioSkipped?: number;
+  /** The illustration manifest (absent: not loaded, buildings only). */
+  artwork?: ArtworkLoad;
+  /** The owner's artwork association decisions (publication v3; [] for v1/v2 or no publication). */
+  artworkDecisions?: readonly PublishedArtworkAssociation[];
 }
 
 /**
@@ -132,7 +146,12 @@ export function buildSearchDocs(
   categoryCounts: Record<string, number>,
   locatedCounts: Record<string, number>,
   relations: readonly Relation[] = [],
-  opts: { mapKey?: (id: string) => string | null; exclude?: ReadonlySet<string> } = {},
+  opts: {
+    mapKey?: (id: string) => string | null;
+    exclude?: ReadonlySet<string>;
+    /** The building directory with its illustration layer: artwork docs and verified-join terms. */
+    buildingDirectory?: CampusDirectory;
+  } = {},
 ): SearchDoc[] {
   // Every registered category gets a count; absent from the data means 0 ("None mapped yet").
   const counts = Object.fromEntries(CATEGORIES.map((c) => [c.id, categoryCounts[c.id] ?? 0]));
@@ -141,15 +160,27 @@ export function buildSearchDocs(
     return { ...d, ...(subtitle ? { subtitle } : {}), boost: CATEGORY_DOC_BOOST };
   });
   const searchable = opts.exclude?.size ? places.filter((p) => !opts.exclude!.has(p.id)) : places;
+  const dir = opts.buildingDirectory;
+  const art = dir?.artwork ?? null;
   const placeDocs = docsFromPlaces(searchable, {
     hostName: hostNames(places, relations),
     ...(opts.mapKey ? { mapKey: opts.mapKey } : {}),
+    ...(dir && art
+      ? {
+          artworkTerms: (id: string) =>
+            artworkTermsOf(
+              dir.byId.get(id)?.artwork ?? [],
+              (s) => art.subjects.get(s)?.artworkNumber ?? null,
+            ),
+        }
+      : {}),
   });
   const have = new Set(placeDocs.map((d) => d.ref));
   return [
     ...categories,
     ...placeDocs,
     ...unnamedStudioDocs(searchable, have),
+    ...docsFromArtwork(art?.entries ?? []),
     ...layerDocs(locatedCounts),
     ...commandDocs(),
   ];
@@ -163,12 +194,36 @@ export function buildServices(data: CampusData, extras: ServiceExtras = {}): Atl
   const categoryCounts = directory.countsByCategory();
   const locatedCounts = directory.countsByCategory({ located: true });
   const exclude = extras.hiddenFromDirectory;
+  const router = createRouter(data.graph);
+  const sources = new Map(data.manifest.sources.map((s) => [s.id, s]));
+  const buildingInput = {
+    buildings: data.buildings,
+    places: data.places,
+    relations: data.relations,
+    ...(exclude ? { exclude } : {}),
+  };
+  const artwork = buildArtwork(
+    extras.artwork ?? NO_ARTWORK,
+    extras.artworkDecisions ?? [],
+    directoryBuildingIds(buildingInput),
+  );
+  const buildingDirectory = createDirectory({
+    ...buildingInput,
+    artwork:
+      artwork.manifest && artwork.directory
+        ? {
+            directory: artwork.directory,
+            subjects: artwork.manifest.subjects,
+            assets: artwork.manifest.assets,
+            resolveUrl: (rel: string) => artworkUrl(rel),
+          }
+        : null,
+  });
   const docs = buildSearchDocs(directory.all, categoryCounts, locatedCounts, data.relations, {
     mapKey: mapKeys(data),
     ...(exclude ? { exclude } : {}),
+    buildingDirectory,
   });
-  const router = createRouter(data.graph);
-  const sources = new Map(data.manifest.sources.map((s) => [s.id, s]));
   const services: AtlasServices = {
     data,
     directory,
@@ -178,17 +233,13 @@ export function buildServices(data: CampusData, extras: ServiceExtras = {}): Atl
     categoryCounts,
     locatedCounts,
     sourceName: (id) => sources.get(id)?.name ?? id,
-    buildingDirectory: createDirectory({
-      buildings: data.buildings,
-      places: data.places,
-      relations: data.relations,
-      ...(exclude ? { exclude } : {}),
-    }),
+    buildingDirectory,
     studioModels: extras.studioModels ?? NO_MODELS,
     publication: extras.publication ?? { kind: 'unavailable' },
     optional: extras.optional ?? null,
     contextPlaces: NO_PLACES,
     studioSkipped: extras.studioSkipped ?? 0,
+    artwork,
   };
   baseDocs.set(services, docs);
   return services;
@@ -231,6 +282,7 @@ export async function buildAppServices(
   base: CampusData,
   load: PublicationLoad,
   optional: OptionalDataLoaders | null,
+  artwork: ArtworkLoad = NO_ARTWORK,
 ): Promise<AppServices> {
   const pub = load.publication;
   const review =
@@ -242,6 +294,8 @@ export async function buildAppServices(
     publication: load.status,
     optional,
     studioSkipped: applied.studioSkipped,
+    artwork,
+    artworkDecisions: pub?.artworkAssociations ?? [],
   });
   return { services, publicationContextPlaces: applied.contextPlaces };
 }

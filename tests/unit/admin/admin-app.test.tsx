@@ -73,6 +73,7 @@ describe('AdminApp shell', () => {
       'Base-place overrides',
       'Building Studio',
       'Templates',
+      'Artwork',
       'History',
       'Quality',
     ]);

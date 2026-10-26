@@ -83,8 +83,20 @@ jobs:
             exit 1
           fi
 
+      - name: Isometric artwork is complete and current
+        # Originals unchanged (sha256), every published copy and derived file present and
+        # current (lossless, traced to the current original, covered by the committed
+        # visual-equivalence record), duplicates handled, no other origin, manifest and
+        # docs/LPU_ISOMETRIC_ASSET_MAPPING.md up to date. No Chromium.
+        run: npm run -s art:check
+
       - name: Production build
         run: npx vite build
+
+      - name: Production build contains the artwork
+        # dist/ holds the manifest and every published file byte-identical, precaches only the
+        # light files (manifest, preview), runtime-caches the rest, and bundles the illustrated view.
+        run: npm run -s art:check-dist
 
       - name: Smoke test the build
         run: npm run -s smoke
@@ -99,6 +111,12 @@ jobs:
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
+
+      - name: Derived artwork is reproducible and visually equivalent
+        # Re-derives every copy twice in Chromium (must be byte-identical between the runs) and
+        # re-measures the COMMITTED copies against the originals (thresholds + negative controls).
+        # Bytes may differ from the committed ones on another Chromium/OS; equivalence is the gate.
+        run: npm run -s art:verify
 
       - name: End-to-end tests (all projects)
         run: npx playwright test

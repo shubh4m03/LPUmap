@@ -105,13 +105,14 @@ Locally, copy `.dev.vars.example` to `.dev.vars` (git-ignored) for `npx wrangler
 
 ### D1 migrations: apply
 
-The two migrations are applied in order by wrangler, which records them in `d1_migrations`, takes a
+The three migrations are applied in order by wrangler, which records them in `d1_migrations`, takes a
 backup first and rolls back a migration that fails:
 
-| File                                  | Creates                                                                                                                                                                       |
-| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `migrations/0001_initial.sql`         | `suggestions`, `locations`, `overrides`, `audit_events`, `sessions`, `rate_limits`, `meta` (community module, [COMMUNITY_MODULE_CONTRACTS.md](COMMUNITY_MODULE_CONTRACTS.md)) |
-| `migrations/0002_building_studio.sql` | `studio_templates`, `studio_template_versions`, `studio_buildings`, `studio_building_versions`; rebuilds `audit_events` with the studio entity types                          |
+| File                                       | Creates                                                                                                                                                                                                                                                |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `migrations/0001_initial.sql`              | `suggestions`, `locations`, `overrides`, `audit_events`, `sessions`, `rate_limits`, `meta` (community module, [COMMUNITY_MODULE_CONTRACTS.md](COMMUNITY_MODULE_CONTRACTS.md))                                                                          |
+| `migrations/0002_building_studio.sql`      | `studio_templates`, `studio_template_versions`, `studio_buildings`, `studio_building_versions`; rebuilds `audit_events` with the studio entity types                                                                                                   |
+| `migrations/0003_artwork_associations.sql` | `artwork_associations` (the owner's links from campus-illustration items to buildings); rebuilds `audit_events` to accept `artwork` ([LPU_ISOMETRIC_ASSET_INTEGRATION.md §4](LPU_ISOMETRIC_ASSET_INTEGRATION.md#4-persistence-and-owner-verification)) |
 
 ```sh
 npx wrangler d1 export lpu-atlas --remote --output=<outside-the-repo>/before-migrate.sql   # backup first
@@ -144,6 +145,14 @@ migration; add `migrations/NNNN_description.sql` instead.
   `d1_migrations` so it can be re-applied later
   ([BUILDING_STUDIO_DESIGN.md §12](BUILDING_STUDIO_DESIGN.md#12-versioning-missing-assets-and-rollback)).
 
+- **0003 down** (artwork links), NON-destructive: after deploying pre-0003 code and exporting the
+  database, run `npx wrangler d1 execute lpu-atlas --remote --file docs/db/0003_down.sql`. It KEEPS
+  `artwork_associations` and every audit row (`artwork` rows stored as `system`, action kept), bumps
+  `publication_version` and forgets 0003 in `d1_migrations`; `migrations apply` re-applies 0003 and
+  restores the same decisions and the `artwork` audit type. Roll back 0003 before 0002. Rehearsed
+  only on isolated local databases (`tests/server/migrations/migration-0003.test.ts`,
+  `tests/server/artwork/persistence.test.ts`, and a `wrangler d1 … --local --persist-to <scratch>`
+  apply → rollback → re-apply run).
 - **0001** has no down script: removing it removes the community module itself. Export the database,
   then either restore to a point before the migration with D1 Time Travel
   ([ADMIN_OPERATIONS.md §6.3](ADMIN_OPERATIONS.md#63-point-in-time-restore-d1-time-travel), which

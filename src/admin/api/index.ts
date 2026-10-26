@@ -7,6 +7,7 @@
  *   const r = await api.community.listSuggestions({ status: 'pending' });
  *   if (r.ok) show(r.data.items); else showError(describeAdminError(r.error));
  */
+import { createArtworkApi, type ArtworkApi } from './artwork.ts';
 import { createCommunityApi, type CommunityApi } from './community.ts';
 import type { AdminApiError } from './errors.ts';
 import { createAdminHttp, type AdminHttp } from './http.ts';
@@ -28,6 +29,8 @@ export interface AdminApi {
   readonly session: SessionApi;
   readonly community: CommunityApi;
   readonly studio: StudioApi;
+  /** Owner verification of the campus illustration's links to buildings. */
+  readonly artwork: ArtworkApi;
   /** The CSRF token sent with writes (password mode); null in Access mode or when signed out. */
   getCsrfToken(): string | null;
   setCsrfToken(token: string | null): void;
@@ -58,6 +61,7 @@ export function createAdminApi(opts: AdminApiOptions = {}): AdminApi {
     session,
     community: createCommunityApi(http),
     studio: createStudioApi(http),
+    artwork: createArtworkApi(http),
     getCsrfToken: () => csrfToken,
     setCsrfToken: (token) => {
       csrfToken = token;
@@ -75,5 +79,14 @@ export { ADMIN_API_BASE, CSRF_HEADER, buildQuery, seg } from './http.ts';
 export type { AdminHttp, AdminRequest, AdminResult, HttpMethod } from './http.ts';
 export { createCommunityApi } from './community.ts';
 export { createStudioApi } from './studio.ts';
+export { createArtworkApi } from './artwork.ts';
+export type {
+  ArtworkApi,
+  ArtworkAssociationDetail,
+  ArtworkAssociationList,
+  ArtworkAssociationView,
+  ArtworkDecision,
+  EffectiveArtworkAssociationView,
+} from './artwork.ts';
 export { createSessionApi } from './session.ts';
 export { createAdminHttp } from './http.ts';

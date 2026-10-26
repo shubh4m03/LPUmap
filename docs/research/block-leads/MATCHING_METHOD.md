@@ -2,8 +2,9 @@
 
 > **Status: review material, not applied data.** This file explains how
 > [`block-candidates.json`](block-candidates.json), [`CANDIDATES.md`](CANDIDATES.md) and
-> [`candidates-overview.png`](candidates-overview.png) were produced. The block numbers come from an
-> undated third-party illustration (Behance "LPU isometric map design"), transcribed in
+> [`candidates-overview.png`](candidates-overview.png) were produced. The block numbers come from the
+> campus illustration ("LPU isometric map design", first studied from Behance; owner-supplied since
+> 2026-10-24, see [`LPU_ISOMETRIC_ASSET_INTEGRATION.md`](../../LPU_ISOMETRIC_ASSET_INTEGRATION.md)), transcribed in
 > [`block-leads.json`](block-leads.json). Under the owner's rules, the illustration may not by itself
 > name, number or position a real footprint, and an official block number may never be inferred from
 > location or appearance alone. Every output therefore lists **candidates for the owner to confirm**,

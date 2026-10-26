@@ -1,4 +1,7 @@
-/** Publication v2 (GET /api/locations): v1 fields unchanged, `buildings` added, v1 bodies still readable. */
+/**
+ * Publication v2/v3 (GET /api/locations): v1 fields unchanged, `buildings` (v2) and
+ * `artworkAssociations` (v3) added, v1 and v2 bodies still readable.
+ */
 import { describe, expect, it } from 'vitest';
 import {
   EMPTY_PUBLICATION,
@@ -26,9 +29,12 @@ const v1Body = {
 };
 
 describe('publication v2', () => {
-  it('is version 2 and still reads version 1 (server rollback keeps feeding current clients)', () => {
-    expect(PUBLICATION_SCHEMA_VERSION).toBe(2);
-    expect(SUPPORTED_PUBLICATION_SCHEMA_VERSIONS).toEqual([1, 2]);
+  it('is version 3 and still reads versions 1 and 2 (server rollback keeps feeding current clients)', () => {
+    expect(PUBLICATION_SCHEMA_VERSION).toBe(3);
+    expect(SUPPORTED_PUBLICATION_SCHEMA_VERSIONS).toEqual([1, 2, 3]);
+    expect(
+      publicationSchema.parse({ ...v1Body, schemaVersion: 2, buildings: [] }).artworkAssociations,
+    ).toBeUndefined();
     const v1 = publicationSchema.parse(v1Body);
     expect(v1.buildings).toBeUndefined();
     expect(v1.overrides).toHaveLength(1);
@@ -57,14 +63,41 @@ describe('publication v2', () => {
   });
 
   it('rejects an unknown schema version and malformed buildings', () => {
-    expect(publicationSchema.safeParse({ ...v1Body, schemaVersion: 3 }).success).toBe(false);
+    expect(publicationSchema.safeParse({ ...v1Body, schemaVersion: 4 }).success).toBe(false);
     expect(
       publicationSchema.safeParse({ ...v1Body, schemaVersion: 2, buildings: [{ id: 'nope' }] }).success,
     ).toBe(false);
   });
 
-  it('EMPTY_PUBLICATION is a valid v2 body with no buildings', () => {
+  it('EMPTY_PUBLICATION is a valid v3 body with no buildings and no artwork decisions', () => {
     expect(publicationSchema.parse(EMPTY_PUBLICATION)).toEqual(EMPTY_PUBLICATION);
     expect(EMPTY_PUBLICATION.buildings).toEqual([]);
+    expect(EMPTY_PUBLICATION.artworkAssociations).toEqual([]);
+  });
+
+  it('v3 carries owner artwork decisions without private fields, and rejects inconsistent ones', () => {
+    const decision = {
+      subjectId: 'art:num-25',
+      status: 'approximate',
+      buildingId: 'osm:way/422823421',
+      evidence: [],
+      revision: 2,
+      updatedAt: '2026-10-24T10:00:00.000Z',
+    };
+    const pub = publicationSchema.parse({
+      ...v1Body,
+      schemaVersion: 3,
+      buildings: [],
+      artworkAssociations: [{ ...decision, note: 'private', updatedBy: 'owner' }],
+    });
+    expect(pub.artworkAssociations).toEqual([decision]);
+    for (const bad of [
+      { ...decision, status: 'verified' },
+      { ...decision, status: 'unresolved' },
+      { ...decision, subjectId: 'BLOCK-25' },
+    ])
+      expect(
+        publicationSchema.safeParse({ ...v1Body, schemaVersion: 3, artworkAssociations: [bad] }).success,
+      ).toBe(false);
   });
 });

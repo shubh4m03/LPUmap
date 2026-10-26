@@ -109,7 +109,7 @@ function PaletteBody({ inputRef }: { inputRef: RefObject<HTMLInputElement | null
     } else if (e.key === 'Enter' && item) {
       e.preventDefault();
       activate(item);
-    } else if (e.key === 'Tab' && !e.shiftKey && item?.kind === 'place') {
+    } else if (e.key === 'Tab' && !e.shiftKey && (item?.kind === 'place' || item?.kind === 'artwork')) {
       e.preventDefault();
       const reason = routeTo(item);
       if (reason) announce(`Cannot plan a route: ${reason}`, 'assertive');

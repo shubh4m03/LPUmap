@@ -17,6 +17,8 @@ export const PERMISSIONS = [
   'studio:publish',
   'studio:delete',
   'studio:templates',
+  // Artwork verification (docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md §4.2).
+  'artwork:verify',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 

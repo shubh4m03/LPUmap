@@ -7,12 +7,12 @@ import { APP_CONFIG } from '../../config/index.ts';
 import { studioModelLabel } from '../place/place-format.ts';
 import { iconForCategory, type IconName, type TitleSegment } from '../ui/index.ts';
 
-export type SectionId = 'recent' | 'favorites' | 'places' | 'categories' | 'commands';
+export type SectionId = 'recent' | 'favorites' | 'places' | 'illustration' | 'categories' | 'commands';
 
 export interface PaletteItem {
   key: string;
   kind: SearchDocKind;
-  /** Place id, category id, layer group id or command id. */
+  /** Place id, artwork subject id (`art:…`), category id, layer group id or command id. */
   ref: string;
   title: string;
   segments?: TitleSegment[];
@@ -33,12 +33,14 @@ const SECTION_LABELS: Record<SectionId, string> = {
   recent: 'Recent',
   favorites: 'Saved places',
   places: 'Places',
+  illustration: 'On the campus illustration',
   categories: 'Categories',
   commands: 'Commands',
 };
 
 const SECTION_OF: Record<SearchDocKind, SectionId> = {
   place: 'places',
+  artwork: 'illustration',
   category: 'categories',
   layer: 'commands',
   command: 'commands',
@@ -92,6 +94,9 @@ function hitItem(hit: SearchHit, getPlace: (id: string) => Place | undefined): P
       iconColor: c.color,
     };
   }
+  if (doc.kind === 'artwork')
+    // An illustration item not linked to a verified building: no map position, never routed.
+    return { ...base, subtitle: doc.subtitle ?? 'Campus illustration', icon: 'overview', noLocation: true };
   if (doc.kind === 'layer')
     return { ...base, subtitle: doc.subtitle ?? 'Map layer', icon: layerIcon(doc.ref) };
   return { ...base, subtitle: doc.subtitle ?? 'Command', icon: commandIcon(doc.ref) };

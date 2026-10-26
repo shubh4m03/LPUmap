@@ -1,0 +1,181 @@
+{
+  "$comment": "DERIVED review images of the owner-supplied artwork. Downscaled previews only; never a substitute for the originals in lpu-isometric-map-design/. Regenerate with: node scripts/isometric-art-contact-sheets.ts",
+  "derived": true,
+  "generator": "scripts/isometric-art-contact-sheets.ts (Playwright Chromium canvas)",
+  "inventory": "data/curated/isometric-art/inventory.json",
+  "sheets": [
+    {
+      "file": "sheet-01-master-overview.png",
+      "sha256": "64247a493b1c691669800f8e5fd5d83876cf1e8c90f42ffc2a76053f28108642",
+      "bytes": 972929,
+      "sources": [
+        {
+          "id": "iso-art-001",
+          "file": "1-lpu-isometric-map-design-3371.jpg",
+          "sha256": "41997f42cea0f99e62c5b6b23406afdb3cd8e4bcb4635fa1c264c91127044a25"
+        }
+      ]
+    },
+    {
+      "file": "sheet-02-block-vignettes-other-captions.png",
+      "sha256": "84259813f6c573633bc76d627a275e47e6dc762f65a14115df4699a9f60b70c8",
+      "bytes": 572098,
+      "sources": [
+        {
+          "id": "iso-art-011",
+          "file": "11-lpu-isometric-map-design-961.png",
+          "sha256": "cca73014e80c5d992d725e55d8477f481d8963249260f6c5ea209dbe25fb7c06"
+        },
+        {
+          "id": "iso-art-015",
+          "file": "15-lpu-isometric-map-design-963.png",
+          "sha256": "73b7339ac8f74b828e9b28d78c30b91ab6affb388b26e1148ee43ca54cd1d9c5"
+        },
+        {
+          "id": "iso-art-019",
+          "file": "19-lpu-isometric-map-design-961.png",
+          "sha256": "28b078d9f4c2074ceeb279695f67938b60f9ef01b2db39d28bd48a832529e745"
+        },
+        {
+          "id": "iso-art-023",
+          "file": "23-lpu-isometric-map-design-961.png",
+          "sha256": "2f1f2b056e466a710381621ede02941db5b00eec5f8bb90e6c770fcada65c16d"
+        },
+        {
+          "id": "iso-art-027",
+          "file": "27-lpu-isometric-map-design-961.png",
+          "sha256": "2a332863ae6fba9a44ac11a660559fa31363c43c07006a4f59e5588c9f1d2636"
+        },
+        {
+          "id": "iso-art-035",
+          "file": "35-lpu-isometric-map-design-961.png",
+          "sha256": "bff5b3b359bb1cac4e72dca6356660582c7be3515f9647bacb211f5fd57c5ecf"
+        },
+        {
+          "id": "iso-art-039",
+          "file": "39-lpu-isometric-map-design-963.png",
+          "sha256": "11c9bc2ad4a85b4a9c125498e2a0ab64ca7b50b01743f68da8be5dc7279e39b2"
+        },
+        {
+          "id": "iso-art-043",
+          "file": "43-lpu-isometric-map-design-961.png",
+          "sha256": "6d1803d48a5a08475a73ce0d68149c798789d0e5fb46779cff5d31cfdee077f3"
+        },
+        {
+          "id": "iso-art-047",
+          "file": "47-lpu-isometric-map-design-961.png",
+          "sha256": "a5e745f8437b06df861b7c4d1df8c2292759e8f9d843a8971bc3b40000f53069"
+        },
+        {
+          "id": "iso-art-051",
+          "file": "51-lpu-isometric-map-design-961.png",
+          "sha256": "958caf11ae7dfae1dc0c7ecdc9f6418a1f7f6b644f5976076ae26b77abc4ff4b"
+        },
+        {
+          "id": "iso-art-083",
+          "file": "83-lpu-isometric-map-design-961.png",
+          "sha256": "84cbc5030f230fbd7f91f57100224b415abdab285cb692ea278dca6655ace947"
+        },
+        {
+          "id": "iso-art-087",
+          "file": "87-lpu-isometric-map-design-963.png",
+          "sha256": "0cf8b8b754cf50aa41f636f3beeeb45ac04bc52b338990ef93e6e69c7c5c7d7e"
+        }
+      ]
+    },
+    {
+      "file": "sheet-03-block-vignettes-hostel-apartment-captions.png",
+      "sha256": "9e8b75a1d6f144b2e5158819db701a879b2ab2804e1866c2d86a6b56052a314b",
+      "bytes": 346516,
+      "sources": [
+        {
+          "id": "iso-art-031",
+          "file": "31-lpu-isometric-map-design-961.png",
+          "sha256": "ccf425a0f411763703b3ec2879ed062b0d27a986639823bf6c68ea0d2b920c72"
+        },
+        {
+          "id": "iso-art-055",
+          "file": "55-lpu-isometric-map-design-961.png",
+          "sha256": "2c865a3effbed91b34b89a4ea040ccaf897657d53de3b31583c039560287cf21"
+        },
+        {
+          "id": "iso-art-059",
+          "file": "59-lpu-isometric-map-design-961.png",
+          "sha256": "f3cc654cb2f026dc016c14d50114e8ec4ef4c08a57572f363d21a177597c5798"
+        },
+        {
+          "id": "iso-art-063",
+          "file": "63-lpu-isometric-map-design-963.png",
+          "sha256": "3ee3db53297766fd8abe9836215a1112a6544796e014e3e8f5b524d984eafb06"
+        },
+        {
+          "id": "iso-art-067",
+          "file": "67-lpu-isometric-map-design-961.png",
+          "sha256": "76701f4f3eb7551bfb55a83809808903b123607c3f0420d0a6d2e0c1efda5c85"
+        },
+        {
+          "id": "iso-art-071",
+          "file": "71-lpu-isometric-map-design-961.png",
+          "sha256": "08ee40d540ccbbd0fbf3fb1c4366e8cace78f2eb452a1e15bb163c8d513e834e"
+        },
+        {
+          "id": "iso-art-075",
+          "file": "75-lpu-isometric-map-design-961.png",
+          "sha256": "d7b04fd08938f1473be0a220608731636aee1abedd8f8c925cf90def8131041c"
+        },
+        {
+          "id": "iso-art-079",
+          "file": "79-lpu-isometric-map-design-961.png",
+          "sha256": "039e7fd535428d33d23a13b1d03ff8623efca1b2749c1809722dd85d22d12be7"
+        }
+      ]
+    },
+    {
+      "file": "sheet-04-scene-vignettes.png",
+      "sha256": "6da45434f84aeb7679f9bf9af19f3f99dc2e092c279b69137d11216f09245071",
+      "bytes": 498956,
+      "sources": [
+        {
+          "id": "iso-art-091",
+          "file": "91-lpu-isometric-map-design-961.png",
+          "sha256": "732dba5ee46ecc67bb55e05a3ed65318011a52beae73bf220490f45d942d3338"
+        },
+        {
+          "id": "iso-art-095",
+          "file": "95-lpu-isometric-map-design-961.png",
+          "sha256": "2471ac6bef735305a892d742f04e180933574c0c35000798b5c757b145f2cb66"
+        },
+        {
+          "id": "iso-art-099",
+          "file": "99-lpu-isometric-map-design-961.png",
+          "sha256": "3952c06ecc358bce1856b4a746b42eed0f28dd1853103ce3e5ea79f2fd93f8db"
+        },
+        {
+          "id": "iso-art-103",
+          "file": "103-lpu-isometric-map-design-961.png",
+          "sha256": "ab5d969fdcb3bcffba01f774b59de47b2acc35187d0145242276692d7f098369"
+        },
+        {
+          "id": "iso-art-107",
+          "file": "107-lpu-isometric-map-design-961.png",
+          "sha256": "2dc2a4837c0b12f204a727fdd5482d828944573be54a82508f50edf07ad7f508"
+        },
+        {
+          "id": "iso-art-111",
+          "file": "111-lpu-isometric-map-design-963.png",
+          "sha256": "b32a8d12c32360a4a0282d71491af0426f11995f77f5e07551f6ab5c462bd5ea"
+        },
+        {
+          "id": "iso-art-115",
+          "file": "115-lpu-isometric-map-design-963.png",
+          "sha256": "b32a8d12c32360a4a0282d71491af0426f11995f77f5e07551f6ab5c462bd5ea"
+        },
+        {
+          "id": "iso-art-119",
+          "file": "119-lpu-isometric-map-design-961.png",
+          "sha256": "b24552ae540cd3a31b892eb74fdc6f067ba7d72e93caaa182e21f2c8d6bf5a44"
+        }
+      ]
+    }
+  ]
+}

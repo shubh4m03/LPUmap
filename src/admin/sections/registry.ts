@@ -18,6 +18,7 @@ export const SECTION_COMPONENTS: Readonly<
   overrides: lazy(() => import('./OverridesSection.tsx')),
   studio: lazy(() => import('../studio/StudioSection.tsx')),
   templates: lazy(() => import('../studio/TemplatesSection.tsx')),
+  artwork: lazy(() => import('./artwork/ArtworkSection.tsx')),
   audit: lazy(() => import('./AuditSection.tsx')),
   quality: lazy(() => import('./QualitySection.tsx')),
 };

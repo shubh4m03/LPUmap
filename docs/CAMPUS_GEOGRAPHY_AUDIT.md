@@ -241,9 +241,12 @@ The full MS-only list (centroid, area, coverage) is in the scratch output `ms-on
 | **Entrances / gates**       | 0 `entrance=*` nodes and 0 gate barriers in the snapshot. The only `barrier` is `block`. The only gate place is "Green valley main gate" (`node/12031088561`, `man_made=ceremonial_gate` + `ceremonial_gate=torii`), which is off campus at 75.69756 E, 31.25173 N.                     | —                                                                                             | **Unresolved**                               |
 | Other inside-boundary items | 40 `leisure=park`, 14 pitches, 6 parking areas, 2 water towers (`node/4224770131`, `node/4225472858`), 34 `natural=tree`, 15 water areas                                                                                                                                                |                                                                                               |                                              |
 
-**Behance "LPU isometric map design" (UNVERIFIED leads only).** The image is copyrighted
-third-party artwork of unknown date, saved under the git-ignored `reference/` folder. Its index
-lists, among others:
+**"LPU isometric map design" campus illustration (UNVERIFIED leads only).** At the time of this
+audit it was known only as a Behance screenshot saved under the git-ignored `reference/` folder. On
+2026-10-24 the owner supplied the original files and stated that they own the artwork or are authorised
+to use it ([GEODATA_SOURCES_AND_LICENSES.md §14](GEODATA_SOURCES_AND_LICENSES.md#14-lpu-isometric-map-design-owner-supplied-campus-illustration));
+it is now shown as the Illustrated overview. Its printed numbers and names remain unverified leads for
+geography and official block numbers. Its index lists, among others:
 
 | Use                   | Block numbers in the artwork |
 | --------------------- | ---------------------------- |
@@ -457,4 +460,4 @@ Node 24 ESM with no dependencies and only read repository files.
 
 - OSM API 0.6 history for relation 21599790 and ways 422435593 and 1566901467, plus changesets 190271129 and 190268485 (© OpenStreetMap contributors, ODbL).
 - Microsoft Global ML Building Footprints, quadkey 123121013 (ODbL).
-- The Behance artwork (<https://www.behance.net/gallery/105159145/LPU-isometric-map-design>), viewed only for unverified leads.
+- The campus illustration as published on Behance (<https://www.behance.net/gallery/105159145/LPU-isometric-map-design>), viewed only for unverified leads. (The owner has since supplied the originals; see GEODATA_SOURCES_AND_LICENSES.md §14.)

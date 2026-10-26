@@ -1,8 +1,16 @@
 # Owner checklist: block-number confirmations
 
+> **Superseded (2026-10-24).** Record decisions in the admin **Artwork** screen (`/admin/artwork`), which
+> links each campus-illustration item to a building with evidence and keeps the history. The walks below
+> are merged, keyed by illustration subject, into
+> [LPU_ISOMETRIC_ASSET_INTEGRATION.md §11](../../LPU_ISOMETRIC_ASSET_INTEGRATION.md#11-owner-verification-guide);
+> the per-subject table is [LPU_ISOMETRIC_ASSET_MAPPING.md](../../LPU_ISOMETRIC_ASSET_MAPPING.md). This file
+> is kept as the research record. The illustration is owner-supplied since 2026-10-24 ("I own or am
+> authorized to use the artwork"), but it is still never evidence of a block number or position.
+>
 > **Status: review items, not applied data.** Every footprint below is an _unverified candidate_. Each
-> block number in this file came from an undated third-party illustration (Behance "LPU isometric map
-> design") or from an official page that gives only the number and function. None of them places a
+> block number in this file came from the campus illustration ("LPU isometric map design", first studied
+> from Behance) or from an official page that gives only the number and function. None of them places a
 > building. Do not write a block number into the dataset until you have confirmed it with **your own**
 > evidence: a sign on the building or an official LPU document that names the building. Location or
 > appearance alone is never enough.

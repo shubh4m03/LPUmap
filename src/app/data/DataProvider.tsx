@@ -17,6 +17,8 @@ import type { AtlasServices } from './services.ts';
 const loadServices = () => import('./services.ts');
 // The owner's publication (GET /api/locations) is fetched in parallel too; it never fails the app.
 const loadPublication = () => import('./publication.ts').then((m) => m.loadPublication());
+// The campus illustration's manifest too; a missing manifest never fails the app (artwork.ts).
+const loadArtwork = () => import('./artwork.ts').then((m) => m.loadArtwork());
 
 type LoadState =
   | { status: 'loading'; attempt: number }
@@ -45,9 +47,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (attempt < 0) return;
     let cancelled = false;
-    Promise.all([loadCampusData(), loadServices(), loadPublication()])
-      .then(async ([base, mod, publication]) => {
-        const built = await mod.buildAppServices(base, publication, createOptionalLoaders(base.manifest));
+    Promise.all([loadCampusData(), loadServices(), loadPublication(), loadArtwork()])
+      .then(async ([base, mod, publication, artwork]) => {
+        const built = await mod.buildAppServices(
+          base,
+          publication,
+          createOptionalLoaders(base.manifest),
+          artwork,
+        );
         return { ...built, withContextPlaces: mod.withContextPlaces };
       })
       .then(

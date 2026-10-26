@@ -96,8 +96,9 @@ const SAMPLE: Record<string, string> = {
   ':targetId': encodeURIComponent('osm:way/123456'),
   ':buildingId': 'stu:aaaaaaaaaaaaaaaaaaaaaaaaaa',
   ':templateId': 'stv:aaaaaaaaaaaaaaaaaaaaaaaaaa',
+  ':subjectId': encodeURIComponent('art:num-25'),
 };
-const DECODED: Record<string, string> = { ':targetId': 'osm:way/123456' };
+const DECODED: Record<string, string> = { ':targetId': 'osm:way/123456', ':subjectId': 'art:num-25' };
 const concrete = (pattern: string) => `/api/admin${pattern.replace(/:[a-zA-Z]+/g, (m) => SAMPLE[m]!)}`;
 const concreteRel = (pattern: string) => concrete(pattern).slice('/api/admin'.length);
 const entityOf = (pattern: string): string | null => {
@@ -112,7 +113,7 @@ const AUDITED = WRITES.filter((r) => !UNAUDITED_WRITES.has(`${r.method} ${r.patt
 
 describe('1. body rejections are audited as rejected', () => {
   it('every authenticated write route (except logout and the validate dry run) declares its audit target', () => {
-    expect(AUDITED).toHaveLength(29); // 16 community + 13 studio writes
+    expect(AUDITED).toHaveLength(31); // 16 community + 13 studio + 2 artwork writes
     for (const r of AUDITED) {
       expect(r.handler.audit, `${r.method} ${r.pattern}`).toBeDefined();
       expect(r.handler.audit!.action).toMatch(/^[a-z]+\.[a-z-]+$/);
@@ -306,8 +307,11 @@ describe('2. GET /api/locations: early 304 and a narrow, consistent read', () =>
     };
     const res = await publicationReq({}, db);
     expect(res.status).toBe(200);
-    expect(batches).toEqual([4]);
-    expect(counting.prepared).toHaveLength(4);
+    // v3: state, locations, overrides, studio versions, artwork decisions
+    expect(batches).toEqual([5]);
+    expect(counting.prepared).toHaveLength(5);
+    const artworkSql = counting.prepared.find((s) => /artwork_associations/.test(s))!;
+    expect(artworkSql).not.toMatch(/\bnote\b|created_by|updated_by|\*/);
     const studioSql = counting.prepared.find((s) => /studio_building_versions/.test(s))!;
     expect(studioSql).not.toMatch(/v\.\*|validation_json|acknowledgements_json|change_summary|published_by/);
     const pub = publicationSchema.parse(await res.json());

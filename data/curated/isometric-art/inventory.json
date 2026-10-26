@@ -1,0 +1,5849 @@
+{
+  "$comment": "Inventory of the owner-supplied LPU isometric artwork. Labels are transcribed EXACTLY as printed (typos kept) and verified by eye on zoomed crops; OCR was not relied on. Artwork/index numbers are NOT official LPU block numbers. Nothing here names, numbers or positions a real building on the geographic map. DRAFT for owner review; not applied data.",
+  "schemaVersion": 1,
+  "kind": "lpu-isometric-art-inventory",
+  "status": "draft-for-owner-review",
+  "verifiedAt": "2026-10-24",
+  "sourceDir": "lpu-isometric-map-design",
+  "provenance": {
+    "suppliedBy": "project owner",
+    "suppliedOn": "2026-10-24",
+    "ownerStatement": "I own or am authorized to use the artwork",
+    "originalDesignTool": "Adobe Illustrator CS6 (from the master JPEG XMP; created 2019-04-25)",
+    "earlierResearch": "docs/research/block-leads/ transcribed byte-identical copies named slide-NN (git-ignored reference/assets/behance-slides/, never committed). earlierResearchName maps each asset to that name.",
+    "handling": "Originals are never modified, renamed or re-encoded. Derived copies live elsewhere and record the source sha256."
+  },
+  "conventions": {
+    "ids": "iso-art-NNN, where NNN is the leading number of the original file name, zero-padded. Label ids are <asset id>/L<n> in reading order.",
+    "coordinates": "Source pixels, origin top-left, x right, y down. nx = x / width and ny = y / height, in [0, 1]. Each asset records its coordinateSpace.",
+    "confidence": {
+      "high": "legible at 2.5x zoom; exact",
+      "medium": "words exact; spacing or punctuation uncertain",
+      "low": "needs manual verification"
+    },
+    "textFields": "\"lines\" are the printed lines; \"text\" joins them with one space. Internal spacing (including double spaces) is kept as seen."
+  },
+  "summary": {
+    "files": 29,
+    "uniqueImages": 28,
+    "masterOverview": ["iso-art-001"],
+    "blockVignettes": [
+      "iso-art-011",
+      "iso-art-015",
+      "iso-art-019",
+      "iso-art-023",
+      "iso-art-027",
+      "iso-art-031",
+      "iso-art-035",
+      "iso-art-039",
+      "iso-art-043",
+      "iso-art-047",
+      "iso-art-051",
+      "iso-art-055",
+      "iso-art-059",
+      "iso-art-063",
+      "iso-art-067",
+      "iso-art-071",
+      "iso-art-075",
+      "iso-art-079",
+      "iso-art-083",
+      "iso-art-087"
+    ],
+    "sceneVignettes": [
+      "iso-art-091",
+      "iso-art-095",
+      "iso-art-099",
+      "iso-art-103",
+      "iso-art-107",
+      "iso-art-111",
+      "iso-art-115",
+      "iso-art-119"
+    ],
+    "duplicateGroups": [["iso-art-111", "iso-art-115"]]
+  },
+  "assets": [
+    {
+      "id": "iso-art-001",
+      "file": "1-lpu-isometric-map-design-3371.jpg",
+      "path": "lpu-isometric-map-design/1-lpu-isometric-map-design-3371.jpg",
+      "earlierResearchName": "slide-28.jpg",
+      "bytes": 5214675,
+      "sha256": "41997f42cea0f99e62c5b6b23406afdb3cd8e4bcb4635fa1c264c91127044a25",
+      "width": 3371,
+      "height": 2384,
+      "format": "JPEG",
+      "mime": "image/jpeg",
+      "encoding": "baseline (SOF0), 8 bits per component",
+      "components": 4,
+      "colorSpace": "CMYK",
+      "iccProfile": "U.S. Web Coated (SWOP) v2 (embedded across 18 APP2 segments)",
+      "adobeApp14Transform": 0,
+      "xmp": {
+        "creatorTool": "Adobe Illustrator CS6 (Windows)",
+        "createDate": "2019-04-25T17:24:41+05:30",
+        "modifyDate": "2019-04-25T11:56:05Z"
+      },
+      "alpha": {
+        "channel": false,
+        "effectivelyOpaque": true
+      },
+      "webNote": "CMYK JPEG. Chromium decodes it with the embedded profile. Derived web copies must be converted to sRGB by a colour-managed decoder and compared visually against the original; never re-save over the original.",
+      "duplicates": [],
+      "canonical": true,
+      "role": "master-overview",
+      "regionsApprox": {
+        "note": "Measured by eye on a 0.4x gridded render; +-15 px. Boxes are [x, y, w, h] in source pixels.",
+        "frame": [25, 25, 3317, 2330],
+        "mapArea": [25, 25, 2575, 2330],
+        "logoBlock": [1805, 30, 745, 432],
+        "informationPanel": [2600, 25, 742, 2330],
+        "legendBox": [88, 1900, 650, 405]
+      },
+      "informationIndex": {
+        "heading": "INFORMATION",
+        "note": "Rows transcribed top to bottom exactly as printed. \"21A,B\" is read as 21A and 21B; that split interprets the printed shorthand.",
+        "sections": [
+          {
+            "heading": "EDUCATION",
+            "colour": "blue",
+            "labelId": "iso-art-001/L2",
+            "rows": [
+              {
+                "row": 1,
+                "labelAsPrinted": "FASHION",
+                "numbersAsPrinted": "1",
+                "numbersPrintedLines": ["1"],
+                "artworkNumbers": ["1"],
+                "labelId": "iso-art-001/L3"
+              },
+              {
+                "row": 2,
+                "labelAsPrinted": "PHARMACY",
+                "numbersAsPrinted": "4,7",
+                "numbersPrintedLines": ["4,7"],
+                "artworkNumbers": ["4", "7"],
+                "labelId": "iso-art-001/L4"
+              },
+              {
+                "row": 3,
+                "labelAsPrinted": "PHYSIOTHERAPY",
+                "numbersAsPrinted": "3",
+                "numbersPrintedLines": ["3"],
+                "artworkNumbers": ["3"],
+                "labelId": "iso-art-001/L5"
+              },
+              {
+                "row": 4,
+                "labelAsPrinted": "ARCHITECTURE",
+                "numbersAsPrinted": "6",
+                "numbersPrintedLines": ["6"],
+                "artworkNumbers": ["6"],
+                "labelId": "iso-art-001/L6"
+              },
+              {
+                "row": 5,
+                "labelAsPrinted": "ANIMATION",
+                "numbersAsPrinted": "8",
+                "numbersPrintedLines": ["8"],
+                "artworkNumbers": ["8"],
+                "labelId": "iso-art-001/L7"
+              },
+              {
+                "row": 6,
+                "labelAsPrinted": "FINE ARTS",
+                "numbersAsPrinted": "8",
+                "numbersPrintedLines": ["8"],
+                "artworkNumbers": ["8"],
+                "labelId": "iso-art-001/L8"
+              },
+              {
+                "row": 7,
+                "labelAsPrinted": "BUSINESS",
+                "numbersAsPrinted": "13",
+                "numbersPrintedLines": ["13"],
+                "artworkNumbers": ["13"],
+                "labelId": "iso-art-001/L9"
+              },
+              {
+                "row": 8,
+                "labelAsPrinted": "HOTEL MANAGEMENT",
+                "numbersAsPrinted": "15",
+                "numbersPrintedLines": ["15"],
+                "artworkNumbers": ["15"],
+                "labelId": "iso-art-001/L10"
+              },
+              {
+                "row": 9,
+                "labelAsPrinted": "EDUCATION",
+                "numbersAsPrinted": "18",
+                "numbersPrintedLines": ["18"],
+                "artworkNumbers": ["18"],
+                "labelId": "iso-art-001/L11"
+              },
+              {
+                "row": 10,
+                "labelAsPrinted": "PERFORMING ARTS",
+                "numbersAsPrinted": "19",
+                "numbersPrintedLines": ["19"],
+                "artworkNumbers": ["19"],
+                "labelId": "iso-art-001/L12"
+              },
+              {
+                "row": 11,
+                "labelAsPrinted": "FILM & JOURNALISM",
+                "numbersAsPrinted": "20",
+                "numbersPrintedLines": ["20"],
+                "artworkNumbers": ["20"],
+                "labelId": "iso-art-001/L13"
+              },
+              {
+                "row": 12,
+                "labelAsPrinted": "LAW",
+                "numbersAsPrinted": "20",
+                "numbersPrintedLines": ["20"],
+                "artworkNumbers": ["20"],
+                "labelId": "iso-art-001/L14"
+              },
+              {
+                "row": 13,
+                "labelAsPrinted": "AGRICULTURE",
+                "numbersAsPrinted": "25,26",
+                "numbersPrintedLines": ["25,26"],
+                "artworkNumbers": ["25", "26"],
+                "labelId": "iso-art-001/L15"
+              },
+              {
+                "row": 14,
+                "labelAsPrinted": "PHYSICAL SCIENCE",
+                "numbersAsPrinted": "27",
+                "numbersPrintedLines": ["27"],
+                "artworkNumbers": ["27"],
+                "labelId": "iso-art-001/L16"
+              },
+              {
+                "row": 15,
+                "labelAsPrinted": "BIOTECHNOLOGY",
+                "numbersAsPrinted": "28",
+                "numbersPrintedLines": ["28"],
+                "artworkNumbers": ["28"],
+                "labelId": "iso-art-001/L17"
+              },
+              {
+                "row": 16,
+                "labelAsPrinted": "COMPUTER APPLICATION",
+                "numbersAsPrinted": "33",
+                "numbersPrintedLines": ["33"],
+                "artworkNumbers": ["33"],
+                "labelId": "iso-art-001/L18"
+              },
+              {
+                "row": 17,
+                "labelAsPrinted": "COMPTER SCIENCE",
+                "numbersAsPrinted": "34",
+                "numbersPrintedLines": ["34"],
+                "artworkNumbers": ["34"],
+                "labelId": "iso-art-001/L19"
+              },
+              {
+                "row": 18,
+                "labelAsPrinted": "ELECTRONIC TELECOM",
+                "numbersAsPrinted": "36",
+                "numbersPrintedLines": ["36"],
+                "artworkNumbers": ["36"],
+                "labelId": "iso-art-001/L20"
+              },
+              {
+                "row": 19,
+                "labelAsPrinted": "RESEARCH",
+                "numbersAsPrinted": "37",
+                "numbersPrintedLines": ["37"],
+                "artworkNumbers": ["37"],
+                "labelId": "iso-art-001/L21"
+              },
+              {
+                "row": 20,
+                "labelAsPrinted": "CIVIL",
+                "numbersAsPrinted": "38",
+                "numbersPrintedLines": ["38"],
+                "artworkNumbers": ["38"],
+                "labelId": "iso-art-001/L22"
+              },
+              {
+                "row": 21,
+                "labelAsPrinted": "MECHANICAL",
+                "numbersAsPrinted": "56",
+                "numbersPrintedLines": ["56"],
+                "artworkNumbers": ["56"],
+                "labelId": "iso-art-001/L23"
+              },
+              {
+                "row": 22,
+                "labelAsPrinted": "POLYTECHINQUE",
+                "numbersAsPrinted": "57",
+                "numbersPrintedLines": ["57"],
+                "artworkNumbers": ["57"],
+                "labelId": "iso-art-001/L24"
+              },
+              {
+                "row": 23,
+                "labelAsPrinted": "",
+                "numbersAsPrinted": "58",
+                "numbersPrintedLines": ["58"],
+                "artworkNumbers": ["58"],
+                "labelId": "iso-art-001/L25"
+              }
+            ]
+          },
+          {
+            "heading": "ADMINISTRATIVE",
+            "colour": "maroon",
+            "labelId": "iso-art-001/L26",
+            "rows": [
+              {
+                "row": 1,
+                "labelAsPrinted": "ADMINISTRATIVE",
+                "numbersAsPrinted": "29",
+                "numbersPrintedLines": ["29"],
+                "artworkNumbers": ["29"],
+                "labelId": "iso-art-001/L27"
+              },
+              {
+                "row": 2,
+                "labelAsPrinted": "PROCHANCELLOR",
+                "numbersAsPrinted": "30",
+                "numbersPrintedLines": ["30"],
+                "artworkNumbers": ["30"],
+                "labelId": "iso-art-001/L28"
+              },
+              {
+                "row": 3,
+                "labelAsPrinted": "CHANCELLOR",
+                "numbersAsPrinted": "31",
+                "numbersPrintedLines": ["31"],
+                "artworkNumbers": ["31"],
+                "labelId": "iso-art-001/L29"
+              },
+              {
+                "row": 4,
+                "labelAsPrinted": "ADMINISTRATIVE",
+                "numbersAsPrinted": "31",
+                "numbersPrintedLines": ["31"],
+                "artworkNumbers": ["31"],
+                "labelId": "iso-art-001/L30"
+              },
+              {
+                "row": 5,
+                "labelAsPrinted": "ADMISSION",
+                "numbersAsPrinted": "32",
+                "numbersPrintedLines": ["32"],
+                "artworkNumbers": ["32"],
+                "labelId": "iso-art-001/L31"
+              },
+              {
+                "row": 6,
+                "labelAsPrinted": "STUDENT WELFARE",
+                "numbersAsPrinted": "13",
+                "numbersPrintedLines": ["13"],
+                "artworkNumbers": ["13"],
+                "labelId": "iso-art-001/L32"
+              },
+              {
+                "row": 7,
+                "labelAsPrinted": "SHANTIDEVI AUDITORIUM",
+                "numbersAsPrinted": "35",
+                "numbersPrintedLines": ["35"],
+                "artworkNumbers": ["35"],
+                "labelId": "iso-art-001/L33"
+              },
+              {
+                "row": 8,
+                "labelAsPrinted": "BALDEV RAJ AUDITORIUM",
+                "numbersAsPrinted": "2",
+                "numbersPrintedLines": ["2"],
+                "artworkNumbers": ["2"],
+                "labelId": "iso-art-001/L34"
+              },
+              {
+                "row": 9,
+                "labelAsPrinted": "INDOOR",
+                "numbersAsPrinted": "47",
+                "numbersPrintedLines": ["47"],
+                "artworkNumbers": ["47"],
+                "labelId": "iso-art-001/L35"
+              },
+              {
+                "row": 10,
+                "labelAsPrinted": "PROJECT LAB",
+                "numbersAsPrinted": "58",
+                "numbersPrintedLines": ["58"],
+                "artworkNumbers": ["58"],
+                "labelId": "iso-art-001/L36"
+              }
+            ]
+          },
+          {
+            "heading": "RESIDENTIAL",
+            "colour": "gold",
+            "labelId": "iso-art-001/L37",
+            "rows": [
+              {
+                "row": 1,
+                "labelAsPrinted": "GIRLS HOSTEL",
+                "numbersAsPrinted": "9,10, 11,12, 21A,B",
+                "numbersPrintedLines": ["9,10,", "11,12,", "21A,B"],
+                "artworkNumbers": ["9", "10", "11", "12", "21A", "21B"],
+                "labelId": "iso-art-001/L38"
+              },
+              {
+                "row": 2,
+                "labelAsPrinted": "APARTMENT",
+                "numbersAsPrinted": "41,42, 43,44",
+                "numbersPrintedLines": ["41,42,", "43,44"],
+                "artworkNumbers": ["41", "42", "43", "44"],
+                "labelId": "iso-art-001/L39"
+              },
+              {
+                "row": 3,
+                "labelAsPrinted": "BOYS HOSTEL",
+                "numbersAsPrinted": "45,48, 49,50, 51,53,52",
+                "numbersPrintedLines": ["45,48,", "49,50,", "51,53,52"],
+                "artworkNumbers": ["45", "48", "49", "50", "51", "53", "52"],
+                "labelId": "iso-art-001/L40"
+              }
+            ]
+          }
+        ]
+      },
+      "legend": [
+        {
+          "labelAsPrinted": "GARDEN OR GROUND AREA",
+          "swatch": "green swatch",
+          "labelId": "iso-art-001/L41"
+        },
+        {
+          "labelAsPrinted": "ROAD",
+          "swatch": "dark swatch with white dashes",
+          "labelId": "iso-art-001/L42"
+        },
+        {
+          "labelAsPrinted": "PEDISTRIAN",
+          "swatch": "dusty-pink swatch",
+          "labelId": "iso-art-001/L43"
+        },
+        {
+          "labelAsPrinted": "PARKING AREA",
+          "swatch": "dark-grey swatch",
+          "labelId": "iso-art-001/L44"
+        },
+        {
+          "labelAsPrinted": "LPU SURROUNDINGS",
+          "swatch": "pale-yellow swatch",
+          "labelId": "iso-art-001/L45"
+        }
+      ],
+      "labels": [
+        {
+          "id": "iso-art-001/L1",
+          "kind": "index-heading",
+          "text": "INFORMATION",
+          "lines": ["INFORMATION"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L2",
+          "kind": "index-section-heading",
+          "text": "EDUCATION",
+          "lines": ["EDUCATION"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L3",
+          "kind": "index-row",
+          "text": "FASHION",
+          "lines": ["FASHION"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L4",
+          "kind": "index-row",
+          "text": "PHARMACY",
+          "lines": ["PHARMACY"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L5",
+          "kind": "index-row",
+          "text": "PHYSIOTHERAPY",
+          "lines": ["PHYSIOTHERAPY"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L6",
+          "kind": "index-row",
+          "text": "ARCHITECTURE",
+          "lines": ["ARCHITECTURE"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L7",
+          "kind": "index-row",
+          "text": "ANIMATION",
+          "lines": ["ANIMATION"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L8",
+          "kind": "index-row",
+          "text": "FINE ARTS",
+          "lines": ["FINE ARTS"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L9",
+          "kind": "index-row",
+          "text": "BUSINESS",
+          "lines": ["BUSINESS"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L10",
+          "kind": "index-row",
+          "text": "HOTEL MANAGEMENT",
+          "lines": ["HOTEL MANAGEMENT"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L11",
+          "kind": "index-row",
+          "text": "EDUCATION",
+          "lines": ["EDUCATION"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L12",
+          "kind": "index-row",
+          "text": "PERFORMING ARTS",
+          "lines": ["PERFORMING ARTS"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L13",
+          "kind": "index-row",
+          "text": "FILM & JOURNALISM",
+          "lines": ["FILM & JOURNALISM"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L14",
+          "kind": "index-row",
+          "text": "LAW",
+          "lines": ["LAW"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L15",
+          "kind": "index-row",
+          "text": "AGRICULTURE",
+          "lines": ["AGRICULTURE"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L16",
+          "kind": "index-row",
+          "text": "PHYSICAL SCIENCE",
+          "lines": ["PHYSICAL SCIENCE"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L17",
+          "kind": "index-row",
+          "text": "BIOTECHNOLOGY",
+          "lines": ["BIOTECHNOLOGY"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L18",
+          "kind": "index-row",
+          "text": "COMPUTER APPLICATION",
+          "lines": ["COMPUTER APPLICATION"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L19",
+          "kind": "index-row",
+          "text": "COMPTER SCIENCE",
+          "lines": ["COMPTER SCIENCE"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L20",
+          "kind": "index-row",
+          "text": "ELECTRONIC TELECOM",
+          "lines": ["ELECTRONIC TELECOM"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L21",
+          "kind": "index-row",
+          "text": "RESEARCH",
+          "lines": ["RESEARCH"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L22",
+          "kind": "index-row",
+          "text": "CIVIL",
+          "lines": ["CIVIL"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L23",
+          "kind": "index-row",
+          "text": "MECHANICAL",
+          "lines": ["MECHANICAL"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L24",
+          "kind": "index-row",
+          "text": "POLYTECHINQUE",
+          "lines": ["POLYTECHINQUE"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L25",
+          "kind": "index-row",
+          "text": "(blank)",
+          "lines": ["(blank)"],
+          "confidence": "high",
+          "note": "This row has a number but NO printed label, as printed."
+        },
+        {
+          "id": "iso-art-001/L26",
+          "kind": "index-section-heading",
+          "text": "ADMINISTRATIVE",
+          "lines": ["ADMINISTRATIVE"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L27",
+          "kind": "index-row",
+          "text": "ADMINISTRATIVE",
+          "lines": ["ADMINISTRATIVE"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L28",
+          "kind": "index-row",
+          "text": "PROCHANCELLOR",
+          "lines": ["PROCHANCELLOR"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L29",
+          "kind": "index-row",
+          "text": "CHANCELLOR",
+          "lines": ["CHANCELLOR"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L30",
+          "kind": "index-row",
+          "text": "ADMINISTRATIVE",
+          "lines": ["ADMINISTRATIVE"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L31",
+          "kind": "index-row",
+          "text": "ADMISSION",
+          "lines": ["ADMISSION"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L32",
+          "kind": "index-row",
+          "text": "STUDENT WELFARE",
+          "lines": ["STUDENT WELFARE"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L33",
+          "kind": "index-row",
+          "text": "SHANTIDEVI AUDITORIUM",
+          "lines": ["SHANTIDEVI AUDITORIUM"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L34",
+          "kind": "index-row",
+          "text": "BALDEV RAJ AUDITORIUM",
+          "lines": ["BALDEV RAJ AUDITORIUM"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L35",
+          "kind": "index-row",
+          "text": "INDOOR",
+          "lines": ["INDOOR"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L36",
+          "kind": "index-row",
+          "text": "PROJECT LAB",
+          "lines": ["PROJECT LAB"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L37",
+          "kind": "index-section-heading",
+          "text": "RESIDENTIAL",
+          "lines": ["RESIDENTIAL"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L38",
+          "kind": "index-row",
+          "text": "GIRLS HOSTEL",
+          "lines": ["GIRLS HOSTEL"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L39",
+          "kind": "index-row",
+          "text": "APARTMENT",
+          "lines": ["APARTMENT"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L40",
+          "kind": "index-row",
+          "text": "BOYS HOSTEL",
+          "lines": ["BOYS HOSTEL"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L41",
+          "kind": "legend",
+          "text": "GARDEN OR GROUND AREA",
+          "lines": ["GARDEN OR GROUND AREA"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L42",
+          "kind": "legend",
+          "text": "ROAD",
+          "lines": ["ROAD"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L43",
+          "kind": "legend",
+          "text": "PEDISTRIAN",
+          "lines": ["PEDISTRIAN"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L44",
+          "kind": "legend",
+          "text": "PARKING AREA",
+          "lines": ["PARKING AREA"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L45",
+          "kind": "legend",
+          "text": "LPU SURROUNDINGS",
+          "lines": ["LPU SURROUNDINGS"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-001/L46",
+          "kind": "logo-text",
+          "text": "LOVELY PROFESSIONAL UNIVERSITY PUNJAB (INDIA)",
+          "lines": ["LOVELY", "PROFESSIONAL", "UNIVERSITY", "PUNJAB (INDIA)"],
+          "confidence": "high",
+          "note": "Text around the circular LPU emblem (part of the LPU logo as drawn in the artwork; not a place label)."
+        },
+        {
+          "id": "iso-art-001/L47",
+          "kind": "logo-text",
+          "text": "L OVELY P ROFESSIONAL U NIVERSITY",
+          "lines": ["L OVELY", "P ROFESSIONAL", "U NIVERSITY"],
+          "confidence": "high",
+          "note": "Wordmark: the initials L, P, U sit in orange boxes followed by \"OVELY\", \"ROFESSIONAL\", \"NIVERSITY\" (reads LOVELY PROFESSIONAL UNIVERSITY)."
+        },
+        {
+          "id": "iso-art-001/L48",
+          "kind": "logo-text",
+          "text": "Transforming Education Transforming India",
+          "lines": ["Transforming Education Transforming India"],
+          "confidence": "high",
+          "note": "Script tagline under the wordmark (mixed case as printed)."
+        }
+      ],
+      "pins": [
+        {
+          "label": "1",
+          "x": 1276,
+          "y": 1707,
+          "nx": 0.37852,
+          "ny": 0.71602,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "2",
+          "x": 1401,
+          "y": 1596,
+          "nx": 0.4156,
+          "ny": 0.66946,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "3",
+          "x": 1562,
+          "y": 1448,
+          "nx": 0.46336,
+          "ny": 0.60738,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "4",
+          "x": 1431,
+          "y": 1380,
+          "nx": 0.4245,
+          "ny": 0.57886,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "6",
+          "x": 1168,
+          "y": 1306,
+          "nx": 0.34648,
+          "ny": 0.54782,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "7",
+          "x": 1289,
+          "y": 1229,
+          "nx": 0.38238,
+          "ny": 0.51552,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "8",
+          "x": 1225,
+          "y": 1215,
+          "nx": 0.36339,
+          "ny": 0.50965,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "9",
+          "x": 1401,
+          "y": 1166,
+          "nx": 0.4156,
+          "ny": 0.48909,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "10",
+          "x": 1505,
+          "y": 1112,
+          "nx": 0.44646,
+          "ny": 0.46644,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "11",
+          "x": 1421,
+          "y": 1065,
+          "nx": 0.42154,
+          "ny": 0.44673,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "12",
+          "x": 1323,
+          "y": 1150,
+          "nx": 0.39247,
+          "ny": 0.48238,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "13",
+          "x": 1146,
+          "y": 1080,
+          "nx": 0.33996,
+          "ny": 0.45302,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "14",
+          "x": 1104,
+          "y": 1011,
+          "nx": 0.3275,
+          "ny": 0.42408,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "15",
+          "x": 1279,
+          "y": 1050,
+          "nx": 0.37941,
+          "ny": 0.44044,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "18",
+          "x": 1365,
+          "y": 976,
+          "nx": 0.40492,
+          "ny": 0.4094,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "20",
+          "x": 1385,
+          "y": 888,
+          "nx": 0.41086,
+          "ny": 0.37248,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "21",
+          "x": 1276,
+          "y": 740,
+          "nx": 0.37852,
+          "ny": 0.3104,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "25",
+          "x": 1123,
+          "y": 792,
+          "nx": 0.33314,
+          "ny": 0.33221,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "26",
+          "x": 1098,
+          "y": 812,
+          "nx": 0.32572,
+          "ny": 0.3406,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "27",
+          "x": 1085,
+          "y": 837,
+          "nx": 0.32186,
+          "ny": 0.35109,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "28",
+          "x": 1057,
+          "y": 847,
+          "nx": 0.31356,
+          "ny": 0.35529,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "29",
+          "x": 1038,
+          "y": 865,
+          "nx": 0.30792,
+          "ny": 0.36284,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "30",
+          "x": 1005,
+          "y": 882,
+          "nx": 0.29813,
+          "ny": 0.36997,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "32",
+          "x": 977,
+          "y": 877,
+          "nx": 0.28982,
+          "ny": 0.36787,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "33",
+          "x": 958,
+          "y": 850,
+          "nx": 0.28419,
+          "ny": 0.35654,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "34",
+          "x": 920,
+          "y": 842,
+          "nx": 0.27292,
+          "ny": 0.35319,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "35",
+          "x": 1003,
+          "y": 850,
+          "nx": 0.29754,
+          "ny": 0.35654,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "36",
+          "x": 967,
+          "y": 820,
+          "nx": 0.28686,
+          "ny": 0.34396,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "37",
+          "x": 1007,
+          "y": 814,
+          "nx": 0.29872,
+          "ny": 0.34144,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "38",
+          "x": 1057,
+          "y": 805,
+          "nx": 0.31356,
+          "ny": 0.33767,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "41",
+          "x": 1070,
+          "y": 728,
+          "nx": 0.31741,
+          "ny": 0.30537,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "42",
+          "x": 1112,
+          "y": 716,
+          "nx": 0.32987,
+          "ny": 0.30034,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "43",
+          "x": 1158,
+          "y": 715,
+          "nx": 0.34352,
+          "ny": 0.29992,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "44",
+          "x": 1156,
+          "y": 669,
+          "nx": 0.34292,
+          "ny": 0.28062,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "45",
+          "x": 1225,
+          "y": 581,
+          "nx": 0.36339,
+          "ny": 0.24371,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "47",
+          "x": 1050,
+          "y": 651,
+          "nx": 0.31148,
+          "ny": 0.27307,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "48",
+          "x": 984,
+          "y": 521,
+          "nx": 0.2919,
+          "ny": 0.21854,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "49",
+          "x": 1037,
+          "y": 521,
+          "nx": 0.30762,
+          "ny": 0.21854,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "50",
+          "x": 1214,
+          "y": 396,
+          "nx": 0.36013,
+          "ny": 0.16611,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "51",
+          "x": 973,
+          "y": 403,
+          "nx": 0.28864,
+          "ny": 0.16904,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "53",
+          "x": 551,
+          "y": 614,
+          "nx": 0.16345,
+          "ny": 0.25755,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "54",
+          "x": 490,
+          "y": 583,
+          "nx": 0.14536,
+          "ny": 0.24455,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "56",
+          "x": 346,
+          "y": 517,
+          "nx": 0.10264,
+          "ny": 0.21686,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "57",
+          "x": 263,
+          "y": 524,
+          "nx": 0.07802,
+          "ny": 0.2198,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        },
+        {
+          "label": "58",
+          "x": 275,
+          "y": 465,
+          "nx": 0.08158,
+          "ny": 0.19505,
+          "style": "white disc with dark digits, no pointer tail",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Pin centres were first measured in docs/research/block-leads/matching-fit.json (\"uv\") and re-verified here on 2.6x crops: each lies inside its disc (radius about 9-14 px) and the digits match. An automated white-disc scan of the map area found no further pins. A disc does not mark an exact ground point.",
+      "overviewAbsentNumbers": ["5", "16", "19", "22", "23", "31", "52", "55"],
+      "drawn": "Whole-campus isometric illustration inside a dark frame: numbered white pins, LPU logo and wordmark block (top centre), INFORMATION index (right panel), legend (bottom left), roads, parking, gardens and the surrounding area in pale yellow.",
+      "coordinateSpace": {
+        "width": 3371,
+        "height": 2384,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-011",
+      "file": "11-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/11-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-29.png",
+      "bytes": 40566,
+      "sha256": "cca73014e80c5d992d725e55d8477f481d8963249260f6c5ea209dbe25fb7c06",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 540,
+        "minAlpha": 64,
+        "nonOpaqueColumns": [0],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 450,
+          "h": 450,
+          "nx": 0.08221,
+          "ny": 0.08333,
+          "nw": 0.46826,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-011/L1",
+          "kind": "block-heading",
+          "text": "BLOCK-1",
+          "lines": ["BLOCK-1"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-011/L2",
+          "kind": "caption-name",
+          "text": "SCHOOL OF FASHION",
+          "lines": ["SCHOOL OF FASHION"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["1"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK-1",
+          "numbers": ["1"],
+          "caption": "SCHOOL OF FASHION",
+          "how": "single drawn building; caption applies to the whole vignette"
+        }
+      ],
+      "drawn": "One brick-red building: stepped cross-shaped roof around a triangular glazed atrium, lower flat-roofed front wing with a teal entrance canopy and steps.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-015",
+      "file": "15-lpu-isometric-map-design-963.png",
+      "path": "lpu-isometric-map-design/15-lpu-isometric-map-design-963.png",
+      "earlierResearchName": "slide-30.png",
+      "bytes": 45846,
+      "sha256": "73b7339ac8f74b828e9b28d78c30b91ab6affb388b26e1148ee43ca54cd1d9c5",
+      "width": 963,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 576,
+        "partialAlphaPx": 1044,
+        "minAlpha": 0,
+        "nonOpaqueColumns": [0, 961, 962],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 450,
+          "h": 450,
+          "nx": 0.08204,
+          "ny": 0.08333,
+          "nw": 0.46729,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-015/L1",
+          "kind": "block-heading",
+          "text": "BLOCK-2",
+          "lines": ["BLOCK-2"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-015/L2",
+          "kind": "caption-name",
+          "text": "CAMPUS CAFE  & BALDEV RAJ AUDITORIUM",
+          "lines": ["CAMPUS CAFE  &", "BALDEV RAJ", "AUDITORIUM"],
+          "confidence": "medium",
+          "note": "The gap between \"CAFE\" and \"&\" is visibly wider than a normal word space (transcribed as two spaces). Words and spelling are high confidence."
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["2"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK-2",
+          "numbers": ["2"],
+          "caption": "CAMPUS CAFE  & BALDEV RAJ AUDITORIUM",
+          "how": "One caption names two uses. The drawing shows a long low bar with a round plinth plus a tall grey box; which part is the cafe and which the auditorium is NOT stated, so no boundary is recorded."
+        }
+      ],
+      "drawn": "Long low two-storey bar with an orange/grey facade and a round plinth, terraced steps along one side, joined at one end to a tall grey square tower block.",
+      "coordinateSpace": {
+        "width": 963,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-019",
+      "file": "19-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/19-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-25.png",
+      "bytes": 55442,
+      "sha256": "28b078d9f4c2074ceeb279695f67938b60f9ef01b2db39d28bd48a832529e745",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 540,
+        "minAlpha": 64,
+        "nonOpaqueColumns": [960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 78,
+          "y": 45,
+          "w": 450,
+          "h": 450,
+          "nx": 0.08117,
+          "ny": 0.08333,
+          "nw": 0.46826,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-019/L1",
+          "kind": "block-heading",
+          "text": "BLOCK-3",
+          "lines": ["BLOCK-3"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-019/L2",
+          "kind": "caption-name",
+          "text": "SCHOOL OF PHYSIOTHERAPHY AND PARAMEDICAL SCIENCE",
+          "lines": ["SCHOOL OF", "PHYSIOTHERAPHY AND", "PARAMEDICAL SCIENCE"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["3"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK-3",
+          "numbers": ["3"],
+          "caption": "SCHOOL OF PHYSIOTHERAPHY AND PARAMEDICAL SCIENCE",
+          "how": "single drawn building"
+        }
+      ],
+      "drawn": "Grey two-part building with splayed walls, dark roof slabs (one with a blue truss edge), a blue glazed corner and an external dog-leg staircase.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-023",
+      "file": "23-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/23-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-26.png",
+      "bytes": 46346,
+      "sha256": "2f1f2b056e466a710381621ede02941db5b00eec5f8bb90e6c770fcada65c16d",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 540,
+        "minAlpha": 64,
+        "nonOpaqueColumns": [960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 78,
+          "y": 45,
+          "w": 450,
+          "h": 450,
+          "nx": 0.08117,
+          "ny": 0.08333,
+          "nw": 0.46826,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-023/L1",
+          "kind": "block-heading",
+          "text": "BLOCK-4",
+          "lines": ["BLOCK-4"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-023/L2",
+          "kind": "caption-name",
+          "text": "SCHOOL OF PHARAMACEUTICAL SCIENCE",
+          "lines": ["SCHOOL OF", "PHARAMACEUTICAL", "SCIENCE"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["4"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK-4",
+          "numbers": ["4"],
+          "caption": "SCHOOL OF PHARAMACEUTICAL SCIENCE",
+          "how": "single drawn building"
+        }
+      ],
+      "drawn": "Grey building whose front is a comb of four projecting window bays, with a wider plain wing at one end.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-027",
+      "file": "27-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/27-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-27.png",
+      "bytes": 102092,
+      "sha256": "2a332863ae6fba9a44ac11a660559fa31363c43c07006a4f59e5588c9f1d2636",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 1080,
+        "minAlpha": 128,
+        "nonOpaqueColumns": [0, 960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 449,
+          "h": 450,
+          "nx": 0.08221,
+          "ny": 0.08333,
+          "nw": 0.46722,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-027/L1",
+          "kind": "block-heading",
+          "text": "BLOCK-6",
+          "lines": ["BLOCK-6"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-027/L2",
+          "kind": "caption-name",
+          "text": "SCHOOL OF ARCHITECRURE & PLANING DIVISION OF CONSTRUCTIONS DIVISION OF ARCHITECTURE & DESIGN",
+          "lines": [
+            "SCHOOL OF ARCHITECRURE &",
+            "PLANING",
+            "DIVISION OF CONSTRUCTIONS",
+            "DIVISION OF ARCHITECTURE &",
+            "DESIGN"
+          ],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-027/L3",
+          "kind": "block-heading",
+          "text": "BLOCK-7",
+          "lines": ["BLOCK-7"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-027/L4",
+          "kind": "caption-name",
+          "text": "DEPARTMENT OF PHARMACEUTICAL SCIENCE",
+          "lines": ["DEPARTMENT OF", "PHARMACEUTICAL SCIENCE"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-027/L5",
+          "kind": "block-heading",
+          "text": "BLOCK-8",
+          "lines": ["BLOCK-8"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-027/L6",
+          "kind": "caption-name",
+          "text": "SCHOOL OF FINE ARTS AND SCHOOL OF DESIGN (MULTIMEDIA)",
+          "lines": ["SCHOOL OF FINE ARTS AND", "SCHOOL OF DESIGN (MULTIMEDIA)"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [
+        {
+          "label": "8",
+          "x": 327,
+          "y": 133,
+          "nx": 0.34027,
+          "ny": 0.2463,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "7",
+          "x": 410,
+          "y": 268,
+          "nx": 0.42664,
+          "ny": 0.4963,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "6",
+          "x": 170,
+          "y": 305,
+          "nx": 0.1769,
+          "ny": 0.56481,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["6", "7", "8"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK-6",
+          "numbers": ["6"],
+          "caption": "SCHOOL OF ARCHITECRURE & PLANING DIVISION OF CONSTRUCTIONS DIVISION OF ARCHITECTURE & DESIGN",
+          "how": "heading number matches the white pin \"6\" drawn on the mass"
+        },
+        {
+          "heading": "BLOCK-7",
+          "numbers": ["7"],
+          "caption": "DEPARTMENT OF PHARMACEUTICAL SCIENCE",
+          "how": "heading number matches pin \"7\""
+        },
+        {
+          "heading": "BLOCK-8",
+          "numbers": ["8"],
+          "caption": "SCHOOL OF FINE ARTS AND SCHOOL OF DESIGN (MULTIMEDIA)",
+          "how": "heading number matches pin \"8\""
+        }
+      ],
+      "boundaryNote": "Pins 6, 7 and 8 sit on one connected brick-red mass; the drawing does not mark where one block ends and the next begins.",
+      "drawn": "One connected brick-red complex of several wings and heights with three numbered pins.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-031",
+      "file": "31-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/31-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-22.png",
+      "bytes": 90679,
+      "sha256": "ccf425a0f411763703b3ec2879ed062b0d27a986639823bf6c68ea0d2b920c72",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 1080,
+        "minAlpha": 128,
+        "nonOpaqueColumns": [0, 960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 449,
+          "h": 450,
+          "nx": 0.08221,
+          "ny": 0.08333,
+          "nw": 0.46722,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-031/L1",
+          "kind": "block-heading",
+          "text": "BLOCK- 09,10, 11,12",
+          "lines": ["BLOCK- 09,10, 11,12"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-031/L2",
+          "kind": "caption-name",
+          "text": "GIRLS HOSTAL 1, 2, 3, 4",
+          "lines": ["GIRLS HOSTAL 1, 2, 3, 4"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [
+        {
+          "label": "11",
+          "x": 363,
+          "y": 155,
+          "nx": 0.37773,
+          "ny": 0.28704,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "10",
+          "x": 419,
+          "y": 231,
+          "nx": 0.436,
+          "ny": 0.42778,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "12",
+          "x": 197,
+          "y": 267,
+          "nx": 0.20499,
+          "ny": 0.49444,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "9",
+          "x": 293,
+          "y": 334,
+          "nx": 0.30489,
+          "ny": 0.61852,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["9", "10", "11", "12"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK- 09,10, 11,12",
+          "numbers": ["9", "10", "11", "12"],
+          "caption": "GIRLS HOSTAL 1, 2, 3, 4",
+          "how": "LISTING ORDER ONLY: the caption lists four block numbers and four hostel numbers in parallel; the pairing 9-1, 10-2, 11-3, 12-4 is implied by order and is NOT stated."
+        }
+      ],
+      "boundaryNote": "Four pinned buildings, partly linked by small connector blocks; boundaries between linked parts are not marked.",
+      "drawn": "Four brick-red residential buildings (pins 9, 10, 11, 12) with linking low blocks.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-035",
+      "file": "35-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/35-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-23.png",
+      "bytes": 85288,
+      "sha256": "bff5b3b359bb1cac4e72dca6356660582c7be3515f9647bacb211f5fd57c5ecf",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 540,
+        "minAlpha": 64,
+        "nonOpaqueColumns": [0],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 450,
+          "h": 450,
+          "nx": 0.08221,
+          "ny": 0.08333,
+          "nw": 0.46826,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-035/L1",
+          "kind": "block-heading",
+          "text": "BLOCK-13",
+          "lines": ["BLOCK-13"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-035/L2",
+          "kind": "caption-name",
+          "text": "DIVISION OF STUDENT WELFARE",
+          "lines": ["DIVISION OF STUDENT", "WELFARE"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["13"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK-13",
+          "numbers": ["13"],
+          "caption": "DIVISION OF STUDENT WELFARE",
+          "how": "single drawn building"
+        }
+      ],
+      "drawn": "Square brick-red building around an open central courtyard, with a stepped black entrance plinth.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-039",
+      "file": "39-lpu-isometric-map-design-963.png",
+      "path": "lpu-isometric-map-design/39-lpu-isometric-map-design-963.png",
+      "earlierResearchName": "slide-24.png",
+      "bytes": 58577,
+      "sha256": "11c9bc2ad4a85b4a9c125498e2a0ab64ca7b50b01743f68da8be5dc7279e39b2",
+      "width": 963,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 576,
+        "partialAlphaPx": 1044,
+        "minAlpha": 0,
+        "nonOpaqueColumns": [0, 961, 962],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 450,
+          "h": 450,
+          "nx": 0.08204,
+          "ny": 0.08333,
+          "nw": 0.46729,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-039/L1",
+          "kind": "block-heading",
+          "text": "BLOCK-14",
+          "lines": ["BLOCK-14"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-039/L2",
+          "kind": "caption-name",
+          "text": "MITTAL SCHOOL OF BUSINESS",
+          "lines": ["MITTAL SCHOOL OF BUSINESS"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["14"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK-14",
+          "numbers": ["14"],
+          "caption": "MITTAL SCHOOL OF BUSINESS",
+          "how": "single drawn building"
+        }
+      ],
+      "drawn": "Brick-red block with a sawtooth roof edge, vertical fins on the end wall and an entrance canopy on teal columns.",
+      "coordinateSpace": {
+        "width": 963,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-043",
+      "file": "43-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/43-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-19.png",
+      "bytes": 102106,
+      "sha256": "6d1803d48a5a08475a73ce0d68149c798789d0e5fb46779cff5d31cfdee077f3",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 540,
+        "minAlpha": 64,
+        "nonOpaqueColumns": [960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 78,
+          "y": 45,
+          "w": 450,
+          "h": 450,
+          "nx": 0.08117,
+          "ny": 0.08333,
+          "nw": 0.46826,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-043/L1",
+          "kind": "block-heading",
+          "text": "BLOCK-15",
+          "lines": ["BLOCK-15"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-043/L2",
+          "kind": "caption-name",
+          "text": "UNI-CENTER, SCHOOL OF HOTAL MANGMENT AND TOURISM",
+          "lines": ["UNI-CENTER,", "SCHOOL OF", "HOTAL MANGMENT AND", "TOURISM"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["15"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK-15",
+          "numbers": ["15"],
+          "caption": "UNI-CENTER, SCHOOL OF HOTAL MANGMENT AND TOURISM",
+          "how": "single drawn building; caption names two uses"
+        }
+      ],
+      "drawn": "Tall wedge-shaped building rising to one end, with a blue-glazed curved front and an entrance canopy.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-047",
+      "file": "47-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/47-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-20.png",
+      "bytes": 82149,
+      "sha256": "a5e745f8437b06df861b7c4d1df8c2292759e8f9d843a8971bc3b40000f53069",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 540,
+        "minAlpha": 64,
+        "nonOpaqueColumns": [960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 78,
+          "y": 45,
+          "w": 450,
+          "h": 450,
+          "nx": 0.08117,
+          "ny": 0.08333,
+          "nw": 0.46826,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-047/L1",
+          "kind": "block-heading",
+          "text": "BLOCK-18",
+          "lines": ["BLOCK-18"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-047/L2",
+          "kind": "caption-name",
+          "text": "SCHOOL OF SOCIAL SCIENCE AND LANGUAGE SCHOOL OF PHYSICAL EDUCATION DEPARTMENT OF EDUCATION",
+          "lines": [
+            "SCHOOL OF SOCIAL SCIENCE",
+            "AND LANGUAGE",
+            "SCHOOL OF PHYSICAL",
+            "EDUCATION",
+            "DEPARTMENT OF EDUCATION"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["18"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK-18",
+          "numbers": ["18"],
+          "caption": "SCHOOL OF SOCIAL SCIENCE AND LANGUAGE SCHOOL OF PHYSICAL EDUCATION DEPARTMENT OF EDUCATION",
+          "how": "single drawn building; caption lists three units without placing them"
+        }
+      ],
+      "drawn": "H-shaped brick-red building: two blue-glazed end blocks joined by an open-frame central bridge.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-051",
+      "file": "51-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/51-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-21.png",
+      "bytes": 96402,
+      "sha256": "958caf11ae7dfae1dc0c7ecdc9f6418a1f7f6b644f5976076ae26b77abc4ff4b",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 1080,
+        "minAlpha": 128,
+        "nonOpaqueColumns": [0, 960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 449,
+          "h": 450,
+          "nx": 0.08221,
+          "ny": 0.08333,
+          "nw": 0.46722,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-051/L1",
+          "kind": "block-heading",
+          "text": "BLOCK-19",
+          "lines": ["BLOCK-19"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-051/L2",
+          "kind": "caption-name",
+          "text": "SCHOOL OF FILMS, JOURNALISM, AND CREATIVE ARTS",
+          "lines": ["SCHOOL OF FILMS,", "JOURNALISM, AND", "CREATIVE ARTS"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-051/L3",
+          "kind": "block-heading",
+          "text": "BLOCK-21",
+          "lines": ["BLOCK-21"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-051/L4",
+          "kind": "caption-name",
+          "text": "SCHOOL OF LAW",
+          "lines": ["SCHOOL OF LAW"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [
+        {
+          "label": "21",
+          "x": 400,
+          "y": 125,
+          "nx": 0.41623,
+          "ny": 0.23148,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "20",
+          "x": 186,
+          "y": 210,
+          "nx": 0.19355,
+          "ny": 0.38889,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "19",
+          "x": 400,
+          "y": 302,
+          "nx": 0.41623,
+          "ny": 0.55926,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["19", "20", "21"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK-19",
+          "numbers": ["19"],
+          "caption": "SCHOOL OF FILMS, JOURNALISM, AND CREATIVE ARTS",
+          "how": "heading number matches pin \"19\""
+        },
+        {
+          "heading": "BLOCK-21",
+          "numbers": ["21"],
+          "caption": "SCHOOL OF LAW",
+          "how": "heading number matches pin \"21\""
+        },
+        {
+          "heading": null,
+          "numbers": ["20"],
+          "caption": null,
+          "how": "pin \"20\" is drawn but has NO caption on this slide"
+        }
+      ],
+      "boundaryNote": "Pins 19, 20 and 21 sit on one connected mass; boundaries are not marked.",
+      "drawn": "One connected brick-red complex with a curved glazed corner and an entrance canopy, three numbered pins.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-055",
+      "file": "55-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/55-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-16.png",
+      "bytes": 86228,
+      "sha256": "2c865a3effbed91b34b89a4ea040ccaf897657d53de3b31583c039560287cf21",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 1080,
+        "minAlpha": 128,
+        "nonOpaqueColumns": [0, 960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 449,
+          "h": 450,
+          "nx": 0.08221,
+          "ny": 0.08333,
+          "nw": 0.46722,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-055/L1",
+          "kind": "block-heading",
+          "text": "BLOCK-22,23",
+          "lines": ["BLOCK-22,23"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-055/L2",
+          "kind": "caption-name",
+          "text": "GIRLS HOSTAL 5, 6.",
+          "lines": ["GIRLS HOSTAL 5, 6."],
+          "confidence": "high"
+        }
+      ],
+      "pins": [
+        {
+          "label": "23",
+          "x": 373,
+          "y": 198,
+          "nx": 0.38814,
+          "ny": 0.36667,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "22",
+          "x": 258,
+          "y": 258,
+          "nx": 0.26847,
+          "ny": 0.47778,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["22", "23"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK-22,23",
+          "numbers": ["22", "23"],
+          "caption": "GIRLS HOSTAL 5, 6.",
+          "how": "LISTING ORDER ONLY: 22-5 and 23-6 are implied by order, not stated."
+        }
+      ],
+      "boundaryNote": "Two pins on a large interlinked courtyard complex; boundaries are not marked.",
+      "drawn": "Large interlinked brick-red residential complex around courtyards.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-059",
+      "file": "59-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/59-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-17.png",
+      "bytes": 95063,
+      "sha256": "f3cc654cb2f026dc016c14d50114e8ec4ef4c08a57572f363d21a177597c5798",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 540,
+        "minAlpha": 64,
+        "nonOpaqueColumns": [0],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 490,
+          "h": 450,
+          "nx": 0.08221,
+          "ny": 0.08333,
+          "nw": 0.50989,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-059/L1",
+          "kind": "block-heading",
+          "text": "BLOCK- 41,42,43,44",
+          "lines": ["BLOCK-", "41,42,43,44"],
+          "confidence": "high",
+          "note": "Heading printed on two lines."
+        },
+        {
+          "id": "iso-art-059/L2",
+          "kind": "caption-name",
+          "text": "APARTMENTS",
+          "lines": ["APARTMENTS"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [
+        {
+          "label": "44",
+          "x": 470,
+          "y": 174,
+          "nx": 0.48907,
+          "ny": 0.32222,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "43",
+          "x": 420,
+          "y": 246,
+          "nx": 0.43704,
+          "ny": 0.45556,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "42",
+          "x": 309,
+          "y": 272,
+          "nx": 0.32154,
+          "ny": 0.5037,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "41",
+          "x": 217,
+          "y": 314,
+          "nx": 0.22581,
+          "ny": 0.58148,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["41", "42", "43", "44"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK- 41,42,43,44",
+          "numbers": ["41", "42", "43", "44"],
+          "caption": "APARTMENTS",
+          "how": "one caption covers all four pinned buildings"
+        }
+      ],
+      "drawn": "Four parallel brick-red slab buildings stepping back diagonally, each with a pin.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-063",
+      "file": "63-lpu-isometric-map-design-963.png",
+      "path": "lpu-isometric-map-design/63-lpu-isometric-map-design-963.png",
+      "earlierResearchName": "slide-18.png",
+      "bytes": 80531,
+      "sha256": "3ee3db53297766fd8abe9836215a1112a6544796e014e3e8f5b524d984eafb06",
+      "width": 963,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 576,
+        "partialAlphaPx": 1044,
+        "minAlpha": 0,
+        "nonOpaqueColumns": [0, 961, 962],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 450,
+          "h": 450,
+          "nx": 0.08204,
+          "ny": 0.08333,
+          "nw": 0.46729,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-063/L1",
+          "kind": "block-heading",
+          "text": "BLOCK- 45",
+          "lines": ["BLOCK- 45"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-063/L2",
+          "kind": "caption-name",
+          "text": "BOYS HOSTEL-1",
+          "lines": ["BOYS HOSTEL-1"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["45"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK- 45",
+          "numbers": ["45"],
+          "caption": "BOYS HOSTEL-1",
+          "how": "one caption for the whole drawing (three linked slabs)"
+        }
+      ],
+      "drawn": "Three parallel linked brick-red slab blocks.",
+      "coordinateSpace": {
+        "width": 963,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-067",
+      "file": "67-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/67-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-13.png",
+      "bytes": 92567,
+      "sha256": "76701f4f3eb7551bfb55a83809808903b123607c3f0420d0a6d2e0c1efda5c85",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 540,
+        "minAlpha": 64,
+        "nonOpaqueColumns": [960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 78,
+          "y": 45,
+          "w": 507,
+          "h": 450,
+          "nx": 0.08117,
+          "ny": 0.08333,
+          "nw": 0.52758,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-067/L1",
+          "kind": "block-heading",
+          "text": "BLOCK- 48, 49",
+          "lines": ["BLOCK- 48, 49"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-067/L2",
+          "kind": "caption-name",
+          "text": "BOYS HOSTEL -2, 3",
+          "lines": ["BOYS HOSTEL -2, 3"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [
+        {
+          "label": "49",
+          "x": 423,
+          "y": 173,
+          "nx": 0.44017,
+          "ny": 0.32037,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "48",
+          "x": 252,
+          "y": 289,
+          "nx": 0.26223,
+          "ny": 0.53519,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["48", "49"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK- 48, 49",
+          "numbers": ["48", "49"],
+          "caption": "BOYS HOSTEL -2, 3",
+          "how": "LISTING ORDER ONLY: 48-2 and 49-3 are implied by order, not stated."
+        }
+      ],
+      "boundaryNote": "Only two pins on a chain of about six linked towers; which towers belong to 48 and which to 49 is NOT drawn.",
+      "drawn": "Diagonal chain of linked brick-red towers with rooftop tanks.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-071",
+      "file": "71-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/71-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-14.png",
+      "bytes": 69839,
+      "sha256": "08ee40d540ccbbd0fbf3fb1c4366e8cace78f2eb452a1e15bb163c8d513e834e",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 540,
+        "minAlpha": 64,
+        "nonOpaqueColumns": [960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 78,
+          "y": 45,
+          "w": 450,
+          "h": 450,
+          "nx": 0.08117,
+          "ny": 0.08333,
+          "nw": 0.46826,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-071/L1",
+          "kind": "block-heading",
+          "text": "BLOCK- 50",
+          "lines": ["BLOCK- 50"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-071/L2",
+          "kind": "caption-name",
+          "text": "BOYS HOSTEL-7",
+          "lines": ["BOYS HOSTEL-7"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["50"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK- 50",
+          "numbers": ["50"],
+          "caption": "BOYS HOSTEL-7",
+          "how": "single drawn building"
+        }
+      ],
+      "drawn": "Single tall brick-red block with rooftop tanks and a side stair tower.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-075",
+      "file": "75-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/75-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-15.png",
+      "bytes": 78187,
+      "sha256": "d7b04fd08938f1473be0a220608731636aee1abedd8f8c925cf90def8131041c",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 1080,
+        "minAlpha": 128,
+        "nonOpaqueColumns": [0, 960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 449,
+          "h": 450,
+          "nx": 0.08221,
+          "ny": 0.08333,
+          "nw": 0.46722,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-075/L1",
+          "kind": "block-heading",
+          "text": "BLOCK- 51",
+          "lines": ["BLOCK- 51"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-075/L2",
+          "kind": "caption-name",
+          "text": "BOYS HOSTEL",
+          "lines": ["BOYS HOSTEL"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["51"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK- 51",
+          "numbers": ["51"],
+          "caption": "BOYS HOSTEL",
+          "how": "one caption for a chain of five linked towers; no hostel number is printed"
+        }
+      ],
+      "drawn": "Diagonal chain of five linked brick-red towers with rooftop tanks.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-079",
+      "file": "79-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/79-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-10.png",
+      "bytes": 88789,
+      "sha256": "039e7fd535428d33d23a13b1d03ff8623efca1b2749c1809722dd85d22d12be7",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 1080,
+        "minAlpha": 128,
+        "nonOpaqueColumns": [0, 960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 449,
+          "h": 450,
+          "nx": 0.08221,
+          "ny": 0.08333,
+          "nw": 0.46722,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-079/L1",
+          "kind": "block-heading",
+          "text": "BLOCK- 53, 54",
+          "lines": ["BLOCK- 53, 54"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-079/L2",
+          "kind": "caption-name",
+          "text": "BOYS HOSTEL - 5, 6",
+          "lines": ["BOYS HOSTEL - 5, 6"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [
+        {
+          "label": "53",
+          "x": 358,
+          "y": 162,
+          "nx": 0.37253,
+          "ny": 0.3,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "54",
+          "x": 437,
+          "y": 210,
+          "nx": 0.45473,
+          "ny": 0.38889,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["53", "54"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK- 53, 54",
+          "numbers": ["53", "54"],
+          "caption": "BOYS HOSTEL - 5, 6",
+          "how": "LISTING ORDER ONLY: 53-5 and 54-6 are implied by order, not stated."
+        }
+      ],
+      "boundaryNote": "Two pins on a large spine-and-wing complex; boundaries are not marked.",
+      "drawn": "Long central spine with perpendicular brick-red slab wings.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-083",
+      "file": "83-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/83-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-11.png",
+      "bytes": 74628,
+      "sha256": "84cbc5030f230fbd7f91f57100224b415abdab285cb692ea278dca6655ace947",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 540,
+        "minAlpha": 64,
+        "nonOpaqueColumns": [0],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 79,
+          "y": 45,
+          "w": 450,
+          "h": 450,
+          "nx": 0.08221,
+          "ny": 0.08333,
+          "nw": 0.46826,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-083/L1",
+          "kind": "block-heading",
+          "text": "BLOCK- 55",
+          "lines": ["BLOCK- 55"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-083/L2",
+          "kind": "caption-name",
+          "text": "SCHOOL OF MECHANICAL INGNEERING",
+          "lines": ["SCHOOL OF MECHANICAL", "INGNEERING"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-083/L3",
+          "kind": "block-heading",
+          "text": "BLOCK- 56",
+          "lines": ["BLOCK- 56"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-083/L4",
+          "kind": "caption-name",
+          "text": "SCHOOL OF CIVIL INGNEERING",
+          "lines": ["SCHOOL OF CIVIL INGNEERING"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-083/L5",
+          "kind": "block-heading",
+          "text": "BLOCK- 57",
+          "lines": ["BLOCK- 57"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-083/L6",
+          "kind": "caption-name",
+          "text": "SCHOOL OF POLYTECHNIC",
+          "lines": ["SCHOOL OF POLYTECHNIC"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [
+        {
+          "label": "57",
+          "x": 347,
+          "y": 143,
+          "nx": 0.36108,
+          "ny": 0.26481,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "56",
+          "x": 262,
+          "y": 217,
+          "nx": 0.27263,
+          "ny": 0.40185,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "55",
+          "x": 355,
+          "y": 287,
+          "nx": 0.36941,
+          "ny": 0.53148,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["55", "56", "57"],
+      "captionMapping": [
+        {
+          "heading": "BLOCK- 55",
+          "numbers": ["55"],
+          "caption": "SCHOOL OF MECHANICAL INGNEERING",
+          "how": "heading number matches pin \"55\""
+        },
+        {
+          "heading": "BLOCK- 56",
+          "numbers": ["56"],
+          "caption": "SCHOOL OF CIVIL INGNEERING",
+          "how": "heading number matches pin \"56\""
+        },
+        {
+          "heading": "BLOCK- 57",
+          "numbers": ["57"],
+          "caption": "SCHOOL OF POLYTECHNIC",
+          "how": "heading number matches pin \"57\""
+        }
+      ],
+      "boundaryNote": "Pins 55, 56, 57 sit on one crescent-shaped connected mass; boundaries are not marked.",
+      "drawn": "Crescent-shaped connected brick-red complex.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-087",
+      "file": "87-lpu-isometric-map-design-963.png",
+      "path": "lpu-isometric-map-design/87-lpu-isometric-map-design-963.png",
+      "earlierResearchName": "slide-12.png",
+      "bytes": 171892,
+      "sha256": "0cf8b8b754cf50aa41f636f3beeeb45ac04bc52b338990ef93e6e69c7c5c7d7e",
+      "width": 963,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 576,
+        "partialAlphaPx": 1044,
+        "minAlpha": 0,
+        "nonOpaqueColumns": [0, 961, 962],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "block-vignette",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 86,
+          "y": 45,
+          "w": 789,
+          "h": 450,
+          "nx": 0.0893,
+          "ny": 0.08333,
+          "nw": 0.81931,
+          "nh": 0.83333
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-087/L1",
+          "kind": "block-caption-run",
+          "text": "BLOCK-25,26: SCHOOL OF AGRICULTURE ;BLOCK-27: SCHOOL OF CHEMICAL ENGINEERING AND PHYSICAL SCIENCE ; BLOCK-28: SCHOOL OF BIO ENGINEERING AND BIO SCIENCES; BLOCK-29: OFFICE OF THE PRO-CHANCELLOR  I) ADMINISTRATION-II BLOCK-30: THE CHANCELLORY  I) ADMINISTRATION-I ; BLOCK-31: I) DIVISSION OF ADMISSIONS II)MUSEUM OF ACADEMICS ; BLOCK-32: I) OFFICE OF VICE CHANCELLORY II)ADMINISTRATION-III ; BLOCK-33,34 : SCHOOL OF COMPUTER SCIENCE AND ENGINEERING BLOCK-35: SHANTI DEVI MITTAL AUDITORIUM ; BLOCK-36: SCHOOL OF ELECTRONICS & ELECTRICAL ENGINEERING ; BLOCK-37: CENTRAL LIBRARY ; BLOCK-38: SCHOOL OF COMPUTER APPLICATIONS",
+          "lines": [
+            "BLOCK-25,26: SCHOOL OF AGRICULTURE ;BLOCK-27: SCHOOL OF CHEMICAL ENGINEERING AND PHYSICAL SCIENCE ;",
+            "BLOCK-28: SCHOOL OF BIO ENGINEERING AND BIO SCIENCES; BLOCK-29: OFFICE OF THE PRO-CHANCELLOR  I) ADMINISTRATION-II",
+            "BLOCK-30: THE CHANCELLORY  I) ADMINISTRATION-I ; BLOCK-31: I) DIVISSION OF ADMISSIONS II)MUSEUM OF ACADEMICS ;",
+            "BLOCK-32: I) OFFICE OF VICE CHANCELLORY II)ADMINISTRATION-III ; BLOCK-33,34 : SCHOOL OF COMPUTER SCIENCE AND ENGINEERING",
+            "BLOCK-35: SHANTI DEVI MITTAL AUDITORIUM ; BLOCK-36: SCHOOL OF ELECTRONICS & ELECTRICAL ENGINEERING ; BLOCK-37: CENTRAL",
+            "LIBRARY ; BLOCK-38: SCHOOL OF COMPUTER APPLICATIONS"
+          ],
+          "confidence": "medium",
+          "note": "Six printed lines under the drawing; \"BLOCK-nn:\" parts are orange, the rest grey italic. Cap height is about 9 px, so spelling is high confidence but spacing and punctuation (double spaces before \"I)\", spaces around \";\" and \":\") are medium confidence. \"I)\" is printed as a capital I and kept as printed."
+        }
+      ],
+      "pins": [
+        {
+          "label": "25",
+          "x": 744,
+          "y": 110,
+          "nx": 0.77259,
+          "ny": 0.2037,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "26",
+          "x": 677,
+          "y": 145,
+          "nx": 0.70301,
+          "ny": 0.26852,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "27",
+          "x": 626,
+          "y": 177,
+          "nx": 0.65005,
+          "ny": 0.32778,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "28",
+          "x": 569,
+          "y": 213,
+          "nx": 0.59086,
+          "ny": 0.39444,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "29",
+          "x": 504,
+          "y": 255,
+          "nx": 0.52336,
+          "ny": 0.47222,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "30",
+          "x": 431,
+          "y": 298,
+          "nx": 0.44756,
+          "ny": 0.55185,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "31",
+          "x": 352,
+          "y": 284,
+          "nx": 0.36552,
+          "ny": 0.52593,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "32",
+          "x": 302,
+          "y": 260,
+          "nx": 0.3136,
+          "ny": 0.48148,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "33",
+          "x": 267,
+          "y": 236,
+          "nx": 0.27726,
+          "ny": 0.43704,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "34",
+          "x": 221,
+          "y": 197,
+          "nx": 0.22949,
+          "ny": 0.36481,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "35",
+          "x": 417,
+          "y": 224,
+          "nx": 0.43302,
+          "ny": 0.41481,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "36",
+          "x": 334,
+          "y": 149,
+          "nx": 0.34683,
+          "ny": 0.27593,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "37",
+          "x": 424,
+          "y": 124,
+          "nx": 0.44029,
+          "ny": 0.22963,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        },
+        {
+          "label": "38",
+          "x": 527,
+          "y": 111,
+          "nx": 0.54725,
+          "ny": 0.20556,
+          "style": "white disc with dark digits",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": [
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38"
+      ],
+      "captionMapping": [
+        {
+          "heading": "BLOCK-25,26:",
+          "numbers": ["25", "26"],
+          "caption": "SCHOOL OF AGRICULTURE",
+          "how": "one caption covers two pinned buildings"
+        },
+        {
+          "heading": "BLOCK-27:",
+          "numbers": ["27"],
+          "caption": "SCHOOL OF CHEMICAL ENGINEERING AND PHYSICAL SCIENCE",
+          "how": "number matches pin"
+        },
+        {
+          "heading": "BLOCK-28:",
+          "numbers": ["28"],
+          "caption": "SCHOOL OF BIO ENGINEERING AND BIO SCIENCES",
+          "how": "number matches pin"
+        },
+        {
+          "heading": "BLOCK-29:",
+          "numbers": ["29"],
+          "caption": "OFFICE OF THE PRO-CHANCELLOR  I) ADMINISTRATION-II",
+          "how": "number matches pin"
+        },
+        {
+          "heading": "BLOCK-30:",
+          "numbers": ["30"],
+          "caption": "THE CHANCELLORY  I) ADMINISTRATION-I",
+          "how": "number matches pin"
+        },
+        {
+          "heading": "BLOCK-31:",
+          "numbers": ["31"],
+          "caption": "I) DIVISSION OF ADMISSIONS II)MUSEUM OF ACADEMICS",
+          "how": "number matches pin"
+        },
+        {
+          "heading": "BLOCK-32:",
+          "numbers": ["32"],
+          "caption": "I) OFFICE OF VICE CHANCELLORY II)ADMINISTRATION-III",
+          "how": "number matches pin"
+        },
+        {
+          "heading": "BLOCK-33,34 :",
+          "numbers": ["33", "34"],
+          "caption": "SCHOOL OF COMPUTER SCIENCE AND ENGINEERING",
+          "how": "one caption covers two pinned buildings"
+        },
+        {
+          "heading": "BLOCK-35:",
+          "numbers": ["35"],
+          "caption": "SHANTI DEVI MITTAL AUDITORIUM",
+          "how": "number matches pin"
+        },
+        {
+          "heading": "BLOCK-36:",
+          "numbers": ["36"],
+          "caption": "SCHOOL OF ELECTRONICS & ELECTRICAL ENGINEERING",
+          "how": "number matches pin"
+        },
+        {
+          "heading": "BLOCK-37:",
+          "numbers": ["37"],
+          "caption": "CENTRAL LIBRARY",
+          "how": "number matches pin; caption wraps across printed lines 5-6"
+        },
+        {
+          "heading": "BLOCK-38:",
+          "numbers": ["38"],
+          "caption": "SCHOOL OF COMPUTER APPLICATIONS",
+          "how": "number matches pin"
+        }
+      ],
+      "boundaryNote": "Pins 35-38 sit on one connected Y-shaped mass around a fan-shaped bowl, and 25-29 on a linked comb; boundaries between blocks are not marked.",
+      "drawn": "Large connected academic complex: a Y-shaped block around a fan-shaped auditorium bowl (pin 35), a comb of linked blocks (25-29) and a separate group (30-34).",
+      "coordinateSpace": {
+        "width": 963,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-091",
+      "file": "91-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/91-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-08.png",
+      "bytes": 94773,
+      "sha256": "732dba5ee46ecc67bb55e05a3ed65318011a52beae73bf220490f45d942d3338",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 540,
+        "minAlpha": 64,
+        "nonOpaqueColumns": [960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "scene-vignette",
+      "scene": "entrance",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 376,
+          "y": 45,
+          "w": 507,
+          "h": 450,
+          "nx": 0.39126,
+          "ny": 0.08333,
+          "nw": 0.52758,
+          "nh": 0.83333
+        },
+        "sceneFrame": {
+          "x": 430,
+          "y": 81,
+          "w": 400,
+          "h": 355,
+          "nx": 0.44745,
+          "ny": 0.15,
+          "nw": 0.41623,
+          "nh": 0.65741,
+          "note": "Rectangular scene picture inside the card; its content is clipped at this frame."
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-091/L1",
+          "kind": "title",
+          "text": "LPU MAP",
+          "lines": ["LPU MAP"],
+          "confidence": "high",
+          "note": "Title of the slide set."
+        },
+        {
+          "id": "iso-art-091/L2",
+          "kind": "scene-caption",
+          "text": "UNIVERSITY ENTRENCE",
+          "lines": ["UNIVERSITY ENTRENCE"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-091/L3",
+          "kind": "signage-microtext",
+          "text": "(illegible)",
+          "lines": ["(illegible)"],
+          "confidence": "low",
+          "note": "Tiny sign text on the gate canopies and on the gate tower/pylon (orange glyphs and emblem roundels). Unreadable at source resolution; not transcribed."
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": [],
+      "drawn": "Title slide. Entrance scene: tall maroon gate tower with emblem roundels and a blue glass top, a multi-lane gate canopy, a second gate with a slim pylon and low red buildings, tree-lined roads and green lane dividers.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-095",
+      "file": "95-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/95-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-09.png",
+      "bytes": 138762,
+      "sha256": "2471ac6bef735305a892d742f04e180933574c0c35000798b5c757b145f2cb66",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 540,
+        "minAlpha": 64,
+        "nonOpaqueColumns": [960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "scene-vignette",
+      "scene": "parking",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 86,
+          "y": 45,
+          "w": 789,
+          "h": 450,
+          "nx": 0.08949,
+          "ny": 0.08333,
+          "nw": 0.82102,
+          "nh": 0.83333
+        },
+        "sceneFrame": {
+          "x": 180,
+          "y": 91,
+          "w": 600,
+          "h": 317,
+          "nx": 0.1873,
+          "ny": 0.16852,
+          "nw": 0.62435,
+          "nh": 0.58704,
+          "note": "Rectangular scene picture inside the card; its content is clipped at this frame."
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-095/L1",
+          "kind": "scene-caption",
+          "text": "PARKING AREA AND GARDEN AREA",
+          "lines": ["PARKING AREA AND GARDEN AREA"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": [],
+      "drawn": "Large parking lot full of cars, a lawn with one large tree, benches and a small red hut, roads with green lane dividers and part of the maroon gate tower.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-099",
+      "file": "99-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/99-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-07.png",
+      "bytes": 153052,
+      "sha256": "3952c06ecc358bce1856b4a746b42eed0f28dd1853103ce3e5ea79f2fd93f8db",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 1080,
+        "minAlpha": 128,
+        "nonOpaqueColumns": [0, 960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "scene-vignette",
+      "scene": "flag-area",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 86,
+          "y": 45,
+          "w": 789,
+          "h": 450,
+          "nx": 0.08949,
+          "ny": 0.08333,
+          "nw": 0.82102,
+          "nh": 0.83333
+        },
+        "sceneFrame": {
+          "x": 180,
+          "y": 88,
+          "w": 600,
+          "h": 322,
+          "nx": 0.1873,
+          "ny": 0.16296,
+          "nw": 0.62435,
+          "nh": 0.5963,
+          "note": "Rectangular scene picture inside the card; its content is clipped at this frame."
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-099/L1",
+          "kind": "scene-caption",
+          "text": "FLAG AREA",
+          "lines": ["FLAG AREA"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": [],
+      "drawn": "Tall flagpole with the Indian flag, square garden with a statue on a plinth, benches and lamps, a shrub grid, an arched covered walkway and staircase (upper left), a lawn with one large tree and a small red hut.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-103",
+      "file": "103-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/103-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-04.png",
+      "bytes": 102294,
+      "sha256": "ab5d969fdcb3bcffba01f774b59de47b2acc35187d0145242276692d7f098369",
+      "width": 961,
+      "height": 540,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 1080,
+        "minAlpha": 128,
+        "nonOpaqueColumns": [0, 960],
+        "nonOpaqueRows": [],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "scene-vignette",
+      "scene": "garden",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 86,
+          "y": 45,
+          "w": 789,
+          "h": 450,
+          "nx": 0.08949,
+          "ny": 0.08333,
+          "nw": 0.82102,
+          "nh": 0.83333
+        },
+        "sceneFrame": {
+          "x": 196,
+          "y": 83,
+          "w": 569,
+          "h": 331,
+          "nx": 0.20395,
+          "ny": 0.1537,
+          "nw": 0.59209,
+          "nh": 0.61296,
+          "note": "Rectangular scene picture inside the card; its content is clipped at this frame."
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-103/L1",
+          "kind": "scene-caption",
+          "text": "DILDO PARK",
+          "lines": ["DILDO PARK"],
+          "confidence": "high",
+          "note": "Transcribed exactly as printed. Its meaning is unclear; it must not be used as a place name without independent confirmation (owner decision)."
+        }
+      ],
+      "pins": [],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": [],
+      "drawn": "Rectangular walled lawn with trees and a paved patch, between grey buildings and a road.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 540,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-107",
+      "file": "107-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/107-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-05.png",
+      "bytes": 190054,
+      "sha256": "2dc2a4837c0b12f204a727fdd5482d828944573be54a82508f50edf07ad7f508",
+      "width": 961,
+      "height": 541,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 2461,
+        "minAlpha": 32,
+        "nonOpaqueColumns": [0],
+        "nonOpaqueRows": [0, 540],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "scene-vignette",
+      "scene": "garden",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 86,
+          "y": 46,
+          "w": 789,
+          "h": 449,
+          "nx": 0.08949,
+          "ny": 0.08503,
+          "nw": 0.82102,
+          "nh": 0.82994
+        },
+        "sceneFrame": {
+          "x": 149,
+          "y": 87,
+          "w": 663,
+          "h": 315,
+          "nx": 0.15505,
+          "ny": 0.16081,
+          "nw": 0.68991,
+          "nh": 0.58226,
+          "note": "Rectangular scene picture inside the card; its content is clipped at this frame."
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-107/L1",
+          "kind": "scene-caption",
+          "text": "GARDEN AREA",
+          "lines": ["GARDEN AREA"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [
+        {
+          "label": "4",
+          "x": 640,
+          "y": 239,
+          "nx": 0.66597,
+          "ny": 0.44177,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "5",
+          "x": 245,
+          "y": 381,
+          "nx": 0.25494,
+          "ny": 0.70425,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["4", "5"],
+      "drawn": "Rectangular garden with a regular grid of shrubs/trees; pin 4 on a grey comb-fronted building; pin 5 (its pointer cut by the scene frame) on a red building corner across the road.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 541,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-111",
+      "file": "111-lpu-isometric-map-design-963.png",
+      "path": "lpu-isometric-map-design/111-lpu-isometric-map-design-963.png",
+      "earlierResearchName": "slide-02.png",
+      "bytes": 150330,
+      "sha256": "b32a8d12c32360a4a0282d71491af0426f11995f77f5e07551f6ab5c462bd5ea",
+      "width": 963,
+      "height": 541,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 576,
+        "partialAlphaPx": 2967,
+        "minAlpha": 0,
+        "nonOpaqueColumns": [0, 961, 962],
+        "nonOpaqueRows": [0, 540],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": ["iso-art-115"],
+      "canonical": true,
+      "role": "scene-vignette",
+      "scene": "open-auditorium",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 97,
+          "y": 46,
+          "w": 789,
+          "h": 449,
+          "nx": 0.10073,
+          "ny": 0.08503,
+          "nw": 0.81931,
+          "nh": 0.82994
+        },
+        "sceneFrame": {
+          "x": 148,
+          "y": 80,
+          "w": 688,
+          "h": 322,
+          "nx": 0.15369,
+          "ny": 0.14787,
+          "nw": 0.71443,
+          "nh": 0.59519,
+          "note": "Rectangular scene picture inside the card; its content is clipped at this frame."
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-111/L1",
+          "kind": "scene-caption",
+          "text": "OPEN AUDITORIUM AND SURROUNDINGS",
+          "lines": ["OPEN AUDITORIUM AND SURROUNDINGS"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-111/L2",
+          "kind": "pin-label",
+          "text": "(illegible)",
+          "lines": ["(illegible)"],
+          "confidence": "low",
+          "note": "A further pin head is cut off by the bottom edge of the scene frame near x 413, y 405; no digits are visible."
+        }
+      ],
+      "pins": [
+        {
+          "label": "14",
+          "x": 346,
+          "y": 298,
+          "nx": 0.35929,
+          "ny": 0.55083,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "16",
+          "x": 535,
+          "y": 276,
+          "nx": 0.55556,
+          "ny": 0.51017,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "15",
+          "x": 631,
+          "y": 379,
+          "nx": 0.65524,
+          "ny": 0.70055,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "18",
+          "x": 807,
+          "y": 225,
+          "nx": 0.83801,
+          "ny": 0.4159,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["14", "15", "16", "18"],
+      "drawn": "Large grey perforated pavilion roof with solar panels on red columns (pin 16), wedge building (pin 15), building with a tree row (pin 14), building on the right (pin 18), a row of flag poles and a tree-lined road upper left, a blue covered walkway.",
+      "coordinateSpace": {
+        "width": 963,
+        "height": 541,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-115",
+      "file": "115-lpu-isometric-map-design-963.png",
+      "path": "lpu-isometric-map-design/115-lpu-isometric-map-design-963.png",
+      "earlierResearchName": "slide-06.png",
+      "bytes": 150330,
+      "sha256": "b32a8d12c32360a4a0282d71491af0426f11995f77f5e07551f6ab5c462bd5ea",
+      "width": 963,
+      "height": 541,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 576,
+        "partialAlphaPx": 2967,
+        "minAlpha": 0,
+        "nonOpaqueColumns": [0, 961, 962],
+        "nonOpaqueRows": [0, 540],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": ["iso-art-111"],
+      "canonical": false,
+      "role": "scene-vignette",
+      "scene": "open-auditorium",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 97,
+          "y": 46,
+          "w": 789,
+          "h": 449,
+          "nx": 0.10073,
+          "ny": 0.08503,
+          "nw": 0.81931,
+          "nh": 0.82994
+        },
+        "sceneFrame": {
+          "x": 148,
+          "y": 80,
+          "w": 688,
+          "h": 322,
+          "nx": 0.15369,
+          "ny": 0.14787,
+          "nw": 0.71443,
+          "nh": 0.59519,
+          "note": "Rectangular scene picture inside the card; its content is clipped at this frame."
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-115/L1",
+          "kind": "scene-caption",
+          "text": "OPEN AUDITORIUM AND SURROUNDINGS",
+          "lines": ["OPEN AUDITORIUM AND SURROUNDINGS"],
+          "confidence": "high"
+        },
+        {
+          "id": "iso-art-115/L2",
+          "kind": "pin-label",
+          "text": "(illegible)",
+          "lines": ["(illegible)"],
+          "confidence": "low",
+          "note": "Same clipped pin as iso-art-111 (byte-identical file)."
+        }
+      ],
+      "pins": [
+        {
+          "label": "14",
+          "x": 346,
+          "y": 298,
+          "nx": 0.35929,
+          "ny": 0.55083,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "16",
+          "x": 535,
+          "y": 276,
+          "nx": 0.55556,
+          "ny": 0.51017,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "15",
+          "x": 631,
+          "y": 379,
+          "nx": 0.65524,
+          "ny": 0.70055,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "18",
+          "x": 807,
+          "y": 225,
+          "nx": 0.83801,
+          "ny": 0.4159,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["14", "15", "16", "18"],
+      "drawn": "Byte-identical duplicate of iso-art-111.",
+      "coordinateSpace": {
+        "width": 963,
+        "height": 541,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    },
+    {
+      "id": "iso-art-119",
+      "file": "119-lpu-isometric-map-design-961.png",
+      "path": "lpu-isometric-map-design/119-lpu-isometric-map-design-961.png",
+      "earlierResearchName": "slide-03.png",
+      "bytes": 179009,
+      "sha256": "b24552ae540cd3a31b892eb74fdc6f067ba7d72e93caaa182e21f2c8d6bf5a44",
+      "width": 961,
+      "height": 541,
+      "format": "PNG",
+      "mime": "image/png",
+      "encoding": "8-bit, non-interlaced",
+      "bitDepth": 8,
+      "colorType": "RGBA (PNG colour type 6)",
+      "colorSpace": "untagged (no iCCP/sRGB/gAMA chunk); treat as sRGB",
+      "chunks": ["IHDR", "pHYs", "IDAT", "IEND"],
+      "pixelsPerMetre": 2834,
+      "alpha": {
+        "channel": true,
+        "effectivelyOpaque": true,
+        "fullyTransparentPx": 0,
+        "partialAlphaPx": 2461,
+        "minAlpha": 32,
+        "nonOpaqueColumns": [960],
+        "nonOpaqueRows": [0, 540],
+        "note": "Only these edge columns/rows (slide-export resampling seams) are not fully opaque; every other pixel has alpha 255. These are full slide rasters (light background, peach circles, white card), NOT transparent cut-out sprites."
+      },
+      "duplicates": [],
+      "canonical": true,
+      "role": "scene-vignette",
+      "scene": "playground",
+      "layout": {
+        "slide": "Light-grey slide background with peach decorative circles; the artwork sits on a white rounded card with a soft shadow.",
+        "card": {
+          "x": 107,
+          "y": 46,
+          "w": 789,
+          "h": 449,
+          "nx": 0.11134,
+          "ny": 0.08503,
+          "nw": 0.82102,
+          "nh": 0.82994
+        },
+        "sceneFrame": {
+          "x": 158,
+          "y": 81,
+          "w": 689,
+          "h": 321,
+          "nx": 0.16441,
+          "ny": 0.14972,
+          "nw": 0.71696,
+          "nh": 0.59335,
+          "note": "Rectangular scene picture inside the card; its content is clipped at this frame."
+        },
+        "measurement": "card = extent of pure-white rows longer than 300 px; sceneFrame = rows/cols inside the card that are more than 60% non-white. +-2 px."
+      },
+      "labels": [
+        {
+          "id": "iso-art-119/L1",
+          "kind": "scene-caption",
+          "text": "PLAYGROUND",
+          "lines": ["PLAYGROUND"],
+          "confidence": "high"
+        }
+      ],
+      "pins": [
+        {
+          "label": "57",
+          "x": 208,
+          "y": 282,
+          "nx": 0.21644,
+          "ny": 0.52126,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "56",
+          "x": 206,
+          "y": 320,
+          "nx": 0.21436,
+          "ny": 0.5915,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "55",
+          "x": 269,
+          "y": 333,
+          "nx": 0.27992,
+          "ny": 0.61553,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "54",
+          "x": 382,
+          "y": 371,
+          "nx": 0.3975,
+          "ny": 0.68577,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "53",
+          "x": 427,
+          "y": 396,
+          "nx": 0.44433,
+          "ny": 0.73198,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "52",
+          "x": 630,
+          "y": 179,
+          "nx": 0.65557,
+          "ny": 0.33087,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "51",
+          "x": 799,
+          "y": 211,
+          "nx": 0.83143,
+          "ny": 0.39002,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "48",
+          "x": 791,
+          "y": 317,
+          "nx": 0.8231,
+          "ny": 0.58595,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "high"
+        },
+        {
+          "label": "58",
+          "x": 161,
+          "y": 276,
+          "nx": 0.16753,
+          "ny": 0.51017,
+          "style": "white disc with grey ring and pointer tail (disc centre recorded)",
+          "confidence": "low",
+          "note": "Cut off by the left edge of the scene frame; only part of the number is visible. Reading \"58\" needs manual verification."
+        }
+      ],
+      "pinNote": "Disc centres read by eye on gridded 1.6x-3x crops and checked with crosshair montages; +-4 px.",
+      "artworkNumbersShown": ["48", "51", "52", "53", "54", "55", "56", "57", "58"],
+      "drawn": "Cricket oval with pitch (pin 52 on the oval, not on a building), tennis and basketball courts, open fields, a parking strip along the outer road, hostel complexes (pins 48, 51, 53, 54), the crescent complex (55, 56, 57), round green tanks and a water tower.",
+      "coordinateSpace": {
+        "width": 961,
+        "height": 541,
+        "origin": "top-left",
+        "units": "source pixels; nx = x / width, ny = y / height"
+      }
+    }
+  ],
+  "scenes": [
+    {
+      "asset": "iso-art-091",
+      "scene": "entrance",
+      "caption": "UNIVERSITY ENTRENCE",
+      "duplicateOf": null
+    },
+    {
+      "asset": "iso-art-095",
+      "scene": "parking",
+      "caption": "PARKING AREA AND GARDEN AREA",
+      "duplicateOf": null
+    },
+    {
+      "asset": "iso-art-099",
+      "scene": "flag-area",
+      "caption": "FLAG AREA",
+      "duplicateOf": null
+    },
+    {
+      "asset": "iso-art-103",
+      "scene": "garden",
+      "caption": "DILDO PARK",
+      "duplicateOf": null
+    },
+    {
+      "asset": "iso-art-107",
+      "scene": "garden",
+      "caption": "GARDEN AREA",
+      "duplicateOf": null
+    },
+    {
+      "asset": "iso-art-111",
+      "scene": "open-auditorium",
+      "caption": "OPEN AUDITORIUM AND SURROUNDINGS",
+      "duplicateOf": null
+    },
+    {
+      "asset": "iso-art-115",
+      "scene": "open-auditorium",
+      "caption": "OPEN AUDITORIUM AND SURROUNDINGS",
+      "duplicateOf": "iso-art-111"
+    },
+    {
+      "asset": "iso-art-119",
+      "scene": "playground",
+      "caption": "PLAYGROUND",
+      "duplicateOf": null
+    }
+  ],
+  "artworkNumbers": [
+    {
+      "artworkNumber": "1",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "FASHION"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-011",
+          "where": "vignette caption",
+          "heading": "BLOCK-1",
+          "text": "SCHOOL OF FASHION",
+          "mapping": "single drawn building; caption applies to the whole vignette"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "2",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "ADMINISTRATIVE",
+          "text": "BALDEV RAJ AUDITORIUM"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-015",
+          "where": "vignette caption",
+          "heading": "BLOCK-2",
+          "text": "CAMPUS CAFE  & BALDEV RAJ AUDITORIUM",
+          "mapping": "One caption names two uses. The drawing shows a long low bar with a round plinth plus a tall grey box; which part is the cafe and which the auditorium is NOT stated, so no boundary is recorded."
+        }
+      ]
+    },
+    {
+      "artworkNumber": "3",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "PHYSIOTHERAPY"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-019",
+          "where": "vignette caption",
+          "heading": "BLOCK-3",
+          "text": "SCHOOL OF PHYSIOTHERAPHY AND PARAMEDICAL SCIENCE",
+          "mapping": "single drawn building"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "4",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "PHARMACY"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-023",
+          "where": "vignette caption",
+          "heading": "BLOCK-4",
+          "text": "SCHOOL OF PHARAMACEUTICAL SCIENCE",
+          "mapping": "single drawn building"
+        },
+        {
+          "asset": "iso-art-107",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "5",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-107",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "6",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "ARCHITECTURE"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-027",
+          "where": "vignette caption",
+          "heading": "BLOCK-6",
+          "text": "SCHOOL OF ARCHITECRURE & PLANING DIVISION OF CONSTRUCTIONS DIVISION OF ARCHITECTURE & DESIGN",
+          "mapping": "heading number matches the white pin \"6\" drawn on the mass"
+        },
+        {
+          "asset": "iso-art-027",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "7",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "PHARMACY"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-027",
+          "where": "vignette caption",
+          "heading": "BLOCK-7",
+          "text": "DEPARTMENT OF PHARMACEUTICAL SCIENCE",
+          "mapping": "heading number matches pin \"7\""
+        },
+        {
+          "asset": "iso-art-027",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "8",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "ANIMATION"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "FINE ARTS"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-027",
+          "where": "vignette caption",
+          "heading": "BLOCK-8",
+          "text": "SCHOOL OF FINE ARTS AND SCHOOL OF DESIGN (MULTIMEDIA)",
+          "mapping": "heading number matches pin \"8\""
+        },
+        {
+          "asset": "iso-art-027",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "9",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "GIRLS HOSTEL"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-031",
+          "where": "vignette caption",
+          "heading": "BLOCK- 09,10, 11,12",
+          "text": "GIRLS HOSTAL 1, 2, 3, 4",
+          "mapping": "LISTING ORDER ONLY: the caption lists four block numbers and four hostel numbers in parallel; the pairing 9-1, 10-2, 11-3, 12-4 is implied by order and is NOT stated."
+        },
+        {
+          "asset": "iso-art-031",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "10",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "GIRLS HOSTEL"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-031",
+          "where": "vignette caption",
+          "heading": "BLOCK- 09,10, 11,12",
+          "text": "GIRLS HOSTAL 1, 2, 3, 4",
+          "mapping": "LISTING ORDER ONLY: the caption lists four block numbers and four hostel numbers in parallel; the pairing 9-1, 10-2, 11-3, 12-4 is implied by order and is NOT stated."
+        },
+        {
+          "asset": "iso-art-031",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "11",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "GIRLS HOSTEL"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-031",
+          "where": "vignette caption",
+          "heading": "BLOCK- 09,10, 11,12",
+          "text": "GIRLS HOSTAL 1, 2, 3, 4",
+          "mapping": "LISTING ORDER ONLY: the caption lists four block numbers and four hostel numbers in parallel; the pairing 9-1, 10-2, 11-3, 12-4 is implied by order and is NOT stated."
+        },
+        {
+          "asset": "iso-art-031",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "12",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "GIRLS HOSTEL"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-031",
+          "where": "vignette caption",
+          "heading": "BLOCK- 09,10, 11,12",
+          "text": "GIRLS HOSTAL 1, 2, 3, 4",
+          "mapping": "LISTING ORDER ONLY: the caption lists four block numbers and four hostel numbers in parallel; the pairing 9-1, 10-2, 11-3, 12-4 is implied by order and is NOT stated."
+        },
+        {
+          "asset": "iso-art-031",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "13",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "BUSINESS"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "ADMINISTRATIVE",
+          "text": "STUDENT WELFARE"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-035",
+          "where": "vignette caption",
+          "heading": "BLOCK-13",
+          "text": "DIVISION OF STUDENT WELFARE",
+          "mapping": "single drawn building"
+        }
+      ],
+      "officialStatementPointer": {
+        "source": "docs/research/block-leads/official-block-confirmations.json",
+        "statement": "Block 13 = Student Welfare Wing",
+        "note": "Context only. It does not place this number on the drawing or on the map, and does not resolve any conflict here."
+      }
+    },
+    {
+      "artworkNumber": "14",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-039",
+          "where": "vignette caption",
+          "heading": "BLOCK-14",
+          "text": "MITTAL SCHOOL OF BUSINESS",
+          "mapping": "single drawn building"
+        },
+        {
+          "asset": "iso-art-111",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "15",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "HOTEL MANAGEMENT"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-043",
+          "where": "vignette caption",
+          "heading": "BLOCK-15",
+          "text": "UNI-CENTER, SCHOOL OF HOTAL MANGMENT AND TOURISM",
+          "mapping": "single drawn building; caption names two uses"
+        },
+        {
+          "asset": "iso-art-111",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "16",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-111",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "18",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "EDUCATION"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-047",
+          "where": "vignette caption",
+          "heading": "BLOCK-18",
+          "text": "SCHOOL OF SOCIAL SCIENCE AND LANGUAGE SCHOOL OF PHYSICAL EDUCATION DEPARTMENT OF EDUCATION",
+          "mapping": "single drawn building; caption lists three units without placing them"
+        },
+        {
+          "asset": "iso-art-111",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "19",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "PERFORMING ARTS"
+        },
+        {
+          "asset": "iso-art-051",
+          "where": "vignette caption",
+          "heading": "BLOCK-19",
+          "text": "SCHOOL OF FILMS, JOURNALISM, AND CREATIVE ARTS",
+          "mapping": "heading number matches pin \"19\""
+        },
+        {
+          "asset": "iso-art-051",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "20",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "FILM & JOURNALISM"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "LAW"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-051",
+          "where": "vignette pin without caption",
+          "heading": null,
+          "text": null,
+          "mapping": "pin \"20\" is drawn but has NO caption on this slide"
+        },
+        {
+          "asset": "iso-art-051",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "21",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-051",
+          "where": "vignette caption",
+          "heading": "BLOCK-21",
+          "text": "SCHOOL OF LAW",
+          "mapping": "heading number matches pin \"21\""
+        },
+        {
+          "asset": "iso-art-051",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "21A",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "GIRLS HOSTEL"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "21B",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "GIRLS HOSTEL"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "22",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-055",
+          "where": "vignette caption",
+          "heading": "BLOCK-22,23",
+          "text": "GIRLS HOSTAL 5, 6.",
+          "mapping": "LISTING ORDER ONLY: 22-5 and 23-6 are implied by order, not stated."
+        },
+        {
+          "asset": "iso-art-055",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "23",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-055",
+          "where": "vignette caption",
+          "heading": "BLOCK-22,23",
+          "text": "GIRLS HOSTAL 5, 6.",
+          "mapping": "LISTING ORDER ONLY: 22-5 and 23-6 are implied by order, not stated."
+        },
+        {
+          "asset": "iso-art-055",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "25",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "AGRICULTURE"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-25,26:",
+          "text": "SCHOOL OF AGRICULTURE",
+          "mapping": "one caption covers two pinned buildings"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "26",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "AGRICULTURE"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-25,26:",
+          "text": "SCHOOL OF AGRICULTURE",
+          "mapping": "one caption covers two pinned buildings"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "27",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "PHYSICAL SCIENCE"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-27:",
+          "text": "SCHOOL OF CHEMICAL ENGINEERING AND PHYSICAL SCIENCE",
+          "mapping": "number matches pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "28",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "BIOTECHNOLOGY"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-28:",
+          "text": "SCHOOL OF BIO ENGINEERING AND BIO SCIENCES",
+          "mapping": "number matches pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "29",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "ADMINISTRATIVE",
+          "text": "ADMINISTRATIVE"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-29:",
+          "text": "OFFICE OF THE PRO-CHANCELLOR  I) ADMINISTRATION-II",
+          "mapping": "number matches pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "30",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "ADMINISTRATIVE",
+          "text": "PROCHANCELLOR"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-30:",
+          "text": "THE CHANCELLORY  I) ADMINISTRATION-I",
+          "mapping": "number matches pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "31",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "ADMINISTRATIVE",
+          "text": "CHANCELLOR"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "ADMINISTRATIVE",
+          "text": "ADMINISTRATIVE"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-31:",
+          "text": "I) DIVISSION OF ADMISSIONS II)MUSEUM OF ACADEMICS",
+          "mapping": "number matches pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "32",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "ADMINISTRATIVE",
+          "text": "ADMISSION"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-32:",
+          "text": "I) OFFICE OF VICE CHANCELLORY II)ADMINISTRATION-III",
+          "mapping": "number matches pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ],
+      "officialStatementPointer": {
+        "source": "docs/research/block-leads/official-block-confirmations.json",
+        "statement": "\"Building No. 32\" = Department of Records (page says Building, not Block)",
+        "note": "Context only. It does not place this number on the drawing or on the map, and does not resolve any conflict here."
+      }
+    },
+    {
+      "artworkNumber": "33",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "COMPUTER APPLICATION"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-33,34 :",
+          "text": "SCHOOL OF COMPUTER SCIENCE AND ENGINEERING",
+          "mapping": "one caption covers two pinned buildings"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "34",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "COMPTER SCIENCE"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-33,34 :",
+          "text": "SCHOOL OF COMPUTER SCIENCE AND ENGINEERING",
+          "mapping": "one caption covers two pinned buildings"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "35",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "ADMINISTRATIVE",
+          "text": "SHANTIDEVI AUDITORIUM"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-35:",
+          "text": "SHANTI DEVI MITTAL AUDITORIUM",
+          "mapping": "number matches pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ],
+      "officialStatementPointer": {
+        "source": "docs/research/block-leads/official-block-confirmations.json",
+        "statement": "Block No. 35 = Shanti Devi Mittal Auditorium",
+        "note": "Context only. It does not place this number on the drawing or on the map, and does not resolve any conflict here."
+      }
+    },
+    {
+      "artworkNumber": "36",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "ELECTRONIC TELECOM"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-36:",
+          "text": "SCHOOL OF ELECTRONICS & ELECTRICAL ENGINEERING",
+          "mapping": "number matches pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "37",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "RESEARCH"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-37:",
+          "text": "CENTRAL LIBRARY",
+          "mapping": "number matches pin; caption wraps across printed lines 5-6"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ],
+      "officialStatementPointer": {
+        "source": "docs/research/block-leads/official-block-confirmations.json",
+        "statement": "Block-37 = Central Library",
+        "note": "Context only. It does not place this number on the drawing or on the map, and does not resolve any conflict here."
+      }
+    },
+    {
+      "artworkNumber": "38",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "CIVIL"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette caption",
+          "heading": "BLOCK-38:",
+          "text": "SCHOOL OF COMPUTER APPLICATIONS",
+          "mapping": "number matches pin"
+        },
+        {
+          "asset": "iso-art-087",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "41",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "APARTMENT"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-059",
+          "where": "vignette caption",
+          "heading": "BLOCK- 41,42,43,44",
+          "text": "APARTMENTS",
+          "mapping": "one caption covers all four pinned buildings"
+        },
+        {
+          "asset": "iso-art-059",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "42",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "APARTMENT"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-059",
+          "where": "vignette caption",
+          "heading": "BLOCK- 41,42,43,44",
+          "text": "APARTMENTS",
+          "mapping": "one caption covers all four pinned buildings"
+        },
+        {
+          "asset": "iso-art-059",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "43",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "APARTMENT"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-059",
+          "where": "vignette caption",
+          "heading": "BLOCK- 41,42,43,44",
+          "text": "APARTMENTS",
+          "mapping": "one caption covers all four pinned buildings"
+        },
+        {
+          "asset": "iso-art-059",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "44",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "APARTMENT"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-059",
+          "where": "vignette caption",
+          "heading": "BLOCK- 41,42,43,44",
+          "text": "APARTMENTS",
+          "mapping": "one caption covers all four pinned buildings"
+        },
+        {
+          "asset": "iso-art-059",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "45",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "BOYS HOSTEL"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-063",
+          "where": "vignette caption",
+          "heading": "BLOCK- 45",
+          "text": "BOYS HOSTEL-1",
+          "mapping": "one caption for the whole drawing (three linked slabs)"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "47",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "ADMINISTRATIVE",
+          "text": "INDOOR"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "48",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "BOYS HOSTEL"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-067",
+          "where": "vignette caption",
+          "heading": "BLOCK- 48, 49",
+          "text": "BOYS HOSTEL -2, 3",
+          "mapping": "LISTING ORDER ONLY: 48-2 and 49-3 are implied by order, not stated."
+        },
+        {
+          "asset": "iso-art-067",
+          "where": "vignette pin",
+          "confidence": "high"
+        },
+        {
+          "asset": "iso-art-119",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "49",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "BOYS HOSTEL"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-067",
+          "where": "vignette caption",
+          "heading": "BLOCK- 48, 49",
+          "text": "BOYS HOSTEL -2, 3",
+          "mapping": "LISTING ORDER ONLY: 48-2 and 49-3 are implied by order, not stated."
+        },
+        {
+          "asset": "iso-art-067",
+          "where": "vignette pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "50",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "BOYS HOSTEL"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-071",
+          "where": "vignette caption",
+          "heading": "BLOCK- 50",
+          "text": "BOYS HOSTEL-7",
+          "mapping": "single drawn building"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "51",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "BOYS HOSTEL"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-075",
+          "where": "vignette caption",
+          "heading": "BLOCK- 51",
+          "text": "BOYS HOSTEL",
+          "mapping": "one caption for a chain of five linked towers; no hostel number is printed"
+        },
+        {
+          "asset": "iso-art-119",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "52",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "BOYS HOSTEL"
+        },
+        {
+          "asset": "iso-art-119",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "53",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "RESIDENTIAL",
+          "text": "BOYS HOSTEL"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-079",
+          "where": "vignette caption",
+          "heading": "BLOCK- 53, 54",
+          "text": "BOYS HOSTEL - 5, 6",
+          "mapping": "LISTING ORDER ONLY: 53-5 and 54-6 are implied by order, not stated."
+        },
+        {
+          "asset": "iso-art-079",
+          "where": "vignette pin",
+          "confidence": "high"
+        },
+        {
+          "asset": "iso-art-119",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "54",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-079",
+          "where": "vignette caption",
+          "heading": "BLOCK- 53, 54",
+          "text": "BOYS HOSTEL - 5, 6",
+          "mapping": "LISTING ORDER ONLY: 53-5 and 54-6 are implied by order, not stated."
+        },
+        {
+          "asset": "iso-art-079",
+          "where": "vignette pin",
+          "confidence": "high"
+        },
+        {
+          "asset": "iso-art-119",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "55",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-083",
+          "where": "vignette caption",
+          "heading": "BLOCK- 55",
+          "text": "SCHOOL OF MECHANICAL INGNEERING",
+          "mapping": "heading number matches pin \"55\""
+        },
+        {
+          "asset": "iso-art-083",
+          "where": "vignette pin",
+          "confidence": "high"
+        },
+        {
+          "asset": "iso-art-119",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "56",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "MECHANICAL"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-083",
+          "where": "vignette caption",
+          "heading": "BLOCK- 56",
+          "text": "SCHOOL OF CIVIL INGNEERING",
+          "mapping": "heading number matches pin \"56\""
+        },
+        {
+          "asset": "iso-art-083",
+          "where": "vignette pin",
+          "confidence": "high"
+        },
+        {
+          "asset": "iso-art-119",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "57",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "POLYTECHINQUE"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-083",
+          "where": "vignette caption",
+          "heading": "BLOCK- 57",
+          "text": "SCHOOL OF POLYTECHNIC",
+          "mapping": "heading number matches pin \"57\""
+        },
+        {
+          "asset": "iso-art-083",
+          "where": "vignette pin",
+          "confidence": "high"
+        },
+        {
+          "asset": "iso-art-119",
+          "where": "scene pin",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "artworkNumber": "58",
+      "isOfficialBlockNumber": false,
+      "appearances": [
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "EDUCATION",
+          "text": "(blank label)"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview index",
+          "section": "ADMINISTRATIVE",
+          "text": "PROJECT LAB"
+        },
+        {
+          "asset": "iso-art-001",
+          "where": "overview pin"
+        },
+        {
+          "asset": "iso-art-119",
+          "where": "scene pin",
+          "confidence": "low"
+        }
+      ]
+    }
+  ],
+  "artworkNumbersNeverShown": {
+    "numbers": ["17", "24", "39", "40", "46"],
+    "note": "Numbers 1-58 that appear in no caption, pin or index row."
+  },
+  "conflicts": [
+    {
+      "id": "C01",
+      "numbers": ["2"],
+      "description": "Vignette caption \"CAMPUS CAFE  & BALDEV RAJ AUDITORIUM\"; index lists only \"BALDEV RAJ AUDITORIUM 2\".",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C02",
+      "numbers": ["4", "7"],
+      "description": "Index \"PHARMACY 4,7\"; vignettes: 4 \"SCHOOL OF PHARAMACEUTICAL SCIENCE\", 7 \"DEPARTMENT OF PHARMACEUTICAL SCIENCE\". Consistent in subject, but two numbers for one subject.",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C03",
+      "numbers": ["13", "14"],
+      "description": "Index EDUCATION \"BUSINESS 13\" and ADMINISTRATIVE \"STUDENT WELFARE 13\"; vignette 13 \"DIVISION OF STUDENT WELFARE\"; vignette 14 \"MITTAL SCHOOL OF BUSINESS\". 14 is not in the index (it has an overview pin).",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C04",
+      "numbers": ["15"],
+      "description": "Vignette adds \"UNI-CENTER,\"; index lists only \"HOTEL MANAGEMENT 15\".",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C05",
+      "numbers": ["18"],
+      "description": "Vignette lists three units; index names only \"EDUCATION 18\".",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C06",
+      "numbers": ["19", "20", "21"],
+      "description": "Index: \"PERFORMING ARTS 19\", \"FILM & JOURNALISM 20\", \"LAW 20\". Vignette: 19 \"SCHOOL OF FILMS, JOURNALISM, AND CREATIVE ARTS\", 21 \"SCHOOL OF LAW\", pin 20 uncaptioned. Overview has pins 20 and 21 but not 19.",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C07",
+      "numbers": ["21", "21A", "21B", "22", "23"],
+      "description": "Index RESIDENTIAL \"GIRLS HOSTEL 9,10, 11,12, 21A,B\"; vignette 21 = \"SCHOOL OF LAW\"; vignette \"BLOCK-22,23 GIRLS HOSTAL 5, 6.\" has no index row and no overview pins. Relationship between 21A/21B and 22/23 is unknown.",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C08",
+      "numbers": ["27"],
+      "description": "Index \"PHYSICAL SCIENCE 27\"; vignette \"SCHOOL OF CHEMICAL ENGINEERING AND PHYSICAL SCIENCE\".",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C09",
+      "numbers": ["28"],
+      "description": "Index \"BIOTECHNOLOGY 28\"; vignette \"SCHOOL OF BIO ENGINEERING AND BIO SCIENCES\".",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C10",
+      "numbers": ["29", "30", "31", "32"],
+      "description": "Administrative numbers differ: vignette 29 PRO-CHANCELLOR + ADMINISTRATION-II, 30 CHANCELLORY + ADMINISTRATION-I, 31 DIVISSION OF ADMISSIONS + MUSEUM OF ACADEMICS, 32 VICE CHANCELLORY + ADMINISTRATION-III; index 29 ADMINISTRATIVE, 30 PROCHANCELLOR, 31 CHANCELLOR and ADMINISTRATIVE, 32 ADMISSION. Overview has no pin 31.",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C11",
+      "numbers": ["33", "38"],
+      "description": "Index \"COMPUTER APPLICATION 33\" and \"CIVIL 38\"; vignette 33,34 \"SCHOOL OF COMPUTER SCIENCE AND ENGINEERING\" and 38 \"SCHOOL OF COMPUTER APPLICATIONS\".",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C12",
+      "numbers": ["36"],
+      "description": "Index \"ELECTRONIC TELECOM 36\"; vignette \"SCHOOL OF ELECTRONICS & ELECTRICAL ENGINEERING\".",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C13",
+      "numbers": ["37"],
+      "description": "Index \"RESEARCH 37\"; vignette \"CENTRAL LIBRARY\". (An official LPU page states Block-37 = Central Library; recorded as a pointer only.)",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C14",
+      "numbers": ["55", "56", "38"],
+      "description": "Vignette 55 \"SCHOOL OF MECHANICAL INGNEERING\", 56 \"SCHOOL OF CIVIL INGNEERING\"; index \"MECHANICAL 56\", \"CIVIL 38\". 55 is not in the index and has no overview pin.",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C15",
+      "numbers": ["57"],
+      "description": "Index \"POLYTECHINQUE 57\"; vignette \"SCHOOL OF POLYTECHNIC\" (same subject, different wording).",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C16",
+      "numbers": ["58"],
+      "description": "Index EDUCATION ends with a row \"58\" that has no label; ADMINISTRATIVE has \"PROJECT LAB 58\". No vignette; a clipped pin read as \"58\" at the left edge of PLAYGROUND (low confidence).",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C17",
+      "numbers": ["51", "52", "53", "54"],
+      "description": "Index BOYS HOSTEL \"45,48, 49,50, 51,53,52\" includes 52 (whose only pin is on the cricket oval in PLAYGROUND, not on a building) and omits 54, which the vignette captions as a boys hostel.",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C18",
+      "numbers": ["45", "48", "49", "50", "51", "53", "54"],
+      "description": "Boys-hostel numbering on vignettes: 45 BOYS HOSTEL-1, 48,49 BOYS HOSTEL -2, 3 (by order), 50 BOYS HOSTEL-7, 51 BOYS HOSTEL (no number), 53,54 BOYS HOSTEL - 5, 6 (by order). Boys Hostel 4 is never assigned. Do not infer 51 = 4.",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C19",
+      "numbers": ["5", "16", "19", "22", "23", "31", "52", "55"],
+      "description": "Numbers that appear on vignettes/scenes but have no pin on the master overview.",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C20",
+      "numbers": ["5", "16"],
+      "description": "Scene pins 5 (GARDEN AREA) and 16 (OPEN AUDITORIUM AND SURROUNDINGS) have no caption and no index row anywhere.",
+      "status": "unresolved - recorded, not resolved"
+    },
+    {
+      "id": "C21",
+      "numbers": ["47"],
+      "description": "Index \"INDOOR 47\" and an overview pin; no vignette.",
+      "status": "unresolved - recorded, not resolved"
+    }
+  ],
+  "corrections": [
+    {
+      "what": "Legend label",
+      "was": "PEDESTRIAN (docs/research/block-leads/block-leads.json scene contents for slide-28)",
+      "now": "PEDISTRIAN",
+      "evidence": "3x zoomed crop of the legend box on iso-art-001"
+    },
+    {
+      "what": "PNG transparency",
+      "was": "Task brief: \"961x540/541, RGBA, transparent\" vignettes",
+      "now": "RGBA format, but every interior pixel is opaque; only 1-3 edge columns/rows are partly transparent. Each PNG is a full presentation slide (background, decorative circles, white card), not a cut-out.",
+      "evidence": "per-pixel alpha scan (alpha field of each asset)"
+    },
+    {
+      "what": "Master colour model",
+      "was": "not recorded before",
+      "now": "CMYK JPEG with an embedded U.S. Web Coated (SWOP) v2 profile",
+      "evidence": "SOF0 component count 4, APP14 transform 0, ICC header"
+    }
+  ],
+  "needsManualVerification": [
+    {
+      "ref": "iso-art-015/L2",
+      "text": "CAMPUS CAFE  & BALDEV RAJ AUDITORIUM",
+      "confidence": "medium",
+      "reason": "The gap between \"CAFE\" and \"&\" is visibly wider than a normal word space (transcribed as two spaces). Words and spelling are high confidence."
+    },
+    {
+      "ref": "iso-art-087/L1",
+      "text": "BLOCK-25,26: SCHOOL OF AGRICULTURE ;BLOCK-27: SCHOOL OF CHEMICAL ENGINEERING AND PHYSICAL SCIENCE ; BLOCK-28: SCHOOL OF BIO ENGINEERING AND BIO SCIENCES; BLOCK-29: OFFICE OF THE PRO-CHANCELLOR  I) ADMINISTRATION-II BLOCK-30: THE CHANCELLORY  I) ADMINISTRATION-I ; BLOCK-31: I) DIVISSION OF ADMISSIONS II)MUSEUM OF ACADEMICS ; BLOCK-32: I) OFFICE OF VICE CHANCELLORY II)ADMINISTRATION-III ; BLOCK-33,34 : SCHOOL OF COMPUTER SCIENCE AND ENGINEERING BLOCK-35: SHANTI DEVI MITTAL AUDITORIUM ; BLOCK-36: SCHOOL OF ELECTRONICS & ELECTRICAL ENGINEERING ; BLOCK-37: CENTRAL LIBRARY ; BLOCK-38: SCHOOL OF COMPUTER APPLICATIONS",
+      "confidence": "medium",
+      "reason": "Six printed lines under the drawing; \"BLOCK-nn:\" parts are orange, the rest grey italic. Cap height is about 9 px, so spelling is high confidence but spacing and punctuation (double spaces before \"I)\", spaces around \";\" and \":\") are medium confidence. \"I)\" is printed as a capital I and kept as printed."
+    },
+    {
+      "ref": "iso-art-091/L3",
+      "text": "(illegible)",
+      "confidence": "low",
+      "reason": "Tiny sign text on the gate canopies and on the gate tower/pylon (orange glyphs and emblem roundels). Unreadable at source resolution; not transcribed."
+    },
+    {
+      "ref": "iso-art-111/L2",
+      "text": "(illegible)",
+      "confidence": "low",
+      "reason": "A further pin head is cut off by the bottom edge of the scene frame near x 413, y 405; no digits are visible."
+    },
+    {
+      "ref": "iso-art-115/L2",
+      "text": "(illegible)",
+      "confidence": "low",
+      "reason": "Same clipped pin as iso-art-111 (byte-identical file)."
+    },
+    {
+      "ref": "iso-art-119/pin:58",
+      "text": "58",
+      "confidence": "low",
+      "reason": "Cut off by the left edge of the scene frame; only part of the number is visible. Reading \"58\" needs manual verification."
+    },
+    {
+      "ref": "iso-art-103/L1",
+      "text": "DILDO PARK",
+      "confidence": "high",
+      "reason": "Transcription is certain, but the meaning is unclear; owner must decide whether it may ever be shown."
+    },
+    {
+      "ref": "iso-art-001/regionsApprox",
+      "text": "region boxes",
+      "confidence": "medium",
+      "reason": "Approximate (+-15 px); measure precisely before using as crop or hotspot bounds."
+    }
+  ],
+  "derivedContactSheets": {
+    "manifest": "docs/isometric-art/contact-sheets/manifest.json",
+    "note": "Derived, downscaled previews for review only; never a substitute for the originals."
+  }
+}

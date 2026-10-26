@@ -6,7 +6,9 @@
  * domain owns their shape.
  */
 import type { BaseData, StudioBaseData } from '../base-data.ts';
+import type { ArtworkDomainContext } from '../domain/artwork/associations.ts';
 import type { StudioContext } from '../domain/studio/context.ts';
+import type { IsometricArtManifest } from '../../src/isometric-art/schema.ts';
 import type { SqlDatabase } from '../db/types.ts';
 import type { IdGenerator } from '../ids.ts';
 import type { RateLimitRepo, SaltRepo, SessionRepo } from '../auth/ports.ts';
@@ -181,15 +183,31 @@ export interface StudioPort {
   getQuality(db: SqlDatabase, ctx: StudioContext): Promise<unknown>;
 }
 
+/**
+ * Owner verification of artwork associations
+ * (docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md §4.2, server/domain/artwork).
+ * Write bodies are passed RAW (size- and structure-bounded): the domain
+ * parses them inside its audit wrapper, so rejected writes are audited too.
+ */
+export interface ArtworkPort {
+  list(db: SqlDatabase, ctx: ArtworkDomainContext): Promise<unknown>;
+  get(db: SqlDatabase, subjectId: string, ctx: ArtworkDomainContext): Promise<unknown>;
+  put(db: SqlDatabase, subjectId: string, body: unknown, ctx: ArtworkDomainContext): Promise<unknown>;
+  reset(db: SqlDatabase, subjectId: string, body: unknown, ctx: ArtworkDomainContext): Promise<unknown>;
+}
+
 export type FetchAsset = (path: string) => Promise<Response>;
 
 export interface Services {
   domain: DomainPort;
   studio: StudioPort;
+  artwork: ArtworkPort;
   sessions: SessionRepo;
   rateLimits: RateLimitRepo;
   salts: SaltRepo;
   loadBase: (fetchAsset: FetchAsset) => Promise<BaseData>;
   /** Studio view of the base dataset (buildings, graph, exact boundary, review sections), cached per version. */
   loadStudioBase: (fetchAsset: FetchAsset) => Promise<StudioBaseData>;
+  /** The published artwork manifest (public/isometric-art/manifest.json), validated and cached. */
+  loadArtManifest: (fetchAsset: FetchAsset) => Promise<IsometricArtManifest>;
 }

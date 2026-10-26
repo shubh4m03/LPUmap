@@ -237,6 +237,9 @@ test.describe('map modes (every configuration)', () => {
     expect(await imageryLayer(page)).toBeNull();
     await shot(page, 'campus map 2D');
     await choose(page, 'Isometric overview');
+    // The illustration (the default variant), then the map-accurate drawing: neither contacts a provider.
+    await expect(page.getByTestId('art-view')).toBeVisible();
+    await page.getByRole('radio', { name: 'Map-accurate' }).click();
     await page.waitForFunction(() => (window.__ATLAS_ISO__?.getFrameStats().fullRedraws ?? 0) > 0);
     await shot(page, 'isometric overview');
     expect(traffic.requests).toEqual([]);

@@ -75,6 +75,16 @@ async function recordAll() {
         dryRun: true,
       }),
     'studio.quality': () => s.quality(),
+    'artwork.listAssociations': () => api.artwork.listAssociations(),
+    'artwork.getAssociation': () => api.artwork.getAssociation('art:num-25'),
+    'artwork.putAssociation': () =>
+      api.artwork.putAssociation('art:area-scene-pavilion', {
+        expectedRevision: null,
+        status: 'unresolved',
+        buildingId: null,
+        evidence: [],
+      }),
+    'artwork.resetAssociation': () => api.artwork.resetAssociation('art:num-21a', { expectedRevision: 2 }),
     'session.getSession': () => api.session.getSession(),
     'session.login': () => api.session.login('pw'),
     'session.logout': () => api.session.logout(),
@@ -95,6 +105,7 @@ describe('admin API client covers every admin route', () => {
     const { api, byName } = await recordAll();
     const methods = [
       ...Object.keys(api.community).map((k) => `community.${k}`),
+      ...Object.keys(api.artwork).map((k) => `artwork.${k}`),
       ...Object.keys(api.studio).map((k) => `studio.${k}`),
       ...['getSession', 'login', 'logout'].map((k) => `session.${k}`),
     ].sort();

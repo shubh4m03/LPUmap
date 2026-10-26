@@ -18,6 +18,7 @@ export const ADMIN_SECTIONS = [
   'overrides',
   'studio',
   'templates',
+  'artwork',
   'audit',
   'quality',
 ] as const;
@@ -29,6 +30,7 @@ export const ADMIN_SECTION_LABELS: Readonly<Record<AdminSection, string>> = {
   overrides: 'Base-place overrides',
   studio: 'Building Studio',
   templates: 'Templates',
+  artwork: 'Artwork',
   audit: 'History',
   quality: 'Quality',
 };

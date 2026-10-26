@@ -25,7 +25,51 @@ export const PRECACHE_GLOBS = [
   'data/*.json',
   'data/*.geojson',
   'fonts/**/*.pbf',
+  // Isometric artwork (public/isometric-art, scripts/build-isometric-art.ts): only the light
+  // files are precached — the manifest and the uniformly downscaled preview of the master.
+  'isometric-art/manifest.json',
+  'isometric-art/derived/*/preview-*.webp',
 ] as const;
+
+/**
+ * Heavy artwork kept OUT of the precache (the shell glob would otherwise take
+ * every vignette PNG): unchanged originals (5.2 MB master + 2.4 MB vignettes),
+ * the full-size web copy and the zoom tiles. They are fetched on demand and
+ * kept by ART_RUNTIME_CACHING instead. The first entry is Workbox's default.
+ */
+export const PRECACHE_IGNORES = [
+  '**/node_modules/**/*',
+  'isometric-art/original/**',
+  'isometric-art/derived/*/tiles/**',
+  'isometric-art/derived/*/web-full.*',
+] as const;
+
+/** Cache of on-demand artwork (originals, web-full, tiles); separate from the precache. */
+export const ART_RUNTIME_CACHE_NAME = `${APP_CONFIG.storage.prefix}-isometric-art`;
+
+/**
+ * The ONLY runtime route: same-origin artwork files under /isometric-art/
+ * (original/ or derived/). `sameOrigin` is required explicitly, so no
+ * third-party request (satellite imagery, API) can ever match. The function is
+ * serialized into sw.js by workbox-build, so it must stay self-contained.
+ * StaleWhileRevalidate: shown from cache (also offline) and refreshed in the
+ * background, so a re-derived file (same URL) is picked up on the next view.
+ * At most 96 entries (today 51 tiles + web-full + 28 originals = 80) and 30
+ * days; purged first when the browser runs out of quota.
+ */
+type RuntimeCachingEntry = NonNullable<NonNullable<VitePWAOptions['workbox']>['runtimeCaching']>[number];
+
+export const ART_RUNTIME_CACHING: RuntimeCachingEntry = {
+  urlPattern: ({ url, sameOrigin }: { url: URL; sameOrigin: boolean }) =>
+    sameOrigin && /\/isometric-art\/(?:original|derived)\/[^?#]+\.(?:png|jpe?g|webp)$/.test(url.pathname),
+  handler: 'StaleWhileRevalidate',
+  method: 'GET',
+  options: {
+    cacheName: ART_RUNTIME_CACHE_NAME,
+    expiration: { maxEntries: 96, maxAgeSeconds: 30 * 24 * 60 * 60, purgeOnQuotaError: true },
+    cacheableResponse: { statuses: [200] },
+  },
+};
 
 export const MANIFEST_ICONS = [
   { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
@@ -59,6 +103,7 @@ export const pwaOptions: Partial<VitePWAOptions> = {
   },
   workbox: {
     globPatterns: [...PRECACHE_GLOBS],
+    globIgnores: [...PRECACHE_IGNORES],
     // The dataset files are large GeoJSON; fail the build rather than silently skip one.
     maximumFileSizeToCacheInBytes: 8 * MB,
     navigateFallback: 'index.html',
@@ -74,14 +119,15 @@ export const pwaOptions: Partial<VitePWAOptions> = {
     // Workbox's defaults (utm_*, fbclid) are kept.
     ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^v$/],
     cacheId: APP_CONFIG.storage.prefix,
-    // No runtime caching: everything first-party is already in the versioned precache,
-    // and third-party satellite imagery (ibasemaps-api.arcgis.com, tiles.maps.eox.at;
-    // src/map/providers) must never be cached or stored for offline use — Esri's terms
-    // forbid storing Data, and the atlas keeps one rule for every provider. With no
-    // route here the worker never touches those requests (tests/unit/map-providers). The owner publication
-    // (/api/locations) is never handled here: the app fetches it network-first and keeps
-    // its own last good copy (src/app/data/publication.ts); /api/admin/** is never cached.
-    runtimeCaching: [],
+    // One runtime route only, for same-origin artwork (ART_RUNTIME_CACHING); everything else
+    // first-party is in the versioned precache. Third-party satellite imagery
+    // (ibasemaps-api.arcgis.com, tiles.maps.eox.at; src/map/providers) must never be cached or
+    // stored for offline use — Esri's terms forbid storing Data, and the atlas keeps one rule
+    // for every provider: the artwork route requires sameOrigin, so the worker never touches
+    // those requests (tests/unit/map-providers). The owner publication (/api/locations) is
+    // never handled here: the app fetches it network-first and keeps its own last good copy
+    // (src/app/data/publication.ts); /api/admin/** is never cached.
+    runtimeCaching: [ART_RUNTIME_CACHING],
   },
   devOptions: { enabled: false },
 };

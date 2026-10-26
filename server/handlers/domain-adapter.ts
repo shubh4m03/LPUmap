@@ -3,9 +3,10 @@
  * Listing every operation explicitly lets the compiler check each signature
  * against the port; the only translation is the typed suggestion filter.
  */
+import * as artwork from '../domain/artwork/associations.ts';
 import * as domain from '../domain/index.ts';
 import * as studio from '../domain/studio/index.ts';
-import type { DomainPort, Filter, StudioPort } from './ports.ts';
+import type { ArtworkPort, DomainPort, Filter, StudioPort } from './ports.ts';
 
 const str = (v: unknown): string | undefined => (typeof v === 'string' && v !== '' ? v : undefined);
 const num = (v: unknown): number | undefined => (typeof v === 'number' && Number.isFinite(v) ? v : undefined);
@@ -73,4 +74,12 @@ export const studioAdapter: StudioPort = {
   duplicate: studio.duplicateStudioBuilding,
   applyTemplate: studio.applyStudioTemplate,
   getQuality: studio.getStudioQuality,
+};
+
+/** Artwork association verification (server/domain/artwork). */
+export const artworkAdapter: ArtworkPort = {
+  list: artwork.listArtworkAssociations,
+  get: artwork.getArtworkAssociation,
+  put: artwork.putArtworkAssociation,
+  reset: artwork.resetArtworkAssociation,
 };

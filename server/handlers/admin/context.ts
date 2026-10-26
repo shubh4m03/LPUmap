@@ -84,6 +84,19 @@ export class AdminCtx {
   }
 
   /**
+   * Admin body read RAW for a domain that parses it inside its own audit
+   * wrapper (artwork verification): JSON content type, <= LIMITS.adminBodyBytes,
+   * finite numbers and bounded depth/arrays. Rejections are audited like body().
+   */
+  async rawBody(): Promise<unknown> {
+    return this.auditingRejection(async () => {
+      const raw = await readJsonBody(this.request, LIMITS.adminBodyBytes);
+      assertJsonBounds(raw);
+      return raw;
+    });
+  }
+
+  /**
    * Runs a body read. A request the HTTP layer rejects before the domain sees
    * it (415 content type, 413 size, 400 malformed JSON / UTF-8 / structural
    * bounds / schema) is audited as 'rejected' for the authenticated actor,

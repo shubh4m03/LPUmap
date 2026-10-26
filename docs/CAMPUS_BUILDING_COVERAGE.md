@@ -650,7 +650,7 @@ Map-key grid cells (200 m, origin `APP_CONFIG.directory.gridOrigin`): inventory 
 
 ## Specific structures: what the sources contain
 
-These are **review items**, never facilities: nothing below is turned into a place, a name or a block number. The Behance illustration index is an unverified lead list only (docs/GEODATA_SOURCES_AND_LICENSES.md §14); its numbers are not used anywhere.
+These are **review items**, never facilities: nothing below is turned into a place, a name or a block number. The campus illustration's index is an unverified lead list only (docs/GEODATA_SOURCES_AND_LICENSES.md §14); its numbers are never used as building names or block numbers. They appear only on the owner-supplied illustration itself (the Illustrated overview), marked as not official.
 
 ### Agriculture Block
 

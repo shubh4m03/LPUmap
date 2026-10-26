@@ -82,7 +82,9 @@ export type AuditEntityType =
   | 'system'
   // Building Studio (migration 0002).
   | 'building'
-  | 'template';
+  | 'template'
+  // Artwork verification (migration 0003).
+  | 'artwork';
 
 export interface AuditEvent {
   id: number;

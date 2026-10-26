@@ -13,7 +13,13 @@
  * does not depend on the base dataset (a record whose base target vanished is
  * reported as an orphan by the client merge and the admin quality view).
  *
- * All four reads run in ONE db.batch (a D1 transaction), so the body is a
+ * v3 (artwork verification, docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md §4.3):
+ * `artworkAssociations` = every owner decision (artwork_associations) in
+ * subject order, public columns only (the note and actors are never selected), each
+ * re-checked against publishedArtworkAssociationSchema. Every decision change
+ * bumps publication_version in the same batch.
+ *
+ * All five reads run in ONE db.batch (a D1 transaction), so the body is a
  * consistent snapshot: its rows always belong to its publicationVersion and
  * a write landing mid-read can never pair new rows with an old version (or
  * the reverse), which would make the ETag lie.
@@ -24,6 +30,11 @@ import {
   publishedOverrideSchema,
   type Publication,
 } from '../../src/community/schema.ts';
+import { publishedArtworkAssociationSchema } from '../../src/isometric-art/schema.ts';
+import {
+  publishedArtworkAssociationsStmt,
+  rowToPublishedArtworkAssociation,
+} from '../db/artwork-associations.ts';
 import { activeLocationsStmt } from '../db/locations.ts';
 import { getPublicationState, publicationStateStmt, toPublicationState } from '../db/meta.ts';
 import { listOverridesStmt } from '../db/overrides.ts';
@@ -43,11 +54,12 @@ export async function getPublicationVersion(db: SqlDatabase): Promise<number> {
 }
 
 export async function getPublication(db: SqlDatabase): Promise<Publication> {
-  const [stateRes, locationRes, overrideRes, studioRes] = await db.batch([
+  const [stateRes, locationRes, overrideRes, studioRes, artworkRes] = await db.batch([
     publicationStateStmt(db),
     activeLocationsStmt(db),
     listOverridesStmt(db),
     publishedStudioVersionsStmt(db),
+    publishedArtworkAssociationsStmt(db),
   ]);
   const state = toPublicationState(stateRes?.results ?? []);
   const locations = (locationRes?.results ?? []).map(rowToLocation);
@@ -67,6 +79,10 @@ export async function getPublication(db: SqlDatabase): Promise<Publication> {
     .map((s) => toPublishedStudioBuilding(s.version, s.targetId))
     .filter((b) => b !== null)
     .sort((a, b) => byString(a.id, b.id));
+  const artworkAssociations = (artworkRes?.results ?? [])
+    .map(rowToPublishedArtworkAssociation)
+    .filter((a) => publishedArtworkAssociationSchema.safeParse(a).success)
+    .sort((a, b) => byString(a.subjectId, b.subjectId));
   return {
     schemaVersion: PUBLICATION_SCHEMA_VERSION,
     publicationVersion: state.version,
@@ -74,5 +90,6 @@ export async function getPublication(db: SqlDatabase): Promise<Publication> {
     locations: pubLocations,
     overrides: pubOverrides,
     buildings,
+    artworkAssociations,
   };
 }

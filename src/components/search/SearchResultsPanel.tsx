@@ -1,30 +1,69 @@
 import { useMemo } from 'react';
+import { selectDirectoryItem } from '../../app/artwork-selection.ts';
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { useAppStore } from '../../app/store/index.ts';
 import { highlightSegments } from '../../search/index.ts';
-import { Button, EmptyState, ResultRow } from '../ui/index.ts';
+import { Button, EmptyState, ResultRow, type IconName, type TitleSegment } from '../ui/index.ts';
 import { placeItem } from './palette-model.ts';
 
 const LIMIT = 50;
 
-/** Place results for the last palette query, kept open beside the map. */
+interface ResultItem {
+  key: string;
+  title: string;
+  segments: TitleSegment[];
+  subtitle?: string;
+  icon: IconName;
+  iconColor?: string;
+  select(): void;
+}
+
+/**
+ * Place results for the last palette query, kept open beside the map, plus
+ * items of the campus illustration that are not linked to a verified building.
+ */
 export function SearchResultsPanel() {
-  const { searchIndex, getPlace } = useAtlas();
+  const { searchIndex, getPlace, buildingDirectory } = useAtlas();
   const query = useAppStore((s) => s.resultsQuery);
   const selectPlace = useAppStore((s) => s.selectPlace);
   const listMode = useAppStore((s) => s.listMode);
   const openPalette = useAppStore((s) => s.openPalette);
   const items = useMemo(
     () =>
-      searchIndex.search(query, { limit: LIMIT, kinds: ['place'] }).flatMap((hit) => {
-        const place = getPlace(hit.doc.ref);
-        if (!place) return [];
-        const segments = highlightSegments(hit.doc.title, hit.highlights);
-        return [
-          { ...placeItem(place, hit.doc.id, hit.doc.qualifier), title: hit.doc.title, segments, place },
-        ];
-      }),
-    [searchIndex, getPlace, query],
+      searchIndex
+        .search(query, { limit: LIMIT, kinds: ['place', 'artwork'] })
+        .flatMap((hit): ResultItem[] => {
+          const segments = highlightSegments(hit.doc.title, hit.highlights);
+          if (hit.doc.kind === 'artwork') {
+            const row = buildingDirectory.item(hit.doc.ref);
+            if (!row) return [];
+            return [
+              {
+                key: hit.doc.id,
+                title: hit.doc.title,
+                segments,
+                subtitle: hit.doc.subtitle ?? 'Campus illustration',
+                icon: 'overview',
+                select: () => selectDirectoryItem(row),
+              },
+            ];
+          }
+          const place = getPlace(hit.doc.ref);
+          if (!place) return [];
+          const p = placeItem(place, hit.doc.id, hit.doc.qualifier);
+          return [
+            {
+              key: p.key,
+              title: hit.doc.title,
+              segments,
+              ...(p.subtitle ? { subtitle: p.subtitle } : {}),
+              icon: p.icon,
+              ...(p.iconColor ? { iconColor: p.iconColor } : {}),
+              select: () => selectPlace(place.id, { focus: place.location !== null && !listMode }),
+            },
+          ];
+        }),
+    [searchIndex, getPlace, buildingDirectory, query, selectPlace, listMode],
   );
 
   return (
@@ -53,9 +92,7 @@ export function SearchResultsPanel() {
                 subtitle={item.subtitle}
                 icon={item.icon}
                 {...(item.iconColor ? { iconColor: item.iconColor } : {})}
-                onSelect={() =>
-                  selectPlace(item.place.id, { focus: item.place.location !== null && !listMode })
-                }
+                onSelect={item.select}
                 className="px-4"
               />
             </li>

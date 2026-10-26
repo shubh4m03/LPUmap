@@ -32,6 +32,7 @@ export const ENTITY_LABELS: Readonly<Record<AuditEntityType, string>> = {
   system: 'System',
   building: 'Studio building',
   template: 'Studio template',
+  artwork: 'Artwork link',
 };
 
 /** Human wording for known actions; unknown actions are shown as recorded. */
@@ -55,6 +56,8 @@ export const ACTION_LABELS: Readonly<Record<string, string>> = {
   'override.delete': 'Override removed (back to base values)',
   'override.revert': 'Override reverted',
   'audit.revert': 'Change reverted',
+  'artwork.put': 'Artwork link decided',
+  'artwork.reset': 'Artwork link reset to the curated baseline',
 };
 
 export const actionLabel = (action: string): string => ACTION_LABELS[action] ?? action;
@@ -120,6 +123,8 @@ export function entityRoute(e: Pick<AuditEvent, 'entityType' | 'entityId'>): Adm
       return { section: 'studio', id: e.entityId };
     case 'template':
       return { section: 'templates', id: e.entityId };
+    case 'artwork':
+      return { section: 'artwork', id: e.entityId };
     default:
       return null;
   }

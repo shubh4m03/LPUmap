@@ -22,7 +22,11 @@ import {
   studioBuildingDetailSchema,
   studioErrorDetailsSchema,
 } from '../../../src/building-studio/schema.ts';
-import { apiErrorSchema, publicationSchema } from '../../../src/community/schema.ts';
+import {
+  apiErrorSchema,
+  PUBLICATION_SCHEMA_VERSION,
+  publicationSchema,
+} from '../../../src/community/schema.ts';
 import { accessEnvVars, claims, jwksFetch, makeKey, sign, type TestKey } from '../auth/jwt-fixtures.ts';
 import {
   TEST_PASSWORD,
@@ -312,7 +316,7 @@ describe('a full Access-mode flow and the wire shapes', () => {
     expect(publication.headers.get('ETag')).toBe(publicationEtag(pr.publicationVersion));
     const text = await publication.text();
     const p = publicationSchema.parse(JSON.parse(text));
-    expect(p.schemaVersion).toBe(2);
+    expect(p.schemaVersion).toBe(PUBLICATION_SCHEMA_VERSION);
     expect(p.buildings!.map((b) => b.id)).toEqual([id]);
     expect(text).not.toContain(PRIVATE_NOTE);
     expect(text).not.toContain('Double-height');

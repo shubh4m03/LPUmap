@@ -1,9 +1,13 @@
 /** Building directory panel UI (docs/ISOMETRIC_AND_3D_DESIGN.md §7.5). */
 export { DirectoryPanel } from './DirectoryPanel.tsx';
 export { DirectoryPeek } from './DirectoryPeek.tsx';
-export { MapKeyGlyph } from './MapKeyGlyph.tsx';
+export { ArtworkNumberGlyph, MapKeyGlyph } from './MapKeyGlyph.tsx';
 export { campusDirectoryFor, useCampusDirectory } from './use-campus-directory.ts';
 export {
+  ARTWORK_MATCHES_LABEL,
+  ARTWORK_STATUS,
+  artworkSectionOptions,
+  artworkStatusOf,
   categoryOptions,
   directorySummary,
   directoryView,
@@ -12,6 +16,7 @@ export {
   UNKEYED_GROUP_LABEL,
 } from './directory-view-model.ts';
 export type {
+  ArtworkStatusKind,
   DirectoryGroup,
   DirectoryGrouping,
   DirectoryView,

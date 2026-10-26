@@ -2,7 +2,8 @@
 
 > **Status: review items for the owner, not applied data.** This review tried to break every
 > `confirm-on-site` and every high-scoring candidate in [`block-candidates.json`](block-candidates.json).
-> Block numbers come from an undated third-party illustration (Behance "LPU isometric map design"). Under
+> Block numbers come from the campus illustration ("LPU isometric map design", first studied from Behance;
+> owner-supplied since 2026-10-24, see [`LPU_ISOMETRIC_ASSET_INTEGRATION.md`](../../LPU_ISOMETRIC_ASSET_INTEGRATION.md)). Under
 > the owner's rules, the illustration cannot by itself name, number or position a footprint, and an
 > official block number may never be inferred from location or appearance alone. **No candidate in this
 > folder is verified.** "Keep" below means only that the candidate is still worth a site check. It does

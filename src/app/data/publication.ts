@@ -26,6 +26,7 @@ import {
   type Publication,
 } from '../../community/schema.ts';
 import { APP_CONFIG } from '../../config/index.ts';
+import { publishedArtworkAssociationSchema } from '../../isometric-art/schema.ts';
 
 export const PUBLICATION_PATH = '/api/locations';
 /** How long startup waits for the network before using the saved copy. */
@@ -137,6 +138,8 @@ const RECORD_SCHEMAS = {
   locations: publishedLocationSchema,
   overrides: publishedOverrideSchema,
   buildings: publishedStudioBuildingSchema,
+  // v3: one malformed artwork decision is dropped (its subject falls back to the curated baseline).
+  artworkAssociations: publishedArtworkAssociationSchema,
 } as const;
 
 /**

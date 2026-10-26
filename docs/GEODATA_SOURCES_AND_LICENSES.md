@@ -21,26 +21,26 @@ today) and [research/LPU_PUBLIC_SOURCES.md](research/LPU_PUBLIC_SOURCES.md)
 
 ## Summary
 
-| #   | Source                                  | Licence (version)                                            | Can we put it in `public/data`?                                           | Decision                                                          |
-| --- | --------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| 1   | OpenStreetMap                           | ODbL 1.0                                                     | **Yes**. This is what we ship today                                       | Keep as the only geometry and name source                         |
-| 2   | Microsoft Global ML Building Footprints | CDLA Permissive 2.0 (was ODbL before 2026-03-11)             | Conditional: licence-compatible, but no names, heights or confidence here | Use only as a **survey lead layer**. Do not import automatically  |
-| 3   | Google Open Buildings v3                | CC BY 4.0 **or** ODbL 1.0 (user's choice)                    | Conditional: licence-compatible, with confidence scores                   | Use only as a **survey lead layer**. Better than MS here          |
-| 4   | Overture Maps buildings                 | ODbL 1.0 (whole theme)                                       | Conditional                                                               | Not needed: for this site it repackages 1 to 3                    |
-| 5   | Esri World Imagery                      | Esri Master License Agreement and OSM-specific permission    | **No** (imagery). Tracing is allowed **into OSM**                         | Trace in iD/JOSM into OSM only                                    |
-| 6   | Bing aerial imagery                     | Bing Maps T&C, OSM clause in §2                              | **No**. Tracing only inside an OSM online editor                          | Trace in iD/JOSM into OSM only                                    |
-| 7   | Google Maps / Earth / Maps Platform     | Google terms                                                 | **No**. Tracing and 45° modelling are expressly prohibited                | Never use for geometry, names or heights                          |
-| 8   | Bhuvan (ISRO/NRSC)                      | Not retrievable (JS-only portal)                             | Unknown, so treat as **No**                                               | Do not use until terms are read                                   |
-| 9   | Copernicus Sentinel-2                   | Copernicus free, full and open data policy                   | Yes, but **10 m** pixels                                                  | Too coarse for footprints. Context only                           |
-| 10  | Wikimedia Commons photos                | Per file (CC BY 2.0, CC BY-SA 3.0/4.0, GODL-India)           | Façade reference only. Redistributing a photo needs per-file attribution  | Use 2 files as façade references. Treat the rest with caution     |
-| 11  | Mapillary                               | CC BY-SA 4.0 (images). Special permission for OSM derivation | Coverage could not be checked without a token                             | Use only inside iD/JOSM for OSM mapping                           |
-| 12  | Sketchfab / 3D Warehouse                | Per model                                                    | No campus models on Sketchfab. 1 legacy model on 3D Warehouse             | Do not download. Do not use                                       |
-| 13  | lpu.in (official site)                  | © LPU, personal non-commercial use only                      | **No** (content). Short factual identifiers only, as today                | Unchanged from LPU_PUBLIC_SOURCES.md                              |
-| 14  | Behance "LPU isometric map design"      | All rights reserved (third-party artwork)                    | **No**                                                                    | Design inspiration and unverified survey leads only               |
-| 17a | Esri World Imagery (runtime basemap)    | Esri Master Agreement; ArcGIS Location Platform free tier    | **No** (tiles are streamed, never stored)                                 | Optional imagery behind `VITE_ARCGIS_API_KEY` (§17)               |
-| 17b | EOX Sentinel-2 cloudless 2016           | CC BY 4.0 (2016 vintage only)                                | **No** (tiles are streamed, never stored)                                 | Optional 10 m backdrop behind `VITE_EOX_BACKDROP=true` (§17)      |
-| 17c | Copernicus DEM GLO-30                   | License-COPDEM-30                                            | Not needed                                                                | Measured once; no terrain added (§17)                             |
-| —   | Google Map Tiles (2D and Photoreal 3D)  | Google Maps Platform terms; needs a billing account          | **No**                                                                    | **Not used** (no-billing decision, §17); never a data source (§7) |
+| #   | Source                                      | Licence (version)                                                       | Can we put it in `public/data`?                                                        | Decision                                                                  |
+| --- | ------------------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| 1   | OpenStreetMap                               | ODbL 1.0                                                                | **Yes**. This is what we ship today                                                    | Keep as the only geometry and name source                                 |
+| 2   | Microsoft Global ML Building Footprints     | CDLA Permissive 2.0 (was ODbL before 2026-03-11)                        | Conditional: licence-compatible, but no names, heights or confidence here              | Use only as a **survey lead layer**. Do not import automatically          |
+| 3   | Google Open Buildings v3                    | CC BY 4.0 **or** ODbL 1.0 (user's choice)                               | Conditional: licence-compatible, with confidence scores                                | Use only as a **survey lead layer**. Better than MS here                  |
+| 4   | Overture Maps buildings                     | ODbL 1.0 (whole theme)                                                  | Conditional                                                                            | Not needed: for this site it repackages 1 to 3                            |
+| 5   | Esri World Imagery                          | Esri Master License Agreement and OSM-specific permission               | **No** (imagery). Tracing is allowed **into OSM**                                      | Trace in iD/JOSM into OSM only                                            |
+| 6   | Bing aerial imagery                         | Bing Maps T&C, OSM clause in §2                                         | **No**. Tracing only inside an OSM online editor                                       | Trace in iD/JOSM into OSM only                                            |
+| 7   | Google Maps / Earth / Maps Platform         | Google terms                                                            | **No**. Tracing and 45° modelling are expressly prohibited                             | Never use for geometry, names or heights                                  |
+| 8   | Bhuvan (ISRO/NRSC)                          | Not retrievable (JS-only portal)                                        | Unknown, so treat as **No**                                                            | Do not use until terms are read                                           |
+| 9   | Copernicus Sentinel-2                       | Copernicus free, full and open data policy                              | Yes, but **10 m** pixels                                                               | Too coarse for footprints. Context only                                   |
+| 10  | Wikimedia Commons photos                    | Per file (CC BY 2.0, CC BY-SA 3.0/4.0, GODL-India)                      | Façade reference only. Redistributing a photo needs per-file attribution               | Use 2 files as façade references. Treat the rest with caution             |
+| 11  | Mapillary                                   | CC BY-SA 4.0 (images). Special permission for OSM derivation            | Coverage could not be checked without a token                                          | Use only inside iD/JOSM for OSM mapping                                   |
+| 12  | Sketchfab / 3D Warehouse                    | Per model                                                               | No campus models on Sketchfab. 1 legacy model on 3D Warehouse                          | Do not download. Do not use                                               |
+| 13  | lpu.in (official site)                      | © LPU, personal non-commercial use only                                 | **No** (content). Short factual identifiers only, as today                             | Unchanged from LPU_PUBLIC_SOURCES.md                                      |
+| 14  | "LPU isometric map design" (owner-supplied) | Owner statement 2026-10-24: "I own or am authorized to use the artwork" | **No** (it is an illustration, not data). Shipped unchanged in `public/isometric-art/` | Shown as the Illustrated overview; never geometry, names or block numbers |
+| 17a | Esri World Imagery (runtime basemap)        | Esri Master Agreement; ArcGIS Location Platform free tier               | **No** (tiles are streamed, never stored)                                              | Optional imagery behind `VITE_ARCGIS_API_KEY` (§17)                       |
+| 17b | EOX Sentinel-2 cloudless 2016               | CC BY 4.0 (2016 vintage only)                                           | **No** (tiles are streamed, never stored)                                              | Optional 10 m backdrop behind `VITE_EOX_BACKDROP=true` (§17)              |
+| 17c | Copernicus DEM GLO-30                       | License-COPDEM-30                                                       | Not needed                                                                             | Measured once; no terrain added (§17)                                     |
+| —   | Google Map Tiles (2D and Photoreal 3D)      | Google Maps Platform terms; needs a billing account                     | **No**                                                                                 | **Not used** (no-billing decision, §17); never a data source (§7)         |
 
 ## Measurements behind this document (re-verified)
 
@@ -335,25 +335,41 @@ the Site's content is strictly prohibited." This is unchanged from
 images, maps or tour content. Block statements such as "Central Library … Block-37"
 remain text leads with no position.
 
-## 14. Behance "LPU isometric map design"
+## 14. "LPU isometric map design" (owner-supplied campus illustration)
 
-| Field         | Value                                                                                                                                                                                                                        |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| URL           | https://www.behance.net/gallery/105159145/LPU-isometric-map-design. robots.txt does not disallow `/gallery/`, but the page returned **HTTP 403** to our client, so the author, date and licence were not read from the page  |
-| Local copy    | `reference/assets/lpu-isometric-map-reference.png` (git-ignored by the `reference/` rule in `.gitignore`). It is a **browser screenshot** that also shows the owner's bookmarks bar and tabs. **Never publish or commit it** |
-| Copyright     | Third-party artwork, all rights reserved by default (no licence visible). It also reproduces the LPU logo. **Date unknown**                                                                                                  |
-| Permitted use | Design inspiration only (isometric style, colour coding of gardens, roads, pedestrian areas and parking). Its index may be used as **unverified survey leads**                                                               |
+> **Updated 2026-10-24.** Earlier versions of this section described the artwork as third-party artwork
+> usable only as design inspiration. That no longer applies: the owner supplied the original files and
+> stated that they own the artwork or are authorised to use it. The rules on what the artwork can prove
+> (nothing about geography, names or official block numbers) are unchanged.
+
+| Field                  | Value                                                                                                                                                                                                                                                                                                                                                          |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Owner statement        | On **2026-10-24** the owner supplied 29 files in `lpu-isometric-map-design/` with the statement **"I own or am authorized to use the artwork"**. This project relies on that statement; it has not seen a licence document, and the statement does not say whether the owner is the author or a licensee. Any question about the rights goes to the owner.     |
+| Files                  | 29 files, 28 unique images: the master overview `1-lpu-isometric-map-design-3371.jpg` (3371 × 2384, CMYK JPEG; XMP: Adobe Illustrator CS6, 2019-04-25) and 28 slide PNGs (20 block vignettes, 8 scene vignettes; `111-…` and `115-…` are byte-identical). sha256 per file: [LPU_ISOMETRIC_ASSET_INVENTORY.md](LPU_ISOMETRIC_ASSET_INVENTORY.md)                |
+| Earlier public copy    | The same artwork is published on Behance (https://www.behance.net/gallery/105159145/LPU-isometric-map-design; the page returned HTTP 403 to our client, so its author, date and licence were not read from it). Each owner-supplied file is byte-identical to a slide file the earlier research saved under the git-ignored `reference/assets/behance-slides/` |
+| Branding               | The artwork reproduces the LPU logo and tagline. They are shown only as part of the unchanged artwork, never extracted or reused as the app's own branding                                                                                                                                                                                                     |
+| How it is used         | Shown **as drawn** in the Illustrated overview (`?view=iso`) and the admin Artwork screen. The 28 canonical originals are committed and published byte-identical in `public/isometric-art/original/`; 53 derived web copies of the master (lossless WebP, uniform scales, each recording the original's sha256) are in `public/isometric-art/derived/`         |
+| Never                  | Modified, renamed, recoloured, cropped, stretched or replaced; used as geometry, as a source of names or official block numbers, or for routing; presented as geographically exact or as a 3D model                                                                                                                                                            |
+| Local reference copies | `reference/assets/lpu-isometric-map-reference.png` and `reference/assets/behance-slides/` stay git-ignored. The first is a browser screenshot that also shows the owner's bookmarks bar and tabs: **never publish or commit it**. The owner-supplied files replace them                                                                                        |
+
+Contract, pipeline and owner verification:
+[LPU_ISOMETRIC_ASSET_INTEGRATION.md](LPU_ISOMETRIC_ASSET_INTEGRATION.md).
 
 **Leads it contains. These are unverified, as printed in the index, and must
-never name, number or position any footprint:**
+never name, number or position any footprint by themselves** (an owner decision
+with evidence in `/admin/artwork` is the only way to link an illustration item to
+a building):
 
 - _Education:_ Fashion 1; Pharmacy 4, 7; Physiotherapy 3; Architecture 6; Animation 8; Fine Arts 8; Business 13; Hotel Management 15; Education 18; Performing Arts 19; Film & Journalism 20; Law 20; Agriculture 25, 26; Physical Science 27; Biotechnology 28; Computer Application 33; Computer Science 34; Electronic Telecom 36; Research 37; Civil 38; Mechanical 56; "Polytechinque" 57 (58 also printed beside it).
 - _Administrative:_ Administrative 29 and 31; Prochancellor 30; Chancellor 31; Admission 32; Student Welfare 13; Shantidevi Auditorium 35; Baldev Raj Auditorium 2; Indoor 47; Project Lab 58.
 - _Residential:_ Girls Hostel 9, 10, 11, 12, 21A, 21B; Apartment 41–44; Boys Hostel 45, 48, 49, 50, 51, 52, 53.
 
-**Staleness evidence.** The illustration lists "Research 37". lpu.in says the
-Central Library is in Block-37 (LPU_PUBLIC_SOURCES.md). Either the illustration
-is out of date or one block hosts both. That is exactly why these are leads only.
+**Staleness evidence.** The illustration's index lists "Research 37" (its block
+vignette says CENTRAL LIBRARY). lpu.in says the Central Library is in Block-37
+(LPU_PUBLIC_SOURCES.md). The artwork dates from 2019, so parts of it may be out
+of date, and its two printed sources disagree in places. That is exactly why its
+printed labels are leads only, shown exactly as printed and never as official
+names or numbers.
 
 ## 15. Decision on what goes into `public/data`
 
@@ -365,7 +381,9 @@ is out of date or one block hosts both. That is exactly why these are leads only
   - MS: CDLA Permissive 2.0, with the licence text shipped.
   - Google: licensed under ODbL. Attribution "Google Open Buildings".
 - Nothing from Google Maps or Earth, Bing (outside OSM editing), Esri (outside
-  OSM editing), lpu.in content, the 360° tour, Behance, Sketchfab or 3D Warehouse.
+  OSM editing), lpu.in content, the 360° tour, Sketchfab or 3D Warehouse. The
+  owner-supplied campus illustration (§14) is shipped separately in
+  `public/isometric-art/` as an illustration, never as data in `public/data`.
 
 ## 16. Path to verified names and positions
 

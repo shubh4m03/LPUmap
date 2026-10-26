@@ -287,11 +287,15 @@ export function PanelSection(props: {
   defaultOpen?: boolean;
   id?: string;
   badge?: ReactNode;
+  /** Called with the new open state when the user opens or closes the section. */
+  onToggle?: (open: boolean) => void;
 }) {
+  const { onToggle } = props;
   return (
     <details
       id={props.id}
       open={props.defaultOpen ?? true}
+      onToggle={onToggle ? (e) => onToggle(e.currentTarget.open) : undefined}
       className="group scroll-mt-2 border-b border-border last:border-b-0"
     >
       <summary

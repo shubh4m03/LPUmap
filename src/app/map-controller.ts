@@ -18,11 +18,24 @@ export interface CarriedCamera {
 }
 
 let current: MapController | null = null;
+/** False while the live view is not geographic (the campus illustration). */
+let currentGeographic = true;
 let carried: CarriedCamera | null = null;
 
-export function setMapController(controller: MapController | null): void {
+export interface MapControllerOptions {
+  /**
+   * False for a view that is not geographically exact (the illustrated
+   * overview, src/isometric-art): a geographic camera is never applied to it,
+   * and the camera carried from the last map view is kept for the next
+   * geographic view (so map → illustration → map-accurate keeps the ground point).
+   */
+  geographic?: boolean;
+}
+
+export function setMapController(controller: MapController | null, opts: MapControllerOptions = {}): void {
   current = controller;
-  if (controller && carried) {
+  currentGeographic = controller === null || opts.geographic !== false;
+  if (controller && carried && currentGeographic) {
     const cam = carried;
     carried = null;
     controller.flyTo(cam.center, cam.zoom);
@@ -55,6 +68,8 @@ export function cameraOf(controller: MapController): CarriedCamera | null {
 
 /** Remembers the live view so the next controller (the other stage) opens on the same ground point. */
 export function carryCamera(): void {
+  // Leaving a non-geographic view: it has no ground point; keep the one carried from the last map view.
+  if (current && !currentGeographic) return;
   carried = current ? cameraOf(current) : null;
 }
 

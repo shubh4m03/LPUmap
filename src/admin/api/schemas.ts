@@ -101,6 +101,7 @@ export const auditEntityTypeSchema = z.enum([
   'system',
   'building',
   'template',
+  'artwork',
 ]);
 export type AuditEntityType = z.infer<typeof auditEntityTypeSchema>;
 

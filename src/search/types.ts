@@ -1,4 +1,5 @@
-export type SearchDocKind = 'place' | 'category' | 'layer' | 'command';
+/** 'artwork': an item of the owner's campus illustration not linked to a verified building (src/search/artwork-docs.ts). */
+export type SearchDocKind = 'place' | 'category' | 'layer' | 'command' | 'artwork';
 
 export interface SearchDoc {
   id: string;

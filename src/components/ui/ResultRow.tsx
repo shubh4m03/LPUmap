@@ -69,7 +69,8 @@ export function ResultRow({
         </span>
       ) : null}
       <span className="flex min-w-0 flex-1 flex-col">
-        <span className="truncate text-sm font-medium text-text">
+        {/* whitespace-pre (not truncate's nowrap): printed artwork labels keep their exact double spaces. */}
+        <span className="overflow-hidden text-sm font-medium text-ellipsis whitespace-pre text-text">
           {useSegments ? (
             <>
               {/* Screen readers split words at <mark> boundaries; give them the plain title. */}

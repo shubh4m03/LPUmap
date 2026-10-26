@@ -1,10 +1,11 @@
 # Implementation status
 
 **As of 2026-10-24.** Commit `2407afe` holds the final UI wave (owner specs A, B and C), server
-hardening and the first QA fixes. On top of it, the working tree holds a **fix wave** (§1.9): D3
-off-campus routing, D4, D5, the honeypot decoy, the Zod CSP violation, the Studio leave prompt,
-access-point picking on the map and new e2e coverage. **The fix wave is not committed yet**; the
-project lead commits.
+hardening and the first QA fixes. Commit `6050e91` holds the **fix wave** (§1.9): D3 off-campus
+routing, D4, D5, the honeypot decoy, the Zod CSP violation, the Studio leave prompt, access-point
+picking on the map and new e2e coverage. On top of `6050e91`, the working tree holds the
+**campus-illustration (artwork) integration** (§1.10). **It is not committed yet**; the project lead
+commits.
 
 Every result in this file is from a real run. The gate in [§2](#2-how-it-was-verified) was re-run in
 full by the verification agent after the fixers finished. Anything that was not run, or could not be
@@ -12,24 +13,26 @@ tested, says so.
 
 ## At a glance
 
-| Area                                       | State                                                                                                                                |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Community: "Suggest a missing place"       | Built, tested end to end against the real server handlers                                                                            |
-| Owner admin (`/admin`): moderation, editor | Built, tested end to end against the real server handlers                                                                            |
-| Building Studio (Creative Mode)            | Built, tested end to end (save, reload, second browser, publish, archive, restore, model existing, template, duplicate, delete, 409) |
-| Map engine (free sources only)             | Built: five view modes, optional Esri imagery, optional EOX backdrop, fallbacks. Tested with synthetic tiles only                    |
-| Photorealistic 3D                          | **Not implemented, by owner decision** (no billing). Shown as unavailable with the reason                                            |
-| Full gate (types, lint, format, all tests) | **All green** on the fix-wave tree (see [§2](#2-how-it-was-verified))                                                                |
-| Acceptance checklist                       | **56 PASS** (one of them, D3, after a fix), **0 FAIL, 1 NOT TESTABLE** of 57 items (see [§3](#3-acceptance-checklist-summary))       |
-| Off-campus routing (D3)                    | **Fixed**: off-campus places are never routing endpoints; verified in the real app                                                   |
-| Performance (D8)                           | Overview budgets met in 3 of 3 runs; one heavy-scene budget still over (§4); phone numbers still missing (owner action 4)            |
+| Area                                       | State                                                                                                                                    |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Community: "Suggest a missing place"       | Built, tested end to end against the real server handlers                                                                                |
+| Owner admin (`/admin`): moderation, editor | Built, tested end to end against the real server handlers                                                                                |
+| Building Studio (Creative Mode)            | Built, tested end to end (save, reload, second browser, publish, archive, restore, model existing, template, duplicate, delete, 409)     |
+| Map engine (free sources only)             | Built: five view modes, optional Esri imagery, optional EOX backdrop, fallbacks. Tested with synthetic tiles only                        |
+| Photorealistic 3D                          | **Not implemented, by owner decision** (no billing). Shown as unavailable with the reason                                                |
+| Full gate (types, lint, format, all tests) | **All green** on the fix-wave tree (see [§2](#2-how-it-was-verified))                                                                    |
+| Acceptance checklist                       | **56 PASS** (one of them, D3, after a fix), **0 FAIL, 1 NOT TESTABLE** of 57 items (see [§3](#3-acceptance-checklist-summary))           |
+| Off-campus routing (D3)                    | **Fixed**: off-campus places are never routing endpoints; verified in the real app                                                       |
+| Campus illustration (Illustrated overview) | Built and integrated (§1.10): renderer, directory/search/details, admin Artwork section, migration 0003. 0 verified links (owner action) |
+| Artwork gate (working tree and clean tree) | **Green** (§1.10): Vitest 2508 passed / 1 skipped, server 1536 / 4 skipped; clean tree Playwright 324 passed, 0 failed, 106 skipped      |
+| Performance (D8)                           | Overview budgets met in 3 of 3 runs; one heavy-scene budget still over (§4); phone numbers still missing (owner action 4)                |
 
 ## 1. What exists
 
 Paths are relative to the repository root.
 
-§1.1 was committed in `e8f313a`; §1.2–§1.8 were committed in `2407afe`; §1.9 is the uncommitted fix
-wave.
+§1.1 was committed in `e8f313a`; §1.2–§1.8 were committed in `2407afe`; §1.9 (the fix wave) was
+committed in `6050e91`; §1.10 (the artwork integration) is uncommitted.
 
 ### 1.1 Already committed in `e8f313a` (unchanged in scope)
 
@@ -173,7 +176,7 @@ rejected in names; an optional global login cap (`ADMIN_LOGIN_GLOBAL_LIMIT`).
 - Fix wave (§1.9): new e2e specs `csp`, `studio-records` and `admin-approve-map`; `studio-workflow`
   and `studio-records` also run on the tablet project.
 
-### 1.9 Fix wave on top of `2407afe` (uncommitted)
+### 1.9 Fix wave on top of `2407afe` (committed in `6050e91`)
 
 Each fix has a regression test. The fixers proved each test fails without its fix by reverting the fix
 temporarily. Not proven by a revert: the new e2e flows in `studio-records.spec.ts` and
@@ -257,6 +260,75 @@ for byte (checked with `cmp`).
   with 50 studio models now builds within budget at 4× (70.0 / 89.5 ms, desktop / mobile; before
   173.8 / 190.0 ms). The custom 3D layer's own CPU p95 at 4× is 4.4 / 3.5 ms (≤ 5 ms). Two numbers are
   still over budget; see §4.
+
+### 1.10 Campus-illustration (artwork) integration on top of `6050e91` (uncommitted)
+
+Contract and reconciliation record: [LPU_ISOMETRIC_ASSET_INTEGRATION.md](LPU_ISOMETRIC_ASSET_INTEGRATION.md)
+(§10 lists every competing implementation the integration owner merged into one; §11 is the owner's
+verification guide; §14 the limitations). Files and exact labels:
+[LPU_ISOMETRIC_ASSET_INVENTORY.md](LPU_ISOMETRIC_ASSET_INVENTORY.md); per-subject links:
+[LPU_ISOMETRIC_ASSET_MAPPING.md](LPU_ISOMETRIC_ASSET_MAPPING.md) (generated); provenance and the owner's
+ownership statement: [GEODATA_SOURCES_AND_LICENSES.md §14](GEODATA_SOURCES_AND_LICENSES.md#14-lpu-isometric-map-design-owner-supplied-campus-illustration).
+Results below are from real runs on 2026-10-24.
+
+- **What was built.** The owner's 29 files are shown unchanged as the **Illustrated overview**, the
+  default `?view=iso` variant (`&iso=map` keeps the footprint-based drawing). 65 clickable outlines on
+  the master, named by their exact printed labels. 82 depicted subjects (55 numbered, 7 scenes, 20
+  areas) appear in the directory (grouped by the printed block headings), search and place details.
+  Associations: **0 verified, 19 approximate** ("Unconfirmed match", never routed, never merged),
+  **63 unresolved**. The owner links items to buildings in `/admin/artwork` (migration 0003, audited,
+  publication v3). Only a verified link joins the illustration and the map; with none today, the two
+  modes share no building selection. Re-checked by the documentation agent: `npm run art:check` OK
+  (28 originals, 65 hotspots, 82 subjects, 81 published files, 53 derived; 0 / 19 / 63).
+
+- **Assets (gate 1).** The 29 originals in `lpu-isometric-map-design/` match their inventory sha256 (29/29)
+  before and after every step. `public/isometric-art/` holds the 28 canonical originals byte-identical
+  (`iso-art-115` is a duplicate of `iso-art-111`), 53 derived lossless WebP copies of the master and the
+  manifest. All are committable: no path is git-ignored, `.gitattributes` now marks `*.jpg`, `*.jpeg` and
+  `*.webp` binary, and git stores every image byte for byte (tested). `npm run art:build` twice: outputs
+  byte-identical to each other and to the tree. `npm run art:verify` (Chromium): 53/53 derived files
+  byte-identical across two derivations and to the committed copies; native maxAbs 0 for all five groups;
+  the three negative controls rejected.
+- **Hotspots (gate 2).** 65 outlines in normalized source coordinates; one transform for image and
+  outlines. `isometric-art.spec.ts` checks image and outline registration within ±1 device px after open,
+  wheel zoom, drag/touch pan, pinch, keyboard zoom and resize at 1440×900, 1280×800, 768×1024, 390×844 and
+  360×800. 44 outlines are flagged `needs-manual-verification` (drawn dashed); none was guessed.
+- **Fidelity against the original.** `art-evidence.spec.ts` draws the ORIGINAL master JPEG with the
+  renderer's transform next to the rendered overview for 4 regions (pins 58, 50, 1, 2): PSNR 47.9–53.1 dB
+  and mean error 0.07–0.38 / 255 on mobile and desktop, no pixel off by more than 32 except 1 sample
+  in 324 000. Side-by-side images were inspected (composition, colour and printed labels identical).
+- **Migration 0003 (gate 4).** On isolated local databases only: `migration-0003.test.ts` and
+  `tests/server/artwork/persistence.test.ts` (fresh, populated 0002→0003, failing-atomic, rollback,
+  re-apply, three cycles); plus a wrangler CLI rehearsal (`d1 migrations apply --local --persist-to
+<scratch>`): 0001+0002 with an audit row → 0003 → a verified and an approximate decision with
+  `artwork` audit rows → `docs/db/0003_down.sql` (decisions kept, audit rows kept as `system`, 0003
+  forgotten, `artwork` inserts refused) → re-apply (decisions and audit rows identical to before the
+  rollback, audit sequence unchanged) ; the file-level recovery copy reproduced the pre-rollback state.
+  `wrangler d1 export --local` crashed in this environment (libuv assertion), so the local recovery copy
+  was a copy of the persisted database directory. No remote database was touched.
+- **Identity.** A VERIFIED association (created through the admin API in the in-memory e2e database,
+  then reset) selects the same building id in the illustration and on the 2D map, where the camera
+  frames the building; an unresolved item selects no building and has no map position.
+- **Clean checkout (gate 5).** A tree of exactly the files to be committed (git `write-tree` of the
+  working tree in a scratch clone, extracted with `git archive`) in a scratch directory: `npm ci`,
+  `npm run build` (data:check with `public/data` unchanged, art:check, tsc, vite build, art:check-dist:
+  manifest and 81 published files byte-identical in `dist/`), `node scripts/smoke.ts` (10/10), Vitest
+  2501 passed / 8 skipped (the git test skips outside a git checkout), lint, format and both tsc clean,
+  and the full Playwright suite: **324 passed, 0 failed, 106 skipped** (project-specific skips; the
+  evidence spec runs on desktop and mobile only).
+- **Gate in the working tree.** `tsc` (both configs), `eslint .`, `prettier --check .`: clean. Vitest
+  2508 passed / 1 skipped (201 files). Server suite 1536 passed / 4 skipped (40 files).
+  `npm run data:check`: 0 errors, 0 warnings, `public/data` byte-identical.
+- **Screenshots** (`test-results/evidence/art/`, desktop 1440×900 and mobile 390×844, all inspected):
+  full overview, 4 regions, vignettes of 4 block captions in the detail card (details sheet on the
+  phone), block-wise directory, selection highlight, verified item in the illustration and on the map,
+  unresolved item in both, admin Artwork list and item.
+- **Open (owner):** no association is verified; 44 outlines and the inventory's manual-verification list
+  need review; the `art:scene-103` caption is withheld pending a decision. **Open (engineering):** map
+  modes do not outline an "Unconfirmed match" candidate (it is only framed and named); on desktop the
+  detail card and the details panel can show the same item side by side; the public details panel
+  quotes the internal research file path in the curated reason; on a DPR-2 phone the overview downloads
+  about 2.1 MB of images on opening; Safari, Firefox and real touch hardware were not tested.
 
 ## 2. How it was verified
 
@@ -408,14 +480,23 @@ by the verification agent and by the repo e2e and unit tests listed in §1.9.
   runtime only). `src/app/App.tsx` prefetches the public shell chunk, so `/admin` downloads it too.
 - **Bake-off report §6** (open item 2) is left as written; its addendum says the item is now narrowed
   to the unthrottled full redraw.
+- **Campus illustration** (§1.10; full list in
+  [LPU_ISOMETRIC_ASSET_INTEGRATION.md §9 and §14](LPU_ISOMETRIC_ASSET_INTEGRATION.md#9-open-items)):
+  it is a 2D schematic drawing from 2019, so it cannot be rotated or tilted, is not geographically
+  exact, and may be out of date. Map modes do not outline an "Unconfirmed match" candidate; on desktop
+  the detail card and the details panel can show the same item side by side; the public details panel
+  quotes an internal research file path in the curated reason; a DPR-2 phone downloads about 2.1 MB of
+  images on opening; Safari, Firefox and real touch hardware were not tested. The generated
+  `LPU_ISOMETRIC_ASSET_MAPPING.md` has no "evidence that would verify it" column (the guide is in the
+  integration doc §11).
 
 ## 5. Owner actions
 
 1. **Block numbers.** None are applied; the app shows its own map keys (for example "E2-05"), labelled as
-   not official. Work through
-   [`docs/research/block-leads/OWNER_CHECKLIST.md`](research/block-leads/OWNER_CHECKLIST.md) and record
-   each block number only with your own first-hand evidence (a sign photo or an official LPU document
-   that names the building). The Behance illustration is never evidence.
+   not official. Record each block number only with your own first-hand evidence (a sign photo or an
+   official LPU document that names the building). The campus illustration is never evidence of a block
+   number or a position. For buildings shown in the campus illustration, use the walks in owner
+   action 10, which replace `docs/research/block-leads/OWNER_CHECKLIST.md`.
 2. **Crossing buildings.** Three footprints that cross the OSM campus boundary are in the campus
    inventory under rule R6 (inside fraction ≥ 0.5, no conflicting evidence): `osm:way/422550525`
    (76.67 % inside), `osm:way/422738888` (83.69 %) and `osm:way/422738894` (99.15 %). Please accept or
@@ -440,35 +521,49 @@ by the verification agent and by the repo e2e and unit tests listed in §1.9.
    dependency; nothing to do unless you want imported models.
 8. **Delete `C:\lpuw014438`.** It is a leftover folder outside the repository (about 2.2 MB, holding a
    `v3` directory). The project does not use it. I did not delete it.
-9. **Commit**: the lead commits the working tree; the fix wave (§1.9) is not committed yet.
+9. **Commit**: the lead commits the working tree; the fix wave (§1.9) is committed in `6050e91`, the
+   artwork integration (§1.10) is not committed yet.
+10. **Campus illustration links** (§1.10). In `/admin/artwork`, link illustration items to buildings,
+    following the walks in
+    [LPU_ISOMETRIC_ASSET_INTEGRATION.md §11](LPU_ISOMETRIC_ASSET_INTEGRATION.md#11-owner-verification-guide).
+    "Verified" needs evidence: a site sign, an official document or your own statement. A link never
+    sets an official block number. Also decide whether the `art:scene-103` caption may be displayed,
+    and review the 44 outlines and the inventory items marked for manual verification.
 
 ## 6. Decisions made autonomously
 
 These were made by the build agents within the owner's rules, not by the owner. Each can be revisited.
 
-| Decision                                                                                              | Reason                                                                                               |
-| ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| Esri World Imagery (free tier, PAYG off) as the only high-resolution imagery, opt-in by key           | Free source with documented attribution and a no-bill free tier; Google needs billing                |
-| EOX Sentinel-2 2016 backdrop opt-in only, Satellite 2D only, camera capped at zoom 14                 | CC BY 4.0 and keyless, but 10 m imagery shows no buildings; it must not pretend otherwise            |
-| Imagery date shown only inside the verified area and never as "live"                                  | The Wayback date was verified for the campus only                                                    |
-| No terrain                                                                                            | Measured relief of about 4.7 m across the campus would not be visible                                |
-| No 3D-tiles renderer, no new npm dependency                                                           | No billing-free photoreal source exists, so the dependency is not justified                          |
-| The store refuses unavailable modes; deep links to them are dropped; fallbacks end at the overview    | Otherwise `?view=earth` would have drawn the 2D map under a "Photorealistic" label; no blank screen  |
-| Accessible name "Satellite map" instead of "Satellite 2D map"                                         | "Satellite 2D map" contains "2D map" and broke role queries for the 2D map                           |
-| `maxPitch` 60                                                                                         | MapLibre marks higher values experimental                                                            |
-| Imagery never cached offline; CSP allows exactly the two provider hosts                               | Esri's terms forbid storing data; one rule for every provider                                        |
-| `/admin` as a lazy chunk; CSRF token in memory only; logout clears all Studio crash recovery          | No admin code or text in the public bundle; nothing sensitive left in the browser after logout       |
-| Approve corrections cannot clear the submitted description (the form points to Edit instead)          | Approve corrections are override fields and cannot clear it; silently keeping old text would mislead |
-| Hidden locations shown by a client-side filter                                                        | The server lists all locations including hidden ones and has no GET by id                            |
-| The Studio's server check runs on its own request and counts only for the exact draft it checked      | A check must never block a save, and a stale result must not count for a changed draft               |
-| "Apply template" previews on the server for a saved record and applies locally for a draft with edits | Keeps unsaved edits; the server stays the authority for saved records                                |
-| E2E runs the real handlers over an in-memory local D1                                                 | Tests the real server without mocks and without touching any remote database                         |
-| Off-campus places are never routing endpoints; they keep their `graphNodeId` in the data (D3)         | The QA brief's rule; the owner can still see the validated access node                               |
-| The honeypot decoy mirrors a real acceptance (201, real duplicates, padded timing), no rate limits    | A bot must not tell a decoy from a real answer; counting decoys against limits was left out          |
-| The bare `zod` import in the client is aliased to a shim that sets `jitless` first                    | Removes the CSP `script-src` eval violation without loosening the CSP; the server is unchanged       |
-| The Studio leave prompt saves the edits to crash recovery before leaving                              | Leaving should never lose work silently; moving between Studio records is not held                   |
-| Access points picked on the map only from validated walkable nodes within 25 m; nothing moves         | A click must never invent an access point or move the place                                          |
-| Below 1024 px the admin section links are a tab row and the Studio side panels open one at a time     | At 768 px the side columns left the Studio map almost no width                                       |
+| Decision                                                                                               | Reason                                                                                               |
+| ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| Esri World Imagery (free tier, PAYG off) as the only high-resolution imagery, opt-in by key            | Free source with documented attribution and a no-bill free tier; Google needs billing                |
+| EOX Sentinel-2 2016 backdrop opt-in only, Satellite 2D only, camera capped at zoom 14                  | CC BY 4.0 and keyless, but 10 m imagery shows no buildings; it must not pretend otherwise            |
+| Imagery date shown only inside the verified area and never as "live"                                   | The Wayback date was verified for the campus only                                                    |
+| No terrain                                                                                             | Measured relief of about 4.7 m across the campus would not be visible                                |
+| No 3D-tiles renderer, no new npm dependency                                                            | No billing-free photoreal source exists, so the dependency is not justified                          |
+| The store refuses unavailable modes; deep links to them are dropped; fallbacks end at the overview     | Otherwise `?view=earth` would have drawn the 2D map under a "Photorealistic" label; no blank screen  |
+| Accessible name "Satellite map" instead of "Satellite 2D map"                                          | "Satellite 2D map" contains "2D map" and broke role queries for the 2D map                           |
+| `maxPitch` 60                                                                                          | MapLibre marks higher values experimental                                                            |
+| Imagery never cached offline; CSP allows exactly the two provider hosts                                | Esri's terms forbid storing data; one rule for every provider                                        |
+| `/admin` as a lazy chunk; CSRF token in memory only; logout clears all Studio crash recovery           | No admin code or text in the public bundle; nothing sensitive left in the browser after logout       |
+| Approve corrections cannot clear the submitted description (the form points to Edit instead)           | Approve corrections are override fields and cannot clear it; silently keeping old text would mislead |
+| Hidden locations shown by a client-side filter                                                         | The server lists all locations including hidden ones and has no GET by id                            |
+| The Studio's server check runs on its own request and counts only for the exact draft it checked       | A check must never block a save, and a stale result must not count for a changed draft               |
+| "Apply template" previews on the server for a saved record and applies locally for a draft with edits  | Keeps unsaved edits; the server stays the authority for saved records                                |
+| E2E runs the real handlers over an in-memory local D1                                                  | Tests the real server without mocks and without touching any remote database                         |
+| Off-campus places are never routing endpoints; they keep their `graphNodeId` in the data (D3)          | The QA brief's rule; the owner can still see the validated access node                               |
+| The honeypot decoy mirrors a real acceptance (201, real duplicates, padded timing), no rate limits     | A bot must not tell a decoy from a real answer; counting decoys against limits was left out          |
+| The bare `zod` import in the client is aliased to a shim that sets `jitless` first                     | Removes the CSP `script-src` eval violation without loosening the CSP; the server is unchanged       |
+| The Studio leave prompt saves the edits to crash recovery before leaving                               | Leaving should never lose work silently; moving between Studio records is not held                   |
+| Access points picked on the map only from validated walkable nodes within 25 m; nothing moves          | A click must never invent an access point or move the place                                          |
+| Below 1024 px the admin section links are a tab row and the Studio side panels open one at a time      | At 768 px the side columns left the Studio map almost no width                                       |
+| The Illustrated overview is the default `?view=iso` variant; the footprint drawing stays as `&iso=map` | The owner made the artwork the authoritative visual source; the map-accurate drawing stays available |
+| Artwork links belong to depicted subjects, not files                                                   | One vignette captions 14 numbered buildings and the master shows 45                                  |
+| Curated baseline: the 19 leads reviewed "confirm-on-site" are approximate; everything else unresolved  | Only reviewed candidates may be shown, and only as "Unconfirmed match"; nothing is verified by us    |
+| Layered DOM renderer (one CSS transform for image and outlines), not Canvas2D                          | Measured at 4× CPU throttle: 16.7 ms p95 frames vs 50–67 ms; 0.5 s vs 3.2–3.6 s first paint          |
+| Lossless WebP derived copies of the master (53 files), not lossy                                       | Lossy q0.9 visibly softened window grids and coloured text at 1:1                                    |
+| The `0003` rollback keeps the decisions table and every audit row                                      | A destructive rollback would lose the owner's decisions; re-applying restores them exactly           |
+| The `art:scene-103` caption is held from display; the file and its exact transcription are kept        | Its meaning is unclear; only the owner can decide whether it may be shown                            |
 
 ## 7. Deployment checklist
 
@@ -479,14 +574,18 @@ Full details: [`docs/DEPLOYMENT.md`](DEPLOYMENT.md) and [`docs/ADMIN_OPERATIONS.
 2. **Run the gate** locally or in CI (all green on 2026-10-24, §2):
    `npx tsc --noEmit -p .`, `npx tsc --noEmit -p tsconfig.server.json`, `npx eslint . --max-warnings=0`,
    `npx prettier --check .`, `npx vitest run`, `npx vitest run -c vitest.server.config.ts`,
-   `npm run data:check`, `npx vite build`, `npm run smoke`, `npx playwright test`.
+   `npm run data:check`, `npm run art:check`, `npx vite build`, `npm run art:check-dist`,
+   `npm run smoke`, `npx playwright test` (`npm run build` runs the data, art, type and dist checks
+   around `vite build`).
 3. **Cloudflare Pages project**: build command `npm run build`, output `dist`, `NODE_VERSION=24` for
    Production and Preview.
 4. **D1**: `npx wrangler d1 create lpu-atlas`, then replace the placeholder `database_id` in
    `wrangler.toml` (or bind `DB` in the dashboard).
 5. **Migrations before code**: back up first (`npx wrangler d1 export lpu-atlas --remote --output=<outside-the-repo>/before-migrate.sql`),
    then `npx wrangler d1 migrations list lpu-atlas --remote` and
-   `npx wrangler d1 migrations apply lpu-atlas --remote` (applies `0001` and `0002`).
+   `npx wrangler d1 migrations apply lpu-atlas --remote` (applies `0001`, `0002` and `0003`). Apply
+   `0003` before deploying the artwork code: its publication read needs the `artwork_associations`
+   table. Rollback of `0003` is non-destructive (`docs/db/0003_down.sql`, `docs/DEPLOYMENT.md`).
 6. **Authentication** (without it every `/api/admin/**` answers 503, fail closed). Choose one:
    - `AUTH_MODE=access` with `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `OWNER_EMAILS`, and one Access
      application protecting both `/admin*` and `/api/admin/*` (leave `/api/locations`,

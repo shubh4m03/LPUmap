@@ -55,7 +55,20 @@ export class Atlas {
     await this.waitForOverviewReady();
   }
 
+  /**
+   * Waits for the MAP-ACCURATE overview (window.__ATLAS_ISO__). The isometric mode opens on the
+   * owner's illustration by default (docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md §3); the checks that
+   * use this helper are about the footprint drawing, so it chooses that variant when the
+   * illustration is shown (tests/e2e/isometric-art.spec.ts covers the illustration).
+   */
   async waitForOverviewReady(): Promise<void> {
+    const art = this.page.getByTestId('art-view');
+    await expect(art.or(this.page.getByTestId('iso-view')).first()).toBeVisible({ timeout: 30_000 });
+    if (await art.isVisible())
+      await this.page
+        .getByRole('radiogroup', { name: 'Overview style' })
+        .getByRole('radio', { name: 'Map-accurate' })
+        .click();
     await this.page.waitForFunction(
       () => (window.__ATLAS_ISO__?.getFrameStats().fullRedraws ?? 0) > 0,
       null,

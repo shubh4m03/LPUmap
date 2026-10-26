@@ -1,0 +1,4208 @@
+{
+  "$comment": "Curated artwork registry (docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md). Records reference inventory.json and hotspots.json by id; labels are exact quotes checked against the inventory by scripts/build-isometric-art.ts. Artwork numbers are never official LPU block numbers. Owner decisions in D1 override the associations here and survive regeneration.",
+  "schemaVersion": 1,
+  "kind": "lpu-isometric-art-registry",
+  "sources": {
+    "inventory": "data/curated/isometric-art/inventory.json",
+    "hotspots": "data/curated/isometric-art/hotspots.json",
+    "candidates": "docs/research/block-leads/block-candidates.json"
+  },
+  "assets": [
+    {
+      "assetId": "iso-art-001",
+      "kind": "master",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [
+        { "purpose": "web-full", "format": "image/webp", "quality": 1 },
+        { "purpose": "preview", "format": "image/webp", "quality": 1, "maxWidth": 1600 },
+        { "purpose": "tiles", "format": "image/webp", "quality": 1, "tileSize": 512, "levels": 3 }
+      ],
+      "visualFidelity": "original-artwork",
+      "notes": "Master isometric overview: CMYK baseline JPEG with an embedded U.S. Web Coated (SWOP) v2 profile. Hotspots are traced on this file. A web copy must be a colour-managed sRGB conversion at a uniform scale (docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md).",
+      "needsManualVerification": [
+        "iso-art-001/regionsApprox: Approximate (+-15 px); measure precisely before using as crop or hotspot bounds."
+      ]
+    },
+    {
+      "assetId": "iso-art-011",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-015",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": [
+        "iso-art-015/L2: The gap between \"CAFE\" and \"&\" is visibly wider than a normal word space (transcribed as two spaces). Words and spelling are high confidence."
+      ]
+    },
+    {
+      "assetId": "iso-art-019",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-023",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-027",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-031",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-035",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-039",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-043",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-047",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-051",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-055",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-059",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-063",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-067",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-071",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-075",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-079",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-083",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-087",
+      "kind": "vignette",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": [
+        "iso-art-087/L1: Six printed lines under the drawing; \"BLOCK-nn:\" parts are orange, the rest grey italic. Cap height is about 9 px, so spelling is high confidence but spacing and punctuation (double spaces before \"I)\", spaces around \";\" and \":\") are medium confidence. \"I)\" is printed as a capital I and kept as printed."
+      ]
+    },
+    {
+      "assetId": "iso-art-091",
+      "kind": "scene",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": [
+        "iso-art-091/L3: Tiny sign text on the gate canopies and on the gate tower/pylon (orange glyphs and emblem roundels). Unreadable at source resolution; not transcribed."
+      ]
+    },
+    {
+      "assetId": "iso-art-095",
+      "kind": "scene",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-099",
+      "kind": "scene",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-103",
+      "kind": "scene",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": [
+        "iso-art-103/L1: Transcription is certain, but the meaning is unclear; owner must decide whether it may ever be shown."
+      ]
+    },
+    {
+      "assetId": "iso-art-107",
+      "kind": "scene",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": []
+    },
+    {
+      "assetId": "iso-art-111",
+      "kind": "scene",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": [
+        "iso-art-111/L2: A further pin head is cut off by the bottom edge of the scene frame near x 413, y 405; no digits are visible."
+      ]
+    },
+    {
+      "assetId": "iso-art-115",
+      "kind": "scene",
+      "publishOriginal": false,
+      "duplicateOf": "iso-art-111",
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Byte-identical duplicate of iso-art-111; only the canonical file is published.",
+      "needsManualVerification": ["iso-art-115/L2: Same clipped pin as iso-art-111 (byte-identical file)."]
+    },
+    {
+      "assetId": "iso-art-119",
+      "kind": "scene",
+      "publishOriginal": true,
+      "duplicateOf": null,
+      "derive": [],
+      "visualFidelity": "original-artwork",
+      "notes": "Full presentation slide (light background, peach circles, artwork on a white card), not a transparent cut-out.",
+      "needsManualVerification": [
+        "iso-art-119/pin:58: Cut off by the left edge of the scene frame; only part of the number is visible. Reading \"58\" needs manual verification."
+      ]
+    }
+  ],
+  "subjects": [
+    {
+      "subjectId": "art:area-grp-25-27-annex",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-grp-25-27-annex"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:num-25",
+          "relation": "candidate-part-of"
+        },
+        {
+          "subjectId": "art:num-26",
+          "relation": "candidate-part-of"
+        },
+        {
+          "subjectId": "art:num-27",
+          "relation": "candidate-part-of"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-grp-25-27-annex outline needs manual verification (confidence low)."
+      ],
+      "notes": "Lower annex with blue awnings between 25, 26 and 27, with no pin of its own."
+    },
+    {
+      "subjectId": "art:area-grp-48-49",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-grp-48-49"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:num-48",
+          "relation": "candidate-part-of"
+        },
+        {
+          "subjectId": "art:num-49",
+          "relation": "candidate-part-of"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": ["Hotspot hs-grp-48-49 outline needs manual verification (confidence low)."],
+      "notes": "Remaining blocks of the 48/49 chain not under either pin. iso-art-067 captions the chain for 48 and 49 but does not show which blocks belong to which number."
+    },
+    {
+      "subjectId": "art:area-grp-53-54",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-grp-53-54"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:num-53",
+          "relation": "candidate-part-of"
+        },
+        {
+          "subjectId": "art:num-54",
+          "relation": "candidate-part-of"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": ["Hotspot hs-grp-53-54 outline needs manual verification (confidence low)."],
+      "notes": "Remaining blocks of the 53/54 complex not under either pin (iso-art-079 draws the whole complex under one caption for 53 and 54)."
+    },
+    {
+      "subjectId": "art:area-grp-56-58-west-wing",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-grp-56-58-west-wing"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:num-56",
+          "relation": "candidate-part-of"
+        },
+        {
+          "subjectId": "art:num-57",
+          "relation": "candidate-part-of"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-grp-56-58-west-wing outline needs manual verification (confidence low)."
+      ],
+      "notes": "West L-shaped wing attached to the back block under pin 58; no pin of its own."
+    },
+    {
+      "subjectId": "art:area-grp-9-12",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-grp-9-12"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:num-10",
+          "relation": "candidate-part-of"
+        },
+        {
+          "subjectId": "art:num-11",
+          "relation": "candidate-part-of"
+        },
+        {
+          "subjectId": "art:num-12",
+          "relation": "candidate-part-of"
+        },
+        {
+          "subjectId": "art:num-9",
+          "relation": "candidate-part-of"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": ["Hotspot hs-grp-9-12 outline needs manual verification (confidence low)."],
+      "notes": "Chain of small blocks between 12 and 11 with no pin of its own (iso-art-031 draws them inside the 9-12 group)."
+    },
+    {
+      "subjectId": "art:area-scene-courts",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-scene-courts"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:scene-119",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-scene-courts outline needs manual verification (confidence medium)."
+      ],
+      "notes": "Drawn group of tennis and basketball courts. Unlabelled on the overview; also drawn in iso-art-119."
+    },
+    {
+      "subjectId": "art:area-scene-garden-grid",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-scene-garden-grid"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:scene-107",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-scene-garden-grid outline needs manual verification (confidence medium)."
+      ],
+      "notes": "Garden with a regular grid of trees beside the building under pin 4 (the part hidden behind that building is excluded). Unlabelled; appears in iso-art-107."
+    },
+    {
+      "subjectId": "art:area-scene-gate-pylon",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-scene-gate-pylon"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:scene-091",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-scene-gate-pylon outline needs manual verification (confidence medium)."
+      ],
+      "notes": "Second gate with a slim pylon and low red buildings. Small text on the canopy is illegible and not transcribed."
+    },
+    {
+      "subjectId": "art:area-scene-gate-tower",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-scene-gate-tower"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:scene-091",
+          "relation": "visual-correspondence"
+        },
+        {
+          "subjectId": "art:scene-095",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-scene-gate-tower outline needs manual verification (confidence medium)."
+      ],
+      "notes": "Tall gate tower with emblem and the gate canopy. Small text on the tower and canopy is illegible and not transcribed."
+    },
+    {
+      "subjectId": "art:area-scene-lawn-tree",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-scene-lawn-tree"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:scene-095",
+          "relation": "visual-correspondence"
+        },
+        {
+          "subjectId": "art:scene-099",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-scene-lawn-tree outline needs manual verification (confidence medium)."
+      ],
+      "notes": "Lawn with one large tree, benches and a small red hut, with a grey path along its lower edge. Unlabelled; appears in iso-art-099 and iso-art-095."
+    },
+    {
+      "subjectId": "art:area-scene-oval-ground",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-scene-oval-ground"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:num-52",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-scene-oval-ground outline needs manual verification (confidence medium)."
+      ],
+      "notes": "Drawn oval track with a pitch strip inside the large green field. No pin on the overview; iso-art-119 draws pin 52 on it. Visual correspondence only."
+    },
+    {
+      "subjectId": "art:area-scene-parking-admin",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-scene-parking-admin"],
+      "vignetteAssetIds": [],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-scene-parking-admin outline needs manual verification (confidence medium)."
+      ],
+      "notes": "Parking lot drawn below the 25-38 megastructure. Unlabelled; legend colour key only."
+    },
+    {
+      "subjectId": "art:area-scene-parking-east",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-scene-parking-east"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:scene-095",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-scene-parking-east outline needs manual verification (confidence medium)."
+      ],
+      "notes": "Large parking lot near the gate tower. Unlabelled; legend colour key and the iso-art-095 scene."
+    },
+    {
+      "subjectId": "art:area-scene-parking-nw",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-scene-parking-nw"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:scene-119",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-scene-parking-nw outline needs manual verification (confidence medium)."
+      ],
+      "notes": "Strip of parked cars on the dark parking colour along the outer road. Unlabelled; the legend colour key is the only text link."
+    },
+    {
+      "subjectId": "art:area-scene-pavilion",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-scene-pavilion"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:num-16",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-scene-pavilion outline needs manual verification (confidence medium)."
+      ],
+      "notes": "Large grey perforated roof on columns with solar panels beside 15. No pin on the overview; iso-art-111 (byte-identical duplicate iso-art-115) draws pin 16 on the same roof. Visual correspondence only."
+    },
+    {
+      "subjectId": "art:area-scene-statue-garden",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-scene-statue-garden"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:scene-099",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-scene-statue-garden outline needs manual verification (confidence medium)."
+      ],
+      "notes": "Square garden with a statue on a plinth and the flagpole at its back corner. Unlabelled; appears in iso-art-099."
+    },
+    {
+      "subjectId": "art:area-scene-walled-lawn",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-scene-walled-lawn"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:scene-103",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-scene-walled-lawn outline needs manual verification (confidence low)."
+      ],
+      "notes": "Walled lawn with trees and a paved patch between the tower of 2 and the road. Unlabelled on the overview; iso-art-103 shows a similar walled lawn. Its caption must not be used as a place name without independent confirmation."
+    },
+    {
+      "subjectId": "art:area-text-lpu-letters",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": {
+        "ref": "hotspot:hs-text-lpu-letters",
+        "text": "LPU"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-text-lpu-letters"],
+      "vignetteAssetIds": [],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [],
+      "notes": "Orange letters printed on the ground beside 15, read at 20x zoom. A smaller line of text under them is illegible and not transcribed."
+    },
+    {
+      "subjectId": "art:area-unpinned-red-building",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-unpinned-red-building"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:num-5",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-unpinned-red-building outline needs manual verification (confidence low)."
+      ],
+      "notes": "Red two-part building across the road from the tree-grid garden. The overview has no pin 5; iso-art-107 draws pin 5 on a red building corner in a matching position. Visual correspondence only."
+    },
+    {
+      "subjectId": "art:area-unpinned-stair-block",
+      "kind": "area",
+      "artworkNumber": null,
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-unpinned-stair-block"],
+      "vignetteAssetIds": [],
+      "relations": [
+        {
+          "subjectId": "art:num-31",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-unpinned-stair-block outline needs manual verification (confidence low)."
+      ],
+      "notes": "External stair block between 32 and 30. The overview has no pin 31; iso-art-087 draws pin 31 at about this position. Visual correspondence only."
+    },
+    {
+      "subjectId": "art:num-1",
+      "kind": "numbered",
+      "artworkNumber": "1",
+      "displayLabel": {
+        "ref": "iso-art-011/L2",
+        "text": "SCHOOL OF FASHION"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-011/L1",
+        "text": "BLOCK-1"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L3",
+          "text": "FASHION"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-1"],
+      "vignetteAssetIds": ["iso-art-011"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-10",
+      "kind": "numbered",
+      "artworkNumber": "10",
+      "displayLabel": {
+        "ref": "iso-art-031/L2",
+        "text": "GIRLS HOSTAL 1, 2, 3, 4"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-031/L1",
+        "text": "BLOCK- 09,10, 11,12"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L38",
+          "text": "GIRLS HOSTEL"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-10"],
+      "vignetteAssetIds": ["iso-art-031"],
+      "relations": [],
+      "aliases": ["GIRLS HOSTEL 1, 2, 3, 4"],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-10 outline needs manual verification (confidence medium).",
+        "Pairing in the iso-art-031 caption is by listing order only: LISTING ORDER ONLY: the caption lists four block numbers and four hostel numbers in parallel; the pairing 9-1, 10-2, 11-3, 12-4 is implied by order and is NOT stated."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-11",
+      "kind": "numbered",
+      "artworkNumber": "11",
+      "displayLabel": {
+        "ref": "iso-art-031/L2",
+        "text": "GIRLS HOSTAL 1, 2, 3, 4"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-031/L1",
+        "text": "BLOCK- 09,10, 11,12"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L38",
+          "text": "GIRLS HOSTEL"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-11"],
+      "vignetteAssetIds": ["iso-art-031"],
+      "relations": [],
+      "aliases": ["GIRLS HOSTEL 1, 2, 3, 4"],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Pairing in the iso-art-031 caption is by listing order only: LISTING ORDER ONLY: the caption lists four block numbers and four hostel numbers in parallel; the pairing 9-1, 10-2, 11-3, 12-4 is implied by order and is NOT stated."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-12",
+      "kind": "numbered",
+      "artworkNumber": "12",
+      "displayLabel": {
+        "ref": "iso-art-031/L2",
+        "text": "GIRLS HOSTAL 1, 2, 3, 4"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-031/L1",
+        "text": "BLOCK- 09,10, 11,12"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L38",
+          "text": "GIRLS HOSTEL"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-12"],
+      "vignetteAssetIds": ["iso-art-031"],
+      "relations": [],
+      "aliases": ["GIRLS HOSTEL 1, 2, 3, 4"],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Pairing in the iso-art-031 caption is by listing order only: LISTING ORDER ONLY: the caption lists four block numbers and four hostel numbers in parallel; the pairing 9-1, 10-2, 11-3, 12-4 is implied by order and is NOT stated."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-13",
+      "kind": "numbered",
+      "artworkNumber": "13",
+      "displayLabel": {
+        "ref": "iso-art-035/L2",
+        "text": "DIVISION OF STUDENT WELFARE"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-035/L1",
+        "text": "BLOCK-13"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L9",
+          "text": "BUSINESS"
+        },
+        {
+          "ref": "iso-art-001/L32",
+          "text": "STUDENT WELFARE"
+        }
+      ],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-pin-13"],
+      "vignetteAssetIds": ["iso-art-035"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C03 (unresolved): Index EDUCATION \"BUSINESS 13\" and ADMINISTRATIVE \"STUDENT WELFARE 13\"; vignette 13 \"DIVISION OF STUDENT WELFARE\"; vignette 14 \"MITTAL SCHOOL OF BUSINESS\". 14 is not in the index (it has an overview pin)."
+      ],
+      "notes": "An official LPU source (docs/research/block-leads/official-block-confirmations.json) states \"Block 13 = Student Welfare Wing\" but ties it to no footprint; artwork number 13 is not thereby an official block number."
+    },
+    {
+      "subjectId": "art:num-14",
+      "kind": "numbered",
+      "artworkNumber": "14",
+      "displayLabel": {
+        "ref": "iso-art-039/L2",
+        "text": "MITTAL SCHOOL OF BUSINESS"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-039/L1",
+        "text": "BLOCK-14"
+      },
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-pin-14"],
+      "vignetteAssetIds": ["iso-art-039", "iso-art-111"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C03 (unresolved): Index EDUCATION \"BUSINESS 13\" and ADMINISTRATIVE \"STUDENT WELFARE 13\"; vignette 13 \"DIVISION OF STUDENT WELFARE\"; vignette 14 \"MITTAL SCHOOL OF BUSINESS\". 14 is not in the index (it has an overview pin)."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-15",
+      "kind": "numbered",
+      "artworkNumber": "15",
+      "displayLabel": {
+        "ref": "iso-art-043/L2",
+        "text": "UNI-CENTER, SCHOOL OF HOTAL MANGMENT AND TOURISM"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-043/L1",
+        "text": "BLOCK-15"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L10",
+          "text": "HOTEL MANAGEMENT"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-15"],
+      "vignetteAssetIds": ["iso-art-043", "iso-art-111"],
+      "relations": [],
+      "aliases": ["UNI-CENTER, SCHOOL OF HOTEL MANAGEMENT AND TOURISM"],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C04 (unresolved): Vignette adds \"UNI-CENTER,\"; index lists only \"HOTEL MANAGEMENT 15\"."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-16",
+      "kind": "numbered",
+      "artworkNumber": "16",
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-111"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C19 (unresolved): Numbers that appear on vignettes/scenes but have no pin on the master overview.",
+        "Inventory conflict C20 (unresolved): Scene pins 5 (GARDEN AREA) and 16 (OPEN AUDITORIUM AND SURROUNDINGS) have no caption and no index row anywhere.",
+        "No numbered pin for this number on the master overview, so it has no hotspot there."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-18",
+      "kind": "numbered",
+      "artworkNumber": "18",
+      "displayLabel": {
+        "ref": "iso-art-047/L2",
+        "text": "SCHOOL OF SOCIAL SCIENCE AND LANGUAGE SCHOOL OF PHYSICAL EDUCATION DEPARTMENT OF EDUCATION"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-047/L1",
+        "text": "BLOCK-18"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L11",
+          "text": "EDUCATION"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-18"],
+      "vignetteAssetIds": ["iso-art-047", "iso-art-111"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C05 (unresolved): Vignette lists three units; index names only \"EDUCATION 18\"."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-19",
+      "kind": "numbered",
+      "artworkNumber": "19",
+      "displayLabel": {
+        "ref": "iso-art-051/L2",
+        "text": "SCHOOL OF FILMS, JOURNALISM, AND CREATIVE ARTS"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-051/L1",
+        "text": "BLOCK-19"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L12",
+          "text": "PERFORMING ARTS"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-051"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C06 (unresolved): Index: \"PERFORMING ARTS 19\", \"FILM & JOURNALISM 20\", \"LAW 20\". Vignette: 19 \"SCHOOL OF FILMS, JOURNALISM, AND CREATIVE ARTS\", 21 \"SCHOOL OF LAW\", pin 20 uncaptioned. Overview has pins 20 and 21 but not 19.",
+        "Inventory conflict C19 (unresolved): Numbers that appear on vignettes/scenes but have no pin on the master overview.",
+        "No numbered pin for this number on the master overview, so it has no hotspot there."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-2",
+      "kind": "numbered",
+      "artworkNumber": "2",
+      "displayLabel": {
+        "ref": "iso-art-015/L2",
+        "text": "CAMPUS CAFE  & BALDEV RAJ AUDITORIUM"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-015/L1",
+        "text": "BLOCK-2"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L34",
+          "text": "BALDEV RAJ AUDITORIUM"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L26",
+        "text": "ADMINISTRATIVE"
+      },
+      "hotspotIds": ["hs-pin-2"],
+      "vignetteAssetIds": ["iso-art-015"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C01 (unresolved): Vignette caption \"CAMPUS CAFE  & BALDEV RAJ AUDITORIUM\"; index lists only \"BALDEV RAJ AUDITORIUM 2\"."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-20",
+      "kind": "numbered",
+      "artworkNumber": "20",
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L13",
+          "text": "FILM & JOURNALISM"
+        },
+        {
+          "ref": "iso-art-001/L14",
+          "text": "LAW"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-20"],
+      "vignetteAssetIds": ["iso-art-051"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C06 (unresolved): Index: \"PERFORMING ARTS 19\", \"FILM & JOURNALISM 20\", \"LAW 20\". Vignette: 19 \"SCHOOL OF FILMS, JOURNALISM, AND CREATIVE ARTS\", 21 \"SCHOOL OF LAW\", pin 20 uncaptioned. Overview has pins 20 and 21 but not 19.",
+        "More than one index row lists this number and no caption names it; no display label was chosen."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-21",
+      "kind": "numbered",
+      "artworkNumber": "21",
+      "displayLabel": {
+        "ref": "iso-art-051/L4",
+        "text": "SCHOOL OF LAW"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-051/L3",
+        "text": "BLOCK-21"
+      },
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-pin-21"],
+      "vignetteAssetIds": ["iso-art-051"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C06 (unresolved): Index: \"PERFORMING ARTS 19\", \"FILM & JOURNALISM 20\", \"LAW 20\". Vignette: 19 \"SCHOOL OF FILMS, JOURNALISM, AND CREATIVE ARTS\", 21 \"SCHOOL OF LAW\", pin 20 uncaptioned. Overview has pins 20 and 21 but not 19.",
+        "Inventory conflict C07 (unresolved): Index RESIDENTIAL \"GIRLS HOSTEL 9,10, 11,12, 21A,B\"; vignette 21 = \"SCHOOL OF LAW\"; vignette \"BLOCK-22,23 GIRLS HOSTAL 5, 6.\" has no index row and no overview pins. Relationship between 21A/21B and 22/23 is unknown."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-21a",
+      "kind": "numbered",
+      "artworkNumber": "21A",
+      "displayLabel": {
+        "ref": "iso-art-001/L38",
+        "text": "GIRLS HOSTEL"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": [],
+      "vignetteAssetIds": [],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C07 (unresolved): Index RESIDENTIAL \"GIRLS HOSTEL 9,10, 11,12, 21A,B\"; vignette 21 = \"SCHOOL OF LAW\"; vignette \"BLOCK-22,23 GIRLS HOSTAL 5, 6.\" has no index row and no overview pins. Relationship between 21A/21B and 22/23 is unknown.",
+        "No numbered pin for this number on the master overview, so it has no hotspot there."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-21b",
+      "kind": "numbered",
+      "artworkNumber": "21B",
+      "displayLabel": {
+        "ref": "iso-art-001/L38",
+        "text": "GIRLS HOSTEL"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": [],
+      "vignetteAssetIds": [],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C07 (unresolved): Index RESIDENTIAL \"GIRLS HOSTEL 9,10, 11,12, 21A,B\"; vignette 21 = \"SCHOOL OF LAW\"; vignette \"BLOCK-22,23 GIRLS HOSTAL 5, 6.\" has no index row and no overview pins. Relationship between 21A/21B and 22/23 is unknown.",
+        "No numbered pin for this number on the master overview, so it has no hotspot there."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-22",
+      "kind": "numbered",
+      "artworkNumber": "22",
+      "displayLabel": {
+        "ref": "iso-art-055/L2",
+        "text": "GIRLS HOSTAL 5, 6."
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-055/L1",
+        "text": "BLOCK-22,23"
+      },
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-055"],
+      "relations": [],
+      "aliases": ["GIRLS HOSTEL 5, 6."],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C07 (unresolved): Index RESIDENTIAL \"GIRLS HOSTEL 9,10, 11,12, 21A,B\"; vignette 21 = \"SCHOOL OF LAW\"; vignette \"BLOCK-22,23 GIRLS HOSTAL 5, 6.\" has no index row and no overview pins. Relationship between 21A/21B and 22/23 is unknown.",
+        "Inventory conflict C19 (unresolved): Numbers that appear on vignettes/scenes but have no pin on the master overview.",
+        "Pairing in the iso-art-055 caption is by listing order only: LISTING ORDER ONLY: 22-5 and 23-6 are implied by order, not stated.",
+        "No numbered pin for this number on the master overview, so it has no hotspot there."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-23",
+      "kind": "numbered",
+      "artworkNumber": "23",
+      "displayLabel": {
+        "ref": "iso-art-055/L2",
+        "text": "GIRLS HOSTAL 5, 6."
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-055/L1",
+        "text": "BLOCK-22,23"
+      },
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-055"],
+      "relations": [],
+      "aliases": ["GIRLS HOSTEL 5, 6."],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C07 (unresolved): Index RESIDENTIAL \"GIRLS HOSTEL 9,10, 11,12, 21A,B\"; vignette 21 = \"SCHOOL OF LAW\"; vignette \"BLOCK-22,23 GIRLS HOSTAL 5, 6.\" has no index row and no overview pins. Relationship between 21A/21B and 22/23 is unknown.",
+        "Inventory conflict C19 (unresolved): Numbers that appear on vignettes/scenes but have no pin on the master overview.",
+        "Pairing in the iso-art-055 caption is by listing order only: LISTING ORDER ONLY: 22-5 and 23-6 are implied by order, not stated.",
+        "No numbered pin for this number on the master overview, so it has no hotspot there."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-25",
+      "kind": "numbered",
+      "artworkNumber": "25",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "SCHOOL OF AGRICULTURE",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-25,26:",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L15",
+          "text": "AGRICULTURE"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-25"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": ["Hotspot hs-pin-25 outline needs manual verification (confidence medium)."],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-26",
+      "kind": "numbered",
+      "artworkNumber": "26",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "SCHOOL OF AGRICULTURE",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-25,26:",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L15",
+          "text": "AGRICULTURE"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-26"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": ["Hotspot hs-pin-26 outline needs manual verification (confidence low)."],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-27",
+      "kind": "numbered",
+      "artworkNumber": "27",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "SCHOOL OF CHEMICAL ENGINEERING AND PHYSICAL SCIENCE",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-27:",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L16",
+          "text": "PHYSICAL SCIENCE"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-27"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-27 outline needs manual verification (confidence low).",
+        "Inventory conflict C08 (unresolved): Index \"PHYSICAL SCIENCE 27\"; vignette \"SCHOOL OF CHEMICAL ENGINEERING AND PHYSICAL SCIENCE\"."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-28",
+      "kind": "numbered",
+      "artworkNumber": "28",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "SCHOOL OF BIO ENGINEERING AND BIO SCIENCES",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-28:",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L17",
+          "text": "BIOTECHNOLOGY"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-28"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-28 outline needs manual verification (confidence low).",
+        "Inventory conflict C09 (unresolved): Index \"BIOTECHNOLOGY 28\"; vignette \"SCHOOL OF BIO ENGINEERING AND BIO SCIENCES\"."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-29",
+      "kind": "numbered",
+      "artworkNumber": "29",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "OFFICE OF THE PRO-CHANCELLOR  I) ADMINISTRATION-II",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-29:",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L27",
+          "text": "ADMINISTRATIVE"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L26",
+        "text": "ADMINISTRATIVE"
+      },
+      "hotspotIds": ["hs-pin-29"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-29 outline needs manual verification (confidence low).",
+        "Inventory conflict C10 (unresolved): Administrative numbers differ: vignette 29 PRO-CHANCELLOR + ADMINISTRATION-II, 30 CHANCELLORY + ADMINISTRATION-I, 31 DIVISSION OF ADMISSIONS + MUSEUM OF ACADEMICS, 32 VICE CHANCELLORY + ADMINISTRATION-III; index 29 ADMINISTRATIVE, 30 PROCHANCELLOR, 31 CHANCELLOR and ADMINISTRATIVE, 32 ADMISSION. Overview has no pin 31."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-3",
+      "kind": "numbered",
+      "artworkNumber": "3",
+      "displayLabel": {
+        "ref": "iso-art-019/L2",
+        "text": "SCHOOL OF PHYSIOTHERAPHY AND PARAMEDICAL SCIENCE"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-019/L1",
+        "text": "BLOCK-3"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L5",
+          "text": "PHYSIOTHERAPY"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-3"],
+      "vignetteAssetIds": ["iso-art-019"],
+      "relations": [],
+      "aliases": ["SCHOOL OF PHYSIOTHERAPY AND PARAMEDICAL SCIENCE"],
+      "displayHold": null,
+      "needsManualVerification": [],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-30",
+      "kind": "numbered",
+      "artworkNumber": "30",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "THE CHANCELLORY  I) ADMINISTRATION-I",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-30:",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L28",
+          "text": "PROCHANCELLOR"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L26",
+        "text": "ADMINISTRATIVE"
+      },
+      "hotspotIds": ["hs-pin-30"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-30 outline needs manual verification (confidence low).",
+        "Inventory conflict C10 (unresolved): Administrative numbers differ: vignette 29 PRO-CHANCELLOR + ADMINISTRATION-II, 30 CHANCELLORY + ADMINISTRATION-I, 31 DIVISSION OF ADMISSIONS + MUSEUM OF ACADEMICS, 32 VICE CHANCELLORY + ADMINISTRATION-III; index 29 ADMINISTRATIVE, 30 PROCHANCELLOR, 31 CHANCELLOR and ADMINISTRATIVE, 32 ADMISSION. Overview has no pin 31."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-31",
+      "kind": "numbered",
+      "artworkNumber": "31",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "I) DIVISSION OF ADMISSIONS II)MUSEUM OF ACADEMICS",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-31:",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L29",
+          "text": "CHANCELLOR"
+        },
+        {
+          "ref": "iso-art-001/L30",
+          "text": "ADMINISTRATIVE"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L26",
+        "text": "ADMINISTRATIVE"
+      },
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": ["I) DIVISION OF ADMISSIONS II)MUSEUM OF ACADEMICS"],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C10 (unresolved): Administrative numbers differ: vignette 29 PRO-CHANCELLOR + ADMINISTRATION-II, 30 CHANCELLORY + ADMINISTRATION-I, 31 DIVISSION OF ADMISSIONS + MUSEUM OF ACADEMICS, 32 VICE CHANCELLORY + ADMINISTRATION-III; index 29 ADMINISTRATIVE, 30 PROCHANCELLOR, 31 CHANCELLOR and ADMINISTRATIVE, 32 ADMISSION. Overview has no pin 31.",
+        "Inventory conflict C19 (unresolved): Numbers that appear on vignettes/scenes but have no pin on the master overview.",
+        "No numbered pin for this number on the master overview, so it has no hotspot there."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-32",
+      "kind": "numbered",
+      "artworkNumber": "32",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "I) OFFICE OF VICE CHANCELLORY II)ADMINISTRATION-III",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-32:",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L31",
+          "text": "ADMISSION"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L26",
+        "text": "ADMINISTRATIVE"
+      },
+      "hotspotIds": ["hs-pin-32"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-32 outline needs manual verification (confidence low).",
+        "Inventory conflict C10 (unresolved): Administrative numbers differ: vignette 29 PRO-CHANCELLOR + ADMINISTRATION-II, 30 CHANCELLORY + ADMINISTRATION-I, 31 DIVISSION OF ADMISSIONS + MUSEUM OF ACADEMICS, 32 VICE CHANCELLORY + ADMINISTRATION-III; index 29 ADMINISTRATIVE, 30 PROCHANCELLOR, 31 CHANCELLOR and ADMINISTRATIVE, 32 ADMISSION. Overview has no pin 31."
+      ],
+      "notes": "An official LPU source (docs/research/block-leads/official-block-confirmations.json) states \"\"Building No. 32\" = Department of Records (page says Building, not Block)\" but ties it to no footprint; artwork number 32 is not thereby an official block number."
+    },
+    {
+      "subjectId": "art:num-33",
+      "kind": "numbered",
+      "artworkNumber": "33",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "SCHOOL OF COMPUTER SCIENCE AND ENGINEERING",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-33,34 :",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L18",
+          "text": "COMPUTER APPLICATION"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-33"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-33 outline needs manual verification (confidence low).",
+        "Inventory conflict C11 (unresolved): Index \"COMPUTER APPLICATION 33\" and \"CIVIL 38\"; vignette 33,34 \"SCHOOL OF COMPUTER SCIENCE AND ENGINEERING\" and 38 \"SCHOOL OF COMPUTER APPLICATIONS\"."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-34",
+      "kind": "numbered",
+      "artworkNumber": "34",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "SCHOOL OF COMPUTER SCIENCE AND ENGINEERING",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-33,34 :",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L19",
+          "text": "COMPTER SCIENCE"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-34"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": ["COMPUTER SCIENCE"],
+      "displayHold": null,
+      "needsManualVerification": [],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-35",
+      "kind": "numbered",
+      "artworkNumber": "35",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "SHANTI DEVI MITTAL AUDITORIUM",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-35:",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L33",
+          "text": "SHANTIDEVI AUDITORIUM"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L26",
+        "text": "ADMINISTRATIVE"
+      },
+      "hotspotIds": ["hs-pin-35"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": ["Hotspot hs-pin-35 outline needs manual verification (confidence low)."],
+      "notes": "An official LPU source (docs/research/block-leads/official-block-confirmations.json) states \"Block No. 35 = Shanti Devi Mittal Auditorium\" but ties it to no footprint; artwork number 35 is not thereby an official block number."
+    },
+    {
+      "subjectId": "art:num-36",
+      "kind": "numbered",
+      "artworkNumber": "36",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "SCHOOL OF ELECTRONICS & ELECTRICAL ENGINEERING",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-36:",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L20",
+          "text": "ELECTRONIC TELECOM"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-36"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-36 outline needs manual verification (confidence low).",
+        "Inventory conflict C12 (unresolved): Index \"ELECTRONIC TELECOM 36\"; vignette \"SCHOOL OF ELECTRONICS & ELECTRICAL ENGINEERING\"."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-37",
+      "kind": "numbered",
+      "artworkNumber": "37",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "CENTRAL LIBRARY",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-37:",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L21",
+          "text": "RESEARCH"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-37"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-37 outline needs manual verification (confidence low).",
+        "Inventory conflict C13 (unresolved): Index \"RESEARCH 37\"; vignette \"CENTRAL LIBRARY\". (An official LPU page states Block-37 = Central Library; recorded as a pointer only.)"
+      ],
+      "notes": "An official LPU source (docs/research/block-leads/official-block-confirmations.json) states \"Block-37 = Central Library\" but ties it to no footprint; artwork number 37 is not thereby an official block number."
+    },
+    {
+      "subjectId": "art:num-38",
+      "kind": "numbered",
+      "artworkNumber": "38",
+      "displayLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "SCHOOL OF COMPUTER APPLICATIONS",
+        "span": true
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-087/L1",
+        "text": "BLOCK-38:",
+        "span": true
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L22",
+          "text": "CIVIL"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-38"],
+      "vignetteAssetIds": ["iso-art-087"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-38 outline needs manual verification (confidence low).",
+        "Inventory conflict C11 (unresolved): Index \"COMPUTER APPLICATION 33\" and \"CIVIL 38\"; vignette 33,34 \"SCHOOL OF COMPUTER SCIENCE AND ENGINEERING\" and 38 \"SCHOOL OF COMPUTER APPLICATIONS\".",
+        "Inventory conflict C14 (unresolved): Vignette 55 \"SCHOOL OF MECHANICAL INGNEERING\", 56 \"SCHOOL OF CIVIL INGNEERING\"; index \"MECHANICAL 56\", \"CIVIL 38\". 55 is not in the index and has no overview pin."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-4",
+      "kind": "numbered",
+      "artworkNumber": "4",
+      "displayLabel": {
+        "ref": "iso-art-023/L2",
+        "text": "SCHOOL OF PHARAMACEUTICAL SCIENCE"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-023/L1",
+        "text": "BLOCK-4"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L4",
+          "text": "PHARMACY"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-4"],
+      "vignetteAssetIds": ["iso-art-023", "iso-art-107"],
+      "relations": [],
+      "aliases": ["SCHOOL OF PHARMACEUTICAL SCIENCE"],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C02 (unresolved): Index \"PHARMACY 4,7\"; vignettes: 4 \"SCHOOL OF PHARAMACEUTICAL SCIENCE\", 7 \"DEPARTMENT OF PHARMACEUTICAL SCIENCE\". Consistent in subject, but two numbers for one subject."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-41",
+      "kind": "numbered",
+      "artworkNumber": "41",
+      "displayLabel": {
+        "ref": "iso-art-059/L2",
+        "text": "APARTMENTS"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-059/L1",
+        "text": "BLOCK- 41,42,43,44"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L39",
+          "text": "APARTMENT"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-41"],
+      "vignetteAssetIds": ["iso-art-059"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-42",
+      "kind": "numbered",
+      "artworkNumber": "42",
+      "displayLabel": {
+        "ref": "iso-art-059/L2",
+        "text": "APARTMENTS"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-059/L1",
+        "text": "BLOCK- 41,42,43,44"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L39",
+          "text": "APARTMENT"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-42"],
+      "vignetteAssetIds": ["iso-art-059"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-43",
+      "kind": "numbered",
+      "artworkNumber": "43",
+      "displayLabel": {
+        "ref": "iso-art-059/L2",
+        "text": "APARTMENTS"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-059/L1",
+        "text": "BLOCK- 41,42,43,44"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L39",
+          "text": "APARTMENT"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-43"],
+      "vignetteAssetIds": ["iso-art-059"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": ["Hotspot hs-pin-43 outline needs manual verification (confidence medium)."],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-44",
+      "kind": "numbered",
+      "artworkNumber": "44",
+      "displayLabel": {
+        "ref": "iso-art-059/L2",
+        "text": "APARTMENTS"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-059/L1",
+        "text": "BLOCK- 41,42,43,44"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L39",
+          "text": "APARTMENT"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-44"],
+      "vignetteAssetIds": ["iso-art-059"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-45",
+      "kind": "numbered",
+      "artworkNumber": "45",
+      "displayLabel": {
+        "ref": "iso-art-063/L2",
+        "text": "BOYS HOSTEL-1"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-063/L1",
+        "text": "BLOCK- 45"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L40",
+          "text": "BOYS HOSTEL"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-45"],
+      "vignetteAssetIds": ["iso-art-063"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C18 (unresolved): Boys-hostel numbering on vignettes: 45 BOYS HOSTEL-1, 48,49 BOYS HOSTEL -2, 3 (by order), 50 BOYS HOSTEL-7, 51 BOYS HOSTEL (no number), 53,54 BOYS HOSTEL - 5, 6 (by order). Boys Hostel 4 is never assigned. Do not infer 51 = 4."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-47",
+      "kind": "numbered",
+      "artworkNumber": "47",
+      "displayLabel": {
+        "ref": "iso-art-001/L35",
+        "text": "INDOOR"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": {
+        "ref": "iso-art-001/L26",
+        "text": "ADMINISTRATIVE"
+      },
+      "hotspotIds": ["hs-pin-47"],
+      "vignetteAssetIds": [],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C21 (unresolved): Index \"INDOOR 47\" and an overview pin; no vignette."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-48",
+      "kind": "numbered",
+      "artworkNumber": "48",
+      "displayLabel": {
+        "ref": "iso-art-067/L2",
+        "text": "BOYS HOSTEL -2, 3"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-067/L1",
+        "text": "BLOCK- 48, 49"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L40",
+          "text": "BOYS HOSTEL"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-48"],
+      "vignetteAssetIds": ["iso-art-067", "iso-art-119"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-48 outline needs manual verification (confidence low).",
+        "Inventory conflict C18 (unresolved): Boys-hostel numbering on vignettes: 45 BOYS HOSTEL-1, 48,49 BOYS HOSTEL -2, 3 (by order), 50 BOYS HOSTEL-7, 51 BOYS HOSTEL (no number), 53,54 BOYS HOSTEL - 5, 6 (by order). Boys Hostel 4 is never assigned. Do not infer 51 = 4.",
+        "Pairing in the iso-art-067 caption is by listing order only: LISTING ORDER ONLY: 48-2 and 49-3 are implied by order, not stated."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-49",
+      "kind": "numbered",
+      "artworkNumber": "49",
+      "displayLabel": {
+        "ref": "iso-art-067/L2",
+        "text": "BOYS HOSTEL -2, 3"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-067/L1",
+        "text": "BLOCK- 48, 49"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L40",
+          "text": "BOYS HOSTEL"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-49"],
+      "vignetteAssetIds": ["iso-art-067"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-49 outline needs manual verification (confidence low).",
+        "Inventory conflict C18 (unresolved): Boys-hostel numbering on vignettes: 45 BOYS HOSTEL-1, 48,49 BOYS HOSTEL -2, 3 (by order), 50 BOYS HOSTEL-7, 51 BOYS HOSTEL (no number), 53,54 BOYS HOSTEL - 5, 6 (by order). Boys Hostel 4 is never assigned. Do not infer 51 = 4.",
+        "Pairing in the iso-art-067 caption is by listing order only: LISTING ORDER ONLY: 48-2 and 49-3 are implied by order, not stated."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-5",
+      "kind": "numbered",
+      "artworkNumber": "5",
+      "displayLabel": null,
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-107"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C19 (unresolved): Numbers that appear on vignettes/scenes but have no pin on the master overview.",
+        "Inventory conflict C20 (unresolved): Scene pins 5 (GARDEN AREA) and 16 (OPEN AUDITORIUM AND SURROUNDINGS) have no caption and no index row anywhere.",
+        "No numbered pin for this number on the master overview, so it has no hotspot there."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-50",
+      "kind": "numbered",
+      "artworkNumber": "50",
+      "displayLabel": {
+        "ref": "iso-art-071/L2",
+        "text": "BOYS HOSTEL-7"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-071/L1",
+        "text": "BLOCK- 50"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L40",
+          "text": "BOYS HOSTEL"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-50"],
+      "vignetteAssetIds": ["iso-art-071"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C18 (unresolved): Boys-hostel numbering on vignettes: 45 BOYS HOSTEL-1, 48,49 BOYS HOSTEL -2, 3 (by order), 50 BOYS HOSTEL-7, 51 BOYS HOSTEL (no number), 53,54 BOYS HOSTEL - 5, 6 (by order). Boys Hostel 4 is never assigned. Do not infer 51 = 4."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-51",
+      "kind": "numbered",
+      "artworkNumber": "51",
+      "displayLabel": {
+        "ref": "iso-art-075/L2",
+        "text": "BOYS HOSTEL"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-075/L1",
+        "text": "BLOCK- 51"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L40",
+          "text": "BOYS HOSTEL"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-51"],
+      "vignetteAssetIds": ["iso-art-075", "iso-art-119"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C17 (unresolved): Index BOYS HOSTEL \"45,48, 49,50, 51,53,52\" includes 52 (whose only pin is on the cricket oval in PLAYGROUND, not on a building) and omits 54, which the vignette captions as a boys hostel.",
+        "Inventory conflict C18 (unresolved): Boys-hostel numbering on vignettes: 45 BOYS HOSTEL-1, 48,49 BOYS HOSTEL -2, 3 (by order), 50 BOYS HOSTEL-7, 51 BOYS HOSTEL (no number), 53,54 BOYS HOSTEL - 5, 6 (by order). Boys Hostel 4 is never assigned. Do not infer 51 = 4."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-52",
+      "kind": "numbered",
+      "artworkNumber": "52",
+      "displayLabel": {
+        "ref": "iso-art-001/L40",
+        "text": "BOYS HOSTEL"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-119"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C17 (unresolved): Index BOYS HOSTEL \"45,48, 49,50, 51,53,52\" includes 52 (whose only pin is on the cricket oval in PLAYGROUND, not on a building) and omits 54, which the vignette captions as a boys hostel.",
+        "Inventory conflict C19 (unresolved): Numbers that appear on vignettes/scenes but have no pin on the master overview.",
+        "No numbered pin for this number on the master overview, so it has no hotspot there."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-53",
+      "kind": "numbered",
+      "artworkNumber": "53",
+      "displayLabel": {
+        "ref": "iso-art-079/L2",
+        "text": "BOYS HOSTEL - 5, 6"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-079/L1",
+        "text": "BLOCK- 53, 54"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L40",
+          "text": "BOYS HOSTEL"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-53"],
+      "vignetteAssetIds": ["iso-art-079", "iso-art-119"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-53 outline needs manual verification (confidence medium).",
+        "Inventory conflict C17 (unresolved): Index BOYS HOSTEL \"45,48, 49,50, 51,53,52\" includes 52 (whose only pin is on the cricket oval in PLAYGROUND, not on a building) and omits 54, which the vignette captions as a boys hostel.",
+        "Inventory conflict C18 (unresolved): Boys-hostel numbering on vignettes: 45 BOYS HOSTEL-1, 48,49 BOYS HOSTEL -2, 3 (by order), 50 BOYS HOSTEL-7, 51 BOYS HOSTEL (no number), 53,54 BOYS HOSTEL - 5, 6 (by order). Boys Hostel 4 is never assigned. Do not infer 51 = 4.",
+        "Pairing in the iso-art-079 caption is by listing order only: LISTING ORDER ONLY: 53-5 and 54-6 are implied by order, not stated."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-54",
+      "kind": "numbered",
+      "artworkNumber": "54",
+      "displayLabel": {
+        "ref": "iso-art-079/L2",
+        "text": "BOYS HOSTEL - 5, 6"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-079/L1",
+        "text": "BLOCK- 53, 54"
+      },
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": ["hs-pin-54"],
+      "vignetteAssetIds": ["iso-art-079", "iso-art-119"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-54 outline needs manual verification (confidence medium).",
+        "Inventory conflict C17 (unresolved): Index BOYS HOSTEL \"45,48, 49,50, 51,53,52\" includes 52 (whose only pin is on the cricket oval in PLAYGROUND, not on a building) and omits 54, which the vignette captions as a boys hostel.",
+        "Inventory conflict C18 (unresolved): Boys-hostel numbering on vignettes: 45 BOYS HOSTEL-1, 48,49 BOYS HOSTEL -2, 3 (by order), 50 BOYS HOSTEL-7, 51 BOYS HOSTEL (no number), 53,54 BOYS HOSTEL - 5, 6 (by order). Boys Hostel 4 is never assigned. Do not infer 51 = 4.",
+        "Pairing in the iso-art-079 caption is by listing order only: LISTING ORDER ONLY: 53-5 and 54-6 are implied by order, not stated."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-55",
+      "kind": "numbered",
+      "artworkNumber": "55",
+      "displayLabel": {
+        "ref": "iso-art-083/L2",
+        "text": "SCHOOL OF MECHANICAL INGNEERING"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-083/L1",
+        "text": "BLOCK- 55"
+      },
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-083", "iso-art-119"],
+      "relations": [],
+      "aliases": ["SCHOOL OF MECHANICAL ENGINEERING"],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Inventory conflict C14 (unresolved): Vignette 55 \"SCHOOL OF MECHANICAL INGNEERING\", 56 \"SCHOOL OF CIVIL INGNEERING\"; index \"MECHANICAL 56\", \"CIVIL 38\". 55 is not in the index and has no overview pin.",
+        "Inventory conflict C19 (unresolved): Numbers that appear on vignettes/scenes but have no pin on the master overview.",
+        "No numbered pin for this number on the master overview, so it has no hotspot there."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-56",
+      "kind": "numbered",
+      "artworkNumber": "56",
+      "displayLabel": {
+        "ref": "iso-art-083/L4",
+        "text": "SCHOOL OF CIVIL INGNEERING"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-083/L3",
+        "text": "BLOCK- 56"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L23",
+          "text": "MECHANICAL"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-56"],
+      "vignetteAssetIds": ["iso-art-083", "iso-art-119"],
+      "relations": [],
+      "aliases": ["SCHOOL OF CIVIL ENGINEERING"],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-56 outline needs manual verification (confidence medium).",
+        "Inventory conflict C14 (unresolved): Vignette 55 \"SCHOOL OF MECHANICAL INGNEERING\", 56 \"SCHOOL OF CIVIL INGNEERING\"; index \"MECHANICAL 56\", \"CIVIL 38\". 55 is not in the index and has no overview pin."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-57",
+      "kind": "numbered",
+      "artworkNumber": "57",
+      "displayLabel": {
+        "ref": "iso-art-083/L6",
+        "text": "SCHOOL OF POLYTECHNIC"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-083/L5",
+        "text": "BLOCK- 57"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L24",
+          "text": "POLYTECHINQUE"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-57"],
+      "vignetteAssetIds": ["iso-art-083", "iso-art-119"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-57 outline needs manual verification (confidence medium).",
+        "Inventory conflict C15 (unresolved): Index \"POLYTECHINQUE 57\"; vignette \"SCHOOL OF POLYTECHNIC\" (same subject, different wording)."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-58",
+      "kind": "numbered",
+      "artworkNumber": "58",
+      "displayLabel": {
+        "ref": "iso-art-001/L36",
+        "text": "PROJECT LAB"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": {
+        "ref": "iso-art-001/L26",
+        "text": "ADMINISTRATIVE"
+      },
+      "hotspotIds": ["hs-pin-58"],
+      "vignetteAssetIds": ["iso-art-119"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-58 outline needs manual verification (confidence medium).",
+        "Inventory conflict C16 (unresolved): Index EDUCATION ends with a row \"58\" that has no label; ADMINISTRATIVE has \"PROJECT LAB 58\". No vignette; a clipped pin read as \"58\" at the left edge of PLAYGROUND (low confidence)."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-6",
+      "kind": "numbered",
+      "artworkNumber": "6",
+      "displayLabel": {
+        "ref": "iso-art-027/L2",
+        "text": "SCHOOL OF ARCHITECRURE & PLANING DIVISION OF CONSTRUCTIONS DIVISION OF ARCHITECTURE & DESIGN"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-027/L1",
+        "text": "BLOCK-6"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L6",
+          "text": "ARCHITECTURE"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-6"],
+      "vignetteAssetIds": ["iso-art-027"],
+      "relations": [],
+      "aliases": [
+        "SCHOOL OF ARCHITECTURE & PLANNING DIVISION OF CONSTRUCTIONS DIVISION OF ARCHITECTURE & DESIGN"
+      ],
+      "displayHold": null,
+      "needsManualVerification": ["Hotspot hs-pin-6 outline needs manual verification (confidence low)."],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-7",
+      "kind": "numbered",
+      "artworkNumber": "7",
+      "displayLabel": {
+        "ref": "iso-art-027/L4",
+        "text": "DEPARTMENT OF PHARMACEUTICAL SCIENCE"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-027/L3",
+        "text": "BLOCK-7"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L4",
+          "text": "PHARMACY"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-7"],
+      "vignetteAssetIds": ["iso-art-027"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-7 outline needs manual verification (confidence low).",
+        "Inventory conflict C02 (unresolved): Index \"PHARMACY 4,7\"; vignettes: 4 \"SCHOOL OF PHARAMACEUTICAL SCIENCE\", 7 \"DEPARTMENT OF PHARMACEUTICAL SCIENCE\". Consistent in subject, but two numbers for one subject."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-8",
+      "kind": "numbered",
+      "artworkNumber": "8",
+      "displayLabel": {
+        "ref": "iso-art-027/L6",
+        "text": "SCHOOL OF FINE ARTS AND SCHOOL OF DESIGN (MULTIMEDIA)"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-027/L5",
+        "text": "BLOCK-8"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L7",
+          "text": "ANIMATION"
+        },
+        {
+          "ref": "iso-art-001/L8",
+          "text": "FINE ARTS"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L2",
+        "text": "EDUCATION"
+      },
+      "hotspotIds": ["hs-pin-8"],
+      "vignetteAssetIds": ["iso-art-027"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": ["Hotspot hs-pin-8 outline needs manual verification (confidence low)."],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:num-9",
+      "kind": "numbered",
+      "artworkNumber": "9",
+      "displayLabel": {
+        "ref": "iso-art-031/L2",
+        "text": "GIRLS HOSTAL 1, 2, 3, 4"
+      },
+      "visibleBlockLabel": {
+        "ref": "iso-art-031/L1",
+        "text": "BLOCK- 09,10, 11,12"
+      },
+      "otherLabels": [
+        {
+          "ref": "iso-art-001/L38",
+          "text": "GIRLS HOSTEL"
+        }
+      ],
+      "artworkCategory": {
+        "ref": "iso-art-001/L37",
+        "text": "RESIDENTIAL"
+      },
+      "hotspotIds": ["hs-pin-9"],
+      "vignetteAssetIds": ["iso-art-031"],
+      "relations": [],
+      "aliases": ["GIRLS HOSTEL 1, 2, 3, 4"],
+      "displayHold": null,
+      "needsManualVerification": [
+        "Hotspot hs-pin-9 outline needs manual verification (confidence medium).",
+        "Pairing in the iso-art-031 caption is by listing order only: LISTING ORDER ONLY: the caption lists four block numbers and four hostel numbers in parallel; the pairing 9-1, 10-2, 11-3, 12-4 is implied by order and is NOT stated."
+      ],
+      "notes": ""
+    },
+    {
+      "subjectId": "art:scene-091",
+      "kind": "scene",
+      "artworkNumber": null,
+      "displayLabel": {
+        "ref": "iso-art-091/L2",
+        "text": "UNIVERSITY ENTRENCE"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [
+        {
+          "ref": "iso-art-091/L1",
+          "text": "LPU MAP"
+        }
+      ],
+      "artworkCategory": null,
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-091"],
+      "relations": [
+        {
+          "subjectId": "art:area-scene-gate-pylon",
+          "relation": "visual-correspondence"
+        },
+        {
+          "subjectId": "art:area-scene-gate-tower",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": ["UNIVERSITY ENTRANCE"],
+      "displayHold": null,
+      "needsManualVerification": [
+        "iso-art-091/L3: Tiny sign text on the gate canopies and on the gate tower/pylon (orange glyphs and emblem roundels). Unreadable at source resolution; not transcribed."
+      ],
+      "notes": "Scene vignette. Links to areas of the master overview are visual correspondences between two drawings, not identifications."
+    },
+    {
+      "subjectId": "art:scene-095",
+      "kind": "scene",
+      "artworkNumber": null,
+      "displayLabel": {
+        "ref": "iso-art-095/L1",
+        "text": "PARKING AREA AND GARDEN AREA"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-095"],
+      "relations": [
+        {
+          "subjectId": "art:area-scene-gate-tower",
+          "relation": "visual-correspondence"
+        },
+        {
+          "subjectId": "art:area-scene-lawn-tree",
+          "relation": "visual-correspondence"
+        },
+        {
+          "subjectId": "art:area-scene-parking-east",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [],
+      "notes": "Scene vignette. Links to areas of the master overview are visual correspondences between two drawings, not identifications."
+    },
+    {
+      "subjectId": "art:scene-099",
+      "kind": "scene",
+      "artworkNumber": null,
+      "displayLabel": {
+        "ref": "iso-art-099/L1",
+        "text": "FLAG AREA"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-099"],
+      "relations": [
+        {
+          "subjectId": "art:area-scene-lawn-tree",
+          "relation": "visual-correspondence"
+        },
+        {
+          "subjectId": "art:area-scene-statue-garden",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [],
+      "notes": "Scene vignette. Links to areas of the master overview are visual correspondences between two drawings, not identifications."
+    },
+    {
+      "subjectId": "art:scene-103",
+      "kind": "scene",
+      "artworkNumber": null,
+      "displayLabel": {
+        "ref": "iso-art-103/L1",
+        "text": "DILDO PARK"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-103"],
+      "relations": [
+        {
+          "subjectId": "art:area-scene-walled-lawn",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": {
+        "reason": "The printed caption is recorded exactly, but the owner must decide whether it may be displayed (inventory needsManualVerification iso-art-103/L1)."
+      },
+      "needsManualVerification": [
+        "iso-art-103/L1: Transcription is certain, but the meaning is unclear; owner must decide whether it may ever be shown."
+      ],
+      "notes": "Scene vignette. Links to areas of the master overview are visual correspondences between two drawings, not identifications."
+    },
+    {
+      "subjectId": "art:scene-107",
+      "kind": "scene",
+      "artworkNumber": null,
+      "displayLabel": {
+        "ref": "iso-art-107/L1",
+        "text": "GARDEN AREA"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-107"],
+      "relations": [
+        {
+          "subjectId": "art:area-scene-garden-grid",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [],
+      "notes": "Scene vignette. Links to areas of the master overview are visual correspondences between two drawings, not identifications."
+    },
+    {
+      "subjectId": "art:scene-111",
+      "kind": "scene",
+      "artworkNumber": null,
+      "displayLabel": {
+        "ref": "iso-art-111/L1",
+        "text": "OPEN AUDITORIUM AND SURROUNDINGS"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-111"],
+      "relations": [],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "iso-art-111/L2: A further pin head is cut off by the bottom edge of the scene frame near x 413, y 405; no digits are visible."
+      ],
+      "notes": "Scene vignette. Links to areas of the master overview are visual correspondences between two drawings, not identifications."
+    },
+    {
+      "subjectId": "art:scene-119",
+      "kind": "scene",
+      "artworkNumber": null,
+      "displayLabel": {
+        "ref": "iso-art-119/L1",
+        "text": "PLAYGROUND"
+      },
+      "visibleBlockLabel": null,
+      "otherLabels": [],
+      "artworkCategory": null,
+      "hotspotIds": [],
+      "vignetteAssetIds": ["iso-art-119"],
+      "relations": [
+        {
+          "subjectId": "art:area-scene-courts",
+          "relation": "visual-correspondence"
+        },
+        {
+          "subjectId": "art:area-scene-parking-nw",
+          "relation": "visual-correspondence"
+        }
+      ],
+      "aliases": [],
+      "displayHold": null,
+      "needsManualVerification": [
+        "iso-art-119/pin:58: Cut off by the left edge of the scene frame; only part of the number is visible. Reading \"58\" needs manual verification."
+      ],
+      "notes": "Scene vignette. Links to areas of the master overview are visual correspondences between two drawings, not identifications."
+    }
+  ],
+  "associations": [
+    {
+      "subjectId": "art:area-grp-25-27-annex",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-grp-48-49",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-grp-53-54",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-grp-56-58-west-wing",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-grp-9-12",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-scene-courts",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-scene-garden-grid",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-scene-gate-pylon",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-scene-gate-tower",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-scene-lawn-tree",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-scene-oval-ground",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-scene-parking-admin",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-scene-parking-east",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-scene-parking-nw",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-scene-pavilion",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-scene-statue-garden",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-scene-walled-lawn",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-text-lpu-letters",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Printed lettering on the illustration; not a building.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-unpinned-red-building",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:area-unpinned-stair-block",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Area of the illustration with no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-1",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/354743583",
+          "score": 0.5,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/427330237",
+          "score": 0.21,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-10",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422437902",
+          "score": 0.26,
+          "shapeMatch": "weak",
+          "rank": 1
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"no-plausible-footprint\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-11",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422437904",
+          "score": 0.4,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422437885",
+          "score": 0.33,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-12",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422437902",
+          "score": 0.45,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422437885",
+          "score": 0.27,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-13",
+      "status": "approximate",
+      "buildingId": "osm:relation/7099162",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:relation/7099162",
+          "score": 0.8,
+          "shapeMatch": "strong",
+          "rank": 1
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:relation/7099162, score 0.8, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-14",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422437887",
+          "score": 0.65,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422437888",
+          "score": 0.6,
+          "shapeMatch": "partial",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-15",
+      "status": "approximate",
+      "buildingId": "osm:way/422437885",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422437885",
+          "score": 0.8,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422823431",
+          "score": 0.55,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422437885, score 0.8, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-16",
+      "status": "approximate",
+      "buildingId": "osm:way/422823431",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422823431",
+          "score": 0.7,
+          "shapeMatch": "strong",
+          "rank": 1
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422823431, score 0.7, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-18",
+      "status": "approximate",
+      "buildingId": "osm:way/422437890",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422437890",
+          "score": 0.75,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/425699179",
+          "score": 0.23,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422437890, score 0.75, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-19",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422548856",
+          "score": 0.5,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422548858",
+          "score": 0.5,
+          "shapeMatch": "partial",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/422548857",
+          "score": 0.5,
+          "shapeMatch": "partial",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-2",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/427330237",
+          "score": 0.56,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422732974",
+          "score": 0.55,
+          "shapeMatch": "partial",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/427330238",
+          "score": 0.54,
+          "shapeMatch": "partial",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-20",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422548858",
+          "score": 0.47,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422548857",
+          "score": 0.47,
+          "shapeMatch": "partial",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/422548856",
+          "score": 0.47,
+          "shapeMatch": "partial",
+          "rank": 3
+        },
+        {
+          "buildingId": "osm:way/422738883",
+          "score": 0.16,
+          "shapeMatch": "weak",
+          "rank": 4
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-21",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422548303",
+          "score": 0.47,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422548301",
+          "score": 0.47,
+          "shapeMatch": "partial",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/422548304",
+          "score": 0.47,
+          "shapeMatch": "partial",
+          "rank": 3
+        },
+        {
+          "buildingId": "osm:way/422437897",
+          "score": 0.35,
+          "shapeMatch": "weak",
+          "rank": 4
+        },
+        {
+          "buildingId": "osm:way/1550425052",
+          "score": 0.34,
+          "shapeMatch": "weak",
+          "rank": 5
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-21a",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422548303",
+          "score": 0.18,
+          "shapeMatch": "weak",
+          "rank": 1
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-21b",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422548303",
+          "score": 0.18,
+          "shapeMatch": "weak",
+          "rank": 1
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-22",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422548303",
+          "score": 0.32,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422548301",
+          "score": 0.32,
+          "shapeMatch": "partial",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-23",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422548304",
+          "score": 0.32,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422548303",
+          "score": 0.32,
+          "shapeMatch": "partial",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-25",
+      "status": "approximate",
+      "buildingId": "osm:way/422823421",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422823421",
+          "score": 0.75,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422556249",
+          "score": 0.47,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422823421, score 0.75, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-26",
+      "status": "approximate",
+      "buildingId": "osm:way/422823421",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422823421",
+          "score": 0.75,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422556249",
+          "score": 0.42,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422823421, score 0.75, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-27",
+      "status": "approximate",
+      "buildingId": "osm:way/422823421",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422823421",
+          "score": 0.7,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422556250",
+          "score": 0.14,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422823421, score 0.7, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-28",
+      "status": "approximate",
+      "buildingId": "osm:way/422823421",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422823421",
+          "score": 0.7,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422823423",
+          "score": 0.27,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422823421, score 0.7, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-29",
+      "status": "approximate",
+      "buildingId": "osm:way/422823421",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422823421",
+          "score": 0.7,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422823423",
+          "score": 0.4,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422823421, score 0.7, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-3",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/354755644",
+          "score": 0.55,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/426283204",
+          "score": 0.45,
+          "shapeMatch": "weak",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/354830243",
+          "score": 0.37,
+          "shapeMatch": "weak",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-30",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422823423",
+          "score": 0.55,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422823420",
+          "score": 0.5,
+          "shapeMatch": "partial",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/422823424",
+          "score": 0.39,
+          "shapeMatch": "weak",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-31",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422823423",
+          "score": 0.45,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422823420",
+          "score": 0.45,
+          "shapeMatch": "partial",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-32",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422823423",
+          "score": 0.6,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422823420",
+          "score": 0.55,
+          "shapeMatch": "partial",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-33",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422823420",
+          "score": 0.55,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422823423",
+          "score": 0.5,
+          "shapeMatch": "weak",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/1566888543",
+          "score": 0.41,
+          "shapeMatch": "weak",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-34",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422823420",
+          "score": 0.6,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/1566888543",
+          "score": 0.46,
+          "shapeMatch": "weak",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/422556250",
+          "score": 0.45,
+          "shapeMatch": "weak",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-35",
+      "status": "approximate",
+      "buildingId": "osm:way/422556250",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422556250",
+          "score": 0.7,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/1566888543",
+          "score": 0.5,
+          "shapeMatch": "partial",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/422556253",
+          "score": 0.5,
+          "shapeMatch": "partial",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422556250, score 0.7, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-36",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422556249",
+          "score": 0.6,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422556250",
+          "score": 0.56,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-37",
+      "status": "approximate",
+      "buildingId": "osm:way/422556249",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422556249",
+          "score": 0.75,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422556250",
+          "score": 0.5,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422556249, score 0.75, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-38",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422556249",
+          "score": 0.6,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422823421",
+          "score": 0.57,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-4",
+      "status": "approximate",
+      "buildingId": "osm:way/354830243",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/354830243",
+          "score": 0.75,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/354755644",
+          "score": 0.36,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/354830243, score 0.75, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-41",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422437894",
+          "score": 0.45,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422437895",
+          "score": 0.45,
+          "shapeMatch": "partial",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-42",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422437895",
+          "score": 0.5,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422437896",
+          "score": 0.5,
+          "shapeMatch": "partial",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-43",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422437896",
+          "score": 0.5,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422437897",
+          "score": 0.5,
+          "shapeMatch": "partial",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/1550425052",
+          "score": 0.44,
+          "shapeMatch": "weak",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-44",
+      "status": "approximate",
+      "buildingId": "osm:way/422437897",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422437897",
+          "score": 0.7,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422437896",
+          "score": 0.39,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422437897, score 0.7, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-45",
+      "status": "approximate",
+      "buildingId": "osm:way/422548300",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422548300",
+          "score": 0.8,
+          "shapeMatch": "strong",
+          "rank": 1
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422548300, score 0.8, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-47",
+      "status": "approximate",
+      "buildingId": "osm:way/422737297",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422737297",
+          "score": 0.75,
+          "shapeMatch": "strong",
+          "rank": 1
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422737297, score 0.75, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-48",
+      "status": "approximate",
+      "buildingId": "osm:way/422548297",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422548297",
+          "score": 0.75,
+          "shapeMatch": "strong",
+          "rank": 1
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422548297, score 0.75, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-49",
+      "status": "approximate",
+      "buildingId": "osm:way/422548297",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422548297",
+          "score": 0.75,
+          "shapeMatch": "strong",
+          "rank": 1
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422548297, score 0.75, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-5",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422738980",
+          "score": 0.31,
+          "shapeMatch": "weak",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/427330237",
+          "score": 0.31,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"no-plausible-footprint\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-50",
+      "status": "approximate",
+      "buildingId": "osm:way/422548299",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422548299",
+          "score": 0.75,
+          "shapeMatch": "strong",
+          "rank": 1
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422548299, score 0.75, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-51",
+      "status": "approximate",
+      "buildingId": "osm:way/422548298",
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422548298",
+          "score": 0.8,
+          "shapeMatch": "strong",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422738863",
+          "score": 0.3,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidate footprint (docs/research/block-leads/block-candidates.json, recommendation \"confirm-on-site\" after the 2026-10-24 adversarial review): osm:way/422548298, score 0.8, shape match strong. Not verified: it needs an on-site check or official evidence, is shown only as an unconfirmed match and is never routed.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-52",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422738863",
+          "score": 0.21,
+          "shapeMatch": "weak",
+          "rank": 1
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"no-plausible-footprint\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-53",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422323508",
+          "score": 0.5,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422547444",
+          "score": 0.5,
+          "shapeMatch": "partial",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/422547443",
+          "score": 0.5,
+          "shapeMatch": "weak",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-54",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422547447",
+          "score": 0.5,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422547446",
+          "score": 0.5,
+          "shapeMatch": "partial",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/422547443",
+          "score": 0.5,
+          "shapeMatch": "weak",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-55",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422547449",
+          "score": 0.4,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422547451",
+          "score": 0.4,
+          "shapeMatch": "partial",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/422547448",
+          "score": 0.4,
+          "shapeMatch": "partial",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-56",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422547448",
+          "score": 0.45,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422547450",
+          "score": 0.45,
+          "shapeMatch": "partial",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/422547449",
+          "score": 0.45,
+          "shapeMatch": "weak",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-57",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422547450",
+          "score": 0.45,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422547452",
+          "score": 0.45,
+          "shapeMatch": "partial",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-58",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422547452",
+          "score": 0.35,
+          "shapeMatch": "weak",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422551921",
+          "score": 0.35,
+          "shapeMatch": "partial",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-6",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/425717556",
+          "score": 0.26,
+          "shapeMatch": "weak",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/425717558",
+          "score": 0.26,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"no-plausible-footprint\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-7",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422437902",
+          "score": 0.37,
+          "shapeMatch": "weak",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/425717556",
+          "score": 0.33,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"no-plausible-footprint\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-8",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/425717556",
+          "score": 0.35,
+          "shapeMatch": "weak",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/425717558",
+          "score": 0.35,
+          "shapeMatch": "weak",
+          "rank": 2
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"no-plausible-footprint\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:num-9",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [
+        {
+          "buildingId": "osm:way/422437902",
+          "score": 0.55,
+          "shapeMatch": "partial",
+          "rank": 1
+        },
+        {
+          "buildingId": "osm:way/422437904",
+          "score": 0.45,
+          "shapeMatch": "partial",
+          "rank": 2
+        },
+        {
+          "buildingId": "osm:way/422437908",
+          "score": 0.45,
+          "shapeMatch": "weak",
+          "rank": 3
+        }
+      ],
+      "reason": "Reviewed candidates (docs/research/block-leads/block-candidates.json) give the recommendation \"ambiguous\": no single footprint is supported.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:scene-091",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Scene vignette: no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:scene-095",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Scene vignette: no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:scene-099",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Scene vignette: no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:scene-103",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Scene vignette: no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:scene-107",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Scene vignette: no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:scene-111",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Scene vignette: no reviewed candidate footprint.",
+      "revision": 1
+    },
+    {
+      "subjectId": "art:scene-119",
+      "status": "unresolved",
+      "buildingId": null,
+      "evidence": [],
+      "candidateFootprints": [],
+      "reason": "Scene vignette: no reviewed candidate footprint.",
+      "revision": 1
+    }
+  ]
+}

@@ -225,7 +225,8 @@ test.describe('Building Studio (desktop, laptop, tablet)', () => {
     await expect(pub.getByRole('article', { name })).toBeVisible();
     await shotOf(pub, testInfo, 'studio-5-published-realistic-3d');
 
-    await pub.goto(`/?place=${encodeURIComponent(id)}&view=iso&e2e=1`);
+    // The map-accurate overview draws the published model (the illustration does not).
+    await pub.goto(`/?place=${encodeURIComponent(id)}&view=iso&iso=map&e2e=1`);
     await expect
       .poll(() => pub.evaluate(() => window.__ATLAS_ISO__?.getSelectedId() ?? null), { timeout: 30_000 })
       .toBe(id);

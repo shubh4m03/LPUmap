@@ -1,0 +1,3514 @@
+{
+  "$comment": "Interactive hit areas for the owner-supplied master isometric overview. Polygons are hand-traced on zoomed crops of the original and stored in NORMALIZED source-image coordinates. Artwork/pin/index numbers are NOT official LPU block numbers. Nothing here names, numbers or positions a real building on the geographic map. DRAFT for owner review.",
+  "schemaVersion": 1,
+  "kind": "lpu-isometric-art-hotspots",
+  "status": "draft-for-owner-review",
+  "tracedAt": "2026-10-24",
+  "source": {
+    "assetId": "iso-art-001",
+    "path": "lpu-isometric-map-design/1-lpu-isometric-map-design-3371.jpg",
+    "sha256": "41997f42cea0f99e62c5b6b23406afdb3cd8e4bcb4635fa1c264c91127044a25",
+    "sourceWidth": 3371,
+    "sourceHeight": 2384,
+    "inventory": "data/curated/isometric-art/inventory.json"
+  },
+  "coordinateSystem": {
+    "space": "normalized-source-image",
+    "x": "pixelX / sourceWidth",
+    "y": "pixelY / sourceHeight",
+    "origin": "top-left of the original image; x right, y down; pixel edges (a pixel centre is at (i + 0.5) / size)",
+    "range": "[0, 1]",
+    "precision": "6 decimals (well below 0.01 source px)",
+    "polygons": "Simple polygons, open rings (first vertex not repeated), clockwise on screen (y down).",
+    "pinRadius": "rx = radius / sourceWidth, ry = radius / sourceHeight (the printed disc is circular in source pixels).",
+    "transform": "Render the image and these outlines with ONE shared transform: screen = translate + scale * (n * [sourceWidth, sourceHeight]). Never fit them separately."
+  },
+  "conventions": {
+    "kinds": {
+      "pin-structure": "the drawn structure the numbered overview pin sits on",
+      "unassigned-structure": "part of a pinned complex that is not under any pin; candidatePinNumbers lists the pins of that complex",
+      "unpinned-structure": "structure with no overview pin; a vignette draws a pin there (visual correspondence only)",
+      "scene": "unlabelled drawn feature that a scene vignette shows (visual correspondence only); no name is printed on the overview",
+      "printed-text": "legible text printed inside the map area"
+    },
+    "artworkLabel": "Exactly what is printed on the overview for this hotspot (pin digits or printed text); null when nothing is printed. Never corrected.",
+    "labelAnchor": "Interior point of the polygon farthest from its edges, for placing a label or focus ring.",
+    "pin": "The printed disc (centre + radii). Discs have no pointer tail, so the anchor is the disc centre; a disc does not mark an exact ground point and may overhang the outline.",
+    "confidence": {
+      "high": "outline clearly bounded in the drawing",
+      "medium": "outline clear but extent or part of a boundary judged",
+      "low": "boundary with neighbours or the pin assignment is judged"
+    },
+    "reviewStatus": {
+      "traced": "traced and checked on zoomed overlays",
+      "needs-manual-verification": "ambiguous outline or assignment; owner should confirm before relying on it"
+    },
+    "links": "indexRows and vignettes reference label/asset ids in inventory.json. Vignette relations: caption-heading(-and-pin) = the vignette caption heading names this number; pin-drawn-in-scene = the number appears only as a pin in a scene vignette; caption-covers-candidate-number = an unassigned part of a complex whose caption covers that number; vignette-pin-visual-correspondence / scene-visual-correspondence = matched by eye between two drawings, needs manual verification.",
+    "overlaps": "Hotspots do not overlap (see qa.overlaps)."
+  },
+  "hotspots": [
+    {
+      "hotspotId": "hs-pin-1",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "1",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.378819,
+        "y": 0.716443,
+        "rx": 0.00445,
+        "ry": 0.006292,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L3",
+            "section": "EDUCATION",
+            "labelAsPrinted": "FASHION",
+            "numbersAsPrinted": "1"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-011",
+            "number": "1",
+            "relation": "caption-heading",
+            "captionHeadingLabelId": "iso-art-011/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.370098, 0.719799],
+        [0.374666, 0.716611],
+        [0.378523, 0.716611],
+        [0.383269, 0.716611],
+        [0.385642, 0.718792],
+        [0.388015, 0.716611],
+        [0.391872, 0.719379],
+        [0.392465, 0.723993],
+        [0.398991, 0.732383],
+        [0.399169, 0.74203],
+        [0.401365, 0.743289],
+        [0.395728, 0.748322],
+        [0.392762, 0.747064],
+        [0.388905, 0.744966],
+        [0.388905, 0.752936],
+        [0.380006, 0.753356],
+        [0.380006, 0.75797],
+        [0.367843, 0.75797],
+        [0.367843, 0.733221],
+        [0.36992, 0.732802]
+      ],
+      "labelAnchor": [0.381044, 0.733599],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Isolated drawn building directly under pin 1, including its grey plinth/shadow base."
+    },
+    {
+      "hotspotId": "hs-pin-2",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "2",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.416197,
+        "y": 0.669883,
+        "rx": 0.00445,
+        "ry": 0.006292,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L34",
+            "section": "ADMINISTRATIVE",
+            "labelAsPrinted": "BALDEV RAJ AUDITORIUM",
+            "numbersAsPrinted": "2"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-015",
+            "number": "2",
+            "relation": "caption-heading",
+            "captionHeadingLabelId": "iso-art-015/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.385049, 0.697148],
+        [0.405814, 0.681628],
+        [0.41323, 0.676174],
+        [0.417977, 0.672819],
+        [0.417977, 0.661074],
+        [0.42035, 0.659396],
+        [0.42035, 0.644295],
+        [0.42658, 0.639262],
+        [0.433106, 0.644295],
+        [0.433106, 0.659396],
+        [0.435776, 0.661913],
+        [0.435776, 0.681628],
+        [0.426283, 0.689178],
+        [0.415307, 0.696309],
+        [0.405518, 0.704698],
+        [0.399585, 0.706376],
+        [0.396025, 0.704698],
+        [0.386532, 0.709732],
+        [0.385049, 0.707634]
+      ],
+      "labelAnchor": [0.426728, 0.674287],
+      "confidence": "medium",
+      "reviewStatus": "traced",
+      "notes": "Long low bar, round drum, stepped dark area and the tall grey box, drawn as one connected mass under pin 2 (iso-art-015 draws the same parts together under one caption). Which part matches which use in that caption is not stated; no internal boundary is recorded."
+    },
+    {
+      "hotspotId": "hs-pin-3",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "3",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.463957,
+        "y": 0.608012,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L5",
+            "section": "EDUCATION",
+            "labelAsPrinted": "PHYSIOTHERAPY",
+            "numbersAsPrinted": "3"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-019",
+            "number": "3",
+            "relation": "caption-heading",
+            "captionHeadingLabelId": "iso-art-019/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.442539, 0.611661],
+        [0.453664, 0.598951],
+        [0.46108, 0.589639],
+        [0.485435, 0.607928],
+        [0.489469, 0.615394],
+        [0.489143, 0.620638],
+        [0.478018, 0.631124],
+        [0.485435, 0.640143],
+        [0.485969, 0.648364],
+        [0.474844, 0.652097],
+        [0.472204, 0.640898],
+        [0.465322, 0.645386],
+        [0.453664, 0.637122],
+        [0.448354, 0.631879],
+        [0.444646, 0.624413]
+      ],
+      "labelAnchor": [0.464046, 0.618372],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Grey angled building with its external stair under pin 3. The curved grey walkway/bridge drawn behind it is excluded."
+    },
+    {
+      "hotspotId": "hs-pin-4",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "4",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.425096,
+        "y": 0.579698,
+        "rx": 0.00445,
+        "ry": 0.006292,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L4",
+            "section": "EDUCATION",
+            "labelAsPrinted": "PHARMACY",
+            "numbersAsPrinted": "4,7"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-023",
+            "number": "4",
+            "relation": "caption-heading",
+            "captionHeadingLabelId": "iso-art-023/L1"
+          },
+          {
+            "assetId": "iso-art-107",
+            "number": "4",
+            "relation": "pin-drawn-in-scene"
+          }
+        ]
+      },
+      "polygon": [
+        [0.402284, 0.589178],
+        [0.412341, 0.577643],
+        [0.420291, 0.583641],
+        [0.440937, 0.583221],
+        [0.453664, 0.590227],
+        [0.453664, 0.598196],
+        [0.442005, 0.598196],
+        [0.442005, 0.622903],
+        [0.439899, 0.618414],
+        [0.414447, 0.617659],
+        [0.402818, 0.615394]
+      ],
+      "labelAnchor": [0.415782, 0.600084],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Grey comb-fronted building under pin 4. Its lower-right extent is partly hidden by a drawn tree; the outline follows the visible facade."
+    },
+    {
+      "hotspotId": "hs-pin-6",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "6",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.346633,
+        "y": 0.547819,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L6",
+            "section": "EDUCATION",
+            "labelAsPrinted": "ARCHITECTURE",
+            "numbersAsPrinted": "6"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-027",
+            "number": "6",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-027/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.340403, 0.549748],
+        [0.349867, 0.542953],
+        [0.35399, 0.540185],
+        [0.36553, 0.541359],
+        [0.36636, 0.542743],
+        [0.366775, 0.54505],
+        [0.372115, 0.552643],
+        [0.372115, 0.562542],
+        [0.356482, 0.57651],
+        [0.340819, 0.569547]
+      ],
+      "labelAnchor": [0.355088, 0.558012],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Front-left wing of the connected 6/7/8 complex. Pins 6, 7 and 8 sit on one connected drawn mass; the split lines between them are judged from roof/facade changes and are not printed. iso-art-027 draws the same complex with pins 6, 7 and 8."
+    },
+    {
+      "hotspotId": "hs-pin-7",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "7",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.382972,
+        "y": 0.51594,
+        "rx": 0.00445,
+        "ry": 0.006292,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L4",
+            "section": "EDUCATION",
+            "labelAsPrinted": "PHARMACY",
+            "numbersAsPrinted": "4,7"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-027",
+            "number": "7",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-027/L3"
+          }
+        ]
+      },
+      "polygon": [
+        [0.383566, 0.497903],
+        [0.385642, 0.497903],
+        [0.385939, 0.5],
+        [0.386829, 0.501258],
+        [0.386829, 0.502936],
+        [0.387422, 0.503356],
+        [0.387422, 0.505034],
+        [0.388015, 0.505453],
+        [0.388015, 0.507131],
+        [0.388609, 0.50755],
+        [0.388609, 0.509228],
+        [0.389202, 0.509648],
+        [0.389202, 0.511745],
+        [0.390685, 0.514681],
+        [0.390982, 0.520134],
+        [0.393652, 0.537752],
+        [0.393948, 0.552013],
+        [0.391279, 0.553691],
+        [0.390389, 0.555369],
+        [0.388609, 0.555789],
+        [0.387719, 0.557466],
+        [0.385939, 0.557886],
+        [0.385049, 0.559564],
+        [0.383269, 0.559983],
+        [0.382379, 0.561661],
+        [0.380599, 0.562081],
+        [0.380006, 0.563339],
+        [0.37259, 0.562081],
+        [0.37259, 0.551594],
+        [0.36725, 0.544463],
+        [0.366953, 0.541527],
+        [0.365767, 0.540688],
+        [0.36547, 0.53104],
+        [0.366953, 0.528523],
+        [0.368733, 0.527265],
+        [0.370217, 0.527265],
+        [0.371996, 0.525168],
+        [0.37348, 0.525168],
+        [0.37526, 0.52307],
+        [0.376743, 0.52307],
+        [0.378523, 0.520973],
+        [0.380896, 0.520134],
+        [0.378819, 0.502097],
+        [0.382676, 0.499581]
+      ],
+      "labelAnchor": [0.381341, 0.53922],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Right part of the connected 6/7/8 complex (tall finned block and the roof end under pin 7). Boundary with 8 is judged, not printed."
+    },
+    {
+      "hotspotId": "hs-pin-8",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "8",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.363542,
+        "y": 0.510906,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L7",
+            "section": "EDUCATION",
+            "labelAsPrinted": "ANIMATION",
+            "numbersAsPrinted": "8"
+          },
+          {
+            "labelId": "iso-art-001/L8",
+            "section": "EDUCATION",
+            "labelAsPrinted": "FINE ARTS",
+            "numbersAsPrinted": "8"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-027",
+            "number": "8",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-027/L5"
+          }
+        ]
+      },
+      "polygon": [
+        [0.377336, 0.502936],
+        [0.378226, 0.502936],
+        [0.378523, 0.504195],
+        [0.380006, 0.519295],
+        [0.377929, 0.520134],
+        [0.37615, 0.522232],
+        [0.374666, 0.522232],
+        [0.372886, 0.524329],
+        [0.371403, 0.524329],
+        [0.369623, 0.526426],
+        [0.36814, 0.526426],
+        [0.36636, 0.527685],
+        [0.364877, 0.530201],
+        [0.365174, 0.540268],
+        [0.353901, 0.53943],
+        [0.353901, 0.520973],
+        [0.370513, 0.508809]
+      ],
+      "labelAnchor": [0.359982, 0.525797],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Back wing with the triangular gable in the connected 6/7/8 complex. Boundary with 7 is judged, not printed."
+    },
+    {
+      "hotspotId": "hs-pin-9",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "9",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.416197,
+        "y": 0.490143,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L38",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "GIRLS HOSTEL",
+            "numbersAsPrinted": "9,10, 11,12, 21A,B"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-031",
+            "number": "9",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-031/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.405963, 0.492156],
+        [0.410709, 0.488591],
+        [0.415663, 0.486829],
+        [0.417295, 0.472106],
+        [0.421507, 0.469547],
+        [0.425541, 0.473112],
+        [0.425541, 0.483893],
+        [0.43364, 0.483515],
+        [0.439484, 0.488339],
+        [0.439484, 0.499161],
+        [0.43005, 0.507424],
+        [0.421952, 0.514052],
+        [0.414773, 0.5125],
+        [0.406675, 0.507424]
+      ],
+      "labelAnchor": [0.421833, 0.497861],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "L-shaped block under pin 9 including the back roof that reaches the face of 10. The 9/10 boundary is judged."
+    },
+    {
+      "hotspotId": "hs-pin-10",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "10",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.447048,
+        "y": 0.467701,
+        "rx": 0.004598,
+        "ry": 0.006502,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L38",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "GIRLS HOSTEL",
+            "numbersAsPrinted": "9,10, 11,12, 21A,B"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-031",
+            "number": "10",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-031/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.441412, 0.454279],
+        [0.443785, 0.454279],
+        [0.445862, 0.456795],
+        [0.448235, 0.457634],
+        [0.449125, 0.459312],
+        [0.450905, 0.459732],
+        [0.451795, 0.461409],
+        [0.453575, 0.461829],
+        [0.454465, 0.463507],
+        [0.459508, 0.466443],
+        [0.460398, 0.468121],
+        [0.462177, 0.46854],
+        [0.463067, 0.471477],
+        [0.463364, 0.483641],
+        [0.462177, 0.485319],
+        [0.461287, 0.485319],
+        [0.458024, 0.489933],
+        [0.455058, 0.491191],
+        [0.454168, 0.492869],
+        [0.445862, 0.498742],
+        [0.442895, 0.498742],
+        [0.440225, 0.496225],
+        [0.440225, 0.487416],
+        [0.439632, 0.487416],
+        [0.439336, 0.48448],
+        [0.430436, 0.478607],
+        [0.429546, 0.47693],
+        [0.42658, 0.475671],
+        [0.426283, 0.472315],
+        [0.425393, 0.471896],
+        [0.425393, 0.467282],
+        [0.428656, 0.465185],
+        [0.429249, 0.463926],
+        [0.433106, 0.461829],
+        [0.433996, 0.460151],
+        [0.435479, 0.459732],
+        [0.436072, 0.458473],
+        [0.437852, 0.458054],
+        [0.438742, 0.456376],
+        [0.440225, 0.455956]
+      ],
+      "labelAnchor": [0.449273, 0.477559],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Large block under pin 10, minus the part assigned to 9. Lower-right edge partly hidden by drawn trees."
+    },
+    {
+      "hotspotId": "hs-pin-11",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "11",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.421537,
+        "y": 0.447148,
+        "rx": 0.00445,
+        "ry": 0.006292,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L38",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "GIRLS HOSTEL",
+            "numbersAsPrinted": "9,10, 11,12, 21A,B"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-031",
+            "number": "11",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-031/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.415218, 0.452517],
+        [0.422397, 0.447064],
+        [0.429605, 0.440688],
+        [0.438594, 0.448322],
+        [0.438594, 0.456586],
+        [0.432305, 0.458851],
+        [0.429605, 0.457215],
+        [0.42916, 0.460403],
+        [0.422872, 0.466107],
+        [0.415663, 0.460403]
+      ],
+      "labelAnchor": [0.423079, 0.455998],
+      "confidence": "medium",
+      "reviewStatus": "traced",
+      "notes": "Block cluster under pin 11 at the back of the 9-12 group."
+    },
+    {
+      "hotspotId": "hs-pin-12",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "12",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.392762,
+        "y": 0.482383,
+        "rx": 0.00445,
+        "ry": 0.006292,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L38",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "GIRLS HOSTEL",
+            "numbersAsPrinted": "9,10, 11,12, 21A,B"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-031",
+            "number": "12",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-031/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.381964, 0.491149],
+        [0.389588, 0.483893],
+        [0.394987, 0.480747],
+        [0.401276, 0.486451],
+        [0.40264, 0.488339],
+        [0.40264, 0.496602],
+        [0.395432, 0.500419],
+        [0.382409, 0.494086]
+      ],
+      "labelAnchor": [0.394275, 0.490604],
+      "confidence": "medium",
+      "reviewStatus": "traced",
+      "notes": "Front-left block under pin 12."
+    },
+    {
+      "hotspotId": "hs-pin-13",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "13",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.340255,
+        "y": 0.453649,
+        "rx": 0.004524,
+        "ry": 0.006397,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L9",
+            "section": "EDUCATION",
+            "labelAsPrinted": "BUSINESS",
+            "numbersAsPrinted": "13"
+          },
+          {
+            "labelId": "iso-art-001/L32",
+            "section": "ADMINISTRATIVE",
+            "labelAsPrinted": "STUDENT WELFARE",
+            "numbersAsPrinted": "13"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-035",
+            "number": "13",
+            "relation": "caption-heading",
+            "captionHeadingLabelId": "iso-art-035/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.332513, 0.457886],
+        [0.334381, 0.453272],
+        [0.33809, 0.450419],
+        [0.345031, 0.453272],
+        [0.35043, 0.458515],
+        [0.35043, 0.46745],
+        [0.3469, 0.470973],
+        [0.341323, 0.472273],
+        [0.332513, 0.466401]
+      ],
+      "labelAnchor": [0.341857, 0.461955],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Block under pin 13 (roof feature included). The black billboards beside it are excluded."
+    },
+    {
+      "hotspotId": "hs-pin-14",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "14",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.327499,
+        "y": 0.424706,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-039",
+            "number": "14",
+            "relation": "caption-heading",
+            "captionHeadingLabelId": "iso-art-039/L1"
+          },
+          {
+            "assetId": "iso-art-111",
+            "number": "14",
+            "relation": "pin-drawn-in-scene"
+          },
+          {
+            "assetId": "iso-art-115",
+            "number": "14",
+            "relation": "pin-drawn-in-scene"
+          }
+        ]
+      },
+      "polygon": [
+        [0.318155, 0.427727],
+        [0.323732, 0.423406],
+        [0.32836, 0.423154],
+        [0.336221, 0.434941],
+        [0.336221, 0.443456],
+        [0.337437, 0.444757],
+        [0.33717, 0.4487],
+        [0.333907, 0.45],
+        [0.331593, 0.4487],
+        [0.318333, 0.438884]
+      ],
+      "labelAnchor": [0.325719, 0.433431],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Block under pin 14 including its entrance canopy. Pin 14 has no row in the overview INFORMATION index."
+    },
+    {
+      "hotspotId": "hs-pin-15",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "15",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.379709,
+        "y": 0.441065,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L10",
+            "section": "EDUCATION",
+            "labelAsPrinted": "HOTEL MANAGEMENT",
+            "numbersAsPrinted": "15"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-043",
+            "number": "15",
+            "relation": "caption-heading",
+            "captionHeadingLabelId": "iso-art-043/L1"
+          },
+          {
+            "assetId": "iso-art-111",
+            "number": "15",
+            "relation": "pin-drawn-in-scene"
+          },
+          {
+            "assetId": "iso-art-115",
+            "number": "15",
+            "relation": "pin-drawn-in-scene"
+          }
+        ]
+      },
+      "polygon": [
+        [0.36728, 0.450419],
+        [0.396025, 0.428104],
+        [0.398072, 0.430327],
+        [0.398072, 0.457886],
+        [0.394186, 0.461158],
+        [0.393236, 0.46443],
+        [0.388134, 0.46573],
+        [0.376565, 0.476216],
+        [0.373776, 0.474916],
+        [0.367754, 0.469002]
+      ],
+      "labelAnchor": [0.386414, 0.451804],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Wedge-shaped block under pin 15 including its entrance canopy."
+    },
+    {
+      "hotspotId": "hs-pin-18",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "18",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.405221,
+        "y": 0.409396,
+        "rx": 0.00445,
+        "ry": 0.006292,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L11",
+            "section": "EDUCATION",
+            "labelAsPrinted": "EDUCATION",
+            "numbersAsPrinted": "18"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-047",
+            "number": "18",
+            "relation": "caption-heading",
+            "captionHeadingLabelId": "iso-art-047/L1"
+          },
+          {
+            "assetId": "iso-art-111",
+            "number": "18",
+            "relation": "pin-drawn-in-scene"
+          },
+          {
+            "assetId": "iso-art-115",
+            "number": "18",
+            "relation": "pin-drawn-in-scene"
+          }
+        ]
+      },
+      "polygon": [
+        [0.397508, 0.418289],
+        [0.404034, 0.410235],
+        [0.408187, 0.408557],
+        [0.415307, 0.413591],
+        [0.415307, 0.425336],
+        [0.405814, 0.431208],
+        [0.397864, 0.427013]
+      ],
+      "labelAnchor": [0.407446, 0.419253],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Block under pin 18."
+    },
+    {
+      "hotspotId": "hs-pin-20",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "20",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.411302,
+        "y": 0.373112,
+        "rx": 0.004301,
+        "ry": 0.006082,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L13",
+            "section": "EDUCATION",
+            "labelAsPrinted": "FILM & JOURNALISM",
+            "numbersAsPrinted": "20"
+          },
+          {
+            "labelId": "iso-art-001/L14",
+            "section": "EDUCATION",
+            "labelAsPrinted": "LAW",
+            "numbersAsPrinted": "20"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-051",
+            "number": "20",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.408395, 0.378565],
+        [0.411836, 0.376678],
+        [0.41507, 0.374371],
+        [0.415307, 0.368414],
+        [0.419757, 0.365772],
+        [0.422219, 0.367366],
+        [0.424711, 0.365059],
+        [0.429249, 0.368414],
+        [0.429249, 0.376468],
+        [0.428419, 0.379069],
+        [0.426669, 0.381711],
+        [0.429249, 0.384522],
+        [0.429398, 0.393582],
+        [0.425185, 0.396518],
+        [0.422219, 0.39568],
+        [0.418274, 0.397651],
+        [0.416049, 0.396057],
+        [0.411362, 0.392324],
+        [0.408395, 0.390101]
+      ],
+      "labelAnchor": [0.418629, 0.384983],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Cross-shaped complex under pin 20 including its entrance canopy. iso-art-051 draws 19, 20 and 21 on one connected mass; the overview has only pin 20 on this complex and pin 21 on a separate cluster. Kept side by side, not resolved."
+    },
+    {
+      "hotspotId": "hs-pin-21",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "21",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.378374,
+        "y": 0.310822,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-051",
+            "number": "21",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-051/L3"
+          }
+        ]
+      },
+      "polygon": [
+        [0.361762, 0.326133],
+        [0.374162, 0.316904],
+        [0.378226, 0.315646],
+        [0.38232, 0.313758],
+        [0.383566, 0.309564],
+        [0.385642, 0.306837],
+        [0.388015, 0.308851],
+        [0.388609, 0.310403],
+        [0.390685, 0.310193],
+        [0.392465, 0.311997],
+        [0.392702, 0.316904],
+        [0.3938, 0.315143],
+        [0.396025, 0.314807],
+        [0.39825, 0.316904],
+        [0.398398, 0.321435],
+        [0.40086, 0.319631],
+        [0.404183, 0.321938],
+        [0.404331, 0.333683],
+        [0.397508, 0.339555],
+        [0.3938, 0.342408],
+        [0.393058, 0.34396],
+        [0.388609, 0.339765],
+        [0.387125, 0.347106],
+        [0.380451, 0.352559],
+        [0.377484, 0.350252],
+        [0.377128, 0.347106],
+        [0.371195, 0.342911],
+        [0.369327, 0.34396],
+        [0.366004, 0.339262],
+        [0.36191, 0.336409]
+      ],
+      "labelAnchor": [0.379413, 0.331376],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Connected residential-looking cluster under pin 21. Pin 21 has no row in the overview INFORMATION index (the index lists 21A,B under GIRLS HOSTEL); not resolved."
+    },
+    {
+      "hotspotId": "hs-pin-25",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "25",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.333284,
+        "y": 0.332634,
+        "rx": 0.003041,
+        "ry": 0.004299,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L15",
+            "section": "EDUCATION",
+            "labelAsPrinted": "AGRICULTURE",
+            "numbersAsPrinted": "25,26"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "25",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.3283, 0.335025],
+        [0.331267, 0.333138],
+        [0.338179, 0.335235],
+        [0.338268, 0.341862],
+        [0.333492, 0.344295],
+        [0.332335, 0.344673],
+        [0.332335, 0.350965],
+        [0.328389, 0.348154]
+      ],
+      "labelAnchor": [0.332305, 0.33922],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Top-right block of the connected 25-38 megastructure under pin 25."
+    },
+    {
+      "hotspotId": "hs-pin-26",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "26",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.325719,
+        "y": 0.341443,
+        "rx": 0.002966,
+        "ry": 0.004195,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L15",
+            "section": "EDUCATION",
+            "labelAsPrinted": "AGRICULTURE",
+            "numbersAsPrinted": "25,26"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "26",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.326313, 0.340185],
+        [0.327796, 0.340185],
+        [0.327796, 0.348993],
+        [0.321863, 0.347315],
+        [0.32216, 0.343121],
+        [0.323939, 0.341023],
+        [0.325719, 0.341023]
+      ],
+      "labelAnchor": [0.325274, 0.344589],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Block under pin 26 in the connected 25-38 megastructure; boundaries judged."
+    },
+    {
+      "hotspotId": "hs-pin-27",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "27",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.32216,
+        "y": 0.3513,
+        "rx": 0.003041,
+        "ry": 0.004299,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L16",
+            "section": "EDUCATION",
+            "labelAsPrinted": "PHYSICAL SCIENCE",
+            "numbersAsPrinted": "27"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "27",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.321863, 0.348574],
+        [0.326016, 0.348993],
+        [0.328686, 0.352349],
+        [0.328389, 0.359899],
+        [0.327499, 0.359899],
+        [0.326609, 0.361158],
+        [0.323643, 0.361158],
+        [0.321863, 0.359899],
+        [0.321863, 0.358221],
+        [0.32038, 0.356963],
+        [0.320083, 0.353188],
+        [0.31949, 0.353188],
+        [0.319193, 0.35151],
+        [0.319193, 0.349413]
+      ],
+      "labelAnchor": [0.324384, 0.354237],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Block under pin 27 in the connected 25-38 megastructure; boundaries judged."
+    },
+    {
+      "hotspotId": "hs-pin-28",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "28",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.31326,
+        "y": 0.355076,
+        "rx": 0.003041,
+        "ry": 0.004299,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L17",
+            "section": "EDUCATION",
+            "labelAsPrinted": "BIOTECHNOLOGY",
+            "numbersAsPrinted": "28"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "28",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.31415, 0.352768],
+        [0.31682, 0.352768],
+        [0.317413, 0.353607],
+        [0.31949, 0.354027],
+        [0.319786, 0.357802],
+        [0.32127, 0.35906],
+        [0.32127, 0.366191],
+        [0.318896, 0.368708],
+        [0.31682, 0.368708],
+        [0.315633, 0.367869],
+        [0.314447, 0.366191],
+        [0.314447, 0.364933],
+        [0.312964, 0.364094],
+        [0.312964, 0.361158],
+        [0.312074, 0.360738],
+        [0.311777, 0.35948],
+        [0.311777, 0.354866]
+      ],
+      "labelAnchor": [0.316078, 0.358431],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Block under pin 28 in the connected 25-38 megastructure; boundaries judged."
+    },
+    {
+      "hotspotId": "hs-pin-29",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "29",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.308365,
+        "y": 0.363674,
+        "rx": 0.003041,
+        "ry": 0.004299,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L27",
+            "section": "ADMINISTRATIVE",
+            "labelAsPrinted": "ADMINISTRATIVE",
+            "numbersAsPrinted": "29"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "29",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.306141, 0.358221],
+        [0.308217, 0.358221],
+        [0.3097, 0.360319],
+        [0.312074, 0.361577],
+        [0.31237, 0.364933],
+        [0.313853, 0.365772],
+        [0.313853, 0.373322],
+        [0.309997, 0.376258],
+        [0.307031, 0.376258],
+        [0.305844, 0.375419],
+        [0.304361, 0.372483],
+        [0.304361, 0.369547],
+        [0.301988, 0.36703],
+        [0.301988, 0.364094],
+        [0.302877, 0.363674],
+        [0.304361, 0.360319]
+      ],
+      "labelAnchor": [0.308959, 0.369337],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Block under pin 29 in the connected 25-38 megastructure; boundaries judged."
+    },
+    {
+      "hotspotId": "hs-pin-30",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "30",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.298428,
+        "y": 0.369966,
+        "rx": 0.002966,
+        "ry": 0.004195,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L28",
+            "section": "ADMINISTRATIVE",
+            "labelAsPrinted": "PROCHANCELLOR",
+            "numbersAsPrinted": "30"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "30",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.294571, 0.364933],
+        [0.296945, 0.364933],
+        [0.296945, 0.365352],
+        [0.299318, 0.365772],
+        [0.303767, 0.370386],
+        [0.303767, 0.380034],
+        [0.303471, 0.380453],
+        [0.301691, 0.381292],
+        [0.301394, 0.382131],
+        [0.299318, 0.382131],
+        [0.299318, 0.381711],
+        [0.298428, 0.381711],
+        [0.296055, 0.380034],
+        [0.294868, 0.377936],
+        [0.293681, 0.377097],
+        [0.293088, 0.365772],
+        [0.294571, 0.365352]
+      ],
+      "labelAnchor": [0.298873, 0.373951],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Small block under pin 30 (blue right face); boundary with the stair block judged."
+    },
+    {
+      "hotspotId": "hs-pin-32",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "32",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.289825,
+        "y": 0.368079,
+        "rx": 0.003041,
+        "ry": 0.004299,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L31",
+            "section": "ADMINISTRATIVE",
+            "labelAsPrinted": "ADMISSION",
+            "numbersAsPrinted": "32"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "32",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.281904, 0.365478],
+        [0.286829, 0.361535],
+        [0.289232, 0.361284],
+        [0.292762, 0.364136],
+        [0.29294, 0.365982],
+        [0.289617, 0.368624],
+        [0.28941, 0.372273],
+        [0.289232, 0.383809],
+        [0.286087, 0.380663],
+        [0.281993, 0.375419]
+      ],
+      "labelAnchor": [0.285909, 0.368624],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Block under pin 32 left of the external stair; the stair itself is a separate unpinned hotspot."
+    },
+    {
+      "hotspotId": "hs-pin-33",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "33",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.284485,
+        "y": 0.356963,
+        "rx": 0.002966,
+        "ry": 0.004195,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L18",
+            "section": "EDUCATION",
+            "labelAsPrinted": "COMPUTER APPLICATION",
+            "numbersAsPrinted": "33"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "33",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.280332, 0.360319],
+        [0.282112, 0.360319],
+        [0.282112, 0.364094],
+        [0.281222, 0.364513],
+        [0.281222, 0.372483],
+        [0.278849, 0.372903],
+        [0.276179, 0.370805],
+        [0.276476, 0.363674],
+        [0.279739, 0.361577]
+      ],
+      "labelAnchor": [0.278701, 0.368498],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Pin 33 floats over the facade of the block under pin 36; the outline takes the small block with blue awnings below-left of the disc (where iso-art-087 puts 33). Ambiguous."
+    },
+    {
+      "hotspotId": "hs-pin-34",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "34",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.273064,
+        "y": 0.354237,
+        "rx": 0.003115,
+        "ry": 0.004404,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L19",
+            "section": "EDUCATION",
+            "labelAsPrinted": "COMPTER SCIENCE",
+            "numbersAsPrinted": "34"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "34",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.277366, 0.352768],
+        [0.279146, 0.352768],
+        [0.281519, 0.354866],
+        [0.281519, 0.35948],
+        [0.279739, 0.35948],
+        [0.279146, 0.360738],
+        [0.276179, 0.362416],
+        [0.275586, 0.36745],
+        [0.272916, 0.368289],
+        [0.270543, 0.366191],
+        [0.270543, 0.356963]
+      ],
+      "labelAnchor": [0.273658, 0.35969],
+      "confidence": "medium",
+      "reviewStatus": "traced",
+      "notes": "Left end block of the 25-38 megastructure under pin 34."
+    },
+    {
+      "hotspotId": "hs-pin-35",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "35",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.297686,
+        "y": 0.356963,
+        "rx": 0.003041,
+        "ry": 0.004299,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L33",
+            "section": "ADMINISTRATIVE",
+            "labelAsPrinted": "SHANTIDEVI AUDITORIUM",
+            "numbersAsPrinted": "35"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "35",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.296945, 0.348154],
+        [0.302877, 0.348574],
+        [0.306734, 0.351091],
+        [0.306734, 0.357383],
+        [0.304657, 0.358221],
+        [0.303174, 0.361577],
+        [0.301394, 0.363255],
+        [0.301098, 0.364933],
+        [0.298131, 0.364094],
+        [0.293385, 0.364513],
+        [0.293088, 0.362836],
+        [0.291012, 0.361577],
+        [0.290715, 0.357383],
+        [0.289825, 0.355705],
+        [0.290122, 0.351091],
+        [0.291902, 0.350671],
+        [0.292495, 0.349413],
+        [0.296351, 0.348993]
+      ],
+      "labelAnchor": [0.298576, 0.356334],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Curved arcaded facade and the dark sunken floor under pin 35; boundaries judged."
+    },
+    {
+      "hotspotId": "hs-pin-36",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "36",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.28671,
+        "y": 0.34375,
+        "rx": 0.003115,
+        "ry": 0.004404,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L20",
+            "section": "EDUCATION",
+            "labelAsPrinted": "ELECTRONIC TELECOM",
+            "numbersAsPrinted": "36"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "36",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.286858, 0.342701],
+        [0.291308, 0.343121],
+        [0.292791, 0.346477],
+        [0.292791, 0.348574],
+        [0.289528, 0.350252],
+        [0.289232, 0.356544],
+        [0.289825, 0.356963],
+        [0.290122, 0.360319],
+        [0.285969, 0.361158],
+        [0.282705, 0.360738],
+        [0.282705, 0.35948],
+        [0.282112, 0.35948],
+        [0.282112, 0.354027],
+        [0.280629, 0.352768],
+        [0.280629, 0.346477],
+        [0.285079, 0.343121]
+      ],
+      "labelAnchor": [0.285227, 0.350042],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Long back-left block under pin 36 (roof and front facade); boundaries judged."
+    },
+    {
+      "hotspotId": "hs-pin-37",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "37",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.298428,
+        "y": 0.341233,
+        "rx": 0.003041,
+        "ry": 0.004299,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L21",
+            "section": "EDUCATION",
+            "labelAsPrinted": "RESEARCH",
+            "numbersAsPrinted": "37"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "37",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.304064, 0.338926],
+        [0.306437, 0.338926],
+        [0.306141, 0.343121],
+        [0.305251, 0.34396],
+        [0.305251, 0.346896],
+        [0.304657, 0.348154],
+        [0.300504, 0.347315],
+        [0.293385, 0.348154],
+        [0.292791, 0.343121],
+        [0.294571, 0.341023]
+      ],
+      "labelAnchor": [0.302433, 0.343331],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "V-shaped roof section under pin 37; boundaries judged."
+    },
+    {
+      "hotspotId": "hs-pin-38",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "38",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.31326,
+        "y": 0.337878,
+        "rx": 0.003041,
+        "ry": 0.004299,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L22",
+            "section": "EDUCATION",
+            "labelAsPrinted": "CIVIL",
+            "numbersAsPrinted": "38"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "38",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "polygon": [
+        [0.324829, 0.33599],
+        [0.326313, 0.33599],
+        [0.326313, 0.338087],
+        [0.322456, 0.341443],
+        [0.32127, 0.347315],
+        [0.32038, 0.347315],
+        [0.318007, 0.349832],
+        [0.316523, 0.350252],
+        [0.315633, 0.35193],
+        [0.313557, 0.35193],
+        [0.31237, 0.352768],
+        [0.311184, 0.354027],
+        [0.311184, 0.355285],
+        [0.309997, 0.355705],
+        [0.30881, 0.357802],
+        [0.307327, 0.357802],
+        [0.307327, 0.350252],
+        [0.306141, 0.349413],
+        [0.305844, 0.347735],
+        [0.305844, 0.344799],
+        [0.306734, 0.34396],
+        [0.307031, 0.341023],
+        [0.30881, 0.339765],
+        [0.310294, 0.339765],
+        [0.310887, 0.338507],
+        [0.323346, 0.336829]
+      ],
+      "labelAnchor": [0.313408, 0.345008],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Long slab under pin 38 running to the right; boundaries judged."
+    },
+    {
+      "hotspotId": "hs-pin-41",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "41",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.31771,
+        "y": 0.305789,
+        "rx": 0.00445,
+        "ry": 0.006292,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L39",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "APARTMENT",
+            "numbersAsPrinted": "41,42, 43,44"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-059",
+            "number": "41",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-059/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.310976, 0.307592],
+        [0.315693, 0.304237],
+        [0.32655, 0.312164],
+        [0.32655, 0.322148],
+        [0.321863, 0.325629],
+        [0.310976, 0.317408]
+      ],
+      "labelAnchor": [0.31943, 0.315352],
+      "confidence": "medium",
+      "reviewStatus": "traced",
+      "notes": "Front-left slab of the four-slab group, under pin 41."
+    },
+    {
+      "hotspotId": "hs-pin-42",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "42",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.330169,
+        "y": 0.301384,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L39",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "APARTMENT",
+            "numbersAsPrinted": "41,42, 43,44"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-059",
+            "number": "42",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-059/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.323346, 0.297399],
+        [0.326313, 0.297819],
+        [0.335805, 0.306208],
+        [0.335509, 0.316275],
+        [0.334026, 0.316695],
+        [0.332246, 0.318792],
+        [0.329872, 0.318792],
+        [0.329279, 0.317534],
+        [0.327203, 0.316695],
+        [0.327203, 0.311242],
+        [0.320083, 0.306208],
+        [0.320083, 0.299916]
+      ],
+      "labelAnchor": [0.331207, 0.309354],
+      "confidence": "medium",
+      "reviewStatus": "traced",
+      "notes": "Second slab under pin 42 (its roof runs back behind 41)."
+    },
+    {
+      "hotspotId": "hs-pin-43",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "43",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.34337,
+        "y": 0.299497,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L39",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "APARTMENT",
+            "numbersAsPrinted": "41,42, 43,44"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-059",
+            "number": "43",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-059/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.332246, 0.290688],
+        [0.334026, 0.290688],
+        [0.334619, 0.291527],
+        [0.337882, 0.292366],
+        [0.338772, 0.294044],
+        [0.340255, 0.294463],
+        [0.342035, 0.29698],
+        [0.345595, 0.299077],
+        [0.347078, 0.301594],
+        [0.348561, 0.302013],
+        [0.348561, 0.312081],
+        [0.346485, 0.312919],
+        [0.345298, 0.315017],
+        [0.342925, 0.315017],
+        [0.339958, 0.312081],
+        [0.338475, 0.312081],
+        [0.336695, 0.310822],
+        [0.336399, 0.305369],
+        [0.328686, 0.298658],
+        [0.328686, 0.293624],
+        [0.331356, 0.292366]
+      ],
+      "labelAnchor": [0.342183, 0.305159],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Third slab under pin 43; its back roof strip vs 42/44 is judged."
+    },
+    {
+      "hotspotId": "hs-pin-44",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "44",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.34337,
+        "y": 0.28125,
+        "rx": 0.004301,
+        "ry": 0.006082,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L39",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "APARTMENT",
+            "numbersAsPrinted": "41,42, 43,44"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-059",
+            "number": "44",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-059/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.341442, 0.283138],
+        [0.345001, 0.283138],
+        [0.355088, 0.289849],
+        [0.355384, 0.299916],
+        [0.349155, 0.302433],
+        [0.349155, 0.301174],
+        [0.347671, 0.300755],
+        [0.346188, 0.298238],
+        [0.344705, 0.297819],
+        [0.340848, 0.293624],
+        [0.339365, 0.293205],
+        [0.338475, 0.291527],
+        [0.337585, 0.291527],
+        [0.337585, 0.286074]
+      ],
+      "labelAnchor": [0.350193, 0.294253],
+      "confidence": "medium",
+      "reviewStatus": "traced",
+      "notes": "Back-right slab under pin 44."
+    },
+    {
+      "hotspotId": "hs-pin-45",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "45",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.36369,
+        "y": 0.244337,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L40",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "BOYS HOSTEL",
+            "numbersAsPrinted": "45,48, 49,50, 51,53,52"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-063",
+            "number": "45",
+            "relation": "caption-heading",
+            "captionHeadingLabelId": "iso-art-063/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.341204, 0.249287],
+        [0.34693, 0.244799],
+        [0.349985, 0.242156],
+        [0.354346, 0.238339],
+        [0.357728, 0.235277],
+        [0.363453, 0.23146],
+        [0.375586, 0.24073],
+        [0.375586, 0.258347],
+        [0.369861, 0.262164],
+        [0.369742, 0.263591],
+        [0.364818, 0.267701],
+        [0.363127, 0.267869],
+        [0.360427, 0.265772],
+        [0.359745, 0.268834],
+        [0.353693, 0.272651],
+        [0.341204, 0.263591]
+      ],
+      "labelAnchor": [0.362711, 0.249706],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Three-block complex under pin 45 (iso-art-063 draws the same three blocks under one caption)."
+    },
+    {
+      "hotspotId": "hs-pin-47",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "47",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.311777,
+        "y": 0.27307,
+        "rx": 0.00445,
+        "ry": 0.006292,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L35",
+            "section": "ADMINISTRATIVE",
+            "labelAsPrinted": "INDOOR",
+            "numbersAsPrinted": "47"
+          }
+        ],
+        "vignettes": []
+      },
+      "polygon": [
+        [0.279353, 0.284773],
+        [0.316434, 0.254237],
+        [0.338831, 0.272777],
+        [0.338683, 0.277768],
+        [0.302403, 0.306544],
+        [0.279353, 0.28943]
+      ],
+      "labelAnchor": [0.316286, 0.275],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Large hall under pin 47 (the blue covered walkway in front is excluded)."
+    },
+    {
+      "hotspotId": "hs-pin-48",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "48",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.291902,
+        "y": 0.21875,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L40",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "BOYS HOSTEL",
+            "numbersAsPrinted": "45,48, 49,50, 51,53,52"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-067",
+            "number": "48",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-067/L1"
+          },
+          {
+            "assetId": "iso-art-119",
+            "number": "48",
+            "relation": "pin-drawn-in-scene"
+          }
+        ]
+      },
+      "polygon": [
+        [0.288015, 0.238045],
+        [0.288015, 0.224706],
+        [0.291931, 0.222777],
+        [0.296322, 0.222777],
+        [0.301365, 0.225168],
+        [0.304598, 0.228523],
+        [0.304598, 0.241401],
+        [0.299674, 0.24396]
+      ],
+      "labelAnchor": [0.29736, 0.233054],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Front-left block of the five-block chain; pin 48 sits over its back edge. iso-art-067 draws the chain under one caption for 48 and 49 and does not show where one ends."
+    },
+    {
+      "hotspotId": "hs-pin-49",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "49",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.307327,
+        "y": 0.21875,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L40",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "BOYS HOSTEL",
+            "numbersAsPrinted": "45,48, 49,50, 51,53,52"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-067",
+            "number": "49",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-067/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.312074, 0.205537],
+        [0.312964, 0.205537],
+        [0.315633, 0.209732],
+        [0.316227, 0.209732],
+        [0.31949, 0.214765],
+        [0.320676, 0.215604],
+        [0.320676, 0.229866],
+        [0.31682, 0.230705],
+        [0.312667, 0.228188],
+        [0.312667, 0.235738],
+        [0.3097, 0.237416],
+        [0.30792, 0.237416],
+        [0.305251, 0.235738],
+        [0.305251, 0.227768],
+        [0.301691, 0.223993],
+        [0.296351, 0.221896],
+        [0.296351, 0.217282],
+        [0.301988, 0.213926],
+        [0.303767, 0.211409],
+        [0.309107, 0.208473]
+      ],
+      "labelAnchor": [0.311035, 0.218331],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Second and third blocks of the chain; pin 49 straddles their junction. Partition judged."
+    },
+    {
+      "hotspotId": "hs-pin-50",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "50",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.360575,
+        "y": 0.165688,
+        "rx": 0.004524,
+        "ry": 0.006397,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L40",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "BOYS HOSTEL",
+            "numbersAsPrinted": "45,48, 49,50, 51,53,52"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-071",
+            "number": "50",
+            "relation": "caption-heading",
+            "captionHeadingLabelId": "iso-art-071/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.354227, 0.173826],
+        [0.359033, 0.169757],
+        [0.363839, 0.169505],
+        [0.366894, 0.174455],
+        [0.366894, 0.181837],
+        [0.361376, 0.186787],
+        [0.355532, 0.183347],
+        [0.354227, 0.181837]
+      ],
+      "labelAnchor": [0.360902, 0.177685],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Isolated block under pin 50."
+    },
+    {
+      "hotspotId": "hs-pin-51",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "51",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.28849,
+        "y": 0.169253,
+        "rx": 0.004301,
+        "ry": 0.006082,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L40",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "BOYS HOSTEL",
+            "numbersAsPrinted": "45,48, 49,50, 51,53,52"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-075",
+            "number": "51",
+            "relation": "caption-heading",
+            "captionHeadingLabelId": "iso-art-075/L1"
+          },
+          {
+            "assetId": "iso-art-119",
+            "number": "51",
+            "relation": "pin-drawn-in-scene"
+          }
+        ]
+      },
+      "polygon": [
+        [0.281815, 0.173951],
+        [0.288401, 0.16896],
+        [0.295402, 0.163842],
+        [0.299525, 0.161158],
+        [0.299703, 0.158599],
+        [0.304895, 0.155914],
+        [0.30712, 0.153356],
+        [0.316019, 0.14656],
+        [0.321359, 0.142869],
+        [0.330584, 0.150084],
+        [0.330851, 0.16057],
+        [0.327974, 0.16229],
+        [0.322041, 0.162878],
+        [0.321774, 0.168121],
+        [0.317235, 0.17047],
+        [0.313142, 0.170134],
+        [0.312726, 0.176888],
+        [0.308187, 0.177475],
+        [0.305725, 0.180956],
+        [0.299941, 0.183851],
+        [0.296648, 0.187374],
+        [0.291694, 0.191191],
+        [0.282231, 0.184438]
+      ],
+      "labelAnchor": [0.292346, 0.178314],
+      "confidence": "medium",
+      "reviewStatus": "traced",
+      "notes": "Whole stepped chain under pin 51 (iso-art-075 draws a multi-block chain under one caption). The small carport/solar structure behind it is excluded."
+    },
+    {
+      "hotspotId": "hs-pin-53",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "53",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.163601,
+        "y": 0.257131,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L40",
+            "section": "RESIDENTIAL",
+            "labelAsPrinted": "BOYS HOSTEL",
+            "numbersAsPrinted": "45,48, 49,50, 51,53,52"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-079",
+            "number": "53",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-079/L1"
+          },
+          {
+            "assetId": "iso-art-119",
+            "number": "53",
+            "relation": "pin-drawn-in-scene"
+          }
+        ]
+      },
+      "polygon": [
+        [0.154821, 0.266107],
+        [0.158529, 0.262626],
+        [0.163483, 0.26401],
+        [0.171729, 0.266611],
+        [0.17873, 0.269841],
+        [0.17873, 0.282676],
+        [0.172797, 0.288129],
+        [0.166538, 0.283012],
+        [0.16636, 0.280914],
+        [0.161436, 0.275084],
+        [0.155236, 0.270428]
+      ],
+      "labelAnchor": [0.172174, 0.276678],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Right-hand block under pin 53. iso-art-079 draws pin 53 on the back-left block and 54 on the right block, the opposite of the overview; kept side by side."
+    },
+    {
+      "hotspotId": "hs-pin-54",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "54",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.145654,
+        "y": 0.244547,
+        "rx": 0.00445,
+        "ry": 0.006292,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-079",
+            "number": "54",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-079/L1"
+          },
+          {
+            "assetId": "iso-art-119",
+            "number": "54",
+            "relation": "pin-drawn-in-scene"
+          }
+        ]
+      },
+      "polygon": [
+        [0.130199, 0.24073],
+        [0.135479, 0.236535],
+        [0.140403, 0.238381],
+        [0.142065, 0.239807],
+        [0.15129, 0.247483],
+        [0.151617, 0.263465],
+        [0.149481, 0.264723],
+        [0.14601, 0.264262],
+        [0.137526, 0.25646],
+        [0.130347, 0.250629]
+      ],
+      "labelAnchor": [0.144586, 0.252265],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Back tall block with sawtooth roof under pin 54. See the pin 53 note for the vignette conflict. Pin 54 has no row in the overview INFORMATION index."
+    },
+    {
+      "hotspotId": "hs-pin-56",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "56",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.102492,
+        "y": 0.217072,
+        "rx": 0.004301,
+        "ry": 0.006082,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L23",
+            "section": "EDUCATION",
+            "labelAsPrinted": "MECHANICAL",
+            "numbersAsPrinted": "56"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-083",
+            "number": "56",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-083/L3"
+          },
+          {
+            "assetId": "iso-art-119",
+            "number": "56",
+            "relation": "pin-drawn-in-scene"
+          }
+        ]
+      },
+      "polygon": [
+        [0.095669, 0.218372],
+        [0.109582, 0.217617],
+        [0.10976, 0.254698],
+        [0.095669, 0.252349],
+        [0.095491, 0.246183],
+        [0.091961, 0.245931],
+        [0.091783, 0.250755],
+        [0.085939, 0.248532],
+        [0.081964, 0.246183],
+        [0.081756, 0.24224],
+        [0.081756, 0.232802],
+        [0.091219, 0.230705],
+        [0.094008, 0.22781],
+        [0.095669, 0.22781]
+      ],
+      "labelAnchor": [0.101187, 0.237122],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Wedge block and the lower curved wing under pin 56. iso-art-083 and iso-art-119 place pins 55/56/57/58 differently on this crescent complex; kept side by side."
+    },
+    {
+      "hotspotId": "hs-pin-57",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "57",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.078167,
+        "y": 0.219379,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L24",
+            "section": "EDUCATION",
+            "labelAsPrinted": "POLYTECHINQUE",
+            "numbersAsPrinted": "57"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-083",
+            "number": "57",
+            "relation": "caption-heading-and-pin",
+            "captionHeadingLabelId": "iso-art-083/L5"
+          },
+          {
+            "assetId": "iso-art-119",
+            "number": "57",
+            "relation": "pin-drawn-in-scene"
+          }
+        ]
+      },
+      "polygon": [
+        [0.080688, 0.210151],
+        [0.084841, 0.210151],
+        [0.085138, 0.21099],
+        [0.089291, 0.213926],
+        [0.094037, 0.216443],
+        [0.094037, 0.22693],
+        [0.093147, 0.22693],
+        [0.090774, 0.229866],
+        [0.081282, 0.231963],
+        [0.081282, 0.24245],
+        [0.078315, 0.242869],
+        [0.070009, 0.236577],
+        [0.065559, 0.229446],
+        [0.064669, 0.223993],
+        [0.064669, 0.211409]
+      ],
+      "labelAnchor": [0.07431, 0.223784],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Middle curved block under pin 57. See the pin 56 note."
+    },
+    {
+      "hotspotId": "hs-pin-58",
+      "kind": "pin-structure",
+      "artworkLabel": {
+        "text": "58",
+        "source": "overview-pin",
+        "exact": true
+      },
+      "pin": {
+        "x": 0.081726,
+        "y": 0.19505,
+        "rx": 0.004376,
+        "ry": 0.006187,
+        "anchor": "disc-centre",
+        "style": "white disc with dark digits, no pointer tail"
+      },
+      "links": {
+        "indexRows": [
+          {
+            "labelId": "iso-art-001/L25",
+            "section": "EDUCATION",
+            "labelAsPrinted": "",
+            "numbersAsPrinted": "58"
+          },
+          {
+            "labelId": "iso-art-001/L36",
+            "section": "ADMINISTRATIVE",
+            "labelAsPrinted": "PROJECT LAB",
+            "numbersAsPrinted": "58"
+          }
+        ],
+        "vignettes": [
+          {
+            "assetId": "iso-art-119",
+            "number": "58",
+            "relation": "pin-drawn-in-scene"
+          }
+        ]
+      },
+      "polygon": [
+        [0.063483, 0.194631],
+        [0.076239, 0.194631],
+        [0.082765, 0.196728],
+        [0.085435, 0.198826],
+        [0.085731, 0.208893],
+        [0.064373, 0.21057]
+      ],
+      "labelAnchor": [0.069564, 0.202391],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Back curved block under pin 58; the attached west L-wing is a separate unassigned hotspot. See the pin 56 note."
+    },
+    {
+      "hotspotId": "hs-grp-25-27-annex",
+      "kind": "unassigned-structure",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "25",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": null
+          },
+          {
+            "assetId": "iso-art-087",
+            "number": "26",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": null
+          },
+          {
+            "assetId": "iso-art-087",
+            "number": "27",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": null
+          }
+        ]
+      },
+      "candidatePinNumbers": ["25", "26", "27"],
+      "polygon": [
+        [0.338475, 0.342701],
+        [0.341442, 0.34354],
+        [0.341442, 0.35193],
+        [0.337882, 0.355285],
+        [0.332839, 0.355705],
+        [0.332246, 0.352768],
+        [0.332246, 0.35151],
+        [0.332839, 0.35151],
+        [0.332839, 0.345638]
+      ],
+      "labelAnchor": [0.336844, 0.349622],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Lower annex with blue awnings between 25, 26 and 27, with no pin of its own."
+    },
+    {
+      "hotspotId": "hs-grp-48-49",
+      "kind": "unassigned-structure",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-067",
+            "number": "48",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": "iso-art-067/L1"
+          },
+          {
+            "assetId": "iso-art-067",
+            "number": "49",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": "iso-art-067/L1"
+          }
+        ]
+      },
+      "candidatePinNumbers": ["48", "49"],
+      "polygon": [
+        [0.332839, 0.184983],
+        [0.334915, 0.184983],
+        [0.339662, 0.189178],
+        [0.342035, 0.190017],
+        [0.342035, 0.200503],
+        [0.329872, 0.209312],
+        [0.329872, 0.222315],
+        [0.326906, 0.223574],
+        [0.323643, 0.223574],
+        [0.32305, 0.222315],
+        [0.32127, 0.221896],
+        [0.32127, 0.214765],
+        [0.32038, 0.214346],
+        [0.313853, 0.205537],
+        [0.313853, 0.203859],
+        [0.314743, 0.203859],
+        [0.31593, 0.201762],
+        [0.319193, 0.200084],
+        [0.320676, 0.197567],
+        [0.329576, 0.192534],
+        [0.330169, 0.191695],
+        [0.330169, 0.1875]
+      ],
+      "labelAnchor": [0.323791, 0.206586],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Remaining blocks of the 48/49 chain not under either pin. iso-art-067 captions the chain for 48 and 49 but does not show which blocks belong to which number."
+    },
+    {
+      "hotspotId": "hs-grp-53-54",
+      "kind": "unassigned-structure",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-079",
+            "number": "53",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": "iso-art-079/L1"
+          },
+          {
+            "assetId": "iso-art-079",
+            "number": "54",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": "iso-art-079/L1"
+          }
+        ]
+      },
+      "candidatePinNumbers": ["53", "54"],
+      "polygon": [
+        [0.123406, 0.246644],
+        [0.126075, 0.246644],
+        [0.128449, 0.248322],
+        [0.129635, 0.249581],
+        [0.129635, 0.251678],
+        [0.137051, 0.257131],
+        [0.145061, 0.265101],
+        [0.1504, 0.26552],
+        [0.151884, 0.264262],
+        [0.15396, 0.265101],
+        [0.154554, 0.271393],
+        [0.160783, 0.275587],
+        [0.165233, 0.28146],
+        [0.165826, 0.28146],
+        [0.165826, 0.283977],
+        [0.166419, 0.283977],
+        [0.166419, 0.294044],
+        [0.16375, 0.295302],
+        [0.16286, 0.29698],
+        [0.16108, 0.298238],
+        [0.159003, 0.298238],
+        [0.153664, 0.293624],
+        [0.153664, 0.303691],
+        [0.149214, 0.307886],
+        [0.146544, 0.307886],
+        [0.144468, 0.305369],
+        [0.141501, 0.304111],
+        [0.140611, 0.302433],
+        [0.138238, 0.301594],
+        [0.137348, 0.299916],
+        [0.131118, 0.295721],
+        [0.130822, 0.28146],
+        [0.127855, 0.280201],
+        [0.126965, 0.282299],
+        [0.123999, 0.283977],
+        [0.122516, 0.286493],
+        [0.119252, 0.286913],
+        [0.105013, 0.276846],
+        [0.104717, 0.261326],
+        [0.117473, 0.252517],
+        [0.118066, 0.251258],
+        [0.120736, 0.249581],
+        [0.121329, 0.248322],
+        [0.122812, 0.247903]
+      ],
+      "labelAnchor": [0.143429, 0.282928],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Remaining blocks of the 53/54 complex not under either pin (iso-art-079 draws the whole complex under one caption for 53 and 54)."
+    },
+    {
+      "hotspotId": "hs-grp-56-58-west-wing",
+      "kind": "unassigned-structure",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-083",
+            "number": "56",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": "iso-art-083/L3"
+          },
+          {
+            "assetId": "iso-art-083",
+            "number": "57",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": "iso-art-083/L5"
+          }
+        ]
+      },
+      "candidatePinNumbers": ["56", "57", "58"],
+      "polygon": [
+        [0.059923, 0.192534],
+        [0.062889, 0.192953],
+        [0.063779, 0.211829],
+        [0.05755, 0.215604],
+        [0.05755, 0.224413],
+        [0.04776, 0.228607],
+        [0.046277, 0.229866],
+        [0.043311, 0.229866],
+        [0.042124, 0.227768],
+        [0.039751, 0.226091],
+        [0.038268, 0.223993],
+        [0.037378, 0.223993],
+        [0.035894, 0.221896],
+        [0.036191, 0.212248],
+        [0.038268, 0.211409],
+        [0.040641, 0.208893],
+        [0.041531, 0.208893],
+        [0.042717, 0.206795],
+        [0.044201, 0.206376],
+        [0.04687, 0.20344],
+        [0.051023, 0.200923],
+        [0.051617, 0.199664],
+        [0.054287, 0.197987],
+        [0.05488, 0.196728],
+        [0.05755, 0.19547]
+      ],
+      "labelAnchor": [0.049095, 0.215814],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "West L-shaped wing attached to the back block under pin 58; no pin of its own."
+    },
+    {
+      "hotspotId": "hs-grp-9-12",
+      "kind": "unassigned-structure",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-031",
+            "number": "9",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": "iso-art-031/L1"
+          },
+          {
+            "assetId": "iso-art-031",
+            "number": "10",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": "iso-art-031/L1"
+          },
+          {
+            "assetId": "iso-art-031",
+            "number": "11",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": "iso-art-031/L1"
+          },
+          {
+            "assetId": "iso-art-031",
+            "number": "12",
+            "relation": "caption-covers-candidate-number",
+            "captionHeadingLabelId": "iso-art-031/L1"
+          }
+        ]
+      },
+      "candidatePinNumbers": ["9", "10", "11", "12"],
+      "polygon": [
+        [0.413527, 0.453859],
+        [0.414714, 0.453859],
+        [0.41501, 0.461409],
+        [0.42035, 0.465185],
+        [0.42035, 0.466443],
+        [0.412341, 0.46896],
+        [0.411747, 0.478188],
+        [0.406111, 0.478188],
+        [0.404331, 0.479027],
+        [0.403738, 0.486158],
+        [0.402255, 0.486158],
+        [0.396322, 0.480285],
+        [0.394245, 0.479446],
+        [0.394245, 0.473993],
+        [0.400178, 0.470218],
+        [0.400475, 0.467701],
+        [0.401365, 0.466023],
+        [0.408187, 0.462248],
+        [0.408484, 0.458893]
+      ],
+      "labelAnchor": [0.406853, 0.470847],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Chain of small blocks between 12 and 11 with no pin of its own (iso-art-031 draws them inside the 9-12 group)."
+    },
+    {
+      "hotspotId": "hs-unpinned-red-building",
+      "kind": "unpinned-structure",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-107",
+            "number": "5",
+            "relation": "vignette-pin-visual-correspondence"
+          }
+        ]
+      },
+      "vignettePinNumbers": ["5"],
+      "polygon": [
+        [0.347998, 0.595973],
+        [0.356422, 0.590814],
+        [0.365114, 0.596938],
+        [0.365114, 0.6013],
+        [0.384278, 0.616946],
+        [0.384278, 0.628691],
+        [0.376505, 0.63469],
+        [0.35666, 0.61854],
+        [0.348205, 0.613045]
+      ],
+      "labelAnchor": [0.356749, 0.604866],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Red two-part building across the road from the tree-grid garden. The overview has no pin 5; iso-art-107 draws pin 5 on a red building corner in a matching position. Visual correspondence only."
+    },
+    {
+      "hotspotId": "hs-unpinned-stair-block",
+      "kind": "unpinned-structure",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-087",
+            "number": "31",
+            "relation": "vignette-pin-visual-correspondence"
+          }
+        ]
+      },
+      "vignettePinNumbers": ["31"],
+      "polygon": [
+        [0.291308, 0.368289],
+        [0.292495, 0.368289],
+        [0.292791, 0.369547],
+        [0.293088, 0.377936],
+        [0.293978, 0.378356],
+        [0.295758, 0.381292],
+        [0.298724, 0.38255],
+        [0.298724, 0.384228],
+        [0.289825, 0.383809],
+        [0.290122, 0.369547]
+      ],
+      "labelAnchor": [0.29205, 0.380663],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "External stair block between 32 and 30. The overview has no pin 31; iso-art-087 draws pin 31 at about this position. Visual correspondence only."
+    },
+    {
+      "hotspotId": "hs-scene-courts",
+      "kind": "scene",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-119",
+            "relation": "scene-visual-correspondence",
+            "sceneCaptionLabelId": "iso-art-119/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.162385, 0.206628],
+        [0.187363, 0.18125],
+        [0.205785, 0.183473],
+        [0.240433, 0.208851],
+        [0.240433, 0.222525],
+        [0.211243, 0.241946],
+        [0.201098, 0.244631],
+        [0.18315, 0.227601]
+      ],
+      "labelAnchor": [0.204657, 0.214178],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Drawn group of tennis and basketball courts. Unlabelled on the overview; also drawn in iso-art-119."
+    },
+    {
+      "hotspotId": "hs-scene-garden-grid",
+      "kind": "scene",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-107",
+            "relation": "scene-visual-correspondence",
+            "sceneCaptionLabelId": "iso-art-107/L1"
+          }
+        ]
+      },
+      "legendLabelIds": ["iso-art-001/L41"],
+      "polygon": [
+        [0.405814, 0.558725],
+        [0.407891, 0.558725],
+        [0.409077, 0.559564],
+        [0.411747, 0.5625],
+        [0.413824, 0.563339],
+        [0.41501, 0.565436],
+        [0.41679, 0.565856],
+        [0.417384, 0.567114],
+        [0.418867, 0.567534],
+        [0.419757, 0.569211],
+        [0.422723, 0.570889],
+        [0.42302, 0.582634],
+        [0.42035, 0.582634],
+        [0.41323, 0.576762],
+        [0.411747, 0.576762],
+        [0.401661, 0.588087],
+        [0.402255, 0.613255],
+        [0.398398, 0.614513],
+        [0.396025, 0.616611],
+        [0.393652, 0.616611],
+        [0.391575, 0.614094],
+        [0.389795, 0.613674],
+        [0.389202, 0.612416],
+        [0.387719, 0.611997],
+        [0.386829, 0.610319],
+        [0.385049, 0.609899],
+        [0.384456, 0.608641],
+        [0.382972, 0.608221],
+        [0.382082, 0.606544],
+        [0.380303, 0.606124],
+        [0.379709, 0.604866],
+        [0.378226, 0.604446],
+        [0.377336, 0.602768],
+        [0.375556, 0.602349],
+        [0.374963, 0.601091],
+        [0.37348, 0.600671],
+        [0.37259, 0.598993],
+        [0.37081, 0.598574],
+        [0.36992, 0.596896],
+        [0.36547, 0.59396],
+        [0.366063, 0.591023],
+        [0.367843, 0.590604],
+        [0.36903, 0.588507],
+        [0.375556, 0.584312],
+        [0.376743, 0.582215],
+        [0.378819, 0.581376],
+        [0.381489, 0.57844],
+        [0.383269, 0.57802],
+        [0.384456, 0.575923],
+        [0.386532, 0.575084],
+        [0.389202, 0.572148],
+        [0.390982, 0.571728],
+        [0.392168, 0.569631],
+        [0.394245, 0.568792],
+        [0.394838, 0.567534],
+        [0.396322, 0.567114],
+        [0.396915, 0.565856],
+        [0.398398, 0.565436],
+        [0.400475, 0.562919],
+        [0.401958, 0.5625],
+        [0.402551, 0.561242],
+        [0.404034, 0.560822]
+      ],
+      "labelAnchor": [0.389647, 0.592911],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Garden with a regular grid of trees beside the building under pin 4 (the part hidden behind that building is excluded). Unlabelled; appears in iso-art-107."
+    },
+    {
+      "hotspotId": "hs-scene-gate-pylon",
+      "kind": "scene",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-091",
+            "relation": "scene-visual-correspondence",
+            "sceneCaptionLabelId": "iso-art-091/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.593177, 0.803775],
+        [0.597182, 0.799245],
+        [0.607446, 0.806963],
+        [0.61771, 0.79568],
+        [0.624562, 0.794086],
+        [0.637674, 0.793289],
+        [0.637674, 0.774706],
+        [0.640522, 0.772777],
+        [0.643044, 0.774706],
+        [0.643044, 0.803775],
+        [0.64509, 0.806166],
+        [0.639395, 0.811829],
+        [0.619994, 0.826342],
+        [0.617146, 0.823112],
+        [0.613705, 0.825545],
+        [0.593177, 0.811829]
+      ],
+      "labelAnchor": [0.621804, 0.80906],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Second gate with a slim pylon and low red buildings. Small text on the canopy is illegible and not transcribed."
+    },
+    {
+      "hotspotId": "hs-scene-gate-tower",
+      "kind": "scene",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-091",
+            "relation": "scene-visual-correspondence",
+            "sceneCaptionLabelId": "iso-art-091/L1"
+          },
+          {
+            "assetId": "iso-art-095",
+            "relation": "scene-visual-correspondence",
+            "sceneCaptionLabelId": "iso-art-095/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.649422, 0.748112],
+        [0.666538, 0.735193],
+        [0.666538, 0.713716],
+        [0.67078, 0.705327],
+        [0.67612, 0.709396],
+        [0.67612, 0.73729],
+        [0.679324, 0.73922],
+        [0.679324, 0.748574],
+        [0.66906, 0.755369],
+        [0.657075, 0.765856],
+        [0.649659, 0.761493]
+      ],
+      "labelAnchor": [0.656689, 0.754195],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Tall gate tower with emblem and the gate canopy. Small text on the tower and canopy is illegible and not transcribed."
+    },
+    {
+      "hotspotId": "hs-scene-lawn-tree",
+      "kind": "scene",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-099",
+            "relation": "scene-visual-correspondence",
+            "sceneCaptionLabelId": "iso-art-099/L1"
+          },
+          {
+            "assetId": "iso-art-095",
+            "relation": "scene-visual-correspondence",
+            "sceneCaptionLabelId": "iso-art-095/L1"
+          }
+        ]
+      },
+      "legendLabelIds": ["iso-art-001/L41"],
+      "polygon": [
+        [0.512637, 0.629992],
+        [0.554376, 0.597232],
+        [0.638179, 0.6638],
+        [0.600712, 0.697903]
+      ],
+      "labelAnchor": [0.554316, 0.62974],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Lawn with one large tree, benches and a small red hut, with a grey path along its lower edge. Unlabelled; appears in iso-art-099 and iso-art-095."
+    },
+    {
+      "hotspotId": "hs-scene-oval-ground",
+      "kind": "scene",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-119",
+            "number": "52",
+            "relation": "vignette-pin-visual-correspondence"
+          }
+        ]
+      },
+      "vignettePinNumbers": ["52"],
+      "legendLabelIds": ["iso-art-001/L41"],
+      "polygon": [
+        [0.194542, 0.138213],
+        [0.196114, 0.128943],
+        [0.200326, 0.121644],
+        [0.208128, 0.114597],
+        [0.217502, 0.111032],
+        [0.227648, 0.109941],
+        [0.238564, 0.111032],
+        [0.24871, 0.114346],
+        [0.260427, 0.121183],
+        [0.270098, 0.129362],
+        [0.277603, 0.138213],
+        [0.281489, 0.148154],
+        [0.281193, 0.158515],
+        [0.277603, 0.167324],
+        [0.270573, 0.174832],
+        [0.260427, 0.179279],
+        [0.247938, 0.18104],
+        [0.235449, 0.179279],
+        [0.222961, 0.174832],
+        [0.212014, 0.168247],
+        [0.20267, 0.159857],
+        [0.197182, 0.151007]
+      ],
+      "labelAnchor": [0.239187, 0.145805],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Drawn oval track with a pitch strip inside the large green field. No pin on the overview; iso-art-119 draws pin 52 on it. Visual correspondence only."
+    },
+    {
+      "hotspotId": "hs-scene-parking-admin",
+      "kind": "scene",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": []
+      },
+      "legendLabelIds": ["iso-art-001/L44"],
+      "polygon": [
+        [0.248146, 0.382215],
+        [0.265263, 0.367659],
+        [0.312044, 0.403985],
+        [0.296648, 0.423322]
+      ],
+      "labelAnchor": [0.294868, 0.40604],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Parking lot drawn below the 25-38 megastructure. Unlabelled; legend colour key only."
+    },
+    {
+      "hotspotId": "hs-scene-parking-east",
+      "kind": "scene",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-095",
+            "relation": "scene-visual-correspondence",
+            "sceneCaptionLabelId": "iso-art-095/L1"
+          }
+        ]
+      },
+      "legendLabelIds": ["iso-art-001/L44"],
+      "polygon": [
+        [0.623376, 0.645763],
+        [0.670424, 0.607802],
+        [0.736399, 0.660738],
+        [0.689766, 0.702685]
+      ],
+      "labelAnchor": [0.689083, 0.662122],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Large parking lot near the gate tower. Unlabelled; legend colour key and the iso-art-095 scene."
+    },
+    {
+      "hotspotId": "hs-scene-parking-nw",
+      "kind": "scene",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-119",
+            "relation": "scene-visual-correspondence",
+            "sceneCaptionLabelId": "iso-art-119/L1"
+          }
+        ]
+      },
+      "legendLabelIds": ["iso-art-001/L44"],
+      "polygon": [
+        [0.072234, 0.186745],
+        [0.125096, 0.144086],
+        [0.136725, 0.151384],
+        [0.086414, 0.193331]
+      ],
+      "labelAnchor": [0.086028, 0.184564],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Strip of parked cars on the dark parking colour along the outer road. Unlabelled; the legend colour key is the only text link."
+    },
+    {
+      "hotspotId": "hs-scene-pavilion",
+      "kind": "scene",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-111",
+            "number": "16",
+            "relation": "vignette-pin-visual-correspondence"
+          },
+          {
+            "assetId": "iso-art-115",
+            "number": "16",
+            "relation": "vignette-pin-visual-correspondence"
+          }
+        ]
+      },
+      "vignettePinNumbers": ["16"],
+      "polygon": [
+        [0.355088, 0.401426],
+        [0.358944, 0.401426],
+        [0.361317, 0.403104],
+        [0.362207, 0.404782],
+        [0.367547, 0.407718],
+        [0.368437, 0.409396],
+        [0.373776, 0.412332],
+        [0.374666, 0.41401],
+        [0.380006, 0.416946],
+        [0.380896, 0.418624],
+        [0.385049, 0.420721],
+        [0.386532, 0.422819],
+        [0.392168, 0.426594],
+        [0.392168, 0.428691],
+        [0.391575, 0.428691],
+        [0.390685, 0.430369],
+        [0.389202, 0.430789],
+        [0.388312, 0.432466],
+        [0.386829, 0.432886],
+        [0.383566, 0.436661],
+        [0.382082, 0.437081],
+        [0.381489, 0.438339],
+        [0.366657, 0.449664],
+        [0.366953, 0.465185],
+        [0.36547, 0.465185],
+        [0.352714, 0.450084],
+        [0.351824, 0.450084],
+        [0.345001, 0.440436],
+        [0.344705, 0.437081],
+        [0.343815, 0.435403],
+        [0.343518, 0.431208],
+        [0.342925, 0.430789],
+        [0.342925, 0.428272],
+        [0.342332, 0.427852],
+        [0.342332, 0.425336],
+        [0.341738, 0.424916],
+        [0.341145, 0.419463],
+        [0.339069, 0.416946],
+        [0.336992, 0.415688],
+        [0.337289, 0.412752],
+        [0.339069, 0.412332],
+        [0.339958, 0.410654],
+        [0.341738, 0.410235],
+        [0.342628, 0.408557],
+        [0.344408, 0.408138],
+        [0.345298, 0.40646],
+        [0.347078, 0.40604],
+        [0.347968, 0.404362],
+        [0.349748, 0.403943],
+        [0.351231, 0.401846]
+      ],
+      "labelAnchor": [0.359982, 0.428901],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Large grey perforated roof on columns with solar panels beside 15. No pin on the overview; iso-art-111 (byte-identical duplicate iso-art-115) draws pin 16 on the same roof. Visual correspondence only."
+    },
+    {
+      "hotspotId": "hs-scene-statue-garden",
+      "kind": "scene",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-099",
+            "relation": "scene-visual-correspondence",
+            "sceneCaptionLabelId": "iso-art-099/L1"
+          }
+        ]
+      },
+      "legendLabelIds": ["iso-art-001/L41"],
+      "polygon": [
+        [0.491338, 0.680327],
+        [0.515811, 0.660151],
+        [0.515811, 0.639178],
+        [0.523761, 0.639178],
+        [0.523761, 0.653314],
+        [0.583091, 0.698658],
+        [0.548799, 0.727517]
+      ],
+      "labelAnchor": [0.547256, 0.698532],
+      "confidence": "medium",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Square garden with a statue on a plinth and the flagpole at its back corner. Unlabelled; appears in iso-art-099."
+    },
+    {
+      "hotspotId": "hs-scene-walled-lawn",
+      "kind": "scene",
+      "artworkLabel": null,
+      "links": {
+        "indexRows": [],
+        "vignettes": [
+          {
+            "assetId": "iso-art-103",
+            "relation": "scene-visual-correspondence",
+            "sceneCaptionLabelId": "iso-art-103/L1"
+          }
+        ]
+      },
+      "polygon": [
+        [0.440522, 0.628356],
+        [0.442599, 0.629195],
+        [0.442895, 0.630034],
+        [0.445268, 0.631292],
+        [0.447642, 0.633809],
+        [0.465144, 0.647232],
+        [0.464551, 0.651007],
+        [0.453278, 0.654362],
+        [0.441709, 0.654362],
+        [0.433699, 0.650168],
+        [0.433699, 0.643456],
+        [0.428953, 0.640101],
+        [0.428953, 0.638842]
+      ],
+      "labelAnchor": [0.441857, 0.641988],
+      "confidence": "low",
+      "reviewStatus": "needs-manual-verification",
+      "notes": "Walled lawn with trees and a paved patch between the tower of 2 and the road. Unlabelled on the overview; iso-art-103 shows a similar walled lawn. Its caption must not be used as a place name without independent confirmation."
+    },
+    {
+      "hotspotId": "hs-text-lpu-letters",
+      "kind": "printed-text",
+      "artworkLabel": {
+        "text": "LPU",
+        "source": "overview-printed-text",
+        "exact": true
+      },
+      "links": {
+        "indexRows": [],
+        "vignettes": []
+      },
+      "polygon": [
+        [0.36191, 0.466023],
+        [0.367547, 0.466023],
+        [0.367547, 0.470218],
+        [0.36191, 0.470218]
+      ],
+      "labelAnchor": [0.363245, 0.467911],
+      "confidence": "high",
+      "reviewStatus": "traced",
+      "notes": "Orange letters printed on the ground beside 15, read at 20x zoom. A smaller line of text under them is illegible and not transcribed."
+    }
+  ],
+  "overviewIndexNumbersWithoutOverviewPin": ["19", "31", "21A", "21B", "52"],
+  "overviewPinsWithoutIndexRow": ["14", "21", "54"],
+  "vignetteNumbersNotPlacedOnOverview": [
+    {
+      "number": "19",
+      "assets": ["iso-art-051"],
+      "note": "iso-art-051 draws 19 on the same connected mass as 20 and 21; the overview complex under pin 20 may include it, but no boundary is drawn. Not placed."
+    },
+    {
+      "number": "22",
+      "assets": ["iso-art-055"],
+      "note": "No overview pin; position on the overview unknown. Not placed."
+    },
+    {
+      "number": "23",
+      "assets": ["iso-art-055"],
+      "note": "No overview pin; position on the overview unknown. Not placed."
+    },
+    {
+      "number": "55",
+      "assets": ["iso-art-083", "iso-art-119"],
+      "note": "Drawn on the crescent complex that carries overview pins 56-58; which overview outline it corresponds to is ambiguous. Not placed."
+    }
+  ],
+  "qa": {
+    "checkedAt": "2026-10-24",
+    "method": "Pin discs found by an automated white-disc scan of the original (45 discs, each within 3.6 px of the inventory pin centre) and read at 4x. Outlines traced in source pixels on 2.6x-8x gridded crops, normalised, then re-rendered over the original at 0.5x-5x and inspected.",
+    "hotspotCount": 65,
+    "polygonsNotSimple": [],
+    "polygonsOutOfBounds": [],
+    "overlaps": [],
+    "indexNumbersWithOverviewPinMissingHotspot": [],
+    "pinDiscCentreOutsideOutlinePx": {
+      "1": 0.4,
+      "2": 6,
+      "4": 9.2,
+      "8": 6.4,
+      "11": 1.2,
+      "18": 0.8,
+      "20": 8.4,
+      "21": 10.8,
+      "25": 2.6,
+      "33": 11.3,
+      "34": 2.6,
+      "38": 0.7,
+      "44": 4.5,
+      "48": 9.6,
+      "50": 9.5,
+      "53": 16.2,
+      "56": 2.2,
+      "58": 3.1
+    }
+  }
+}

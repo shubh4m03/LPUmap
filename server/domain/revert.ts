@@ -34,6 +34,7 @@ const ENTITY_TYPES: readonly AuditEntityType[] = [
   'system',
   'building',
   'template',
+  'artwork',
 ];
 
 export function listAudit(db: SqlDatabase, filter: Record<string, unknown> = {}) {

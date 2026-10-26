@@ -44,7 +44,8 @@ listed under [Known limitations](#known-limitations).
 - Five view modes in one "View mode" switcher in the map controls (or the `?view=` deep link):
   **Satellite map** (`satellite`), **Photorealistic 3D** (`earth`, always unavailable, see below),
   **3D map** (`3d`: our buildings and owner-placed models, on satellite imagery when it is
-  configured), **Isometric overview** (`iso`: a Canvas2D drawing that needs no WebGL) and **2D map**
+  configured), **Isometric overview** (`iso`: the Illustrated overview by default, or a Canvas2D
+  map-accurate drawing; neither needs WebGL) and **2D map**
   (`2d`). Selection, search, saved places and the planned route are shared: switching keeps the
   selected building and opens on the same ground point. The app starts in 3D on screens 768 px and
   wider and in 2D on phones. A mode that cannot be used stays visible with its reason (a toast and
@@ -54,6 +55,24 @@ listed under [Known limitations](#known-limitations).
   announces it. A deep link to an
   unavailable mode is ignored and dropped from the URL. A "Back to campus" button appears whenever
   the campus is off screen.
+- The **Illustrated overview** is the default style of the isometric mode (`?view=iso`, or
+  `?view=iso&iso=art`); an "Overview style" switch, or `&iso=map`, gives the **Map-accurate**
+  drawing above. It shows the owner-supplied campus illustration
+  (`lpu-isometric-map-design/`, used with the owner's statement that they own or are authorised to
+  use it) exactly as drawn: never redrawn, recoloured, stretched or cropped. Buildings are clickable
+  outlines traced on the original artwork and stored in normalized image coordinates, so the image
+  and the outlines always move with one transform (zoom, pan, pinch, keyboard, resize). A notice
+  says "Illustration — not to scale; positions are schematic": it is a 2D drawing, not a rotatable
+  model and not a geographic source, so it never plans routes or picks points (both switch to the
+  map and say why). Every printed label is shown exactly as printed, typos included
+  (`SCHOOL OF CIVIL INGNEERING`, `GIRLS HOSTAL`); corrected spellings are search aliases only, and
+  numbers printed on the artwork are never presented as official LPU block numbers. A detail card
+  shows the labels, the original block vignette and the link status: **Verified link to the map**
+  (only with recorded owner or official evidence — none yet), **Unconfirmed match** (a reviewed
+  candidate footprint, never routed) or **Not linked to a map building**. The directory can group
+  by the illustration's own printed block captions, and search finds items by label or number
+  ("Block 25", "BLOCK-25", "25"). A verified item and its building share one stable id in every
+  view. If the artwork cannot load, the map-accurate drawing is shown with the reason.
 - The 3D legend separates the height sources: measured heights (`height` tag, none in the current
   snapshot), heights estimated from `building:levels`, placeholder heights, and owner-placed models.
 - Layer groups (academic, residences, food, study, health, ATMs, sports, transport and others), a
@@ -197,19 +216,22 @@ npm run preview        # http://localhost:4173 (strict port)
 
 ## Testing
 
-| Command                    | What it runs                                                                                                                                   |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm test`                 | All Vitest suites (unit + integration) in jsdom                                                                                                |
-| `npm run test:unit`        | `tests/unit` only                                                                                                                              |
-| `npm run test:integration` | `tests/integration` only (data pipeline on a synthetic snapshot and on the real committed snapshot)                                            |
-| `npm run test:e2e`         | Playwright against `vite preview` on port 4173 plus a local real-handler backend, in five viewports (needs a prior `vite build`)               |
-| `npm run test:server`      | Server suites (`vitest.server.config.ts`): handlers, domain, auth, studio and red-team tests on a local in-memory D1                           |
-| `npm run test:a11y`        | Only the Playwright specs tagged `@a11y` (axe checks)                                                                                          |
-| `npm run smoke`            | `scripts/smoke.ts`: checks the built `dist/` (HTML shell, web manifest, service worker, shipped dataset, a real search and route, secret scan) |
-| `npm run check`            | The full gate: `format:check` → `lint` → `typecheck` → `test` → `data:check` → `vite build` → `smoke` → `test:e2e`                             |
-| `npm run typecheck`        | `tsc --noEmit`                                                                                                                                 |
-| `npm run lint`             | `eslint . --max-warnings=0`                                                                                                                    |
-| `npm run format:check`     | `prettier --check .`                                                                                                                           |
+| Command                             | What it runs                                                                                                                                                        |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm test`                          | All Vitest suites (unit + integration) in jsdom                                                                                                                     |
+| `npm run test:unit`                 | `tests/unit` only                                                                                                                                                   |
+| `npm run test:integration`          | `tests/integration` only (data pipeline on a synthetic snapshot and on the real committed snapshot)                                                                 |
+| `npm run test:e2e`                  | Playwright against `vite preview` on port 4173 plus a local real-handler backend, in five viewports (needs a prior `vite build`)                                    |
+| `npm run test:server`               | Server suites (`vitest.server.config.ts`): handlers, domain, auth, studio and red-team tests on a local in-memory D1                                                |
+| `npm run test:a11y`                 | Only the Playwright specs tagged `@a11y` (axe checks)                                                                                                               |
+| `npm run smoke`                     | `scripts/smoke.ts`: checks the built `dist/` (HTML shell, web manifest, service worker, shipped dataset, a real search and route, secret scan)                      |
+| `npm run check`                     | The full gate: `format:check` → `lint` → `typecheck` → `test` → `data:check` → `art:check` → `vite build` → `art:check-dist` → `smoke` → `test:e2e`                 |
+| `npm run art:check`                 | Campus illustration: validates inventory, hotspots and registry, original sha256s, and that the committed `public/isometric-art/` outputs are current (no Chromium) |
+| `npm run art:build`                 | Regenerates `public/isometric-art/manifest.json`, the published originals and `docs/LPU_ISOMETRIC_ASSET_MAPPING.md` (deterministic)                                 |
+| `npm run art:derive` / `art:verify` | Dev only (Playwright Chromium): makes / re-checks the derived WebP copies of the master and their visual equivalence with the original                              |
+| `npm run typecheck`                 | `tsc --noEmit`                                                                                                                                                      |
+| `npm run lint`                      | `eslint . --max-warnings=0`                                                                                                                                         |
+| `npm run format:check`              | `prettier --check .`                                                                                                                                                |
 
 CI (`.github/workflows/ci.yml`) runs the same gates on every push and pull request. It also checks
 that rebuilding the data leaves `public/data` unchanged, and audits production dependencies.
@@ -221,7 +243,8 @@ npx playwright install chromium
 ```
 
 Load the app with `?e2e=1` to expose read-only test hooks: `window.__ATLAS_MAP__` (camera,
-selection, route, layer and Realistic-3D state) and, in the overview, `window.__ATLAS_ISO__`. They
+selection, route, layer and Realistic-3D state), in the overview `window.__ATLAS_ISO__`, and in the
+Illustrated overview `window.__ATLAS_ART__` (transform, stage, hotspots, selection, image files). They
 never report user coordinates. See [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md).
 
 The e2e suite never talks to a live or remote backend. The admin, suggestion and Building Studio
@@ -324,7 +347,7 @@ database. The public map does not need them. The full runbook is
 [docs/ADMIN_OPERATIONS.md](docs/ADMIN_OPERATIONS.md); in short:
 
 1. `npx wrangler d1 create lpu-atlas`, put the id in `wrangler.toml`, then apply
-   `migrations/0001_initial.sql` and `0002_building_studio.sql` with
+   `migrations/0001_initial.sql`, `0002_building_studio.sql` and `0003_artwork_associations.sql` with
    `npx wrangler d1 migrations apply lpu-atlas --remote` (`npm run db:migrate:local` for local
    development). Rollback is in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#d1-migrations-rollback).
 2. Choose **one** `AUTH_MODE`. Without it every `/api/admin/**` endpoint answers 503 (fail closed).
@@ -350,17 +373,33 @@ acknowledgement with a reason. Published models appear in the 3D map, the isomet
 and the directory, always labelled as owner-placed. Archive hides a model and can be undone; delete
 needs the typed id.
 
+**Verifying the campus illustration (Admin → Artwork).** Open `/admin/artwork` and sign in. The list
+shows every item of the illustration (82: numbered buildings, scenes and unlabelled areas) with its
+exact printed label and status — Verified, Unconfirmed match or Unresolved — filterable and
+searchable by label, number or id. An item page shows the printed labels with their source, the
+original overview with the item's outline (a dashed outline still needs manual review), the original
+vignettes, the reviewed candidate footprints on the campus map, and the change history. To link an
+item, choose **Verified**, pick the campus building ("Use this building" on a candidate, or click
+the map) and add at least one piece of evidence: a sign seen on site, an official document (with
+its URL) or your own statement, each with a date. **Unconfirmed match** needs a private note saying
+why, and is shown to the public only as "Unconfirmed match", never routed. Saving is audited and
+republishes at once; a stale page is refused with the current version. "Reset to the curated
+baseline" removes your decision (also audited). Decisions live only in D1, so regenerating the
+artwork files never overwrites them. The Building Studio inspector shows, read-only, which
+illustration items are linked to the open building. Nothing in the admin changes an artwork file.
+
 **Where to read more (owner tools):**
 
-| Topic                                                                           | Document                                                                                                                                  |
-| ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| First-time setup, sign-in modes, moderation, recovery, credentials, privacy     | [docs/ADMIN_OPERATIONS.md](docs/ADMIN_OPERATIONS.md) (§1 setup, §2 moderation, §6 recovery, §7 credentials, §8 rate limits and IP hashes) |
-| Hosting, headers, D1 migrations and rollback                                    | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                                                                                                  |
-| Building Studio: records, templates, validation, publishing, text rules         | [docs/BUILDING_STUDIO_DESIGN.md](docs/BUILDING_STUDIO_DESIGN.md)                                                                          |
-| Suggestions, moderation, honeypot, merge rules (off-campus places never routed) | [docs/COMMUNITY_MODULE_CONTRACTS.md](docs/COMMUNITY_MODULE_CONTRACTS.md)                                                                  |
-| Optional imagery keys and what each one contacts                                | [docs/MAP_PROVIDER_CONFIGURATION.md](docs/MAP_PROVIDER_CONFIGURATION.md)                                                                  |
-| Security and privacy model                                                      | [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md)                                                                              |
-| What is built, tested and still open                                            | [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md)                                                                            |
+| Topic                                                                             | Document                                                                                                                                  |
+| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| First-time setup, sign-in modes, moderation, recovery, credentials, privacy       | [docs/ADMIN_OPERATIONS.md](docs/ADMIN_OPERATIONS.md) (§1 setup, §2 moderation, §6 recovery, §7 credentials, §8 rate limits and IP hashes) |
+| Hosting, headers, D1 migrations and rollback                                      | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                                                                                                  |
+| Building Studio: records, templates, validation, publishing, text rules           | [docs/BUILDING_STUDIO_DESIGN.md](docs/BUILDING_STUDIO_DESIGN.md)                                                                          |
+| Suggestions, moderation, honeypot, merge rules (off-campus places never routed)   | [docs/COMMUNITY_MODULE_CONTRACTS.md](docs/COMMUNITY_MODULE_CONTRACTS.md)                                                                  |
+| Optional imagery keys and what each one contacts                                  | [docs/MAP_PROVIDER_CONFIGURATION.md](docs/MAP_PROVIDER_CONFIGURATION.md)                                                                  |
+| Security and privacy model                                                        | [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md)                                                                              |
+| Campus illustration: assets, labels, hotspots, owner verification, migration 0003 | [docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md](docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md)                                                        |
+| What is built, tested and still open                                              | [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md)                                                                            |
 
 ## Deployment
 
@@ -421,6 +460,11 @@ from the OSM snapshot of 2026-10-23) and from the module reviews. The module doc
 - **Imported, not verified.** Every record is `imported`. No physical survey has been done.
 - **GPS behaviour has been tested only with simulated positions** (jsdom and Playwright). The
   real-device checks still open are listed in [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md#what-needs-human-or-on-device-verification).
+- **Campus illustration links.** No illustration item is verified yet: 19 are "Unconfirmed match"
+  (reviewed candidate footprints) and 63 are unresolved, until the owner records evidence in
+  Admin → Artwork. 44 of the 65 traced outlines are flagged for manual review (drawn dashed with
+  "Show outlines"), and one printed caption is withheld pending the owner's decision. See
+  [docs/LPU_ISOMETRIC_ASSET_MAPPING.md](docs/LPU_ISOMETRIC_ASSET_MAPPING.md).
 - **Glyph coverage** is Latin only. Characters such as Gurmukhi or Devanagari in an OSM name render
   blank on the map labels. Panels and search results use the system font stack, so they show whatever the device's fonts support.
 
@@ -432,7 +476,8 @@ docs/            architecture, plans, data sources, QA, security, deployment, pe
 public/          static files: _headers, generated data/, self-hosted fonts/, icons/
 functions/       Cloudflare Pages Functions (thin entry points over server/)
 server/          API handlers, domain logic (community, Building Studio, publication), auth, D1 access
-migrations/      D1 migrations 0001 (community) and 0002 (Building Studio); rollback in docs/db/
+migrations/      D1 migrations 0001 (community), 0002 (Building Studio), 0003 (artwork links); rollback in docs/db/
+lpu-isometric-map-design/  the owner's original campus illustration (29 files, never modified; checked by sha256)
 scripts/         Node 24 TypeScript CLIs: fetch-osm, fetch-public-data, build-data, validate-data, smoke, generate-icons
   lib/           pipeline stages (parse, geometry, buildings, places, graph, relations, quality, validate)
 src/
@@ -445,7 +490,8 @@ src/
   search/        search index, normalisation, ranking, highlighting
   facilities/    directory, opening hours, nearest, relation checks
   map/           MapView (MapLibre), style, layers, controller, e2e hook; providers/ (free imagery), editing/ (map-editing contract)
-  isometric/     Canvas2D isometric overview
+  isometric/     Canvas2D isometric overview (the Map-accurate style)
+  isometric-art/ the Illustrated overview: artwork contracts, manifest loader, associations, renderer, detail card
   building-studio/  studio schema, mesh generator, validation, history, editor state, studio UI store
   community/     publication and contribution schemas shared with the server
   admin/         the lazily loaded /admin app: API client, session gate, sections, Building Studio UI
@@ -466,29 +512,32 @@ tests/
 
 ## Documentation
 
-| Document                                                                     | Topic                                                                                   |
-| ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                                 | System diagram, module boundaries, data flow, key decisions, extension points           |
-| [docs/MODULE_CONTRACTS.md](docs/MODULE_CONTRACTS.md)                         | Public interface of every module                                                        |
-| [docs/modules/](docs/modules/)                                               | One page per module: purpose, interface, invariants, tests, limitations                 |
-| [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md)                   | The staged plan that was followed, with acceptance criteria                             |
-| [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md)                                 | Every source, its licence and status, and what was looked for but not found             |
-| [docs/DATA_QUALITY_REPORT.md](docs/DATA_QUALITY_REPORT.md)                   | Generated by `data:build`: counts, gaps, survey priorities                              |
-| [docs/research/LPU_PUBLIC_SOURCES.md](docs/research/LPU_PUBLIC_SOURCES.md)   | Every LPU page examined, `robots.txt` and terms findings                                |
-| [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md)                                   | Test pyramid, browser matrix, workflows, accessibility, CI stages                       |
-| [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md)                 | Threat model, CSP, storage inventory, location privacy, supply chain, incident record   |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                                     | Cloudflare Pages, headers, service-worker updates, rollback, D1 migrations, other hosts |
-| [docs/ADMIN_OPERATIONS.md](docs/ADMIN_OPERATIONS.md)                         | Owner runbook: auth setup, moderation, backups, recovery, credentials, incidents        |
-| [docs/COMMUNITY_MODULE_CONTRACTS.md](docs/COMMUNITY_MODULE_CONTRACTS.md)     | Suggestions, moderation, locations, overrides, audit: API and data contracts            |
-| [docs/BUILDING_STUDIO_DESIGN.md](docs/BUILDING_STUDIO_DESIGN.md)             | Building Studio design: schema, validation, publication, rollback                       |
-| [docs/ISOMETRIC_AND_3D_DESIGN.md](docs/ISOMETRIC_AND_3D_DESIGN.md)           | Isometric overview, realistic 3D and view modes                                         |
-| [docs/MAP_PROVIDER_CONFIGURATION.md](docs/MAP_PROVIDER_CONFIGURATION.md)     | The five view modes, free imagery providers, fallbacks, CSP and privacy                 |
-| [docs/GEODATA_SOURCES_AND_LICENSES.md](docs/GEODATA_SOURCES_AND_LICENSES.md) | Licences of every geodata and imagery source, including what is not used (Google)       |
-| [docs/PERFORMANCE.md](docs/PERFORMANCE.md)                                   | Budgets and measured search, route, load and bundle numbers                             |
-| [docs/PROJECT_ASSESSMENT.md](docs/PROJECT_ASSESSMENT.md)                     | Starting state and data reachability                                                    |
-| [data/README.md](data/README.md)                                             | Pipeline rules and curated-file formats                                                 |
-| [src/offline/README.md](src/offline/README.md)                               | Offline and PWA strategy                                                                |
-| [CONTRIBUTING.md](CONTRIBUTING.md)                                           | Coding standards, data-contribution rules, PR checklist                                 |
+| Document                                                                           | Topic                                                                                   |
+| ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                                       | System diagram, module boundaries, data flow, key decisions, extension points           |
+| [docs/MODULE_CONTRACTS.md](docs/MODULE_CONTRACTS.md)                               | Public interface of every module                                                        |
+| [docs/modules/](docs/modules/)                                                     | One page per module: purpose, interface, invariants, tests, limitations                 |
+| [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md)                         | The staged plan that was followed, with acceptance criteria                             |
+| [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md)                                       | Every source, its licence and status, and what was looked for but not found             |
+| [docs/DATA_QUALITY_REPORT.md](docs/DATA_QUALITY_REPORT.md)                         | Generated by `data:build`: counts, gaps, survey priorities                              |
+| [docs/research/LPU_PUBLIC_SOURCES.md](docs/research/LPU_PUBLIC_SOURCES.md)         | Every LPU page examined, `robots.txt` and terms findings                                |
+| [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md)                                         | Test pyramid, browser matrix, workflows, accessibility, CI stages                       |
+| [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md)                       | Threat model, CSP, storage inventory, location privacy, supply chain, incident record   |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                                           | Cloudflare Pages, headers, service-worker updates, rollback, D1 migrations, other hosts |
+| [docs/ADMIN_OPERATIONS.md](docs/ADMIN_OPERATIONS.md)                               | Owner runbook: auth setup, moderation, backups, recovery, credentials, incidents        |
+| [docs/COMMUNITY_MODULE_CONTRACTS.md](docs/COMMUNITY_MODULE_CONTRACTS.md)           | Suggestions, moderation, locations, overrides, audit: API and data contracts            |
+| [docs/BUILDING_STUDIO_DESIGN.md](docs/BUILDING_STUDIO_DESIGN.md)                   | Building Studio design: schema, validation, publication, rollback                       |
+| [docs/ISOMETRIC_AND_3D_DESIGN.md](docs/ISOMETRIC_AND_3D_DESIGN.md)                 | Isometric overview, realistic 3D and view modes                                         |
+| [docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md](docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md) | Campus illustration contract: assets, hotspots, associations, migration 0003, gates     |
+| [docs/LPU_ISOMETRIC_ASSET_INVENTORY.md](docs/LPU_ISOMETRIC_ASSET_INVENTORY.md)     | The 29 artwork files and their exact printed labels                                     |
+| [docs/LPU_ISOMETRIC_ASSET_MAPPING.md](docs/LPU_ISOMETRIC_ASSET_MAPPING.md)         | Generated: every illustration item and its link status                                  |
+| [docs/MAP_PROVIDER_CONFIGURATION.md](docs/MAP_PROVIDER_CONFIGURATION.md)           | The five view modes, free imagery providers, fallbacks, CSP and privacy                 |
+| [docs/GEODATA_SOURCES_AND_LICENSES.md](docs/GEODATA_SOURCES_AND_LICENSES.md)       | Licences of every geodata and imagery source, including what is not used (Google)       |
+| [docs/PERFORMANCE.md](docs/PERFORMANCE.md)                                         | Budgets and measured search, route, load and bundle numbers                             |
+| [docs/PROJECT_ASSESSMENT.md](docs/PROJECT_ASSESSMENT.md)                           | Starting state and data reachability                                                    |
+| [data/README.md](data/README.md)                                                   | Pipeline rules and curated-file formats                                                 |
+| [src/offline/README.md](src/offline/README.md)                                     | Offline and PWA strategy                                                                |
+| [CONTRIBUTING.md](CONTRIBUTING.md)                                                 | Coding standards, data-contribution rules, PR checklist                                 |
 
 ## Credits
 

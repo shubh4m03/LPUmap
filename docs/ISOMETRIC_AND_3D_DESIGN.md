@@ -121,13 +121,25 @@ carry real weight: they become the main handle for 134 unnamed footprints.
 
 ## 2. The reference illustration: visual system
 
-**Source:** "LPU isometric map design" on Behance (<https://www.behance.net/gallery/105159145/LPU-isometric-map-design>),
-viewed from `reference/assets/lpu-isometric-map-reference.png`. That file is a browser screenshot at 40 % page
-zoom, so fine details are approximate. It is **copyrighted third-party artwork of unknown date.**
+> **Superseded in part (2026-10-24).** On 2026-10-24 the owner supplied the original artwork files
+> (`lpu-isometric-map-design/`) with the statement "I own or am authorized to use the artwork". The artwork
+> is now the authoritative **visual** source of the isometric experience: it is shown unchanged as the
+> **Illustrated overview** (the default `?view=iso` variant), with exact printed labels and clickable
+> outlines, and is no longer a style reference only. The footprint-based drawing described in this document
+> remains as the **Map-accurate** variant (`&iso=map`), and the observations below remain its design
+> rationale. Contract, renderer and status:
+> [LPU_ISOMETRIC_ASSET_INTEGRATION.md](LPU_ISOMETRIC_ASSET_INTEGRATION.md); provenance:
+> [GEODATA_SOURCES_AND_LICENSES.md §14](GEODATA_SOURCES_AND_LICENSES.md#14-lpu-isometric-map-design-owner-supplied-campus-illustration).
 
-**Usage rule (binding).** The illustration is used **only** as design inspiration and as unverified leads for a
-future survey. We do not copy its colours, typography, logo or layout literally. No footprint is named,
-numbered or positioned from it. Its block numbers never appear in the product.
+**Source (as first studied):** "LPU isometric map design" on Behance
+(<https://www.behance.net/gallery/105159145/LPU-isometric-map-design>), viewed from
+`reference/assets/lpu-isometric-map-reference.png`. That file is a browser screenshot at 40 % page zoom, so
+fine details are approximate. The owner-supplied master (3371 × 2384, made in 2019) replaces it.
+
+**Usage rule for the map-accurate drawing (binding).** The map-accurate drawing does not copy the artwork's
+colours, typography, logo or layout literally; it borrows principles only (table below). In every mode, no
+footprint is named, numbered or positioned from the artwork. The artwork's numbers appear only on the artwork
+itself and in its labels, always marked as not official LPU block numbers.
 
 ### 2.1 What we observe and what we borrow
 

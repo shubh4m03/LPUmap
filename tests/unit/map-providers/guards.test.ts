@@ -57,8 +57,21 @@ describe('CSP (public/_headers)', () => {
 describe('PWA never stores third-party tiles', () => {
   const workbox = pwaOptions.workbox;
 
-  it('has no runtime caching route at all', () => {
-    expect(workbox?.runtimeCaching ?? []).toEqual([]);
+  it('has one runtime route only — same-origin artwork — and it never matches a provider request', () => {
+    const routes = workbox?.runtimeCaching ?? [];
+    expect(routes).toHaveLength(1);
+    const match = routes[0]?.urlPattern;
+    expect(typeof match).toBe('function');
+    const matches = (href: string, sameOrigin: boolean) =>
+      (match as (o: { url: URL; sameOrigin: boolean }) => boolean)({ url: new URL(href), sameOrigin });
+    for (const origin of IMAGERY_ORIGINS) {
+      // Even a provider URL shaped like an artwork path is cross-origin, so it never matches.
+      expect(matches(`${origin}/isometric-art/derived/iso-art-001/tiles/0/0-0.webp`, false)).toBe(false);
+      expect(matches(`${origin}/tile/1/2/3`, false)).toBe(false);
+    }
+    expect(matches('https://atlas.example/isometric-art/derived/iso-art-001/tiles/0/0-0.webp', true)).toBe(
+      true,
+    );
   });
 
   it('no precache glob or extra manifest entry can match a provider origin or tile path', () => {

@@ -12,15 +12,18 @@ import { publishedStudioBuildingSchema } from '../building-studio/schema.ts';
 import { MARK_FLOOD_MESSAGE, hasCombiningMarkFlood, hasInvisibleNameChars } from '../building-studio/text.ts';
 import { CATEGORIES } from '../config/categories.ts';
 import { lngLatSchema, wheelchairSchema, verificationStatusSchema } from '../data/schema.ts';
+import { publishedArtworkAssociationSchema } from '../isometric-art/schema.ts';
 
 /**
  * Version 2 (Building Studio, docs/BUILDING_STUDIO_DESIGN.md §9) = version 1
  * + `buildings` (published, non-archived studio buildings); v1 fields are
- * unchanged. Readers accept both, so a server rolled back to v1 still feeds
- * current clients (a v1 body simply has no `buildings`).
+ * unchanged. Version 3 (docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md §4.3) = v2 +
+ * `artworkAssociations` (owner decisions linking illustration subjects to
+ * buildings). Readers accept all three, so a server rolled back to v1 or v2
+ * still feeds current clients (an older body simply lacks the newer arrays).
  */
-export const PUBLICATION_SCHEMA_VERSION = 2;
-export const SUPPORTED_PUBLICATION_SCHEMA_VERSIONS = [1, 2] as const;
+export const PUBLICATION_SCHEMA_VERSION = 3;
+export const SUPPORTED_PUBLICATION_SCHEMA_VERSIONS = [1, 2, 3] as const;
 
 /** Categories a contributor or the owner may assign (excludes generic placeholders). */
 export const ASSIGNABLE_CATEGORY_IDS = CATEGORIES.filter((c) => c.id !== 'building' && c.id !== 'other').map(
@@ -260,9 +263,9 @@ export const publishedOverrideSchema = z.object({
 });
 export type PublishedOverride = z.infer<typeof publishedOverrideSchema>;
 
-/** GET /api/locations response (v1 or v2). */
+/** GET /api/locations response (v1, v2 or v3). */
 export const publicationSchema = z.object({
-  schemaVersion: z.union([z.literal(1), z.literal(PUBLICATION_SCHEMA_VERSION)]),
+  schemaVersion: z.union([z.literal(1), z.literal(2), z.literal(PUBLICATION_SCHEMA_VERSION)]),
   /** Monotonic counter bumped on every publicly visible change (drives the ETag). */
   publicationVersion: z.number().int().nonnegative(),
   generatedAt: z.string(),
@@ -274,6 +277,13 @@ export const publicationSchema = z.object({
    * it is optional only so a v1 body still parses. Absent = none.
    */
   buildings: z.array(publishedStudioBuildingSchema).optional(),
+  /**
+   * v3: the owner's artwork association decisions in subject order (public
+   * fields only: no private note, no actors). Each overrides the curated
+   * baseline in public/isometric-art/manifest.json (mergeArtworkAssociations).
+   * A v3 server always sends the array; absent (v1/v2) = no decisions.
+   */
+  artworkAssociations: z.array(publishedArtworkAssociationSchema).optional(),
 });
 export type Publication = z.infer<typeof publicationSchema>;
 
@@ -284,6 +294,7 @@ export const EMPTY_PUBLICATION: Publication = {
   locations: [],
   overrides: [],
   buildings: [],
+  artworkAssociations: [],
 };
 
 /** Allowed moderation transitions (server-enforced). `approved` is terminal except via unpublish+reopen. */

@@ -3,6 +3,7 @@ import { getCategory, type CategoryDef } from '../config/categories.ts';
 import { APP_CONFIG } from '../config/index.ts';
 import { PLACE_KIND_LABELS } from '../data/place-labels.ts';
 import type { Place } from '../data/schema.ts';
+import type { ArtworkTerms } from './artwork-docs.ts';
 import type { SearchDoc } from './types.ts';
 
 export const PLACE_DOC_PREFIX = 'place:';
@@ -60,6 +61,13 @@ export interface PlaceDocOptions {
    * invented name, and no category synonyms (so generic queries are not flooded).
    */
   mapKey?: (placeId: string) => string | null | undefined;
+  /**
+   * Exact labels, aliases and artwork numbers of the VERIFIED illustration
+   * items depicting a building (src/search/artwork-docs.ts). They are search
+   * terms of the building's one doc; a building with no other title is titled
+   * with its first printed label (never an invented name).
+   */
+  artworkTerms?: (placeId: string) => ArtworkTerms | undefined;
 }
 
 export const MAP_KEY_TITLE_PREFIX = 'Map key';
@@ -96,13 +104,24 @@ export function docsFromPlaces(places: Place[], opts: PlaceDocOptions = {}): Sea
     const offCampus = place.campusZone === 'off-campus-nearby';
     if (offCampus && !opts.includeContext) continue;
     const key = place.kind === 'building' && !offCampus ? (opts.mapKey?.(place.id) ?? null) : null;
-    const aliases = uniqueNonEmpty([...(place.aliases ?? []), ...(key ? [key] : [])]);
+    const art = place.kind === 'building' && !offCampus ? opts.artworkTerms?.(place.id) : undefined;
+    const aliases = uniqueNonEmpty([
+      ...(place.aliases ?? []),
+      ...(key ? [key] : []),
+      ...(art ? [...art.labels, ...art.aliases] : []),
+    ]);
     const name = place.name?.trim() ? place.name.trim() : null;
     const sourcedTitle = name ?? uniqueNonEmpty(place.aliases ?? [])[0];
-    const title = sourcedTitle ?? (key ? `${MAP_KEY_TITLE_PREFIX} ${key}` : undefined);
+    const artTitle = art?.labels[0];
+    const title =
+      sourcedTitle ??
+      (key ? `${MAP_KEY_TITLE_PREFIX} ${key}` : artTitle !== undefined ? artTitle : undefined);
     if (title === undefined) continue;
     const category = getCategory(place.categoryId);
-    const subtitleParts = sourcedTitle === undefined ? [place.displayName] : [category.label];
+    const subtitleParts =
+      sourcedTitle === undefined
+        ? [place.displayName, ...(title === artTitle ? ['Label on the campus illustration'] : [])]
+        : [category.label];
     if (offCampus) subtitleParts.push(OFF_CAMPUS_LABEL);
     const keywords =
       sourcedTitle === undefined
@@ -115,7 +134,7 @@ export function docsFromPlaces(places: Place[], opts: PlaceDocOptions = {}): Sea
       title,
       subtitle: subtitleParts.join(' · '),
       aliases: aliases.filter((a) => a !== title),
-      codes: uniqueNonEmpty([...aliases.filter(looksLikeCode), ...(key ? [key] : [])]),
+      codes: uniqueNonEmpty([...aliases.filter(looksLikeCode), ...(key ? [key] : []), ...(art?.codes ?? [])]),
       keywords,
       categoryId: place.categoryId,
       ref: place.id,

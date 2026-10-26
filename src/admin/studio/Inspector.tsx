@@ -8,6 +8,7 @@ import { currentValidation } from '../../building-studio/ui/store.ts';
 import type { DetectionsFile } from '../../data/index.ts';
 import { AppearanceSection } from './AppearancePanel.tsx';
 import { DimensionsSection, PositionSection, ShapeSection } from './GeometryPanel.tsx';
+import { StudioArtworkSection } from '../sections/artwork/StudioArtworkLinks.tsx';
 import { CorrectionSection, IdentitySection, VerificationSection } from './InfoPanel.tsx';
 import { SnapSection } from './SnapSection.tsx';
 import { TemplateSection } from './TemplatePanel.tsx';
@@ -76,6 +77,7 @@ export function Inspector(props: InspectorProps) {
           <ShapeSection />
           <AppearanceSection />
           <VerificationSection />
+          <StudioArtworkSection />
           <CorrectionSection />
           <TemplateSection />
           <SnapSection {...props} />

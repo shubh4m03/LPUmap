@@ -2,6 +2,7 @@
 import type { FetchLike } from '../auth/access.ts';
 import type { BaseData, StudioBaseData } from '../base-data.ts';
 import type { Env, ParsedEnv } from '../env.ts';
+import type { IsometricArtManifest } from '../../src/isometric-art/schema.ts';
 import { HttpError } from '../http/errors.ts';
 import type { Services } from './ports.ts';
 
@@ -28,6 +29,20 @@ export async function loadBaseFor(request: Request, env: ParsedEnv, deps: Handle
   if (!assets) throw new HttpError('unavailable', 'Base dataset is unavailable');
   const origin = new URL(request.url).origin;
   return deps.services.loadBase((path: string) =>
+    assets.fetch(new Request(new URL(`/${path.replace(/^\/+/, '')}`, origin).toString())),
+  );
+}
+
+/** Loads the published artwork manifest (same deployment, validated, cached per generatedFrom hashes). */
+export async function loadArtManifestFor(
+  request: Request,
+  env: ParsedEnv,
+  deps: HandlerDeps,
+): Promise<IsometricArtManifest> {
+  const assets = env.assets;
+  if (!assets) throw new HttpError('unavailable', 'Artwork manifest is unavailable');
+  const origin = new URL(request.url).origin;
+  return deps.services.loadArtManifest((path: string) =>
     assets.fetch(new Request(new URL(`/${path.replace(/^\/+/, '')}`, origin).toString())),
   );
 }

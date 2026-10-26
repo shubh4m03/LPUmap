@@ -4,11 +4,12 @@
  * data layer's exact function signatures.
  */
 import type { RateLimitRepo, SessionRepo } from '../auth/ports.ts';
+import { loadArtworkManifest } from '../artwork-manifest.ts';
 import { d1SaltRepo } from '../auth/salt.ts';
 import { loadBaseData, loadStudioBaseData } from '../base-data.ts';
 import { hit } from '../db/rate-limits.ts';
 import { createSession, deleteSession, getSession, purgeExpiredSessions } from '../db/sessions.ts';
-import { domainAdapter, studioAdapter } from './domain-adapter.ts';
+import { artworkAdapter, domainAdapter, studioAdapter } from './domain-adapter.ts';
 import type { Services } from './ports.ts';
 
 export const d1Sessions: SessionRepo = {
@@ -51,9 +52,11 @@ export const d1RateLimits: RateLimitRepo = {
 export const realServices: Services = {
   domain: domainAdapter,
   studio: studioAdapter,
+  artwork: artworkAdapter,
   sessions: d1Sessions,
   rateLimits: d1RateLimits,
   salts: d1SaltRepo,
   loadBase: loadBaseData,
   loadStudioBase: loadStudioBaseData,
+  loadArtManifest: loadArtworkManifest,
 };

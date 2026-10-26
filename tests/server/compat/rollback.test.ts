@@ -7,14 +7,15 @@
  *     restores all of them at once and a cached client never mixes versions.
  *     Checked on the working tree AND on the pinned v1 commit (the revert target).
  *     The full `git revert` drill is rollback-drill.test.ts (opt-in, slow).
- * (b) D1: the dataset v2 change itself needed no migration. The only later
- *     migration is 0002 (Building Studio, docs/BUILDING_STUDIO_DESIGN.md §12):
+ * (b) D1: the dataset v2 change itself needed no migration. The later
+ *     migrations are 0002 (Building Studio, docs/BUILDING_STUDIO_DESIGN.md §12)
+ *     and 0003 (artwork verification, docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md §4):
  *     the v1 migration files are an unchanged, byte-identical PREFIX of the
  *     current set, and a database built from the v1 SQL plus the later files
  *     has exactly the schema the current server uses. A pre-studio server runs
  *     safely on a 0002 database (it never touches the studio tables) and the
  *     publication reader still accepts v1, so a code rollback needs no D1
- *     change; tests/server/migrations covers 0002 and its down script. (The
+ *     change; tests/server/migrations covers 0002, 0003 and their down scripts. (The
  *     survival test proves the same rows work against v1, v2 and v1 again.)
  */
 import { execFileSync } from 'node:child_process';
@@ -100,7 +101,7 @@ describe.skipIf('skip' in v1)(`rollback (a): the revert target ${V1_COMMIT} is s
 });
 
 /** Migrations added after the v1 commit, in order; each has its own rollback script and tests. */
-const LATER_MIGRATIONS = ['0002_building_studio.sql'];
+const LATER_MIGRATIONS = ['0002_building_studio.sql', '0003_artwork_associations.sql'];
 
 describe.skipIf('skip' in v1)(
   'rollback (b): the v1 migrations are an unchanged prefix of the current set',

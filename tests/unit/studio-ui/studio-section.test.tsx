@@ -54,7 +54,11 @@ const { AdminContext } = await import('../../../src/admin/context.ts');
 const { navigateAdmin } = await import('../../../src/admin/router.ts');
 const { default: StudioSection } = await import('../../../src/admin/studio/StudioSection.tsx');
 
-function setup(id: string | null = null, configure?: (studio: ReturnType<typeof fakeStudioApi>) => void) {
+function setup(
+  id: string | null = null,
+  configure?: (studio: ReturnType<typeof fakeStudioApi>) => void,
+  artwork?: Partial<AdminApi['artwork']>,
+) {
   const studio = fakeStudioApi();
   studio.library.mockResolvedValue(
     ok({
@@ -69,7 +73,7 @@ function setup(id: string | null = null, configure?: (studio: ReturnType<typeof 
   );
   configure?.(studio);
   const navigate = vi.fn();
-  const services = { api: { studio } as unknown as AdminApi, session: {} as never } as AdminServices;
+  const services = { api: { studio, artwork } as unknown as AdminApi, session: {} as never } as AdminServices;
   const route: AdminSectionProps['route'] = { section: 'studio', id, query: {} };
   const view = render(
     <AdminContext value={services}>
@@ -301,6 +305,46 @@ describe('Studio workspace (desktop)', () => {
     await t.user.selectOptions(screen.getByLabelText('Evidence for this building'), 'source-backed');
     await t.user.type(screen.getByTestId('studio-citation-url'), 'https://maps.google.com/?q=lpu');
     expect(screen.getByTestId('studio-citation-url')).toHaveAccessibleDescription(/Google Maps/);
+  });
+});
+
+describe('Campus illustration links in the Studio inspector (read-only)', () => {
+  const linkedView = {
+    subjectId: 'art:num-34',
+    baseline: null,
+    decision: null,
+    effective: {
+      subjectId: 'art:num-34',
+      status: 'verified' as const,
+      buildingId: STU_ID,
+      unconfirmedMatchId: null,
+      evidence: [],
+      candidateFootprints: [],
+      reason: null,
+      source: 'owner' as const,
+      revision: 1,
+      updatedAt: '2026-10-24T09:00:00.000Z',
+    },
+  };
+
+  it('requests nothing until the section is opened, then lists the linked items with their status', async () => {
+    const listAssociations = vi.fn().mockResolvedValue(ok({ items: [linkedView], issues: [] }));
+    const t = setup(STU_ID, (api) => api.getBuilding.mockResolvedValue(ok(detail())), { listAssociations });
+    await waitFor(() => expect(state()).toHaveTextContent('Saved draft (rev 1)'));
+    const section = document.getElementById('studio-section-artwork') as HTMLDetailsElement;
+    expect(section.open).toBe(false);
+    expect(listAssociations).not.toHaveBeenCalled();
+
+    await t.user.click(within(section).getByText('Campus illustration'));
+    const list = await within(section).findByRole('list', { name: 'Linked illustration items' });
+    expect(listAssociations).toHaveBeenCalledTimes(1);
+    expect(within(list).getByRole('link', { name: 'art:num-34' })).toHaveAttribute(
+      'href',
+      expect.stringContaining('artwork'),
+    );
+    expect(list).toHaveTextContent('Verified');
+    // Read-only: no control in the panel can write an association.
+    expect(within(section).queryByRole('button')).toBeNull();
   });
 });
 
