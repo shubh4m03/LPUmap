@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import { Button } from '../../components/ui/Button.tsx';
-import { Icon } from '../../components/icons/Icon.tsx';
-import { cx } from '../../components/ui/cx.ts';
+import { Button } from '../../components/ui/index.ts';
+import { Icon } from '../../components/icons/index.ts';
+import { cx } from '../../components/ui/index.ts';
 import { describeAdminError, type AdminApiError } from '../api/errors.ts';
 
 export interface ErrorNoticeProps {

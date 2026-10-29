@@ -3,11 +3,11 @@
  * building index, the building under a map point, and the preview geometry.
  */
 import type { Geometry } from 'geojson';
-import { pointInRing } from '../../../community/geo.ts';
-import type { CampusData } from '../../../data/campus-data.ts';
-import type { LngLat } from '../../../data/schema.ts';
-import type { CandidateFootprint } from '../../../isometric-art/schema.ts';
-import type { EditPreviewCollection, EditPreviewFeature } from '../../../map/editing/types.ts';
+import { pointInRing } from '../../../community/index.ts';
+import type { CampusData } from '../../../data/index.ts';
+import type { LngLat } from '../../../data/index.ts';
+import type { CandidateFootprint } from '../../../isometric-art/index.ts';
+import type { EditPreviewCollection, EditPreviewFeature } from '../../../map/editing/index.ts';
 
 type BuildingFeature = CampusData['buildings']['features'][number];
 

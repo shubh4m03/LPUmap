@@ -8,11 +8,15 @@
  * schemas and assigns all status/actor/provenance fields itself.
  */
 import { z } from 'zod';
-import { publishedStudioBuildingSchema } from '../building-studio/schema.ts';
-import { MARK_FLOOD_MESSAGE, hasCombiningMarkFlood, hasInvisibleNameChars } from '../building-studio/text.ts';
-import { CATEGORIES } from '../config/categories.ts';
-import { lngLatSchema, wheelchairSchema, verificationStatusSchema } from '../data/schema.ts';
-import { publishedArtworkAssociationSchema } from '../isometric-art/schema.ts';
+import { publishedStudioBuildingSchema } from '../building-studio/index.ts';
+import {
+  MARK_FLOOD_MESSAGE,
+  hasCombiningMarkFlood,
+  hasInvisibleNameChars,
+} from '../building-studio/index.ts';
+import { CATEGORIES } from '../config/index.ts';
+import { lngLatSchema, wheelchairSchema, verificationStatusSchema } from '../data/index.ts';
+import { publishedArtworkAssociationSchema } from '../isometric-art/index.ts';
 
 /**
  * Version 2 (Building Studio, docs/BUILDING_STUDIO_DESIGN.md §9) = version 1

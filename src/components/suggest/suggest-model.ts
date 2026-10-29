@@ -4,9 +4,9 @@
  * request body, and the contribution area check. The server re-validates
  * everything and always stores the suggestion as `pending`.
  */
-import { contributionInputSchema, LIMITS, type ContributionInput } from '../../community/schema.ts';
-import { insideContributionArea } from '../../community/geo.ts';
-import type { LngLat } from '../../data/schema.ts';
+import { contributionInputSchema, LIMITS, type ContributionInput } from '../../community/index.ts';
+import { insideContributionArea } from '../../community/index.ts';
+import type { LngLat } from '../../data/index.ts';
 
 export interface SuggestFormValues {
   name: string;

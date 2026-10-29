@@ -123,7 +123,8 @@ describe('alternatives', () => {
   });
 
   it('returns a single connector-only route when both ends snap to one node', () => {
-    const r = router.alternatives({ from: pt(3, 3), to: pt(-3, -3), profile: 'walk' });
+    // West of node 0 no edge runs, so both points project onto the node itself.
+    const r = router.alternatives({ from: pt(-3, 0), to: pt(-7, 0), profile: 'walk' });
     expect(r).toHaveLength(1);
     expect(expectOk(r[0]).edgeIds).toEqual([]);
   });

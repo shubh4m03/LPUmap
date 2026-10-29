@@ -8,10 +8,13 @@
  */
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ArtworkDetailCard, type LinkedBuildingInfo } from '../../../src/isometric-art/ArtworkDetailCard.tsx';
-import { ArtworkLegend } from '../../../src/isometric-art/ArtworkLegend.tsx';
-import { LEGEND_CROP } from '../../../src/isometric-art/art-ui.ts';
-import { IllustratedOverview } from '../../../src/isometric-art/IllustratedOverview.tsx';
+import {
+  ArtworkDetailCard,
+  type LinkedBuildingInfo,
+} from '../../../src/isometric-art/view/ArtworkDetailCard.tsx';
+import { ArtworkLegend } from '../../../src/isometric-art/view/ArtworkLegend.tsx';
+import { LEGEND_CROP } from '../../../src/isometric-art/view/art-ui.ts';
+import { IllustratedOverview } from '../../../src/isometric-art/view/IllustratedOverview.tsx';
 import {
   initialTransform,
   NO_INSETS,
@@ -309,6 +312,8 @@ describe('IllustratedOverview motion and hover', () => {
       />,
     );
     for (let i = 0; i < 5; i++) await frame();
+    // Bottom-anchored on a phone: marked so the toast stack is lifted above it.
+    expect(screen.getByText('card').parentElement).toHaveAttribute('data-toast-clearance');
     const h = model.byHotspot.get('hs-pin-58')!;
     const t = layerTransform();
     // Pin 58 sits at the artwork's top-left: it is now inside the stage.

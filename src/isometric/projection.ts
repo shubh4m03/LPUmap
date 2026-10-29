@@ -15,12 +15,14 @@
  * Pure: no DOM, no MapLibre.
  */
 import { APP_CONFIG } from '../config/index.ts';
-import type { LngLat } from '../data/schema.ts';
+import type { LngLat } from '../data/index.ts';
+import { EARTH_RADIUS_M } from '../distance/index.ts';
 
 export type IsoRotation = 0 | 1 | 2 | 3;
 export const ISO_ROTATIONS: readonly IsoRotation[] = [0, 1, 2, 3];
 
-export const EARTH_RADIUS_M = 6_371_008.8;
+/** Re-exported from the one shared definition (src/distance/geodesic.ts). */
+export { EARTH_RADIUS_M };
 const DEG = Math.PI / 180;
 
 /** A 3D point in local metres: east, north, up. */

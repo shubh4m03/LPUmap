@@ -6,7 +6,7 @@
  * equal configs share one mesh however their objects were built. Meshes are
  * immutable values: callers must not modify a cached mesh.
  */
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 import { canonicalJson } from '../canonical.ts';
 import type { ModelConfigV1 } from '../schema.ts';
 import { generateStudioMeshDetailed, type DetailedMeshResult, type GenerateOptions } from './generate.ts';

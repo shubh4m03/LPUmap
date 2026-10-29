@@ -19,3 +19,15 @@
 
 /data/manifest.json
   Cache-Control: no-cache
+
+# The owner admin and the API are never search results (the admin page also adds a robots meta
+# at runtime). Cloudflare applies _headers to static responses only: /admin is the static app
+# shell, but responses produced by Pages Functions (/api/*) need the header from server code.
+/admin
+  X-Robots-Tag: noindex, nofollow
+
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+
+/api/*
+  X-Robots-Tag: noindex, nofollow

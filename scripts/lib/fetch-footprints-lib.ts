@@ -2,15 +2,17 @@
  * Pure helpers for scripts/fetch-footprints.ts: locate the Microsoft tile in
  * dataset-links.csv, filter source records to the map extent, extract the
  * CDLA-Permissive-2.0 text from its official page, and stream a gzip download
- * while hashing it. Records are kept byte-for-byte as published (never
- * re-projected, rounded or shifted).
+ * while hashing it (timeouts and bounded retries: scripts/lib/http.ts).
+ * Records are kept byte-for-byte as published (never re-projected, rounded or
+ * shifted).
  */
 import { createHash } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import { createInterface } from 'node:readline';
-import { Readable } from 'node:stream';
-import type { ReadableStream as WebReadableStream } from 'node:stream/web';
+import type { Readable } from 'node:stream';
 import { createGunzip } from 'node:zlib';
+import { openStream, withRetry } from './http.ts';
+import type { RetryOptions } from './http.ts';
 
 export type BBox4 = readonly [number, number, number, number];
 
@@ -109,7 +111,11 @@ export interface StreamStats {
   lines: number;
 }
 
-/** Streams gzip bytes, hashing the compressed input and yielding decompressed lines to `onLine`. */
+/**
+ * Streams gzip bytes, hashing the compressed input and yielding decompressed
+ * lines to `onLine`. An error on the input (a dropped or stalled download)
+ * rejects instead of leaving the line reader waiting forever.
+ */
 export async function scanGzipLines(input: Readable, onLine: (line: string) => void): Promise<StreamStats> {
   const hash = createHash('sha256');
   let bytes = 0;
@@ -117,7 +123,9 @@ export async function scanGzipLines(input: Readable, onLine: (line: string) => v
     hash.update(chunk);
     bytes += chunk.length;
   });
-  const rl = createInterface({ input: input.pipe(createGunzip()), crlfDelay: Infinity });
+  const gunzip = createGunzip();
+  input.on('error', (e) => gunzip.destroy(e));
+  const rl = createInterface({ input: input.pipe(gunzip), crlfDelay: Infinity });
   let lines = 0;
   for await (const line of rl) {
     lines++;
@@ -126,14 +134,31 @@ export async function scanGzipLines(input: Readable, onLine: (line: string) => v
   return { sha256: hash.digest('hex'), bytes, lines };
 }
 
-export async function openSource(
+export interface ScanResult {
+  stats: StreamStats;
+  kept: string[];
+}
+
+/**
+ * Reads a gzip line file from `localFile` when given, else downloads `url`
+ * (research User-Agent, header timeout, stall timeout). A failed or stalled
+ * download is restarted from scratch, at most `retry.retries` times with
+ * exponential backoff, so a partial read never leaks into the result.
+ */
+export async function scanSource(
   url: string,
   localFile: string | undefined,
   fetchImpl: typeof fetch,
-  userAgent: string,
-): Promise<Readable> {
-  if (localFile) return createReadStream(localFile);
-  const res = await fetchImpl(url, { headers: { 'User-Agent': userAgent } });
-  if (!res.ok || !res.body) throw new Error(`${url} answered HTTP ${res.status}`);
-  return Readable.fromWeb(res.body as unknown as WebReadableStream);
+  keep: (line: string) => boolean,
+  retry: RetryOptions = {},
+): Promise<ScanResult> {
+  const run = async (input: Readable): Promise<ScanResult> => {
+    const kept: string[] = [];
+    const stats = await scanGzipLines(input, (line) => {
+      if (keep(line)) kept.push(line);
+    });
+    return { stats, kept };
+  };
+  if (localFile) return run(createReadStream(localFile));
+  return withRetry(url, async () => run(await openStream(fetchImpl, url, retry)), retry);
 }

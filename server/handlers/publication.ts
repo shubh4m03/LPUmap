@@ -18,7 +18,7 @@
  * depends on the base dataset (no base data is read; the client merges against
  * whatever dataset it has), so a data refresh does not change it.
  */
-import { PUBLICATION_SCHEMA_VERSION } from '../../src/community/schema.ts';
+import { PUBLICATION_SCHEMA_VERSION } from '../../src/community/index.ts';
 import { parseEnv } from '../env.ts';
 import { HttpError } from '../http/errors.ts';
 import { log } from '../http/log.ts';

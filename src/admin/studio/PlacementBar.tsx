@@ -7,10 +7,10 @@
  * the owner confirms and then saves the draft.
  */
 import { useState } from 'react';
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 import { Button } from '../../components/ui/index.ts';
-import { anchorFromCoordinates, moveByMetres } from '../../building-studio/geometry.ts';
-import { currentValidation } from '../../building-studio/ui/store.ts';
+import { anchorFromCoordinates, moveByMetres } from '../../building-studio/editor.ts';
+import { currentValidation } from '../../building-studio/ui/index.ts';
 import { NumberField } from './controls.tsx';
 import { useStudioServices, useStudioState } from './studio-context.ts';
 

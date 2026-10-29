@@ -3,10 +3,10 @@
  * coordinates and category options. Nothing here invents a value: unknown
  * input is shown as-is.
  */
-import { ASSIGNABLE_CATEGORY_IDS, type SuggestionStatus } from '../../community/schema.ts';
-import { VERIFICATION_BADGE, type BadgeTone } from '../../components/ui/badge-meta.ts';
-import { getCategory } from '../../config/categories.ts';
-import type { LngLat, VerificationStatus, Wheelchair } from '../../data/schema.ts';
+import { ASSIGNABLE_CATEGORY_IDS, type SuggestionStatus } from '../../community/index.ts';
+import { VERIFICATION_BADGE, type BadgeTone } from '../../components/ui/index.ts';
+import { getCategory } from '../../config/index.ts';
+import type { LngLat, VerificationStatus, Wheelchair } from '../../data/index.ts';
 import type { OrphanReason, QualityWarningKind } from '../api/schemas.ts';
 import type { SelectOption } from './fields.tsx';
 

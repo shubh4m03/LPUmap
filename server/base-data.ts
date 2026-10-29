@@ -41,9 +41,9 @@ import {
   type GraphFile,
   type LngLat,
   type Place,
-} from '../src/data/schema.ts';
-import { boundaryPolygons, footNodeSet, type PolygonRings } from '../src/community/geo.ts';
-import { boundaryFromFeatureCollection, type CampusBoundary } from '../src/geo/boundary.ts';
+} from '../src/data/index.ts';
+import { boundaryPolygons, footNodeSet, type PolygonRings } from '../src/community/index.ts';
+import { boundaryFromFeatureCollection, type CampusBoundary } from '../src/geo/index.ts';
 import { DomainError } from './errors.ts';
 
 /** A footprint/place held out of the campus inventory (boundary-review.json item). */

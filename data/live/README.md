@@ -47,7 +47,7 @@ should reject a feed that misses one.
 6. **Fail closed.** A failed refresh keeps the previous file, never writes a
    partial one, and never fabricates entries. The refresher follows the same
    rules as `scripts/fetch-public-data.ts`: obey robots.txt, run one request at
-   a time with backoff, send a `DATA_FETCH_CONTACT` User-Agent, and refuse a
+   a time with backoff, send the neutral `LPU-Campus-Atlas-research/0.1` User-Agent, and refuse a
    suspicious drop in record count.
 7. **No personal data.** No names of staff or students, phone numbers of
    individuals, or anything not meant for public reuse.

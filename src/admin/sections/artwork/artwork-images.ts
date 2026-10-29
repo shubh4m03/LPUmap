@@ -2,7 +2,7 @@
  * Pure helpers of the admin artwork images (ArtworkImages.tsx): which file to
  * show for an asset and the zoom window around outlines, in SOURCE pixels.
  */
-import type { IsometricArtManifest, ManifestAsset } from '../../../isometric-art/schema.ts';
+import type { IsometricArtManifest, ManifestAsset } from '../../../isometric-art/index.ts';
 
 export interface ViewBox {
   x: number;

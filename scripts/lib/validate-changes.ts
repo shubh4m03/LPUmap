@@ -23,6 +23,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'zod';
 import type { Manifest, Place } from '../../src/data/schema.ts';
+import { fetchResponseWithRetry } from './http.ts';
+import type { RetryOptions } from './http.ts';
 import type { IssueSink } from './validate-geometry.ts';
 
 export interface CountThresholds {
@@ -291,20 +293,27 @@ export function checkCounts(
   reportCountGuard(evaluateCountGuard(current, baseline, acceptance, thresholds), thresholds, c);
 }
 
+/**
+ * HEAD-requests every website (opt-in, network). Each request carries the
+ * research User-Agent and a timeout and is retried a bounded number of times
+ * on network errors, 429 and 5xx (scripts/lib/http.ts). Problems are warnings.
+ */
 export async function checkLinks(
   places: Place[],
-  opts: { fetchImpl: typeof fetch; timeoutMs?: number },
+  opts: { fetchImpl: typeof fetch } & RetryOptions,
   c: IssueSink,
 ): Promise<void> {
   const urls = [...new Set(places.flatMap((p) => (p.contact?.website ? [p.contact.website] : [])))].sort();
+  const { fetchImpl, ...retry } = opts;
   for (const url of urls) {
     try {
-      const res = await opts.fetchImpl(url, {
-        method: 'HEAD',
-        redirect: 'follow',
-        signal: AbortSignal.timeout(opts.timeoutMs ?? 10000),
-      });
-      if (!res.ok) c.warn('link', `${url} answered HTTP ${res.status}`);
+      const res = await fetchResponseWithRetry(
+        fetchImpl,
+        url,
+        { method: 'HEAD', redirect: 'follow' },
+        { retries: 2, baseDelayMs: 1000, timeoutMs: 10_000, ...retry },
+      );
+      if (res.status < 200 || res.status >= 300) c.warn('link', `${url} answered HTTP ${res.status}`);
     } catch (e) {
       c.warn('link', `${url} unreachable: ${(e as Error).message}`);
     }

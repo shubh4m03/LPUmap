@@ -5,7 +5,7 @@
  * contain secrets, SQL, stack traces or other users' private data.
  */
 import type { z } from 'zod';
-import type { ApiError } from '../src/community/schema.ts';
+import type { ApiError } from '../src/community/index.ts';
 
 export type ErrorCode = ApiError['error']['code'];
 export interface ErrorIssue {

@@ -13,7 +13,7 @@
  *    on the map, labelled as unconfirmed; never route to it, never merge it).
  *  - A label under `displayHold` is neither shown nor searchable.
  */
-import { normalizeDirectoryText } from '../directory/normalize.ts';
+import { normalizeDirectoryText } from '../utils/directory-text.ts';
 import type { EffectiveArtworkAssociation } from './associations.ts';
 import type { ArtSubject, LabelQuote } from './schema.ts';
 import { ARTWORK_NUMBER_NOTE, UNCONFIRMED_MATCH_LABEL } from './text.ts';

@@ -8,7 +8,7 @@
 import { useMemo } from 'react';
 import { Button } from '../../components/ui/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
-import { UNNAMED_STUDIO_BUILDING } from '../../building-studio/merge.ts';
+import { UNNAMED_STUDIO_BUILDING } from '../../building-studio/index.ts';
 import {
   STUDIO_LIMITS,
   VERIFICATION_LABELS,
@@ -16,7 +16,7 @@ import {
   type StudioDraft,
   type StudioIdentity,
   type VerificationDraft,
-} from '../../building-studio/schema.ts';
+} from '../../building-studio/index.ts';
 import {
   draftSchemaIssues,
   issuesAt,
@@ -24,7 +24,7 @@ import {
   prohibitedSourceProblem,
   STUDIO_CATEGORY_OPTIONS,
   withVerificationStatus,
-} from '../../building-studio/ui/fields.ts';
+} from '../../building-studio/ui/index.ts';
 import { useStudioAccessCandidates } from './access-pick-data.ts';
 import { CheckField, NumberField, PanelSection, SelectField, TextField } from './controls.tsx';
 import { useStudioServices, useStudioState } from './studio-context.ts';

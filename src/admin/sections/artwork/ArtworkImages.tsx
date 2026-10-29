@@ -8,9 +8,9 @@
  * viewBox→viewport transform places both. The zoomed view only narrows the
  * viewBox (the same transform, a different window); nothing is cut from the file.
  */
-import { prepareHotspots, svgPoints, unionBBox } from '../../../isometric-art/hotspot-geometry.ts';
-import { artworkUrl } from '../../../isometric-art/manifest-loader.ts';
-import type { IsometricArtManifest } from '../../../isometric-art/schema.ts';
+import { prepareHotspots, svgPoints, unionBBox } from '../../../isometric-art/index.ts';
+import { artworkUrl } from '../../../isometric-art/index.ts';
+import type { IsometricArtManifest } from '../../../isometric-art/index.ts';
 import { displayAsset, masterAsset, zoomViewBox, type ViewBox } from './artwork-images.ts';
 
 const vb = (b: ViewBox) => `${b.x} ${b.y} ${b.width} ${b.height}`;

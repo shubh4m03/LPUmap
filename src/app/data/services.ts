@@ -6,8 +6,8 @@
  * (./apply-publication.ts), so every view mode, the building directory and
  * search see the same records with the same ids.
  */
-import type { StudioRenderModel } from '../../building-studio/merge.ts';
-import { CATEGORIES } from '../../config/categories.ts';
+import type { StudioRenderModel } from '../../building-studio/index.ts';
+import { CATEGORIES } from '../../config/index.ts';
 import type { CampusData, OptionalDataLoaders, Place, Relation } from '../../data/index.ts';
 import { createDirectory, directoryBuildingIds, type CampusDirectory } from '../../directory/index.ts';
 import { artworkUrl, type PublishedArtworkAssociation } from '../../isometric-art/index.ts';

@@ -288,6 +288,26 @@ describe('image files', () => {
     expect(mid.detail.every((t) => t.level === 1)).toBe(true);
   });
 
+  it('under tiles the base is the lightest preview (a placeholder); without tiles the sharp one', () => {
+    const big = sources.previews[sources.previews.length - 1];
+    if (!big) return;
+    const small = {
+      ...big,
+      key: 'preview:small',
+      url: 'derived/x/preview-800.webp',
+      pixelWidth: 800,
+      pixelHeight: 566,
+    };
+    const two = { ...sources, previews: [small, ...sources.previews] };
+    const phone = planArtImages(two, 1, { x: 1000, y: 800, width: 400, height: 500 })!;
+    expect(phone.detail.length).toBeGreaterThan(0);
+    expect(phone.base.url).toBe(small.url);
+    // Below tile need, the smallest SHARP-ENOUGH preview stays the base (no detail layer).
+    const desk = planArtImages(two, 0.45, everything)!;
+    expect(desk.detail).toEqual([]);
+    expect(desk.base.url).toBe(big.url);
+  });
+
   it('without derived copies the published original is shown; a stale derived copy is never shown', () => {
     const bare: ManifestAsset = { ...master, derived: [] };
     const plan = planArtImages(artImageSources(bare, model.space), 2, everything)!;

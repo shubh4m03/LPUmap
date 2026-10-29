@@ -56,6 +56,21 @@ describe('exact printed text', () => {
     expect(exactTextSchema.safeParse('').success).toBe(false);
   });
 
+  it('refuses bidi controls and unpaired surrogates like the shared text rule, keeps real scripts', () => {
+    const bad = [
+      'LAW‮',
+      '⁦LAW⁩',
+      'LA‪W',
+      `LAW${String.fromCharCode(0xd800)}`,
+      `${String.fromCharCode(0xdc00)}LAW`,
+      'LA\tW',
+      'LA\u0085W',
+    ];
+    for (const s of bad) expect(exactTextSchema.safeParse(s).success, JSON.stringify(s)).toBe(false);
+    for (const s of ['LAW 😀', 'लॉ', 'क्‍ष', 'قانون‏'])
+      expect(exactTextSchema.safeParse(s).success, JSON.stringify(s)).toBe(true);
+  });
+
   it('label quotes need a known reference form and are strict', () => {
     expect(labelQuoteSchema.safeParse({ ref: 'iso-art-087/L1', text: 'LAW' }).success).toBe(true);
     expect(labelQuoteSchema.safeParse({ ref: 'iso-art-119/pin:58', text: '58' }).success).toBe(true);

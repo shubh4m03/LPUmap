@@ -24,16 +24,16 @@
  *  - The private note lives only in D1 and the admin views; the publication
  *    never selects it (server/domain/publication.ts).
  */
-import { mergeArtworkAssociations } from '../../../src/isometric-art/associations.ts';
-import type { EffectiveArtworkAssociation } from '../../../src/isometric-art/associations.ts';
-import { PROHIBITED_SOURCE_MESSAGE } from '../../../src/building-studio/text.ts';
+import { mergeArtworkAssociations } from '../../../src/isometric-art/index.ts';
+import type { EffectiveArtworkAssociation } from '../../../src/isometric-art/index.ts';
+import { PROHIBITED_SOURCE_MESSAGE } from '../../../src/building-studio/index.ts';
 import {
   artworkAssociationResetSchema,
   artworkAssociationWriteSchema,
   type ArtworkAssociationWrite,
   type CuratedAssociation,
   type IsometricArtManifest,
-} from '../../../src/isometric-art/schema.ts';
+} from '../../../src/isometric-art/index.ts';
 import { auditStmt, entityHistory } from '../../db/audit.ts';
 import {
   ARTWORK_EVIDENCE_JSON_MAX,

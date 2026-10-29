@@ -7,8 +7,8 @@
  *
  * Pure: no DOM.
  */
-import type { MaterialSlot, StudioFace, StudioMesh, WindowGrid } from '../building-studio/mesh/types.ts';
-import type { LngLat } from '../data/schema.ts';
+import type { MaterialSlot, StudioFace, StudioMesh, WindowGrid } from '../building-studio/index.ts';
+import type { LngLat } from '../data/index.ts';
 import {
   boxOf,
   boxesOverlap,

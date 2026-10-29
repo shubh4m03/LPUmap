@@ -10,8 +10,8 @@
  * user does leaves the device unless they copy, download or open a
  * correction link themselves.
  */
-import { BUILD_PROVIDERS } from '../map/providers/runtime.ts';
-import type { ProviderRegistry } from '../map/providers/types.ts';
+import { BUILD_PROVIDERS } from '../map/providers/index.ts';
+import type { ProviderRegistry } from '../map/providers/index.ts';
 
 export interface PrivacyFact {
   id: string;

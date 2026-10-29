@@ -4,11 +4,11 @@
  */
 import type { GeoJSON } from 'geojson';
 import type { GeoJSONSource, Map as MapLibreMap } from 'maplibre-gl';
-import type { LayerGroupId } from '../config/categories.ts';
+import type { LayerGroupId } from '../config/index.ts';
 import { GROUP_FILTERED_LAYER_IDS, LABEL_LAYER_IDS, LAYER_IDS, SOURCE_IDS } from './ids.ts';
 import { groupFilter, labelVisibility, poiLabelFilter } from './overlay-layers.ts';
 import { buildLayers } from './style.ts';
-import type { MapTheme } from './theme-colors.ts';
+import type { MapTheme } from '../styles/index.ts';
 
 export type ApplyMap = Pick<
   MapLibreMap,

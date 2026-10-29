@@ -22,7 +22,7 @@
  */
 import type { Feature, FeatureCollection, Geometry } from 'geojson';
 import type { StudioRenderSource } from '../../building-studio/render/maplibre/index.ts';
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 
 /** Styling role of a preview feature (src/map/editing/layers.ts). */
 export type EditPreviewRole =

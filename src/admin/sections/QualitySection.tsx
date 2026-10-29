@@ -4,11 +4,11 @@
  * duplicates, stale pending suggestions) and the overview counts. Each
  * warning links to the record to fix.
  */
-import { Badge } from '../../components/ui/Badge.tsx';
-import { Button } from '../../components/ui/Button.tsx';
-import { cx, FOCUS_RING } from '../../components/ui/cx.ts';
-import { EmptyState } from '../../components/ui/EmptyState.tsx';
-import { Spinner } from '../../components/ui/Spinner.tsx';
+import { Badge } from '../../components/ui/index.ts';
+import { Button } from '../../components/ui/index.ts';
+import { cx, FOCUS_RING } from '../../components/ui/index.ts';
+import { EmptyState } from '../../components/ui/index.ts';
+import { Spinner } from '../../components/ui/index.ts';
 import { QUALITY_WARNING_KINDS, type Overview, type QualityWarning } from '../api/schemas.ts';
 import { useAdminApi } from '../context.ts';
 import { useResource } from '../hooks/useResource.ts';

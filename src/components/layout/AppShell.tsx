@@ -1,5 +1,6 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useAnnounce, useIsMobile, useReducedMotion, useTheme } from '../../accessibility/index.ts';
+import { useDatasetAgeNotice } from '../../app/hooks/useDatasetAgeNotice.ts';
 import { useDeepLink } from '../../app/hooks/useDeepLink.ts';
 import { useGeoFeedback } from '../../app/hooks/useGeoFeedback.ts';
 import { useGlobalShortcuts } from '../../app/hooks/useGlobalShortcuts.ts';
@@ -15,7 +16,7 @@ import {
 import { ViewStage } from '../../app/ViewStage.tsx';
 import { supportsWebGL } from '../../buildings3d/index.ts';
 // Direct file import (not the map index) so MapLibre stays out of the initial chunk.
-import { MAP_MESSAGES } from '../../map/errors.ts';
+import { MAP_MESSAGES } from '../../map/index.ts';
 import { Spinner } from '../ui/index.ts';
 import { CommandPalette } from '../search/CommandPalette.tsx';
 import { DesktopLayout } from './DesktopLayout.tsx';
@@ -31,6 +32,7 @@ export function AppShell() {
   useHistoryLayers();
   useGlobalShortcuts();
   useGeoFeedback();
+  useDatasetAgeNotice();
   useViewModeSync();
   usePrefetchDeferredPanels();
   const announce = useAnnounce();

@@ -27,8 +27,8 @@ import type {
 } from '../building-studio/render/maplibre/index.ts';
 import { loadStudioRenderer } from '../building-studio/render/maplibre/index.ts';
 import { APP_CONFIG } from '../config/index.ts';
-import type { DetectionsFile } from '../data/schema.ts';
-import { mapThemeColors, type MapTheme } from '../map/theme-colors.ts';
+import type { DetectionsFile } from '../data/index.ts';
+import { mapThemeColors, type MapTheme } from '../styles/index.ts';
 import { BUILDING_LAYER_IDS, BUILDINGS_SOURCE_ID, extrusionFilter, studioPickLayer } from './layers.ts';
 import { lightSpecification, realisticLight } from './lighting.ts';
 import { applyOptionalLayersTheme, setDetectionsLayer, setOutsideBadgeLayer } from './optional-layers.ts';

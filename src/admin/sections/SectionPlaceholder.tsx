@@ -1,4 +1,4 @@
-import { EmptyState } from '../../components/ui/EmptyState.tsx';
+import { EmptyState } from '../../components/ui/index.ts';
 
 /** Honest stand-in for a section whose screen is not built yet (never fake data). */
 export function SectionPlaceholder({ title, description }: { title: string; description: string }) {

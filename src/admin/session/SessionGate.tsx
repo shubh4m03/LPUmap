@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import { Button } from '../../components/ui/Button.tsx';
-import { ErrorState } from '../../components/ui/EmptyState.tsx';
-import { Spinner } from '../../components/ui/Spinner.tsx';
+import { Button } from '../../components/ui/index.ts';
+import { ErrorState } from '../../components/ui/index.ts';
+import { Spinner } from '../../components/ui/index.ts';
 import { useAdminSession, useAdminSessionClient } from '../context.ts';
 import type { SessionInfo } from '../api/schemas.ts';
 import { LoginForm } from './LoginForm.tsx';

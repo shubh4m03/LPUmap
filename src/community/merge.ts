@@ -32,19 +32,14 @@
  * but the merge does not trust it), the winner is chosen by a total order:
  * highest revision, then latest updatedAt, then canonical JSON.
  */
-import { CATEGORIES } from '../config/categories.ts';
-import type { CampusData } from '../data/campus-data.ts';
-import type { BuildingsFile, LngLat, Manifest, Place, Relation, SourceRecord } from '../data/schema.ts';
-import { placeKindSchema, relationTypeSchema } from '../data/schema.ts';
-import { isValidLngLat } from '../distance/geodesic.ts';
+import { CATEGORIES } from '../config/index.ts';
+import type { CampusData } from '../data/index.ts';
+import type { BuildingsFile, LngLat, Manifest, Place, Relation, SourceRecord } from '../data/index.ts';
+import { placeKindSchema, relationTypeSchema } from '../data/index.ts';
+import { COMMUNITY_SOURCE, OWNER_SOURCE, type MergeIssue } from '../data/index.ts';
+import { isValidLngLat } from '../distance/index.ts';
 import type { Publication, PublishedLocation, PublishedOverride } from './schema.ts';
 import { boundaryPolygons, campusZoneFor, checkAccessNode, footNodeSet, type PolygonRings } from './geo.ts';
-
-export interface MergeIssue {
-  id: string;
-  reason: string;
-  message: string;
-}
 
 export interface MergeReport {
   publicationVersion: number;
@@ -81,17 +76,8 @@ export interface MergeResult {
   report: MergeReport;
 }
 
-export const OWNER_SOURCE: SourceRecord = {
-  id: 'owner',
-  name: 'Campus Atlas owner edits',
-  notes:
-    'Locations and corrections published by the site owner. Overlaid on the base dataset; never written into it.',
-};
-export const COMMUNITY_SOURCE: SourceRecord = {
-  id: 'community',
-  name: 'Community suggestions (owner-approved)',
-  notes: 'Submitted by visitors and published only after the site owner reviewed and approved them.',
-};
+// Defined in src/data (shared with the Building Studio merge); part of this module's API too.
+export { COMMUNITY_SOURCE, OWNER_SOURCE, type MergeIssue };
 
 const byString = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 

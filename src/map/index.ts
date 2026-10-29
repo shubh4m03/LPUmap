@@ -9,7 +9,7 @@ export type {
   MapViewProps,
 } from './types.ts';
 export { createMapController, FOCUS_ZOOM, FIT_MAX_ZOOM, DEFAULT_FIT_PADDING } from './controller.ts';
-export { MAP_THEME_COLORS, mapThemeColors, type MapTheme, type MapThemeColors } from './theme-colors.ts';
+export { MAP_THEME_COLORS, mapThemeColors, type MapTheme, type MapThemeColors } from '../styles/index.ts';
 export { contrastRatio, relativeLuminance, parseHexColor } from './contrast.ts';
 export { buildMapStyle, buildLayers, glyphsUrl, OSM_ATTRIBUTION_HTML } from './style.ts';
 export { groupFilter, labelVisibility, LABEL_SORT_KEY } from './overlay-layers.ts';

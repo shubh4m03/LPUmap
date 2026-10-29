@@ -5,12 +5,12 @@
  * access-point list), so editing still works without it.
  */
 import { lazy, Suspense, useState, type ComponentType } from 'react';
-import { Button } from '../../components/ui/Button.tsx';
-import { cx } from '../../components/ui/cx.ts';
-import { Spinner } from '../../components/ui/Spinner.tsx';
-import type { CampusData } from '../../data/campus-data.ts';
-import type { LngLat } from '../../data/schema.ts';
-import type { MapEditingProps } from '../../map/editing/types.ts';
+import { Button } from '../../components/ui/index.ts';
+import { cx } from '../../components/ui/index.ts';
+import { Spinner } from '../../components/ui/index.ts';
+import type { CampusData } from '../../data/index.ts';
+import type { LngLat } from '../../data/index.ts';
+import type { MapEditingProps } from '../../map/editing/index.ts';
 import type { CampusDataState } from '../data/campus-data.ts';
 import type { AdminMapProps } from './AdminMap.tsx';
 

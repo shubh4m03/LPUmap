@@ -1,6 +1,10 @@
 /**
  * JSON response helpers. Every API response carries the same hardening
  * headers; there are deliberately no CORS headers (same-origin only).
+ *
+ * X-Robots-Tag (G-16): Cloudflare Pages applies public/_headers to static
+ * files only, never to responses produced by Pages Functions, so the API's
+ * noindex has to come from here.
  */
 import { HttpError, isApiErrorLike } from './errors.ts';
 import type { ApiErrorLike } from './errors.ts';
@@ -17,6 +21,7 @@ export function apiHeaders(cache: CachePolicy, extra?: Record<string, string>): 
     'X-Frame-Options': 'DENY',
     'Content-Security-Policy': "default-src 'none'; frame-ancestors 'none'",
     'Cross-Origin-Resource-Policy': 'same-origin',
+    'X-Robots-Tag': 'noindex, nofollow',
   });
   if (extra) for (const [k, v] of Object.entries(extra)) h.set(k, v);
   return h;

@@ -1,6 +1,6 @@
 /**
- * Loads and merges data/curated/: sourced aliases, overrides and
- * organization records. Problems are collected and thrown together so a
+ * Loads and merges data/curated/: sourced aliases, overrides, organization
+ * records and evidence-backed path connections (connected_by_path). Problems are collected and thrown together so a
  * curator sees every broken record at once.
  */
 import { existsSync, readFileSync } from 'node:fs';
@@ -10,9 +10,18 @@ import { CATEGORIES } from '../../src/config/categories.ts';
 import type { Place, Relation, SourceRecord } from '../../src/data/schema.ts';
 import type { PlaceRecord } from './build-places.ts';
 import { relationId } from './build-relations.ts';
-import { aliasesFileSchema, organizationsFileSchema, overridesFileSchema } from './curated-schema.ts';
-import type { AliasesFile, OrganizationsFile, OverridesFile } from './curated-schema.ts';
+import {
+  aliasesFileSchema,
+  organizationsFileSchema,
+  overridesFileSchema,
+  pathConnectionsFileSchema,
+} from './curated-schema.ts';
+import type { AliasesFile, OrganizationsFile, OverridesFile, PathConnectionsFile } from './curated-schema.ts';
+import { buildPathConnections, PATH_CONNECTIONS_FILE } from './path-connections.ts';
+import type { PathConnectionContext } from './path-connections.ts';
 import { mergeAliases, safeHttpUrl } from './place-fields.ts';
+import { publisherTerms } from './publisher-terms.ts';
+import type { SourceTerms } from './publisher-terms.ts';
 
 export class CuratedDataError extends Error {
   readonly problems: string[];
@@ -27,6 +36,8 @@ export interface CuratedInputs {
   aliases: AliasesFile;
   overrides: OverridesFile;
   organizations: OrganizationsFile;
+  /** Evidence-backed walkway connections (G-29); absent file = none. */
+  pathConnections: PathConnectionsFile;
   /** File names that were present. */
   present: string[];
 }
@@ -62,15 +73,18 @@ export function loadCurated(dir: string): CuratedInputs {
   const a = readJson(dir, 'aliases.json', aliasesFileSchema, { aliases: [] }, problems);
   const o = readJson(dir, 'overrides.json', overridesFileSchema, { overrides: [] }, problems);
   const g = readJson(dir, 'organizations.json', organizationsFileSchema, { records: [] }, problems);
+  const pc = readJson(dir, PATH_CONNECTIONS_FILE, pathConnectionsFileSchema, { connections: [] }, problems);
   if (problems.length > 0) throw new CuratedDataError(problems);
   return {
     aliases: a.value,
     overrides: o.value,
     organizations: g.value,
+    pathConnections: pc.value,
     present: [
       a.present && 'aliases.json',
       o.present && 'overrides.json',
       g.present && 'organizations.json',
+      pc.present && PATH_CONNECTIONS_FILE,
     ].filter((x): x is string => typeof x === 'string'),
   };
 }
@@ -93,13 +107,53 @@ function urlStem(url: string): string {
   }
 }
 
-/** Registry of curated sources keyed by name+url, with deterministic ids. */
+interface CitedSource {
+  name: string;
+  url?: string;
+  retrievedAt?: string;
+  license?: string;
+  attribution?: string;
+  licenseUrl?: string;
+}
+
+/**
+ * Licence terms for a cited source: the entry's own `license` + `attribution`
+ * (both or neither), else the publisher table, else null (G-07).
+ */
+function termsOf(src: CitedSource): SourceTerms | null {
+  if (src.license && src.attribution)
+    return {
+      license: src.license,
+      attribution: src.attribution,
+      ...(src.licenseUrl ? { licenseUrl: src.licenseUrl } : {}),
+    };
+  if (src.license || src.attribution || src.licenseUrl) return null;
+  return publisherTerms(src.url);
+}
+
+/**
+ * Registry of curated sources keyed by name+url, with deterministic ids. Every
+ * registered source carries a licence and an attribution; a source without
+ * them is reported to `problems` (G-07).
+ */
 class SourceRegistry {
   private byKey = new Map<string, SourceRecord>();
-  add(src: { name: string; url?: string; retrievedAt?: string }): string {
+  private readonly problems: string[];
+  constructor(problems: string[]) {
+    this.problems = problems;
+  }
+  add(src: CitedSource, where: string): string {
     const key = `${src.name}\u0000${src.url ?? ''}`;
+    const terms = termsOf(src);
+    if (!terms)
+      this.problems.push(
+        `${where}: source "${src.name}"${src.url ? ` (${src.url})` : ''} has no licence/attribution: ` +
+          'add both "license" and "attribution" to the source (or list the publisher in scripts/lib/publisher-terms.ts)',
+      );
     const existing = this.byKey.get(key);
     if (existing) {
+      if (terms && (terms.license !== existing.license || terms.attribution !== existing.attribution))
+        this.problems.push(`${where}: source "${src.name}" is cited elsewhere with different licence terms`);
       if (src.retrievedAt && (!existing.retrievedAt || src.retrievedAt > existing.retrievedAt)) {
         existing.retrievedAt = src.retrievedAt;
       }
@@ -112,6 +166,8 @@ class SourceRegistry {
       id,
       name: src.name,
       ...(src.url ? { url: src.url } : {}),
+      ...(terms ? { license: terms.license, attribution: terms.attribution } : {}),
+      ...(terms?.licenseUrl ? { licenseUrl: terms.licenseUrl } : {}),
       ...(src.retrievedAt ? { retrievedAt: src.retrievedAt } : {}),
     });
     return id;
@@ -125,16 +181,30 @@ export interface CuratedMergeResult {
   records: PlaceRecord[];
   relations: Relation[];
   sources: SourceRecord[];
-  applied: { aliases: number; overrides: number; organizations: number; anchoredOrganizations: number };
+  applied: {
+    aliases: number;
+    overrides: number;
+    organizations: number;
+    anchoredOrganizations: number;
+    pathConnections: number;
+  };
 }
 
-/** Applies organizations, then aliases, then overrides. Throws CuratedDataError on any unresolved reference. */
-export function mergeCurated(records: readonly PlaceRecord[], curated: CuratedInputs): CuratedMergeResult {
+/**
+ * Applies organizations, then aliases, then overrides, then path connections
+ * (checked against `paths`: the routing graph). Throws CuratedDataError on any
+ * unresolved reference or unlicensed source.
+ */
+export function mergeCurated(
+  records: readonly PlaceRecord[],
+  curated: CuratedInputs,
+  paths?: PathConnectionContext,
+): CuratedMergeResult {
   const problems: string[] = [];
   const out = [...records];
   const byId = new Map(out.map((r) => [r.place.id, r]));
   const categoryIds = new Set(CATEGORIES.map((c) => c.id));
-  const sources = new SourceRegistry();
+  const sources = new SourceRegistry(problems);
   const relations: Relation[] = [];
   let anchored = 0;
 
@@ -150,7 +220,7 @@ export function mergeCurated(records: readonly PlaceRecord[], curated: CuratedIn
       continue;
     }
     const website = safeHttpUrl(rec.website);
-    const sourceId = sources.add(rec.source);
+    const sourceId = sources.add(rec.source, where);
     const a = anchor?.place;
     const buildingId = a ? (a.kind === 'building' ? a.id : a.buildingId) : undefined;
     const place: Place = {
@@ -204,7 +274,7 @@ export function mergeCurated(records: readonly PlaceRecord[], curated: CuratedIn
       problems.push(`aliases.json aliases[${i}]: target ${entry.target} does not exist`);
       continue;
     }
-    sources.add(entry.source);
+    sources.add(entry.source, `aliases.json aliases[${i}]`);
     target.place.aliases = mergeAliases(target.place.aliases, entry.aliases, target.place.name);
   }
 
@@ -229,7 +299,7 @@ export function mergeCurated(records: readonly PlaceRecord[], curated: CuratedIn
     if (o.set.description) p.description = o.set.description;
     if (o.set.openingHours) p.openingHours = o.set.openingHours;
     if (o.set.wheelchair) p.wheelchair = o.set.wheelchair;
-    sources.add(o.source);
+    sources.add(o.source, where);
     // An unverified report is dated in the notes only: lastVerifiedAt would claim a check that never happened.
     const verified = o.check === 'physical-survey' || o.check === 'official-publication';
     const { lastVerifiedAt: _previous, ...rest } = p.provenance;
@@ -243,6 +313,21 @@ export function mergeCurated(records: readonly PlaceRecord[], curated: CuratedIn
     };
   }
 
+  const connections = curated.pathConnections.connections;
+  if (connections.length > 0 && !paths)
+    problems.push(`${PATH_CONNECTIONS_FILE}: path connections need the routing graph to be checked`);
+  else if (paths) {
+    relations.push(
+      ...buildPathConnections(
+        curated.pathConnections,
+        byId,
+        paths,
+        (src, where) => sources.add(src, where),
+        problems,
+      ),
+    );
+  }
+
   if (problems.length > 0) throw new CuratedDataError(problems);
   return {
     records: out,
@@ -253,6 +338,7 @@ export function mergeCurated(records: readonly PlaceRecord[], curated: CuratedIn
       overrides: curated.overrides.overrides.length,
       organizations: curated.organizations.records.length,
       anchoredOrganizations: anchored,
+      pathConnections: connections.length,
     },
   };
 }

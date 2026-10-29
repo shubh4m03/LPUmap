@@ -2,7 +2,7 @@ import { useTheme } from '../../accessibility/index.ts';
 import { groupCount } from '../../app/commands.ts';
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { useAppStore } from '../../app/store/index.ts';
-import { categoriesInGroup, LAYER_GROUPS, type LayerGroupId } from '../../config/categories.ts';
+import { categoriesInGroup, LAYER_GROUPS, type LayerGroupId } from '../../config/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
 import { Button, Icon, Switch, iconForCategory } from '../ui/index.ts';
 import { BuildingLegend } from './BuildingLegend.tsx';

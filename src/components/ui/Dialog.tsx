@@ -1,6 +1,6 @@
 import { useId, useRef, type KeyboardEvent, type ReactNode, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
-import { useFocusTrap } from '../../accessibility/useFocusTrap.ts';
+import { useFocusTrap } from '../../accessibility/index.ts';
 import { IconButton } from './IconButton.tsx';
 import { cx } from './cx.ts';
 import { useModalPresence } from './modal-presence.ts';

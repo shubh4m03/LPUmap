@@ -1,6 +1,6 @@
 import { useId, type FormEvent, type ReactNode } from 'react';
-import { Button } from '../../components/ui/Button.tsx';
-import { Dialog } from '../../components/ui/Dialog.tsx';
+import { Button } from '../../components/ui/index.ts';
+import { Dialog } from '../../components/ui/index.ts';
 import type { AdminApiError } from '../api/errors.ts';
 import { ErrorNotice } from './ErrorNotice.tsx';
 

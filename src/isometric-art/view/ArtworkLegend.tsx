@@ -1,7 +1,7 @@
 import { useId, useState } from 'react';
-import { IconButton } from '../components/ui/index.ts';
+import { IconButton } from '../../components/ui/index.ts';
 import { LEGEND_CROP } from './art-ui.ts';
-import type { ArtSourceSpace } from './viewport.ts';
+import type { ArtSourceSpace } from '../index.ts';
 
 export interface ArtworkLegendProps {
   /** Manifest-relative URL already resolved to an app URL (the image the overview shows). */

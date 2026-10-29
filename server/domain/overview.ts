@@ -5,8 +5,8 @@
  */
 import { APP_CONFIG } from '../../src/config/index.ts';
 import { describeOrphan, orphanReasonFor, type OrphanReason } from '../base-data.ts';
-import { findPossibleDuplicates } from '../../src/community/duplicates.ts';
-import { checkAccessNode, pointInPolygons } from '../../src/community/geo.ts';
+import { findPossibleDuplicates } from '../../src/community/index.ts';
+import { checkAccessNode, pointInPolygons } from '../../src/community/index.ts';
 import { countAuditSince } from '../db/audit.ts';
 import { countLocations, listLocationRows } from '../db/locations.ts';
 import { getPublicationState } from '../db/meta.ts';

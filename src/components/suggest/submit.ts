@@ -9,7 +9,7 @@ import {
   contributionResponseSchema,
   type ContributionInput,
   type DuplicateCandidate,
-} from '../../community/schema.ts';
+} from '../../community/index.ts';
 
 export const CONTRIBUTION_PATH = '/api/contributions/locations';
 

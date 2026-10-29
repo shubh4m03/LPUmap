@@ -20,9 +20,11 @@
  *
  * A local file (--ms-file / --google-file) replaces the download of that file
  * only; the published URL is still recorded and --retrieved-at must say when
- * that copy was downloaded. Set DATA_FETCH_CONTACT for the User-Agent.
+ * that copy was downloaded. Every request carries the neutral User-Agent
+ * `LPU-Campus-Atlas-research/0.1`, a timeout (and a stall timeout for the tile
+ * downloads) and bounded retries with backoff (scripts/lib/http.ts).
  */
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, renameSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { APP_CONFIG } from '../src/config/index.ts';
@@ -38,16 +40,15 @@ import {
   msSourceSchema,
 } from './lib/detection-sources.ts';
 import type { GoogleSource, MsSource } from './lib/detection-sources.ts';
-import { userAgent as osmUserAgent } from './lib/fetch-osm-lib.ts';
 import {
   extractCdlaText,
   findTileUrl,
   keepGoogleRow,
   keepMsLine,
-  openSource,
   releaseOf,
-  scanGzipLines,
+  scanSource,
 } from './lib/fetch-footprints-lib.ts';
+import { fetchTextWithRetry } from './lib/http.ts';
 
 const root = resolve(fileURLToPath(import.meta.url), '../..');
 
@@ -81,9 +82,6 @@ async function main(): Promise<void> {
     ['force', 'skip-ms', 'skip-google'],
   );
   const out = resolve(values.out ?? resolve(root, 'data/raw/detections'));
-  const version = (JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')) as { version: string })
-    .version;
-  const ua = osmUserAgent(version, process.env.DATA_FETCH_CONTACT);
   const box = APP_CONFIG.map.maxBounds;
   const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
   if ((values['ms-file'] || values['google-file']) && !values['retrieved-at'])
@@ -98,20 +96,16 @@ async function main(): Promise<void> {
       mkdirSync(dir, { recursive: true });
       const linksUrl = values['ms-links'] ?? DEFAULTS.msLinks;
       console.log(`Reading ${linksUrl} …`);
-      const linksRes = await fetch(linksUrl, { headers: { 'User-Agent': ua } });
-      if (!linksRes.ok) throw new Error(`${linksUrl} answered HTTP ${linksRes.status}`);
-      const tileUrl = findTileUrl(await linksRes.text(), DEFAULTS.msLocation, DEFAULTS.msQuadkey);
+      const linksCsv = await fetchTextWithRetry(fetch, linksUrl);
+      const tileUrl = findTileUrl(linksCsv, DEFAULTS.msLocation, DEFAULTS.msQuadkey);
       console.log(
         `Tile ${DEFAULTS.msQuadkey}: ${tileUrl}${values['ms-file'] ? ` (local copy ${values['ms-file']})` : ''}`,
       );
-      const kept: string[] = [];
-      const stats = await scanGzipLines(await openSource(tileUrl, values['ms-file'], fetch, ua), (line) => {
-        if (keepMsLine(line, box)) kept.push(line);
-      });
+      const { stats, kept } = await scanSource(tileUrl, values['ms-file'], fetch, (line) =>
+        keepMsLine(line, box),
+      );
       console.log(`Reading ${DEFAULTS.cdlaUrl} …`);
-      const cdlaRes = await fetch(DEFAULTS.cdlaUrl, { headers: { 'User-Agent': ua } });
-      if (!cdlaRes.ok) throw new Error(`${DEFAULTS.cdlaUrl} answered HTTP ${cdlaRes.status}`);
-      const licenseText = extractCdlaText(await cdlaRes.text());
+      const licenseText = extractCdlaText(await fetchTextWithRetry(fetch, DEFAULTS.cdlaUrl));
       const source: MsSource = msSourceSchema.parse({
         sourceId: 'microsoft-ml-buildings',
         name: 'Microsoft Global ML Building Footprints',
@@ -151,10 +145,9 @@ async function main(): Promise<void> {
       mkdirSync(dir, { recursive: true });
       const url = values['google-url'] ?? DEFAULTS.googleUrl;
       console.log(`Reading ${url}${values['google-file'] ? ` (local copy ${values['google-file']})` : ''} …`);
-      const kept: string[] = [];
-      const stats = await scanGzipLines(await openSource(url, values['google-file'], fetch, ua), (row) => {
-        if (keepGoogleRow(row, box)) kept.push(row);
-      });
+      const { stats, kept } = await scanSource(url, values['google-file'], fetch, (row) =>
+        keepGoogleRow(row, box),
+      );
       const source: GoogleSource = googleSourceSchema.parse({
         sourceId: 'google-open-buildings',
         name: 'Google Open Buildings',

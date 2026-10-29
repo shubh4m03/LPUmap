@@ -23,9 +23,9 @@ import {
   compareArtworkNumbers,
   type ArtworkJoin,
   type ArtworkOnlyEntry,
-} from '../isometric-art/directory.ts';
-import type { ArtSubject, ManifestAsset } from '../isometric-art/schema.ts';
-import { normalizeDirectoryText } from './normalize.ts';
+} from '../isometric-art/index.ts';
+import type { ArtSubject, ManifestAsset } from '../isometric-art/index.ts';
+import { normalizeDirectoryText } from '../utils/directory-text.ts';
 import type {
   ArtworkGroup,
   ArtworkSection,

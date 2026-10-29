@@ -1,5 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { ErrorState } from '../../components/ui/EmptyState.tsx';
+import { ErrorState } from '../../components/ui/index.ts';
 
 interface Props {
   /** Changing it (e.g. the section name) clears a previous failure. */

@@ -1,5 +1,5 @@
-import type { VerificationStatus } from '../../data/schema.ts';
-import type { IconName } from '../icons/icon-paths.ts';
+import type { VerificationStatus } from '../../data/index.ts';
+import type { IconName } from '../icons/index.ts';
 
 export type BadgeTone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger' | 'info';
 

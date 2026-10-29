@@ -1,4 +1,4 @@
-import type { LngLat } from '../data/schema.ts';
+import type { LngLat } from '../data/index.ts';
 
 /** One position fix. Held in memory only — never logged, persisted or sent. */
 export interface GeoSample {

@@ -9,10 +9,10 @@
  */
 import type { ReactNode } from 'react';
 import { Button, cx, type IconName } from '../../components/ui/index.ts';
-import { FOCUS_RING } from '../../components/ui/cx.ts';
-import { Icon } from '../../components/icons/Icon.tsx';
-import type { StudioTool } from '../../building-studio/editor-state.ts';
-import { PUBLISH_BLOCKER_TEXT, studioPublishBlockers, studioStatus } from '../../building-studio/ui/store.ts';
+import { FOCUS_RING } from '../../components/ui/index.ts';
+import { Icon } from '../../components/icons/index.ts';
+import type { StudioTool } from '../../building-studio/editor.ts';
+import { PUBLISH_BLOCKER_TEXT, studioPublishBlockers, studioStatus } from '../../building-studio/ui/index.ts';
 import { selectTool } from './select-tool.ts';
 import { useStudioServices, useStudioState } from './studio-context.ts';
 

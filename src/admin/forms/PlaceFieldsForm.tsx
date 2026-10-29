@@ -1,7 +1,7 @@
 /** Inputs for the editable place fields (position and access point have their own controls). */
-import { LIMITS } from '../../community/schema.ts';
-import { TextInput } from '../../components/ui/TextInput.tsx';
-import type { VerificationStatus, Wheelchair } from '../../data/schema.ts';
+import { LIMITS } from '../../community/index.ts';
+import { TextInput } from '../../components/ui/index.ts';
+import type { VerificationStatus, Wheelchair } from '../../data/index.ts';
 import { SelectField, TextArea } from '../ui/fields.tsx';
 import type { FieldErrors } from '../ui/form-errors.ts';
 import { CATEGORY_OPTIONS, VERIFICATION_OPTIONS, WHEELCHAIR_OPTIONS } from '../ui/format.ts';

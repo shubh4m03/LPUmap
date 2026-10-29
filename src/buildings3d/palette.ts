@@ -1,11 +1,11 @@
 /**
  * Realistic-3D colours that are not in the shared map palette
- * (src/map/theme-colors.ts): the honest class for owner-placed studio models
+ * (src/styles/map-theme-colors.ts): the honest class for owner-placed studio models
  * drawn as fallback extrusions, the "Unverified detected footprints" layer,
  * the "Outside campus" badge, the glass tone of procedural windows, and the
  * map-anchored light. Hex values so tests can check contrast.
  */
-import type { MapTheme } from '../map/theme-colors.ts';
+import type { MapTheme } from '../styles/index.ts';
 
 export interface Realistic3DColors {
   /** Fallback extrusion of an owner-placed studio model (cool tone: not OSM data). */

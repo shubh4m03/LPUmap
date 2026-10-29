@@ -6,8 +6,8 @@
  * record or an image file.
  */
 import { useMemo, useState } from 'react';
-import { cx, FOCUS_RING } from '../../../components/ui/cx.ts';
-import { Spinner } from '../../../components/ui/Spinner.tsx';
+import { cx, FOCUS_RING } from '../../../components/ui/index.ts';
+import { Spinner } from '../../../components/ui/index.ts';
 import { useAdminApi } from '../../context.ts';
 import { useResource } from '../../hooks/useResource.ts';
 import { navigateAdmin } from '../../router.ts';

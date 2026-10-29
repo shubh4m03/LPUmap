@@ -15,7 +15,7 @@
  *    access and correction, and reports values outside the new template's
  *    guidance as 'outside-template-range' warnings — nothing is clamped.
  */
-import type { LngLat } from '../data/schema.ts';
+import type { LngLat } from '../data/index.ts';
 import type { MeshCache } from './mesh/cache.ts';
 import { fallbackPrismMesh, generateStudioMeshDetailed } from './mesh/generate.ts';
 import type { StudioMesh } from './mesh/types.ts';

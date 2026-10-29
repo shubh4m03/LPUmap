@@ -5,9 +5,9 @@
  * BEFORE publishing what the public app will do with the point. Pure.
  */
 import { useMemo } from 'react';
-import { boundaryPolygons, pointInPolygons, type PolygonRings } from '../../community/geo.ts';
-import type { BoundaryFile, LngLat } from '../../data/schema.ts';
-import { isValidLngLat } from '../../distance/geodesic.ts';
+import { boundaryPolygons, pointInPolygons, type PolygonRings } from '../../community/index.ts';
+import type { BoundaryFile, LngLat } from '../../data/index.ts';
+import { isValidLngLat } from '../../distance/index.ts';
 import type { CampusDataState } from '../data/campus-data.ts';
 
 /** 'unknown': no position yet, or the boundary is not loaded / has no polygon. */

@@ -146,9 +146,9 @@ reuse permission.
 ## Refreshing
 
 ```sh
-DATA_FETCH_CONTACT="<your contact>" npm run data:fetch-public -- --dry-run   # fetch, print diff, write nothing
-DATA_FETCH_CONTACT="<your contact>" npm run data:fetch-public                # write organizations.json + snapshot
-npm run data:fetch-public -- --offline                                        # re-extract from data/.cache/lpu only
+npm run data:fetch-public -- --dry-run   # fetch, print diff, write nothing
+npm run data:fetch-public                # write organizations.json + snapshot
+npm run data:fetch-public -- --offline   # re-extract from data/.cache/lpu only
 ```
 
 The script fetches about 31 pages, one at a time, with 2 s between requests.
@@ -157,7 +157,9 @@ errors, 429 and 5xx. It refuses redirects off www.lpu.in. If extraction yields
 zero records, or drops more than 40% against the current file, it exits with
 code 2 and leaves the file untouched. The normal build does not need it.
 
-robots.txt groups are matched on the exact product token (`LPUCampusAtlasDataBot`), never
+Requests send the neutral User-Agent `LPU-Campus-Atlas-research/0.1`, with no contact or personal identifier.
+robots.txt groups are matched on its exact product token (`LPU-Campus-Atlas-research`; the
+2026-10-23 snapshot was taken under the earlier token `LPUCampusAtlasDataBot`), never
 by substring, and a robots.txt that redirects off-site aborts the run. With `--offline`,
 `retrievedAt` is the date of the oldest cached page (file modification time), not the
 day of the re-extraction, so provenance never looks fresher than the HTML it came from.

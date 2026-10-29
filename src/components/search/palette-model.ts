@@ -1,6 +1,6 @@
 /** Pure view-model for the command palette: sections and flat option order. */
 import { commandIcon, commandNeedsMap } from '../../app/commands.ts';
-import { getCategory, LAYER_GROUPS, categoriesInGroup } from '../../config/categories.ts';
+import { getCategory, LAYER_GROUPS, categoriesInGroup } from '../../config/index.ts';
 import type { Place } from '../../data/index.ts';
 import { highlightSegments, type SearchDocKind, type SearchHit } from '../../search/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';

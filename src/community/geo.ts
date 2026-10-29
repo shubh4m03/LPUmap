@@ -4,8 +4,8 @@
  * DOM/Node APIs. Distances come only from src/distance.
  */
 import { APP_CONFIG } from '../config/index.ts';
-import type { BoundaryFile, CampusZone, GraphFile, LngLat } from '../data/schema.ts';
-import { haversineM, isValidLngLat } from '../distance/geodesic.ts';
+import type { BoundaryFile, CampusZone, GraphFile, LngLat } from '../data/index.ts';
+import { haversineM, isValidLngLat } from '../distance/index.ts';
 
 /** A polygon as rings (first = outer, rest = holes). */
 export type PolygonRings = LngLat[][];

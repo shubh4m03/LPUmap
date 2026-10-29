@@ -10,7 +10,7 @@ import type {
   TemplateDefinition,
   ValidationResult,
   PublishedStudioBuilding,
-} from '../../../src/building-studio/schema.ts';
+} from '../../../src/building-studio/index.ts';
 import type { StudioBaseData } from '../../base-data.ts';
 import { randomIds, type IdGenerator } from '../../ids.ts';
 import type { DomainContext } from '../context.ts';

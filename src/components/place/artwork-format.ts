@@ -5,13 +5,10 @@
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { useAppStore } from '../../app/store/index.ts';
 import type { DirectoryEntry } from '../../directory/index.ts';
-import type { ArtworkLabelView } from '../../isometric-art/directory.ts';
-import type { AssociationEvidence } from '../../isometric-art/schema.ts';
-import {
-  setRequestedIsometricVariant,
-  useRequestedIsometricVariant,
-} from '../../isometric-art/variant-state.ts';
-import { ARTWORK_NUMBER_NOTE } from '../../isometric-art/text.ts';
+import type { ArtworkLabelView } from '../../isometric-art/index.ts';
+import type { AssociationEvidence } from '../../isometric-art/index.ts';
+import { setRequestedIsometricVariant, useRequestedIsometricVariant } from '../../app/isometric-variant.ts';
+import { ARTWORK_NUMBER_NOTE, unconfirmedMatchLabel } from '../../isometric-art/index.ts';
 
 /** How each printed label is introduced (the text itself is shown exactly as printed). */
 export const ARTWORK_LABEL_ROLES: Record<ArtworkLabelView['role'], string> = {
@@ -35,7 +32,7 @@ export const EVIDENCE_KIND_LABELS: Record<AssociationEvidence['kind'], string> =
 
 /**
  * Switches to the illustrated overview (the renderer's variant state,
- * src/isometric-art/variant-state.ts) and frames the current selection there.
+ * src/app/isometric-variant.ts) and frames the current selection there.
  */
 export function showOnIllustration(): void {
   setRequestedIsometricVariant('illustrated');
@@ -61,5 +58,5 @@ export function frameCandidate(e: DirectoryEntry): void {
   const s = useAppStore.getState();
   if (s.viewMode === 'isometric' && s.mapUnavailable === null)
     s.setViewMode(s.lastMapMode, { reason: 'user' });
-  s.requestFocus({ kind: 'place', placeId: e.id });
+  s.showUnconfirmedMatch(e.id, unconfirmedMatchLabel(e.title));
 }

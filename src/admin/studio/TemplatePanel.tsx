@@ -7,11 +7,11 @@
  */
 import { useMemo, useState } from 'react';
 import { Badge, Button } from '../../components/ui/index.ts';
-import { starterTemplate } from '../../building-studio/asset-library.ts';
-import { templateAvailability } from '../../building-studio/template-compat.ts';
-import type { TemplateDefinition } from '../../building-studio/schema.ts';
-import type { ApplyTemplatePreview } from '../../building-studio/ui/actions.ts';
-import { fieldLabel, valueAt } from '../../building-studio/ui/text.ts';
+import { starterTemplate } from '../../building-studio/editor.ts';
+import { templateAvailability } from '../../building-studio/editor.ts';
+import type { TemplateDefinition } from '../../building-studio/index.ts';
+import type { ApplyTemplatePreview } from '../../building-studio/ui/index.ts';
+import { fieldLabel, valueAt } from '../../building-studio/ui/index.ts';
 import { PanelSection, SelectField } from './controls.tsx';
 import { useStudioServices, useStudioState } from './studio-context.ts';
 import { useDraftEdit } from './useDraftEdit.ts';

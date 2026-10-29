@@ -30,6 +30,11 @@ export const APP_CONFIG = {
     /** Panning limit [w, s, e, n]: campus extent plus margin for nearby Law Gate area. */
     maxBounds: [75.685, 31.236, 75.722, 31.27] as [number, number, number, number],
     pitch3d: 55,
+    /**
+     * Campus 3D pitch on phones (< 768 px wide). A steep tilt on a short, narrow screen hides most
+     * of the campus behind the near buildings and costs more fill rate, so phones tilt less.
+     */
+    pitch3dCompact: 42,
     bearing3d: -20,
     /** Below this zoom 3D extrusions are hidden (flat footprints only). */
     extrusionMinZoom: 14.5,
@@ -99,6 +104,12 @@ export const APP_CONFIG = {
     dataCache: 'lpu-atlas-data-v2',
     /** Hours after which cached opening hours show a freshness warning. */
     hoursFreshnessDays: 180,
+    /**
+     * Days after the dataset's source retrieval (manifest.builtFrom) after which the app says the
+     * campus data may be out of date (About panel, and once per visit at start-up). A policy
+     * choice, not a measured change rate.
+     */
+    datasetStaleDays: 120,
   },
   contributions: {
     /**
@@ -167,11 +178,14 @@ const configSchema = z.object({
       minZoom: z.number().nonnegative(),
       maxZoom: positive,
       maxBounds: z.tuple([z.number(), z.number(), z.number(), z.number()]),
+      pitch3d: z.number().gt(0).lte(85),
+      pitch3dCompact: z.number().gt(0).lte(85),
       fallbackBuildingHeightM: positive,
       metresPerLevel: positive,
     })
     .loose()
     .refine((m) => m.minZoom < m.zoom && m.zoom < m.maxZoom, 'zoom must lie between minZoom and maxZoom')
+    .refine((m) => m.pitch3dCompact <= m.pitch3d, 'pitch3dCompact must not exceed pitch3d')
     .refine(
       (m) =>
         m.maxBounds[0] < m.center[0] &&
@@ -228,3 +242,5 @@ export function validateConfig(config: unknown = APP_CONFIG): void {
     throw new Error(`Invalid APP_CONFIG: ${z.prettifyError(result.error)}`);
   }
 }
+export { CATEGORIES, LAYER_GROUPS, categoriesInGroup, getCategory } from './categories.ts';
+export type { CategoryDef, LayerGroupId } from './categories.ts';

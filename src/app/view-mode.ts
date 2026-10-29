@@ -19,7 +19,11 @@
  * variants" below): the owner's illustration (default; schematic, not
  * geographically exact) and the map-accurate drawing from real footprints.
  */
-import { PHOTOREAL_UNAVAILABLE_REASON, SATELLITE_NOT_CONFIGURED_REASON } from '../map/providers/types.ts';
+import {
+  PHOTOREAL_UNAVAILABLE_REASON,
+  SATELLITE_NOT_CONFIGURED_REASON,
+  type ViewModeAvailability,
+} from '../map/providers/index.ts';
 
 export type ViewMode = 'realistic3d' | 'isometric' | 'standard2d' | 'satellite2d' | 'photoreal3d';
 /** Modes rendered by MapLibre (live GPS works only here). */
@@ -140,11 +144,8 @@ export function buildViewUrl(href: string, mode: ViewMode | null): string {
 // Provider availability (src/map/providers fills it at runtime)
 // ---------------------------------------------------------------------------
 
-/** For each provider-backed mode: null when it can be shown, else the user-facing reason. */
-export interface ViewModeAvailability {
-  satellite: string | null;
-  photoreal: string | null;
-}
+/** Defined by the provider registry (the lower module), re-exported for the app. */
+export type { ViewModeAvailability };
 
 /**
  * Until the provider registry reports otherwise: no imagery is configured and

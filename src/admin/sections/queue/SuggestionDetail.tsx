@@ -4,13 +4,13 @@
  * state allows.
  */
 import { useMemo, useState } from 'react';
-import { Badge } from '../../../components/ui/Badge.tsx';
-import { Button } from '../../../components/ui/Button.tsx';
-import { cx, FOCUS_RING } from '../../../components/ui/cx.ts';
-import { EmptyState } from '../../../components/ui/EmptyState.tsx';
-import { Spinner } from '../../../components/ui/Spinner.tsx';
-import { useToast } from '../../../components/ui/toast-context.ts';
-import type { DuplicateCandidate } from '../../../community/schema.ts';
+import { Badge } from '../../../components/ui/index.ts';
+import { Button } from '../../../components/ui/index.ts';
+import { cx, FOCUS_RING } from '../../../components/ui/index.ts';
+import { EmptyState } from '../../../components/ui/index.ts';
+import { Spinner } from '../../../components/ui/index.ts';
+import { useToast } from '../../../components/ui/index.ts';
+import type { DuplicateCandidate } from '../../../community/index.ts';
 import type { SuggestionRecord } from '../../api/schemas.ts';
 import { useAdminApi } from '../../context.ts';
 import { useAdminCampusData } from '../../data/campus-data.ts';

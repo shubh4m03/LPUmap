@@ -4,7 +4,7 @@
  * while editing, `dispose()` removes everything. Positions reported to the
  * editor are always [lon, lat].
  */
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 import {
   EDIT_LAYER_IDS,
   EDIT_LAYER_ORDER,

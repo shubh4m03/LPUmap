@@ -5,7 +5,7 @@
  * the change having happened. Hide/restore are reversible; permanent delete is
  * allowed only for hidden locations and requires the exact current name.
  */
-import { placeFieldsSchema, type PlaceFields } from '../../src/community/schema.ts';
+import { placeFieldsSchema, type PlaceFields } from '../../src/community/index.ts';
 import { auditStmt } from '../db/audit.ts';
 import {
   deleteLocationStmt,

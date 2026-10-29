@@ -4,7 +4,7 @@ import { copyText, downloadText } from '../../feedback/index.ts';
 import { safeExternalUrl } from '../../utils/safe-url.ts';
 import { ExternalLink } from '../place/index.ts';
 import { Button, Icon, cx, useToast } from '../ui/index.ts';
-import { BUTTON_BASE } from '../ui/cx.ts';
+import { BUTTON_BASE } from '../ui/index.ts';
 
 const OSM_EDIT_HELP = 'https://www.openstreetmap.org/fixthemap';
 

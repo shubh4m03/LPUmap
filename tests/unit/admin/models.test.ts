@@ -4,6 +4,7 @@ import { REVERTABLE_ACTIONS as SERVER_REVERTABLE } from '../../../server/domain/
 import { accessPointBody } from '../../../src/admin/map/access-choice.ts';
 import { accessCandidates, accessProblem } from '../../../src/admin/map/access-points.ts';
 import { nudge, pointHandle, pointPreview, roundLngLat } from '../../../src/admin/map/preview.ts';
+import { createLocalProjection, haversineM } from '../../../src/distance/geodesic.ts';
 import {
   approveCorrections,
   emptyPlaceForm,
@@ -290,7 +291,9 @@ describe('map preview helpers', () => {
   it('nudges by metres and rounds to 7 decimals', () => {
     const p = nudge([75.7, 31.25], 0, 1);
     expect(p[0]).toBe(75.7);
-    expect(p[1]).toBeCloseTo(31.25 + 1 / 111_320, 7);
+    // The shared local projection (src/distance), not a private metres-per-degree constant.
+    expect(p).toEqual(roundLngLat(createLocalProjection([75.7, 31.25]).toLngLat([0, 1])));
+    expect(haversineM([75.7, 31.25], nudge([75.7, 31.25], 3, -4))).toBeCloseTo(5, 1);
     expect(roundLngLat([1.123456789, 2.987654321])).toEqual([1.1234568, 2.9876543]);
   });
 });

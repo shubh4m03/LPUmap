@@ -6,9 +6,9 @@
  * Assigning the validator to StudioValidator makes tsc prove that the
  * server's validation context satisfies the validator's contract.
  */
-import { STARTER_TEMPLATE_VERSIONS, starterTemplate } from '../../../src/building-studio/asset-library.ts';
-import type { TemplateDefinition } from '../../../src/building-studio/schema.ts';
-import { validateStudioDraft } from '../../../src/building-studio/validate.ts';
+import { STARTER_TEMPLATE_VERSIONS, starterTemplate } from '../../../src/building-studio/editor.ts';
+import type { TemplateDefinition } from '../../../src/building-studio/index.ts';
+import { validateStudioDraft } from '../../../src/building-studio/editor.ts';
 import type { CodeTemplateLibrary, StudioValidator } from './context.ts';
 
 export const sharedValidator: StudioValidator = (draft, ctx) => validateStudioDraft(draft, ctx);

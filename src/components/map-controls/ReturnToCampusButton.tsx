@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { useAppStore } from '../../app/store/index.ts';
-import { Button } from '../ui/Button.tsx';
-import { cx } from '../ui/cx.ts';
+import { Button } from '../ui/index.ts';
+import { cx } from '../ui/index.ts';
 
 export const RETURN_TO_CAMPUS_LABEL = 'Back to campus';
 

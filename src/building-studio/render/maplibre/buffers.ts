@@ -16,8 +16,8 @@
  *   11–14 window grid: floor height, first-floor bottom, bay width, density
  *   15–16 pattern id (0 none, 1 ribbon, 2 punched, 3 grid, 4 curtain), floors
  */
-import { faceVertices, triangulateFace } from '../../mesh/triangulate.ts';
-import type { MaterialSlot, StudioFace, StudioMesh, Vec3, WindowGrid } from '../../mesh/types.ts';
+import { faceVertices, triangulateFace } from '../../index.ts';
+import type { MaterialSlot, StudioFace, StudioMesh, Vec3, WindowGrid } from '../../index.ts';
 
 export const STRIDE_FLOATS = 17;
 export const STRIDE_BYTES = STRIDE_FLOATS * 4;

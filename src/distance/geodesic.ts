@@ -9,7 +9,7 @@
  *
  * Shared with scripts/: erasable syntax and `.ts` import extensions only.
  */
-import type { LngLat } from '../data/schema.ts';
+import type { LngLat } from '../data/index.ts';
 
 export const EARTH_RADIUS_M = 6_371_008.8;
 

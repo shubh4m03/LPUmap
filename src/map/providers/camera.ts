@@ -6,7 +6,7 @@
  * terrain or photorealistic scene there is nothing a near-horizon view would
  * add; Campus 3D opens at APP_CONFIG.map.pitch3d (55°).
  */
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 
 export const MAX_PITCH = 60;
 

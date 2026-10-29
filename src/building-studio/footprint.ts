@@ -15,8 +15,8 @@
  * y forward) maps to east/north as e = x·cosθ + y·sinθ, n = −x·sinθ + y·cosθ,
  * which preserves orientation (counter-clockwise stays counter-clockwise).
  */
-import type { LngLat } from '../data/schema.ts';
-import { createLocalProjection, isValidLngLat } from '../distance/geodesic.ts';
+import type { LngLat } from '../data/index.ts';
+import { createLocalProjection, isValidLngLat } from '../distance/index.ts';
 import { modelLocalFootprint } from './generators/shapes.ts';
 import type { LocalPolygon, Vec2 } from './mesh/types.ts';
 import type { ModelConfigV1, StudioFootprint } from './schema.ts';

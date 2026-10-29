@@ -4,7 +4,12 @@
     {
       "target": "osm:way/201",
       "set": { "name": "Synthetic Admin Block", "wheelchair": "limited" },
-      "source": { "name": "Synthetic site survey", "url": "https://example.org/survey" },
+      "source": {
+        "name": "Synthetic site survey",
+        "url": "https://example.org/survey",
+        "license": "CC0-1.0 (synthetic test data)",
+        "attribution": "Synthetic fixture"
+      },
       "check": "physical-survey",
       "lastVerifiedAt": "2026-01-03",
       "verifiedBy": "fixture"
@@ -12,7 +17,11 @@
     {
       "target": "osm:node/41",
       "set": { "description": "Reported by a synthetic tester." },
-      "source": { "name": "Synthetic report" },
+      "source": {
+        "name": "Synthetic report",
+        "license": "CC0-1.0 (synthetic test data)",
+        "attribution": "Synthetic fixture"
+      },
       "check": "unverified-report",
       "lastVerifiedAt": "2026-01-04"
     }

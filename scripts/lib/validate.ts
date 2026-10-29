@@ -165,6 +165,9 @@ function checkManifest(m: Manifest, raws: Record<string, string | undefined>, di
   if (!m.sources.some((s) => s.id === 'osm'))
     c.error('manifest-sources', 'manifest lacks the OpenStreetMap source');
   for (const s of m.sources) {
+    // G-07: every registered source states its licence terms and how to credit it.
+    if (!s.license?.trim()) c.error('source-license', `manifest source ${s.id} has no licence`);
+    if (!s.attribution?.trim()) c.error('source-attribution', `manifest source ${s.id} has no attribution`);
     if (!s.licenseTextPath) continue;
     const local = join(dir, s.licenseTextPath.replace(/^data\//, ''));
     if (!existsSync(local))
@@ -262,7 +265,41 @@ function checkEntrance(p: Place, buildings: Map<string, MultiPolygon>, c: Collec
   if (!onOutline) c.error('entrance-outline', `${p.id} is not a vertex of its building ${p.buildingId}`);
 }
 
-function checkRelations(relations: Relation[], placeIds: Set<string>, c: Collector) {
+/**
+ * G-07: every place, relation and building cites a source registered (with its
+ * licence) in manifest.sources; every place also names the exact record
+ * (sourceRef) and when it was retrieved.
+ */
+function checkProvenance(
+  manifest: Manifest,
+  items: {
+    places: readonly Place[];
+    relations: readonly Relation[];
+    buildings: BuildingsFile | null;
+  },
+  c: Collector,
+) {
+  const known = new Set(manifest.sources.map((s) => s.id));
+  const unknown = new Map<string, string>();
+  const note = (sourceId: string, id: string) => {
+    if (!known.has(sourceId) && !unknown.has(sourceId)) unknown.set(sourceId, id);
+  };
+  for (const p of items.places) {
+    note(p.provenance.sourceId, p.id);
+    if (!p.provenance.sourceRef?.trim()) c.error('provenance-ref', `${p.id} provenance has no sourceRef`);
+    if (!p.provenance.retrievedAt?.trim())
+      c.error('provenance-retrieved', `${p.id} provenance has no retrievedAt`);
+  }
+  for (const r of items.relations) note(r.provenance.sourceId, r.id);
+  for (const f of items.buildings?.features ?? []) note(f.properties.sourceId, f.properties.id);
+  for (const [sourceId, id] of unknown)
+    c.error('provenance-source', `${id} cites source ${sourceId}, which manifest.sources does not register`);
+}
+
+function checkRelations(relations: Relation[], placeIds: Set<string>, graph: GraphFile | null, c: Collector) {
+  const walkableWays = new Set(
+    (graph?.edges ?? []).filter((e) => e.foot && e.osmWayId !== null).map((e) => e.osmWayId),
+  );
   const ids = new Set<string>();
   const triples = new Set<string>();
   for (const r of relations) {
@@ -276,6 +313,13 @@ function checkRelations(relations: Relation[], placeIds: Set<string>, c: Collect
     if (r.from === r.to) c.error('relation-self', `${r.id} relates a place to itself`);
     if (r.type === 'nearby' && r.distanceM === undefined)
       c.error('relation-distance', `${r.id} lacks distanceM`);
+    // G-29: relationSchema already demands a curated record citing pathOsmWayId; that way must be
+    // a walkable way in graph.json.
+    if (r.type === 'connected_by_path' && (r.pathOsmWayId === undefined || !walkableWays.has(r.pathOsmWayId)))
+      c.error(
+        'relation-path',
+        `${r.id}: cited path way ${r.pathOsmWayId ?? '(none)'} is not a walkable way in graph.json`,
+      );
   }
 }
 
@@ -531,7 +575,17 @@ export async function validateDataset(opts: ValidateOptions): Promise<ValidateRe
     if (buildings) checkBuildingPlaceSync(buildings.data, places.data.places, c);
   }
   if (context) checkContextPlaces(context.data.places, placeIds, ctx, opts, c);
-  if (relations && places) checkRelations(relations.data.relations, placeIds, c);
+  if (relations && places) checkRelations(relations.data.relations, placeIds, graph?.data ?? null, c);
+  if (manifest)
+    checkProvenance(
+      manifest.data,
+      {
+        places: [...(places?.data.places ?? []), ...(context?.data.places ?? [])],
+        relations: relations?.data.relations ?? [],
+        buildings: buildings?.data ?? null,
+      },
+      c,
+    );
   if (detections && buildings) checkDetections(detections.data, buildings.data, manifest?.data ?? null, c);
   if (review) checkReview(review.data, new Set(footprints.keys()), placeIds, c);
   if (manifest)

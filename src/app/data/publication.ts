@@ -18,15 +18,15 @@
  *  - 'failed'      the API answered with an error or invalid data and there
  *                  is no saved copy — base data only.
  */
-import { publishedStudioBuildingSchema } from '../../building-studio/schema.ts';
+import { publishedStudioBuildingSchema } from '../../building-studio/index.ts';
 import {
   publicationSchema,
   publishedLocationSchema,
   publishedOverrideSchema,
   type Publication,
-} from '../../community/schema.ts';
+} from '../../community/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
-import { publishedArtworkAssociationSchema } from '../../isometric-art/schema.ts';
+import { publishedArtworkAssociationSchema } from '../../isometric-art/index.ts';
 
 export const PUBLICATION_PATH = '/api/locations';
 /** How long startup waits for the network before using the saved copy. */

@@ -15,7 +15,8 @@ createRouter(graph: GraphFile): Router
 interface Router {
   route(req: RouteRequest): RouteResult;              // RouteOk | RouteFailure
   alternatives(req: RouteRequest): RouteResult[];     // best first; failure → [failure]
-  snap(p: LngLat, profile: RouteProfileId): { nodeId: number; distanceM: number } | null;
+  snap(p: LngLat, profile: RouteProfileId): RouteSnap | null;
+  // RouteSnap { location, distanceM, nodeId: number | null, edgeId: number | null }
   readonly nodeCount: number;
   readonly edgeCount: number;                         // accepted edges only
 }
@@ -28,7 +29,7 @@ isRouteProfileId(v): v is RouteProfileId
 ```
 
 - **Failure reasons:** `invalid-input`, `same-point` (endpoints under 3 m apart),
-  `origin-unsnappable` or `destination-unsnappable` (no usable node within `maxSnapDistanceM` = 80 m),
+  `origin-unsnappable` or `destination-unsnappable` (no usable edge within `maxSnapDistanceM` = 80 m),
   and `no-path`, with a message specific to the profile.
 - **Caveat codes:** `accessibility-unverified`, `contains-steps`, `push-bike`, `start-connector` and
   `end-connector` (a connector leg over 15 m), and `unnamed-paths`.
@@ -59,10 +60,26 @@ isRouteProfileId(v): v is RouteProfileId
   - `step-free` excludes `steps` and `wheelchair: 'no'` edges. It adds `accessibility-unverified`
     whenever a used edge is `unknown` or `limited`, a connector is over 15 m, or the route has no
     network edges.
-- **Snapping:** a `place` endpoint uses its `nodeId` if the profile can use that node and it is
-  within range. Otherwise the router snaps to the nearest node incident to a usable edge (ties go to
-  the lower id). The straight connector legs are part of `coordinates`; legs under 0.5 m are dropped,
-  and `snap.fromM` and `snap.toM` are then 0.
+- **Snapping (G-28):**
+  - A `place` endpoint uses its `nodeId` (the pipeline's or an owner-set entrance) if the profile can
+    use that node and it is within range. That is documented data, so it wins even when the place
+    lies beside a different point of an edge.
+  - Every other endpoint snaps to the nearest point on an edge the profile may use in at least one
+    direction (`src/routing/snap.ts`). A projection within 0.5 m of an edge end counts as that node.
+    Distance ties go to a node over an edge interior, then to the lower node or edge id, independent
+    of input order.
+  - A snapped point inside an edge splits that edge virtually for the search, without changing the
+    graph. The search starts from the edge's end nodes (each seeded with the cost of the partial edge,
+    only in directions the profile may travel) and ends at a virtual target reached the same way.
+    Two endpoints on the same edge also get the direct piece between them, subject to one-way rules.
+    A partial edge costs its share of the full edge's cost (including the step penalty), so A\*
+    stays admissible and consistent.
+  - Fallback: when the snapped pair has no path (for example, the nearest edge belongs to a separate
+    component) the router retries with the nearest usable node at the destination, then at the
+    origin, then at both. It reports `no-path` only if all of them fail, and never bridges
+    components.
+  - The straight connector legs are part of `coordinates`; legs under 0.5 m are dropped, and
+    `snap.fromM` and `snap.toM` are then 0.
 - **Alternatives:** up to `maxAlternatives` (2) more routes, found by a cumulative ×1.5 penalty on
   used edges. A candidate is accepted only if its length-weighted overlap with every accepted route is
   below `1 − alternativeMinDifference` (0.7). Reported distances and durations are the true,
@@ -79,7 +96,7 @@ isRouteProfileId(v): v is RouteProfileId
 
 ## Tests
 
-`tests/unit/routing/*` (6 files, 94 tests) on synthetic graphs (`tests/fixtures/graphs/synthetic-*`):
+`tests/unit/routing/*` (7 test files) on synthetic graphs (`tests/fixtures/graphs/synthetic-*`):
 
 - A* against Dijkstra for optimality, plus heuristic admissibility
 - deterministic ties
@@ -88,15 +105,21 @@ isRouteProfileId(v): v is RouteProfileId
 - alternatives (distinctness, true costs)
 - failure reasons
 - malformed-graph robustness
+- mid-edge endpoints (`edge-snap.test.ts`): a point beside a long edge, a place whose access node
+  lies far along an edge, one-way and profile permissions on a split edge, the node-only fallback,
+  and agreement with an explicitly split graph and with Dijkstra on random networks
 - a timing budget: the best of 5 warm runs must be under 150 ms
 
-Measured on the real graph: route p95 is about 0.2 ms; see [PERFORMANCE.md](../PERFORMANCE.md).
+Measured on the real graph (1,636 nodes, 1,770 edges) on 2026-10-29, after edge snapping (G-28),
+with `node scripts/perf/route.ts --check`. Place-to-place routes (500 pairs per profile from the 168
+routable campus places) had a p95 of 0.20–0.33 ms, and alternatives (100 walk pairs) 1.21 ms.
+A one-off timing of 500 seeded map-point pairs per profile, within about 60 m of a graph node, gave a
+p95 of 0.49–0.72 ms (worst call 4.3 ms). In that run 84–86 % of origins snapped inside an edge, and
+the `no-path` cases try up to four searches. Both are far under the 150 ms budget; see
+[PERFORMANCE.md](../PERFORMANCE.md).
 
 ## Known limitations
 
-- **Snapping is node-based.** A point beside the middle of a long edge snaps to the nearer end node
-  (or is unsnappable beyond 80 m), not to the nearest point on the edge. Projecting onto edges would
-  be an improvement.
 - **Edge length** is the straight line between the edge's two nodes, so the router depends on the
   pipeline emitting one edge per consecutive OSM node pair, which it does. `GraphEdge.lengthM` is not
   used for cost.

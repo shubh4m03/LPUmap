@@ -1,12 +1,26 @@
 /**
  * createRouter: validates requests, snaps endpoints, runs A* and assembles
  * results. Per-profile tables and snap indexes are built lazily and cached.
+ *
+ * Endpoints: a `place` with a usable access node (`nodeId`, the pipeline's or
+ * an owner-set entrance) within range is routed to that node, as documented
+ * data. Everything else — map points, GPS positions, places without a usable
+ * node — snaps to the nearest point on an edge the profile may use, which can
+ * lie inside the edge (snap.ts, G-28).
+ *
+ * Fallback: the nearest edge can belong to a piece of network the other end
+ * cannot reach (a separate component, or a one-way edge leading away) while
+ * the nearest usable node — the rule before G-28 — does connect. When the
+ * snapped pair has no path, the router therefore retries, in this fixed
+ * order, with the nearest node at the destination, then at the origin, then
+ * at both, and reports `no-path` only if all of them fail. It never bridges
+ * components.
  */
-import type { GraphFile, LngLat } from '../data/schema.ts';
+import type { GraphFile, LngLat } from '../data/index.ts';
 import { APP_CONFIG } from '../config/index.ts';
-import { haversineM, isValidLngLat } from '../distance/geodesic.ts';
+import { haversineM, isValidLngLat } from '../distance/index.ts';
 import { findAlternatives } from './alternatives.ts';
-import { createWorkspace, findPath } from './astar.ts';
+import { createWorkspace, findRoute, type PathPiece, type SearchEnd } from './astar.ts';
 import { buildRoute } from './build-route.ts';
 import { SAME_POINT_M } from './constants.ts';
 import { buildGraph, nodeCoord } from './graph.ts';
@@ -27,6 +41,7 @@ import type {
   RouteProfileId,
   RouteRequest,
   RouteResult,
+  RouteSnap,
   Router,
 } from './types.ts';
 
@@ -38,9 +53,13 @@ interface Prepared {
   profile: RouteProfileId;
   preference: RoutePreference;
   tables: ProfileTables;
-  fromSnap: SnapHit;
-  toSnap: SnapHit;
+  /** The snapped endpoint, then its node-only fallback when that differs. */
+  fromSnaps: SnapHit[];
+  toSnaps: SnapHit[];
 }
+
+const sameHit = (a: SnapHit, b: SnapHit) =>
+  a.kind === 'node' ? b.kind === 'node' && a.nodeId === b.nodeId : b.kind === 'edge' && a.edge === b.edge;
 
 const fail = (reason: RouteFailureReason, message: string): RouteFailure => ({ ok: false, reason, message });
 
@@ -84,7 +103,7 @@ export function createRouter(file: GraphFile): Router {
   const snapIndexFor = (profile: RouteProfileId) => {
     let s = snapCache.get(profile);
     if (!s) {
-      s = buildSnapIndex(graph, tablesFor(profile).nodeUsable, R.maxSnapDistanceM);
+      s = buildSnapIndex(graph, tablesFor(profile).edgeUsable, R.maxSnapDistanceM);
       snapCache.set(profile, s);
     }
     return s;
@@ -100,12 +119,35 @@ export function createRouter(file: GraphFile): Router {
       const id = ep.nodeId;
       const usable = tablesFor(profile).nodeUsable;
       if (typeof id === 'number' && Number.isInteger(id) && id >= 0 && id < graph.nodeCount && usable[id]) {
-        const d = haversineM(ep.location, nodeCoord(graph, id));
-        if (d <= R.maxSnapDistanceM) return { nodeId: id, distanceM: d };
+        const point = nodeCoord(graph, id);
+        const d = haversineM(ep.location, point);
+        if (d <= R.maxSnapDistanceM) return { kind: 'node', nodeId: id, point, distanceM: d };
       }
     }
     return snap(ep.location, profile);
   };
+
+  /** The resolved endpoint plus, if different, the nearest usable node as a fallback. */
+  const candidates = (ep: RouteEndpoint, hit: SnapHit, profile: RouteProfileId): SnapHit[] => {
+    if (hit.kind === 'node') return [hit];
+    const node = snapIndexFor(profile).nearestNode(ep.location);
+    return node && !sameHit(node, hit) ? [hit, node] : [hit];
+  };
+
+  const searchEnd = (hit: SnapHit): SearchEnd =>
+    hit.kind === 'node'
+      ? { kind: 'node', node: hit.nodeId }
+      : { kind: 'edge', edge: hit.edge, point: hit.point, fromM: hit.fromM, toM: hit.toM };
+
+  const publicSnap = (hit: SnapHit | null): RouteSnap | null =>
+    hit === null
+      ? null
+      : {
+          location: [hit.point[0], hit.point[1]],
+          distanceM: hit.distanceM,
+          nodeId: hit.kind === 'node' ? hit.nodeId : null,
+          edgeId: hit.kind === 'edge' ? graph.edges[hit.edge]!.id : null,
+        };
 
   const prepare = (req: RouteRequest): Prepared | RouteFailure => {
     if (typeof req !== 'object' || req === null) return fail('invalid-input', 'No route request was given.');
@@ -133,55 +175,69 @@ export function createRouter(file: GraphFile): Router {
         `The destination is more than ${R.maxSnapDistanceM} m from any mapped path usable for ${mode}. Choose a destination on or near the campus path network.`,
       );
     }
-    return { from, to, profile, preference, tables: tablesFor(profile), fromSnap, toSnap };
+    return {
+      from,
+      to,
+      profile,
+      preference,
+      tables: tablesFor(profile),
+      fromSnaps: candidates(from, fromSnap, profile),
+      toSnaps: candidates(to, toSnap, profile),
+    };
   };
 
-  const build = (p: Prepared, arcs: readonly number[]) =>
+  /** Snap pairs to try, best first: as snapped, then node fallbacks at the destination, origin, both. */
+  const pairs = (p: Prepared): Array<[SnapHit, SnapHit]> => {
+    const out: Array<[SnapHit, SnapHit]> = [];
+    for (const f of p.fromSnaps) for (const t of p.toSnaps) out.push([f, t]);
+    return out;
+  };
+
+  const build = (p: Prepared, fromSnap: SnapHit, toSnap: SnapHit, pieces: readonly PathPiece[]) =>
     buildRoute({
       graph,
       tables: p.tables,
       preference: p.preference,
       from: p.from,
       to: p.to,
-      fromSnap: p.fromSnap,
-      toSnap: p.toSnap,
-      arcs,
+      fromSnap,
+      toSnap,
+      pieces,
     });
 
   return {
     nodeCount: graph.nodeCount,
     edgeCount: graph.edgeCount,
-    snap,
+    snap: (p, profile) => publicSnap(snap(p, profile)),
     route(req) {
       const p = prepare(req);
       if ('ok' in p) return p;
-      const found = findPath(
-        graph,
-        costTable(p.tables, p.preference),
-        p.fromSnap.nodeId,
-        p.toSnap.nodeId,
-        heuristicScale(p.profile, p.preference),
-        workspace,
-      );
-      return found ? build(p, found.arcs) : fail('no-path', noPathMessage(p.profile));
+      for (const [f, t] of pairs(p)) {
+        const found = findRoute(
+          graph,
+          costTable(p.tables, p.preference),
+          searchEnd(f),
+          searchEnd(t),
+          heuristicScale(p.profile, p.preference),
+          workspace,
+        );
+        if (found) return build(p, f, t, found.pieces);
+      }
+      return fail('no-path', noPathMessage(p.profile));
     },
     alternatives(req): RouteResult[] {
       const p = prepare(req);
       if ('ok' in p) return [p];
-      const paths = findAlternatives(
-        graph,
-        costTable(p.tables, p.preference),
-        p.fromSnap.nodeId,
-        p.toSnap.nodeId,
-        {
+      for (const [f, t] of pairs(p)) {
+        const paths = findAlternatives(graph, costTable(p.tables, p.preference), searchEnd(f), searchEnd(t), {
           maxAlternatives: R.maxAlternatives,
           minDifference: R.alternativeMinDifference,
           hScale: heuristicScale(p.profile, p.preference),
           workspace,
-        },
-      );
-      if (paths.length === 0) return [fail('no-path', noPathMessage(p.profile))];
-      return paths.map((path) => build(p, path.arcs));
+        });
+        if (paths.length > 0) return paths.map((path) => build(p, f, t, path.pieces));
+      }
+      return [fail('no-path', noPathMessage(p.profile))];
     },
   };
 }

@@ -14,9 +14,9 @@
  * footprint.ts and are re-exported here so callers have one import.
  */
 import { APP_CONFIG } from '../config/index.ts';
-import type { LngLat } from '../data/schema.ts';
-import { isValidLngLat } from '../distance/geodesic.ts';
-import { pointOnSurface } from '../geo/boundary.ts';
+import type { LngLat } from '../data/index.ts';
+import { isValidLngLat } from '../distance/index.ts';
+import { pointOnSurface } from '../geo/index.ts';
 import {
   createEnuFrame,
   deriveFootprint,

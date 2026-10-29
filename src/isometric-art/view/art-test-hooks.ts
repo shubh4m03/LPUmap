@@ -15,8 +15,8 @@
  * Tests drive the overview through the UI (pointer, wheel, keyboard) and use
  * this hook only to READ where things are, then check pixels and hit-tests.
  */
-import type { ArtImagePurpose } from './image-plan.ts';
-import type { ArtPoint, ArtRect, ArtSourceSpace, ArtTransform } from './viewport.ts';
+import type { ArtImagePurpose } from '../index.ts';
+import type { ArtPoint, ArtRect, ArtSourceSpace, ArtTransform } from '../index.ts';
 
 export interface ArtStats {
   /** ms from the stage mounting to the base image being decoded and shown. */

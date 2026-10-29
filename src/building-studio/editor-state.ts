@@ -20,7 +20,7 @@
  * Status (S10) is derived by `editorStatus`: unsaved local changes · saved
  * draft (rev n) · published (version n) · archived.
  */
-import type { LngLat } from '../data/schema.ts';
+import type { LngLat } from '../data/index.ts';
 import { jsonEqual } from './canonical.ts';
 import {
   applyEdit,

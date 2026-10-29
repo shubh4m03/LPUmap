@@ -1,7 +1,7 @@
 /** Pre-approval edit of a suggestion (pure): validation with the public schema, PATCH body of changes only. */
-import { contributionInputSchema } from '../../../community/schema.ts';
-import type { LngLat } from '../../../data/schema.ts';
-import { isValidLngLat } from '../../../distance/geodesic.ts';
+import { contributionInputSchema } from '../../../community/index.ts';
+import type { LngLat } from '../../../data/index.ts';
+import { isValidLngLat } from '../../../distance/index.ts';
 import type { EditSuggestionBody } from '../../api/community.ts';
 import type { SuggestionRecord } from '../../api/schemas.ts';
 import { zodFieldErrors, type FieldErrors } from '../../ui/form-errors.ts';

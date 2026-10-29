@@ -13,11 +13,11 @@
  * `previewRenderSource` (preview: true, never memoised).
  */
 import type { Feature, Geometry, Polygon } from 'geojson';
-import type { LngLat } from '../../data/schema.ts';
-import type { EditPreviewCollection, EditPreviewFeature, EditPreviewRole } from '../../map/editing/types.ts';
+import type { LngLat } from '../../data/index.ts';
+import type { EditPreviewCollection, EditPreviewFeature, EditPreviewRole } from '../../map/editing/index.ts';
 import type { StudioRenderSource } from '../render/maplibre/index.ts';
-import { deriveFootprint } from '../geometry.ts';
-import type { ModelConfigV1, StudioFootprint } from '../schema.ts';
+import { deriveFootprint } from '../editor.ts';
+import type { ModelConfigV1, StudioFootprint } from '../index.ts';
 
 /** Placeholder record id of a model that is not on the server yet (valid `stu:` syntax, never stored). */
 export const PREVIEW_RECORD_ID = 'stu:localpreviewlocalpreview';

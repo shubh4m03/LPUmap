@@ -36,7 +36,7 @@ export type { EmptyStateProps, ErrorStateProps } from './EmptyState.tsx';
 export { Skeleton, Spinner } from './Spinner.tsx';
 export type { SkeletonProps, SpinnerProps } from './Spinner.tsx';
 export { ToastProvider } from './Toast.tsx';
-export { useToast } from './toast-context.ts';
+export { NOTICE_TOAST_MS, useNoticeToast, useToast } from './toast-context.ts';
 export type { ToastApi, ToastOptions, ToastTone } from './toast-context.ts';
 export { Kbd, VisuallyHidden } from './VisuallyHidden.tsx';
 export { cx } from './cx.ts';
@@ -44,4 +44,6 @@ export { lockBodyScroll, useScrollLock } from './scroll-lock.ts';
 // Re-exported so feature code can import every primitive from one place (MODULE_CONTRACTS).
 export { Icon, iconForCategory, ICON_NAMES, isIconName } from '../icons/index.ts';
 export type { IconName, IconProps } from '../icons/index.ts';
-export { LiveRegion } from '../../accessibility/LiveRegion.tsx';
+export { LiveRegion } from '../../accessibility/index.ts';
+export { BUTTON_BASE, FOCUS_RING } from './cx.ts';
+export { ToastContext } from './toast-context.ts';

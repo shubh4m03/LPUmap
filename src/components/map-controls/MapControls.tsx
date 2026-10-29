@@ -28,6 +28,12 @@ export function MapControls({ compact = false, className }: { compact?: boolean;
   const requestFocus = useAppStore((s) => s.requestFocus);
   const { resolved, setPreference } = useTheme();
   const size = compact ? 'sm' : 'md';
+  // Phones get "Reset view" too (G-13): once the campus is panned or zoomed away, it is the one-tap
+  // way back. While the bottom sheet is open it steps aside: the sheet lifts the map attribution
+  // to just under the column, and a longer column would cover it (close the sheet, or use the
+  // command palette, to reset then).
+  const sheetOpen = useAppStore((s) => s.activePanel !== 'none');
+  const showReset = !compact || !sheetOpen;
 
   return (
     <div role="group" aria-label="Map controls" className={cx('flex flex-col items-end gap-2', className)}>
@@ -64,14 +70,15 @@ export function MapControls({ compact = false, className }: { compact?: boolean;
           className={IN_STACK}
           onClick={() => (layersOpen ? closePanel() : openPanel('layers'))}
         />
-        {compact ? null : (
+        {showReset ? (
           <IconButton
             icon="reset"
             label="Reset view to the whole campus"
+            size={size}
             className={IN_STACK}
             onClick={() => requestFocus({ kind: 'reset' })}
           />
-        )}
+        ) : null}
       </div>
       <LocateButton size={size} />
       {compact ? null : (

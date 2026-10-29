@@ -5,8 +5,8 @@
  * picks one of them explicitly. Nodes that are not candidates are never
  * offered, however close to the click they are.
  */
-import type { LngLat } from '../../data/schema.ts';
-import { haversineM } from '../../distance/geodesic.ts';
+import type { LngLat } from '../../data/index.ts';
+import { haversineM } from '../../distance/index.ts';
 
 /** How far from the click a candidate may be to be listed, metres. */
 export const ACCESS_PICK_RADIUS_M = 25;

@@ -21,7 +21,7 @@
  *  - Faces of one mesh form a closed surface when `closed` is true (every
  *    generator; the signed volume then equals the body volume).
  */
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 import type { WindowPattern } from '../schema.ts';
 
 export type Vec3 = readonly [number, number, number];

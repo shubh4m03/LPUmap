@@ -9,7 +9,6 @@
  * invisible in a 3D view — and GLO-30 is a surface model that would lift the
  * ground under buildings and trees. See MAP_PROVIDER_CONFIGURATION.md §Terrain.
  */
-import type { ViewMode, ViewModeAvailability } from '../../app/view-mode.ts';
 import type { ProviderConfig } from './config.ts';
 import { ESRI_ORIGIN, esriWorldImagery } from './esri.ts';
 import { EOX_ORIGIN, eoxSentinel2016 } from './eox.ts';
@@ -23,6 +22,7 @@ import {
   type ProviderFailure,
   type ProviderRegistry,
   type ProviderStatus,
+  type ViewModeAvailability,
 } from './types.ts';
 
 /** Every third-party origin any build may contact (public/_headers connect-src must list exactly these). */
@@ -78,11 +78,12 @@ export function viewModeAvailability(
 }
 
 /**
- * The imagery drawn in `mode`: Satellite 2D needs it; Campus 3D uses it only
- * when it shows buildings ('high' detail); every other mode draws none.
+ * The imagery drawn in `mode` (a `ViewMode` of src/app/view-mode.ts): Satellite
+ * 2D needs it; Campus 3D uses it only when it shows buildings ('high' detail);
+ * every other mode draws none.
  */
 export function imageryForMode(
-  mode: ViewMode,
+  mode: string,
   registry: ProviderRegistry,
   runtime: ImageryRuntime,
 ): ImageryProvider | null {

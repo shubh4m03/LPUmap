@@ -2,17 +2,18 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'r
 import { useShallow } from 'zustand/react/shallow';
 import { ImageryNotice } from '../components/map-controls/ImageryNotice.tsx';
 import { ReturnToCampusButton } from '../components/map-controls/ReturnToCampusButton.tsx';
-import { useIsMobile } from '../accessibility/useMediaQuery.ts';
+import { useIsMobile } from '../accessibility/index.ts';
 import { Button, Icon } from '../components/ui/index.ts';
-import { ToastContext } from '../components/ui/toast-context.ts';
+import { ToastContext } from '../components/ui/index.ts';
+import { useNoticeToast } from '../components/ui/index.ts';
 import { APP_CONFIG } from '../config/index.ts';
 import type { DetectionsFile, LngLat } from '../data/index.ts';
 import { useSuggestEditing } from '../components/suggest/useSuggestEditing.ts';
 import { MAP_MESSAGES, MapView, type MapController, type MapPadding } from '../map/index.ts';
-import { boundsOfPolygons, campusOutOfView, polygonsOf, type CameraView } from '../map/providers/camera.ts';
-import { probeImagery } from '../map/providers/failure.ts';
-import { imageryForMode } from '../map/providers/registry.ts';
-import type { ImageryProvider, ProviderFailure } from '../map/providers/types.ts';
+import { boundsOfPolygons, campusOutOfView, polygonsOf, type CameraView } from '../map/providers/index.ts';
+import { probeImagery } from '../map/providers/index.ts';
+import { imageryForMode } from '../map/providers/index.ts';
+import type { ImageryProvider, ProviderFailure } from '../map/providers/index.ts';
 import { useAtlas } from './data/atlas-context.ts';
 import { useImageryFailureReporter } from './hooks/useImageryRuntime.ts';
 import { useNow } from './hooks/useNow.ts';
@@ -63,13 +64,14 @@ export function MapStage({ theme, reducedMotion, padding, onFatalError }: MapSta
   const { data, getPlace, studioModels, contextPlaces } = useAtlas();
   const [controller, setController] = useState<MapController | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
-  const { mode3d, showLabels, visibleGroups, selectedPlaceId, focusRequest } = useAppStore(
+  const { mode3d, showLabels, visibleGroups, selectedPlaceId, focusRequest, unconfirmedMatch } = useAppStore(
     useShallow((s) => ({
       mode3d: s.mode3d,
       showLabels: s.showLabels,
       visibleGroups: s.visibleGroups,
       selectedPlaceId: s.selectedPlaceId,
       focusRequest: s.focusRequest,
+      unconfirmedMatch: s.unconfirmedMatch,
     })),
   );
   const { showNearbyOutsideCampus, showDetectedFootprints } = useAppStore(
@@ -118,6 +120,7 @@ export function MapStage({ theme, reducedMotion, padding, onFatalError }: MapSta
   );
 
   const pickToast = useContext(ToastContext);
+  const onRenderNotice = useNoticeToast();
   const onSelectPlace = useCallback(
     (id: string | null) => {
       // While choosing on the map: an empty-map click is handled by onMapClick; an
@@ -193,10 +196,12 @@ export function MapStage({ theme, reducedMotion, padding, onFatalError }: MapSta
         data={data}
         theme={theme}
         mode3d={mode3d}
+        compact={isMobile}
         reducedMotion={reducedMotion}
         visibleGroups={visibleGroups}
         showLabels={showLabels}
         selectedPlaceId={selectedPlaceId}
+        unconfirmedMatch={unconfirmedMatch}
         route={route}
         userLocation={userLocation}
         studioModels={studioModels}
@@ -213,6 +218,7 @@ export function MapStage({ theme, reducedMotion, padding, onFatalError }: MapSta
         imagery={imagery}
         onImageryFailure={onImageryFailure}
         onCameraIdle={setCameraView}
+        onRenderNotice={onRenderNotice}
       />
       {imagery ? (
         <ImageryNotice

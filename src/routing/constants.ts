@@ -30,3 +30,9 @@ export const COST_TIE_TOLERANCE = 1e-9;
  * normal turn; otherwise sharp turn.
  */
 export const TURN_THRESHOLDS_DEG = { straight: 20, slight: 45, turn: 135 } as const;
+
+/**
+ * A snapped point this close to an edge end is treated as that node, so the
+ * router never splits off a sliver of edge (matches MIN_CONNECTOR_DRAW_M).
+ */
+export const SNAP_NODE_MERGE_M = 0.5;

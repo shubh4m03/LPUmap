@@ -17,12 +17,12 @@ import {
   starterLibrary,
   starterTemplate,
   type LibraryEntry,
-} from '../asset-library.ts';
+} from '../editor.ts';
 import { APP_CONFIG } from '../../config/index.ts';
-import type { LngLat } from '../../data/schema.ts';
-import { generateStudioMeshDetailed } from '../mesh/generate.ts';
-import type { TemplateDefinition, TemplateListing } from '../schema.ts';
-import { modelThumbnailSvg, templateThumbnailSvg } from '../thumbnails.ts';
+import type { LngLat } from '../../data/index.ts';
+import { generateStudioMeshDetailed } from '../index.ts';
+import type { TemplateDefinition, TemplateListing } from '../index.ts';
+import { modelThumbnailSvg, templateThumbnailSvg } from '../editor.ts';
 
 export interface StudioLibraryItem extends LibraryEntry {
   source: 'code' | 'owner';

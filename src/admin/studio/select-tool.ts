@@ -1,5 +1,5 @@
-import type { StudioTool } from '../../building-studio/editor-state.ts';
-import type { StudioStore } from '../../building-studio/ui/store.ts';
+import type { StudioTool } from '../../building-studio/editor.ts';
+import type { StudioStore } from '../../building-studio/ui/index.ts';
 
 /** Selects a tool; Appearance and Info also bring their inspector section into view. */
 export function selectTool(store: StudioStore, tool: StudioTool): void {

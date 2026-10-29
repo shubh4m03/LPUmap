@@ -9,8 +9,8 @@
  * bearing of the last non-zero segment before it vs outgoing bearing of the
  * first non-zero segment after it); thresholds are TURN_THRESHOLDS_DEG.
  */
-import type { LngLat } from '../data/schema.ts';
-import { bearingDeg } from '../distance/geodesic.ts';
+import type { LngLat } from '../data/index.ts';
+import { bearingDeg } from '../distance/index.ts';
 import { MIN_CONNECTOR_DRAW_M, TURN_THRESHOLDS_DEG } from './constants.ts';
 import type { RouteProfileId, RouteStep, RouteStepKind } from './types.ts';
 

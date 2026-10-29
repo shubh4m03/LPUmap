@@ -1,8 +1,8 @@
 /** Builds search docs from dataset records. Only data that exists in the records is used. */
-import { getCategory, type CategoryDef } from '../config/categories.ts';
+import { getCategory, type CategoryDef } from '../config/index.ts';
 import { APP_CONFIG } from '../config/index.ts';
-import { PLACE_KIND_LABELS } from '../data/place-labels.ts';
-import type { Place } from '../data/schema.ts';
+import { PLACE_KIND_LABELS } from '../data/index.ts';
+import type { Place } from '../data/index.ts';
 import type { ArtworkTerms } from './artwork-docs.ts';
 import type { SearchDoc } from './types.ts';
 

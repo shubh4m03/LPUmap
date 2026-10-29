@@ -6,7 +6,7 @@
  */
 import { useState, type FormEvent } from 'react';
 import { useIsMobile } from '../../../accessibility/index.ts';
-import { Button } from '../../../components/ui/Button.tsx';
+import { Button } from '../../../components/ui/index.ts';
 import type { ApproveResult, SuggestionRecord } from '../../api/schemas.ts';
 import { useAdminApi } from '../../context.ts';
 import type { CampusDataState } from '../../data/campus-data.ts';

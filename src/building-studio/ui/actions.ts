@@ -1,24 +1,18 @@
 /**
  * Server operations of the Building Studio, wired to the UI store. Every
- * call goes through the typed admin client (src/admin/api/studio.ts); a
+ * call goes through the server port the caller injects (../server-api.ts; the
+ * admin passes its typed client, src/admin/api/studio.ts, and its error
+ * wording), so the Studio never imports the admin. A
  * failure is ALWAYS reported as a failure — the local draft is kept, the
  * state badge keeps saying "unsaved", and the error says whether the outcome
  * is unknown. Success notices quote what the server returned (revision,
  * version), never what the client hoped for.
  */
-import type { StudioApi } from '../../admin/api/studio.ts';
-import { describeAdminError, type AdminApiError } from '../../admin/api/errors.ts';
-import type { LngLat } from '../../data/schema.ts';
-import { jsonEqual } from '../canonical.ts';
-import { currentDraft, shouldGuardUnload, type ServerOp } from '../editor-state.ts';
-import { footprintPrismPlacement } from '../geometry.ts';
-import {
-  clearRecovery,
-  loadRecovery,
-  recoveryKey,
-  saveRecovery,
-  type RecoveryStorage,
-} from '../local-recovery.ts';
+import type { LngLat } from '../../data/index.ts';
+import { jsonEqual } from '../index.ts';
+import { currentDraft, shouldGuardUnload, type ServerOp } from '../editor.ts';
+import { footprintPrismPlacement } from '../editor.ts';
+import { clearRecovery, loadRecovery, recoveryKey, saveRecovery, type RecoveryStorage } from '../editor.ts';
 import {
   WARNING_CODES,
   studioBuildingHeadSchema,
@@ -27,9 +21,10 @@ import {
   type StudioDraft,
   type TemplateDefinition,
   type TemplateRef,
-} from '../schema.ts';
-import { applyTemplateVersion } from '../template-compat.ts';
+} from '../index.ts';
+import { applyTemplateVersion } from '../editor.ts';
 import { defaultIdentity, draftSchemaIssues } from './fields.ts';
+import type { StudioServerApi, StudioServerFailure } from '../index.ts';
 import {
   adoptConflictHead,
   checkTarget,
@@ -40,8 +35,10 @@ import {
   type StudioStore,
 } from './store.ts';
 
-export interface StudioActionsDeps {
-  api: StudioApi;
+export interface StudioActionsDeps<E extends StudioServerFailure = StudioServerFailure> {
+  api: StudioServerApi<E>;
+  /** One sentence for a failure (banner, notice); never claims success. The admin passes describeAdminError. */
+  describeError(error: E): string;
   store: StudioStore;
   /** The open record changed (navigate to /admin/studio/<id>, or the list for null). */
   onRecordChange?(id: string | null): void;
@@ -60,7 +57,7 @@ export interface ApplyTemplatePreview {
   warnings: string[];
 }
 
-const errCode = (e: AdminApiError): string => e.code ?? e.kind;
+const errCode = (e: StudioServerFailure): string => e.code ?? e.kind;
 
 /** The draft shown for a server detail: the draft, else the published record. */
 export const shownDraft = (d: StudioBuildingDetail): StudioDraft | null =>
@@ -68,8 +65,8 @@ export const shownDraft = (d: StudioBuildingDetail): StudioDraft | null =>
 
 export type StudioActions = ReturnType<typeof createStudioActions>;
 
-export function createStudioActions(deps: StudioActionsDeps) {
-  const { api, store } = deps;
+export function createStudioActions<E extends StudioServerFailure>(deps: StudioActionsDeps<E>) {
+  const { api, store, describeError } = deps;
   const storageOpt = deps.storage === undefined ? {} : { storage: deps.storage };
   let validateCtl: AbortController | null = null;
 
@@ -85,13 +82,13 @@ export function createStudioActions(deps: StudioActionsDeps) {
     return state().editor.pending?.op === op;
   }
 
-  function fail(op: ServerOp, e: AdminApiError): void {
+  function fail(op: ServerOp, e: E): void {
     const parsed = e.kind === 'conflict' ? studioBuildingHeadSchema.safeParse(e.current) : null;
     store.dispatch({
       type: 'server/failure',
       op,
       code: errCode(e),
-      message: describeAdminError(e),
+      message: describeError(e),
       ...(parsed?.success ? { current: parsed.data } : {}),
     });
     const t = checkTarget(state());
@@ -240,7 +237,7 @@ export function createStudioActions(deps: StudioActionsDeps) {
     ): Promise<'opened' | 'started' | 'failed'> {
       const list = await api.listBuildings({ targetId });
       if (!list.ok) {
-        notice({ tone: 'danger', message: describeAdminError(list.error) });
+        notice({ tone: 'danger', message: describeError(list.error) });
         return 'failed';
       }
       const existing = list.data.items[0];
@@ -328,7 +325,7 @@ export function createStudioActions(deps: StudioActionsDeps) {
       validateCtl = null;
       if (!r.ok) {
         if (r.error.kind === 'aborted') return false;
-        store.setState({ validating: false, validationError: describeAdminError(r.error) });
+        store.setState({ validating: false, validationError: describeError(r.error) });
         return false;
       }
       store.setState({ validating: false, validationError: null, validation: { result: r.data, ...t } });
@@ -552,7 +549,7 @@ export function createStudioActions(deps: StudioActionsDeps) {
         const r = await api.applyTemplate(head.id, { revision: head.revision, ...ref, dryRun: true });
         if (!r.ok) {
           fail('apply-template', r.error);
-          return { error: describeAdminError(r.error) };
+          return { error: describeError(r.error) };
         }
         store.dispatch({ type: 'server/success', op: 'apply-template' });
         return {

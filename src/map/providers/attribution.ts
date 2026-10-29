@@ -3,7 +3,7 @@
  * HTML, so provider parts are escaped here and only https links survive; the
  * React notice renders the same parts as text nodes.
  */
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 import type { AttributionPart, ImageryProvider, ProviderAttribution } from './types.ts';
 
 export function escapeHtml(text: string): string {

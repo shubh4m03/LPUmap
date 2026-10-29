@@ -144,6 +144,8 @@ export interface QualityReport {
     overrides: number;
     organizations: number;
     anchoredOrganizations: number;
+    /** Evidence-backed connected_by_path records (data/curated/path-connections.json). */
+    pathConnections: number;
   };
   directory: {
     lockVersion: number | null;

@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
-import { IsoStage } from '../isometric/IsoStage.tsx';
+import { IsoStage } from './IsoStage.tsx';
 import { isoStudioModel } from '../isometric/studio.ts';
-import type { MapPadding } from '../map/types.ts';
+import type { MapPadding } from '../map/index.ts';
 import { useAtlas } from './data/atlas-context.ts';
 import { useAppStore } from './store/index.ts';
 

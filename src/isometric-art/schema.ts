@@ -27,13 +27,13 @@
  * artwork's own numbering and is never an official LPU block number.
  */
 import { z } from 'zod';
-import { BASE_BUILDING_ID_RE, STUDIO_ID_RE } from '../building-studio/schema.ts';
+import { BASE_BUILDING_ID_RE, STUDIO_ID_RE } from '../building-studio/index.ts';
 import {
   PROHIBITED_SOURCE_MESSAGE,
   containsProhibitedSourceUrl,
   hasControlChars,
   isProhibitedSourceUrl,
-} from '../building-studio/text.ts';
+} from '../building-studio/index.ts';
 import { ASSOCIATION_STATUSES, ILLUSTRATION_DISCLAIMER } from './text.ts';
 
 export const ISOMETRIC_ART_REGISTRY_VERSION = 1;
@@ -101,24 +101,18 @@ export const areaSubjectId = (hotspotId: string): string => `art:area-${hotspotI
 // Text
 // ---------------------------------------------------------------------------
 
-/** C0/C1 controls (incl. tab/newline) and DEL: never part of a printed single-line label. */
-const hasControl = (s: string) => {
-  for (let i = 0; i < s.length; i++) {
-    const c = s.charCodeAt(i);
-    if (c < 0x20 || (c >= 0x7f && c <= 0x9f)) return true;
-  }
-  return false;
-};
-
 /**
  * Printed text, EXACT: never trimmed, case-folded or normalized here, so
  * "SCHOOL OF CIVIL INGNEERING" and "CAMPUS CAFE  &" (two spaces) survive.
+ * Same house control-character rule as the prose below (hasControlChars):
+ * C0/C1 controls (incl. tab/newline), DEL, bidi embedding/override/isolate
+ * controls and unpaired surrogates are refused; a printed label has none.
  */
 export const exactTextSchema = z
   .string()
   .min(1)
   .max(2000)
-  .refine((s) => !hasControl(s), { message: 'Control characters are not allowed' })
+  .refine((s) => !hasControlChars(s), { message: 'Control characters are not allowed' })
   .refine((s) => s === s.trim(), { message: 'Printed text never starts or ends with whitespace' });
 
 /**

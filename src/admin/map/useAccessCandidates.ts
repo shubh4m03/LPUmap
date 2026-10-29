@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 import type { CampusDataState } from '../data/campus-data.ts';
 import { accessCandidates, accessProblem, type AccessCandidate } from './access-points.ts';
 

@@ -33,10 +33,10 @@
  * list yet (required change C1). Until C1 lands the result is typed with
  * the widened `MergedBuildingProps`; base features are assignable to it.
  */
-import { CATEGORIES } from '../config/categories.ts';
+import { CATEGORIES } from '../config/index.ts';
 import { APP_CONFIG } from '../config/index.ts';
-import { OWNER_SOURCE, type MergeIssue } from '../community/merge.ts';
-import type { CampusData } from '../data/campus-data.ts';
+import { OWNER_SOURCE, type MergeIssue } from '../data/index.ts';
+import type { CampusData } from '../data/index.ts';
 import {
   placeKindSchema,
   relationTypeSchema,
@@ -50,14 +50,14 @@ import {
   type Manifest,
   type Place,
   type Relation,
-} from '../data/schema.ts';
+} from '../data/index.ts';
 import {
   boundaryFromFeatureCollection,
   classifyFootprint,
   geometryProblems,
   type CampusBoundary,
   type MembershipResult,
-} from '../geo/boundary.ts';
+} from '../geo/index.ts';
 import { canonicalJson } from './canonical.ts';
 import { createEnuFrame, lngLatToLocalPolygon } from './footprint.ts';
 import { studioPublicLabel } from './labels.ts';

@@ -5,7 +5,7 @@ import { useAtlas } from '../../app/data/atlas-context.ts';
 import { useCommandRunner } from '../../app/hooks/useCommandRunner.ts';
 import { placeEndpoint, routeBlockReason } from '../../app/place-actions.ts';
 import { useAppStore } from '../../app/store/index.ts';
-import { LAYER_GROUPS, type LayerGroupId } from '../../config/categories.ts';
+import { LAYER_GROUPS, type LayerGroupId } from '../../config/index.ts';
 import type { PaletteItem } from './palette-model.ts';
 
 const isGroupId = (v: string): v is LayerGroupId => LAYER_GROUPS.some((g) => g.id === v);

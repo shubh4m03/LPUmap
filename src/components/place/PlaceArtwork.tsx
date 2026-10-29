@@ -8,7 +8,7 @@ import { Badge, Button } from '../ui/index.ts';
 import { EvidenceList, PrintedLabels, PrintedText, Vignettes } from './ArtworkDetails.tsx';
 import { ARTWORK_NUMBER_NOTE_TEXT, showOnIllustration, useOnIllustration } from './artwork-format.ts';
 import { DetailSection } from './DetailSection.tsx';
-import { verifiedOfficialName } from '../../directory/identity.ts';
+import { verifiedOfficialName } from '../../directory/index.ts';
 
 /**
  * Identity of a building (docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md §0 rule 3):

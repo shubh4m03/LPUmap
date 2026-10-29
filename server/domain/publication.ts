@@ -29,8 +29,8 @@ import {
   publishedLocationSchema,
   publishedOverrideSchema,
   type Publication,
-} from '../../src/community/schema.ts';
-import { publishedArtworkAssociationSchema } from '../../src/isometric-art/schema.ts';
+} from '../../src/community/index.ts';
+import { publishedArtworkAssociationSchema } from '../../src/isometric-art/index.ts';
 import {
   publishedArtworkAssociationsStmt,
   rowToPublishedArtworkAssociation,

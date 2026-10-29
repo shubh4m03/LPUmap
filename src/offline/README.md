@@ -1,9 +1,14 @@
 # Offline and PWA strategy
 
-LPU Campus Atlas is a static app with no backend. Everything it needs — the
+The public LPU Campus Atlas is a static app: everything a visitor needs — the
 app shell, the generated campus dataset and the map glyphs — is first-party,
-so offline support is a single, versioned **precache**. There is no runtime
-caching and no request to any third-party origin.
+so offline support is a single, versioned **precache**. The owner backend
+(Cloudflare Pages Functions + D1 under `/api/`: the owner publication, public
+suggestions and the `/admin` app) is never precached; the app fetches the
+owner publication network-first and keeps its own last good copy
+(`src/app/data/publication.ts`). The only runtime cache is the same-origin
+isometric artwork (`ART_RUNTIME_CACHING` in `pwa-config.ts`). No third-party
+request is ever cached.
 
 ## What is cached
 
@@ -14,6 +19,19 @@ caching and no request to any third-party origin.
 | `**/*.{js,mjs,css,html,svg,png,ico,webmanifest,woff2}` | App shell (including the MapLibre worker `.mjs`), icons, manifest |
 | `data/*.json`, `data/*.geojson`                        | Generated dataset from `public/data/`                             |
 | `fonts/**/*.pbf`                                       | Self-hosted MapLibre glyphs from `public/fonts/`                  |
+
+**Not precached:** the owner admin (G-19). `precache-scope.ts` reads the real
+chunk graph during the build: every chunk reachable from the public entry
+without going through the lazy `src/admin/AdminApp.tsx` boundary is public;
+the rest (admin shell, queue, locations, overrides, Studio, Templates,
+Artwork, audit, quality and the CSS/assets only they import) is dropped from
+the precache by a Workbox `manifestTransforms` entry. Those files are still
+in `dist/assets` and load normally when the owner opens `/admin` online;
+offline, `/admin` says it could not be loaded. Modules shared with the public
+map (for example the studio renderer) stay precached. The web manifest and
+icons are listed once (no `includeAssets`/manifest-icon duplicates), and the
+build ships no source maps (`vite.config.ts`, `workbox.sourcemap: false`).
+`tests/integration/build-output.test.ts` checks all of this on a real build.
 
 `maximumFileSizeToCacheInBytes` is 8 MB. If a dataset file grows beyond that,
 the build fails loudly rather than shipping a service worker that silently

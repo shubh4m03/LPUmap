@@ -5,8 +5,8 @@
  * undo command until the field loses focus (S9).
  */
 import { useEffect, useId, useRef, useState, type ReactNode, type SelectHTMLAttributes } from 'react';
-import { cx, FOCUS_RING } from '../../components/ui/cx.ts';
-import { Icon } from '../../components/icons/Icon.tsx';
+import { cx, FOCUS_RING } from '../../components/ui/index.ts';
+import { Icon } from '../../components/icons/index.ts';
 
 const INPUT = cx(
   'h-10 w-full min-w-0 rounded-md border border-border-strong bg-surface-sunken px-2.5 text-sm text-text',

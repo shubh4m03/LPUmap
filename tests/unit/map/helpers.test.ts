@@ -17,7 +17,7 @@ import {
 } from '../../../src/map/index.ts';
 import { pickPlaceId, renderedBuildingIds, type PickMap } from '../../../src/map/picking.ts';
 import { installMapTestHooks, type AtlasMapTestHooks } from '../../../src/map/test-hooks.ts';
-import { MAP_THEME_COLORS } from '../../../src/map/theme-colors.ts';
+import { MAP_THEME_COLORS } from '../../../src/styles/map-theme-colors.ts';
 import { evalFilter } from './style-eval.ts';
 
 describe('classifyMapError', () => {

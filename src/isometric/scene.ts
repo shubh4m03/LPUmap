@@ -12,7 +12,7 @@
  *    instead of its prism; its footprint still takes part in the depth graph
  *    and in hit-testing (S1: picking always uses the footprint).
  */
-import type { StudioMesh } from '../building-studio/mesh/types.ts';
+import type { StudioMesh } from '../building-studio/index.ts';
 import { APP_CONFIG } from '../config/index.ts';
 import type {
   BasemapFile,
@@ -21,7 +21,7 @@ import type {
   BuildingsFile,
   HeightSource,
   LngLat,
-} from '../data/schema.ts';
+} from '../data/index.ts';
 import { depthOrder, type DepthNode } from './depth-order.ts';
 import {
   normalizePolygon,

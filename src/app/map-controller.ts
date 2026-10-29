@@ -7,9 +7,9 @@
  * (docs/ISOMETRIC_AND_3D_DESIGN.md §8.1): the outgoing view's ground centre
  * and equivalent scale are remembered and applied to the next controller.
  */
-import { zoomForPxPerMetre } from '../isometric/projection.ts';
-import type { LngLat } from '../data/schema.ts';
-import type { MapCamera, MapController } from '../map/types.ts';
+import { zoomForPxPerMetre } from '../isometric/index.ts';
+import type { LngLat } from '../data/index.ts';
+import type { MapCamera, MapController } from '../map/index.ts';
 
 /** Ground centre and Web-Mercator-equivalent zoom of a view. */
 export interface CarriedCamera {

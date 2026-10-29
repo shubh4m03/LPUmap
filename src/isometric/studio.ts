@@ -9,8 +9,8 @@
  *    height, flagged `fallback` (S2: never dropped).
  *  - Labels are the S3 public wording (VERIFICATION_LABELS, APPEARANCE_LABEL).
  */
-import { studioPublicLabel } from '../building-studio/labels.ts';
-import { fallbackPrismMesh, generateStudioMesh } from '../building-studio/mesh/generate.ts';
+import { studioPublicLabel } from '../building-studio/index.ts';
+import { fallbackPrismMesh, generateStudioMesh } from '../building-studio/index.ts';
 import {
   APPEARANCE_LABEL,
   modelSupport,
@@ -18,8 +18,8 @@ import {
   type VERIFICATION_LABELS,
   type ModelEnvelope,
   type StudioFootprint,
-} from '../building-studio/schema.ts';
-import type { LngLat } from '../data/schema.ts';
+} from '../building-studio/index.ts';
+import type { LngLat } from '../data/index.ts';
 import type { IsoStudioModel } from './scene.ts';
 
 /** The fields of a StudioRenderModel the overview needs (structural, so either side may add fields). */

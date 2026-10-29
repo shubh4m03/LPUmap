@@ -7,7 +7,7 @@ import {
   type PointerEvent,
   type ReactNode,
 } from 'react';
-import { useFocusTrap } from '../../accessibility/useFocusTrap.ts';
+import { useFocusTrap } from '../../accessibility/index.ts';
 import { IconButton } from './IconButton.tsx';
 import { cx, FOCUS_RING } from './cx.ts';
 import { closestSnap, nextSnap, type SheetSnap, snapHeightsPx } from './sheet-snap.ts';

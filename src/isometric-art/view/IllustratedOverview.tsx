@@ -12,11 +12,11 @@ import {
 } from 'react';
 import { ILLUSTRATION_NOTICE } from './art-ui.ts';
 import { installArtTestHooks, type ArtStats } from './art-test-hooks.ts';
-import { hitTestHotspots, svgPoints, unionBBox } from './hotspot-geometry.ts';
-import { hotspotsOfSubject, type ArtModel } from './hotspot-model.ts';
-import { artImageSources, planArtImages, type ArtImageLayer } from './image-plan.ts';
-import { artworkUrl } from './manifest-loader.ts';
-import { ILLUSTRATION_DISCLAIMER } from './schema.ts';
+import { hitTestHotspots, svgPoints, unionBBox } from '../index.ts';
+import { hotspotsOfSubject, type ArtModel } from '../index.ts';
+import { artImageSources, planArtImages, type ArtImageLayer } from '../index.ts';
+import { artworkUrl } from '../index.ts';
+import { ILLUSTRATION_DISCLAIMER } from '../index.ts';
 import {
   clampTransform,
   frameRect,
@@ -38,7 +38,7 @@ import {
   type ArtPoint,
   type ArtTransform,
   type ArtViewportSize,
-} from './viewport.ts';
+} from '../index.ts';
 
 /** The overview's camera, registered as the app's MapController (zoom buttons, reset). */
 export interface ArtController {
@@ -790,7 +790,8 @@ export function IllustratedOverview(props: IllustratedOverviewProps) {
         }}
       >
         {props.card && narrow ? (
-          <div ref={cardRef} className="flex min-h-0 w-full flex-col">
+          // Bottom-anchored on phones: toasts (e.g. "Ready to work offline") stay above it.
+          <div ref={cardRef} data-toast-clearance="" className="flex min-h-0 w-full flex-col">
             {props.card}
           </div>
         ) : null}
@@ -802,6 +803,8 @@ export function IllustratedOverview(props: IllustratedOverviewProps) {
               checked={showAll}
               onChange={(e) => setShowAll(e.target.checked)}
               data-testid="art-show-outlines"
+              // 24 × 24 CSS px: WCAG 2.2 target size (2.5.8) next to the legend button on phones.
+              className="size-6 shrink-0 accent-accent"
             />
             Show outlines
           </label>

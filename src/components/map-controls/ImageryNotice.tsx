@@ -1,8 +1,8 @@
 import { Fragment, type CSSProperties, type ReactNode } from 'react';
-import type { LngLat } from '../../data/schema.ts';
-import { imageryDateLine } from '../../map/providers/attribution.ts';
-import type { ImageryProvider } from '../../map/providers/types.ts';
-import { cx } from '../ui/cx.ts';
+import type { LngLat } from '../../data/index.ts';
+import { imageryDateLine } from '../../map/providers/index.ts';
+import type { ImageryProvider } from '../../map/providers/index.ts';
+import { cx } from '../ui/index.ts';
 
 /** Keeps ISO dates on one line ("2026-10-24" must never break at a hyphen). */
 function withUnbrokenDates(text: string): ReactNode {

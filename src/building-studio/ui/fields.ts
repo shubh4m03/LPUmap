@@ -5,11 +5,11 @@
  * Honesty: appearance presets are generic colour/material combinations
  * ("appearance only", APPEARANCE_LABEL); none describes a real LPU building.
  */
-import { CATEGORIES } from '../../config/categories.ts';
-import type { GraphFile, LngLat } from '../../data/schema.ts';
-import { createEnuFrame, lngLatToLocalPolygon } from '../footprint.ts';
-import { pointToPolygonM } from '../planar.ts';
-import { containsProhibitedSourceUrl, isProhibitedSourceUrl, PROHIBITED_SOURCE_MESSAGE } from '../text.ts';
+import { CATEGORIES } from '../../config/index.ts';
+import type { GraphFile, LngLat } from '../../data/index.ts';
+import { createEnuFrame, lngLatToLocalPolygon } from '../index.ts';
+import { pointToPolygonM } from '../index.ts';
+import { containsProhibitedSourceUrl, isProhibitedSourceUrl, PROHIBITED_SOURCE_MESSAGE } from '../index.ts';
 import {
   GENERATORS,
   PITCHED_ROOFS,
@@ -25,8 +25,8 @@ import {
   type StudioIdentity,
   type VerificationDraft,
   type WindowPattern,
-} from '../schema.ts';
-import type { PlacementPreview } from '../editor-state.ts';
+} from '../index.ts';
+import type { PlacementPreview } from '../editor.ts';
 
 export interface FieldIssue {
   /** Dot path in the draft (e.g. 'identity.name'), '' for the whole draft. */

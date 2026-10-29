@@ -392,9 +392,11 @@ test('vignettes of four different block captions in the detail card', async ({ p
     const file = assetOf(s.vignetteAssetIds[0]!);
     const canonical = file.duplicateOf ? assetOf(file.duplicateOf) : file;
     await openArt(page, { place: subjectId });
-    // On a phone the details sheet shows the same item (the card steps aside for it).
+    // The deep link opens the details panel (side panel, or the sheet on a phone), which shows
+    // the item; the floating card steps aside for it so the item is not shown twice.
     const holder = page
       .getByTestId('art-detail-card')
+      .or(page.getByRole('complementary', { name: /campus illustration item details/ }))
       .or(page.getByRole('region', { name: /campus illustration item details/ }))
       .or(page.getByRole('dialog', { name: /campus illustration item details/ }))
       .first();

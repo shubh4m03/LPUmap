@@ -18,7 +18,12 @@ export default defineConfig({
   workers: process.env.CI ? 2 : 6,
   timeout: 60_000,
   expect: { timeout: 10_000 },
-  reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
+  // Every skipped test is counted by reason and project and checked against the explicit skip
+  // rules in scripts/ci/skip-policy.ts; in CI (or with E2E_SKIP_POLICY=enforce) a skip outside
+  // those rules fails the run. E2E_IMAGERY (none | esri | eox) names the build's imagery setup.
+  reporter: process.env.CI
+    ? [['list'], ['html', { open: 'never' }], ['./scripts/ci/playwright-skip-reporter.ts']]
+    : [['list'], ['./scripts/ci/playwright-skip-reporter.ts']],
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: 'retain-on-failure',

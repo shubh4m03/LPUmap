@@ -1,6 +1,6 @@
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { useAppStore, type OpenPanelId, type PanelId } from '../../app/store/index.ts';
-import { getCategory } from '../../config/categories.ts';
+import { getCategory } from '../../config/index.ts';
 
 export const STATIC_TITLES: Record<OpenPanelId, string> = {
   results: 'Search results',

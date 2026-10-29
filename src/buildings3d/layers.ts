@@ -19,8 +19,8 @@ import type {
   LineLayerSpecification,
 } from 'maplibre-gl';
 import { APP_CONFIG } from '../config/index.ts';
-import type { HeightSource } from '../data/schema.ts';
-import { mapThemeColors, type MapTheme, type MapThemeColors } from '../map/theme-colors.ts';
+import type { HeightSource } from '../data/index.ts';
+import { mapThemeColors, type MapTheme, type MapThemeColors } from '../styles/index.ts';
 import { realistic3dColors } from './palette.ts';
 
 export const BUILDINGS_SOURCE_ID = 'buildings';

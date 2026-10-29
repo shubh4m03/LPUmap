@@ -1,5 +1,5 @@
 import { useAppStore } from '../../app/store/index.ts';
-import { CATEGORIES } from '../../config/categories.ts';
+import { CATEGORIES } from '../../config/index.ts';
 import { Icon, cx, iconForCategory } from '../ui/index.ts';
 
 const QUICK = CATEGORIES.filter((c) => c.nearestAction);

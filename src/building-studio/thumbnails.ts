@@ -17,7 +17,7 @@
  * are escaped anyway; numbers are formatted with toFixed.
  */
 import { APP_CONFIG } from '../config/index.ts';
-import type { LngLat } from '../data/schema.ts';
+import type { LngLat } from '../data/index.ts';
 import { starterTemplate, modelFromVariant } from './asset-library.ts';
 import { generateStudioMeshDetailed } from './mesh/generate.ts';
 import type { MaterialSlot, StudioFace, StudioMesh, Vec3 } from './mesh/types.ts';

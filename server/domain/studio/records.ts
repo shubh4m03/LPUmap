@@ -13,7 +13,7 @@ import {
   type StudioDraft,
   type StudioMembership,
   type StudioPublishedVersion,
-} from '../../../src/building-studio/schema.ts';
+} from '../../../src/building-studio/index.ts';
 import type {
   PublishedStudioVersionRow,
   StudioBuildingRow,

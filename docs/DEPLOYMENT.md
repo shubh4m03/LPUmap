@@ -38,8 +38,8 @@ They are read at **build time** and embedded in the bundle, so changing one need
 | `VITE_ARCGIS_API_KEY`  | No      | Optional free-tier ArcGIS key for Esri World Imagery (Satellite 2D, and imagery under Campus 3D). See below                  |
 | `VITE_EOX_BACKDROP`    | No      | `true` adds the keyless EOX Sentinel-2 2016 backdrop (10 m, Satellite 2D only, when no Esri key is set). Empty = off         |
 
-Never set `DATA_FETCH_CONTACT` on the host. Data fetching is a maintainer task done locally, not part
-of a deploy.
+Data fetching is a maintainer task done locally, not part of a deploy; the host needs no data-fetch
+setting.
 
 **Satellite imagery is optional and free-only.** The owner decided on 2026-10-24 that the project uses
 no billing account, so Google Map Tiles (2D satellite and Photorealistic 3D Tiles) are not implemented;
@@ -254,16 +254,22 @@ DevTools → Application → "Clear site data". As a last resort, an operator co
 
 ## Before deploying
 
-Run the gate locally (or in CI):
+Run the full gate locally (CI's `verify` job runs the same gates in the same order):
 
 ```sh
 npm ci
-npx tsc --noEmit -p . && npx tsc --noEmit -p tsconfig.server.json && npx eslint . --max-warnings=0 && npx prettier --check . && npx vitest run && npx vitest run -c vitest.server.config.ts && npm run -s data:check && npx vite build
-npm run smoke
-npm run preview     # then open http://localhost:4173 and check the map, search and a route
+npx playwright install chromium   # once; the gate fails without it instead of skipping browser tests
+npm run check
+npm run preview                   # then open http://localhost:4173 and check the map, search and a route
 ```
 
-`npm run check` runs all of this plus the Playwright suite.
+`npm run check` runs, in this order: format:check → lint → typecheck → typecheck:server →
+test:browsers → test → test:perf → test:server → data:check → art:check → vite build →
+art:check-dist → smoke → perf:bundle → test:e2e. That covers the client and the server
+(`server/`, `functions/`) type checks, the parallel Vitest suites, the wall-clock budget suites run
+serially, the server suites on a local in-memory D1, the data and artwork checks, the production
+build, the smoke test, the bundle-size budgets and the Playwright suite. See
+[QA_STRATEGY.md §CI stages](QA_STRATEGY.md#ci-stages).
 
 ## Alternative static hosts
 

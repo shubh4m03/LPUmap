@@ -6,13 +6,13 @@
  * `error.details` (409 `current`, studio 422 `validation` /
  * `missingAcknowledgements`, template 409 `currentTemplate`).
  */
-import { apiErrorSchema, type ApiError } from '../../community/schema.ts';
+import { apiErrorSchema, type ApiError } from '../../community/index.ts';
 import {
   validationResultSchema,
   warningCodeSchema,
   type ValidationResult,
   type WarningCode,
-} from '../../building-studio/schema.ts';
+} from '../../building-studio/index.ts';
 
 export type ApiErrorCode = ApiError['error']['code'];
 

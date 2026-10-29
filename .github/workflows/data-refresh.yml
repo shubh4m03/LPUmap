@@ -5,9 +5,9 @@
 # HEAD (> 40 % change or a missing landmark); the guarded build then leaves
 # public/data untouched. It never commits or pushes (read-only token) and needs
 # no secrets. An intentional large change is acknowledged by a human in
-# data/curated/count-change-acceptance.json in the commit that lands it. Set the repository variable
-# DATA_FETCH_CONTACT (an e-mail or URL) so OSM operators can identify the
-# client, as their usage policy asks.
+# data/curated/count-change-acceptance.json in the commit that lands it. The fetch scripts
+# identify themselves with the neutral User-Agent LPU-Campus-Atlas-research/0.1
+# (no contact or personal identifier; scripts/lib/http.ts).
 name: Data refresh
 
 on:
@@ -30,8 +30,6 @@ jobs:
     name: Fetch, build and validate data
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    env:
-      DATA_FETCH_CONTACT: ${{ vars.DATA_FETCH_CONTACT }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

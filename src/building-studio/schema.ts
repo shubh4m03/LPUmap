@@ -22,13 +22,13 @@
  * never dropped).
  */
 import { z } from 'zod';
-import { CATEGORIES } from '../config/categories.ts';
+import { CATEGORIES } from '../config/index.ts';
 import {
   DETECTION_ID_RE,
   lngLatSchema,
   membershipDecisionSchema,
   membershipReasonCodeSchema,
-} from '../data/schema.ts';
+} from '../data/index.ts';
 import {
   isHttpUrl,
   isProhibitedSourceUrl,

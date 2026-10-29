@@ -1,9 +1,10 @@
 # Performance
 
-The budgets, and what was actually measured against them on the real LPU dataset (`b628c5855b1d`).
-All numbers below were measured on **2026-10-23** by the documentation agent. They are a
-**snapshot**: another agent was code-splitting the app at the same time, so bundle figures are given
-for two builds taken about 20 minutes apart.
+The budgets, how they are enforced, and what was measured against them. The current numbers were
+measured on **2026-10-29** on the current dataset (`50fefb5e828b`, read from
+`public/data/manifest.json`) with the committed measurement scripts in `scripts/perf/`
+([Current measurements](#current-measurements-2026-10-29)). The older sections below are dated
+snapshots kept as history; each names the dataset it ran on.
 
 ## Budgets
 
@@ -13,10 +14,130 @@ for two builds taken about 20 minutes apart.
 | Route computation          | **< 150 ms** | `APP_CONFIG.performance.routeBudgetMs`                                                   |
 | Search input debounce      | 60 ms        | `APP_CONFIG.search.debounceMs` (UI responsiveness, not a measurement)                    |
 | Single precached file      | ≤ 8 MB       | `maximumFileSizeToCacheInBytes` in `src/offline/pwa-config.ts`; the build fails above it |
-| JS chunk size warning      | 1,200 kB     | `chunkSizeWarningLimit` in `vite.config.ts`                                              |
+| JS chunk size              | 1,200 kB     | `chunkSizeWarningLimit` in `vite.config.ts` warns; `npm run perf:bundle` fails above it  |
+| Bundle sizes               | see below    | [Bundle budgets (enforced)](#bundle-budgets-enforced), `scripts/perf/bundle-budget.ts`   |
 
-`APP_CONFIG` calls the budgets "targets (not guarantees)". No budget is defined for page-load time or
-total transfer size. Those are reported below without a pass/fail verdict.
+`APP_CONFIG` calls the search and route budgets "targets (not guarantees)". No budget is defined for
+page-load time; it is reported without a pass/fail verdict.
+
+## Bundle budgets (enforced)
+
+`npm run perf:bundle` (`node scripts/perf/bundle.ts`) checks the production build in `dist/` against
+these limits and exits 1 on any breach. It runs in `npm run check` and in CI right after
+`vite build` and the smoke test. The limits live in `BUNDLE_BUDGETS` in
+`scripts/perf/bundle-budget.ts`; `tests/unit/docs/docs-integrity.test.ts` fails when this table and
+the code disagree. Gzip is level 9 from Node `zlib`.
+
+| Key                       | Limit       | What is measured                                                                        |
+| ------------------------- | ----------- | --------------------------------------------------------------------------------------- |
+| `maxChunkRawBytes`        | 1,200,000 B | every JS chunk, raw bytes (Vite only warns at this size; this check fails)              |
+| `entryGzipBytes`          | 100,000 B   | the public entry script referenced by `index.html`, gzip                                |
+| `startupJsGzipBytes`      | 160,000 B   | JS fetched before first render: the entry plus its `modulepreload` links, gzip          |
+| `startupCssGzipBytes`     | 25,000 B    | stylesheets linked from `index.html`, gzip                                              |
+| `isometricChunkGzipBytes` | 25,000 B    | each chunk holding the Canvas2D isometric overview, gzip (ISOMETRIC_AND_3D_DESIGN §9.1) |
+| `precacheBytes`           | 6,500,000 B | the sum of every file in the service-worker precache (what a first visit stores)        |
+
+It also enforces isolation rules: MapLibre GL never in the entry, its preloads or the overview chunks;
+no admin-only strings (`X-CSRF-Token`, `/api/admin`, `Owner password`, …) in the public entry; only
+the lazy admin boundary and the path test from `src/admin/` in the entry (checked when the build has
+source maps). Chunks are classified by their contents, not by Rollup's chunk names, which change
+between builds; `tests/unit/ci/bundle-budget.test.ts` checks the classification markers still exist
+in the sources.
+
+On 2026-10-29 every measured size sat under its limit with room to spare (entry 83 kB of
+100 kB, start-up JS 131 kB of 160 kB, CSS 20 kB of 25 kB, precache 5.6 MB of 6.5 MB; see
+[Current measurements](#current-measurements-2026-10-29)), so a real regression fails while a small
+change does not. Raising a limit is a reviewed change to `BUNDLE_BUDGETS` and this table together.
+
+## Timing-sensitive tests
+
+Wall-clock assertions in Vitest are sensitive to CPU contention: on 2026-10-23 the synthetic-corpus
+search budget test failed in one full parallel run while dozens of jsdom suites competed for the CPU,
+and passed in the next. Those suites therefore run on their own, serially:
+
+- `npm test` excludes them; `npm run test:perf` runs them with `--no-file-parallelism`
+  (`tests/unit/search/performance.test.ts`, `tests/unit/building-studio/perf.test.ts`,
+  `tests/unit/routing/robustness.test.ts`, `tests/unit/routing/astar.test.ts`,
+  `tests/unit/community/merge-real.test.ts`, `tests/unit/isometric/scene-real.test.ts`).
+- CI runs `test:perf` as its own step after the parallel unit run; `npm run check` does the same.
+- `tests/unit/ci/gates.test.ts` fails if a timing suite is added back to the parallel run or dropped
+  from `test:perf`.
+
+The budgets themselves were not relaxed.
+
+## Current measurements (2026-10-29)
+
+Measured on 2026-10-29 between 16:23 and 16:25 IST on the test machine below, on the working tree
+of this wave (HEAD `6a07349` plus the wave's uncommitted changes), dataset `50fefb5e828b`. Other
+agents' builds and tests were running on the same machine; no isolation was attempted, so treat
+small differences between runs as noise.
+
+**Search** (`node scripts/perf/search.ts --check`). The index is the app's own: `buildServices()`
+over `public/data` and the artwork manifest (places, categories, 82 illustration subjects, layers and
+commands), **252 docs**. 200 seeded queries (fixed realistic queries, typing prefixes of 1–6
+characters, full titles, one-character typos, single title words), one warm-up pass, three timed
+runs. 155 of the 200 queries returned at least one hit. `buildServices()` took 23.2 ms cold.
+
+| Run | p50     | p95     | max     | mean    |
+| --- | ------- | ------- | ------- | ------- |
+| 1   | 0.21 ms | 0.50 ms | 0.77 ms | 0.25 ms |
+| 2   | 0.18 ms | 0.44 ms | 0.70 ms | 0.23 ms |
+| 3   | 0.19 ms | 0.46 ms | 0.66 ms | 0.23 ms |
+
+**Verdict: met.** Worst p95 0.50 ms against the 50 ms budget.
+
+**Route** (`node scripts/perf/route.ts --check`). `createRouter(graph.json)`: 1,636 nodes, 1,770
+edges, 9 components. Pairs are drawn from the **168 routable campus places** (on campus, with a
+location and a graph node; off-campus places are never routable). 500 seeded pairs per profile as
+place-to-place requests, plus 100 pairs through `alternatives()`. Two runs, the second while the
+machine was busier:
+
+| Request (run 1 / run 2)        | p50            | p95            | max (incl. first call) | Succeeded | Failure reasons                  |
+| ------------------------------ | -------------- | -------------- | ---------------------- | --------- | -------------------------------- |
+| walk (500 pairs)               | 0.04 / 0.12 ms | 0.28 / 0.75 ms | 3.28 / 16.02 ms        | 462 / 500 | 37 × `no-path`, 1 × `same-point` |
+| cycle (500 pairs)              | 0.04 / 0.07 ms | 0.20 / 0.37 ms | 1.39 / 2.09 ms         | 450 / 500 | 49 × `no-path`, 1 × `same-point` |
+| step-free (500 pairs)          | 0.03 / 0.05 ms | 0.17 / 0.26 ms | 1.73 / 1.89 ms         | 462 / 500 | 37 × `no-path`, 1 × `same-point` |
+| alternatives (walk, 100 pairs) | 0.37 / 0.57 ms | 1.11 / 2.22 ms | 2.04 / 5.19 ms         | 96 / 100  | 4 × `no-path`                    |
+
+**Verdict: met.** Worst p95 2.22 ms against the 150 ms budget. The `no-path` results are real: the
+pairs lie in different graph components and the router never bridges them. The share is higher than
+in the 2026-10-23 baseline because the pairs are now campus places only (the v1 baseline drew from
+790 places, most of them off campus, in the largest component).
+
+**Bundle** (`npx vite build --outDir <scratch>`, then `node scripts/perf/bundle.ts --dist <scratch>`;
+no imagery variables set):
+
+| Budget                   | 16:24, before G-26/G-27               | 19:14, after G-26/G-27               | Limit       | Verdict |
+| ------------------------ | ------------------------------------- | ------------------------------------ | ----------- | ------- |
+| Largest JS chunk, raw    | 1,086,744 B (`MapView-*.js`)          | 1,093,399 B (`map-*.js`)             | 1,200,000 B | within  |
+| Public entry, gzip       | 84,469 B (`index-*.js`)               | 83,270 B (`index-*.js`)              | 100,000 B   | within  |
+| Start-up JS, gzip        | 133.30 kB (entry + 11 modulepreloads) | 130.51 kB (entry + 2 modulepreloads) | 160,000 B   | within  |
+| Start-up CSS, gzip       | 19.53 kB                              | 19.53 kB                             | 25,000 B    | within  |
+| Isometric overview chunk | 15,715 B gzip (`studio-*.js`)         | 17,132 B gzip (`isometric-*.js`)     | 25,000 B    | within  |
+| Precache                 | 87 files, 5,557 kB                    | 69 files, 5,551 kB                   | 6,500,000 B | within  |
+
+The module-boundaries work (G-26/G-27, after the first measurement) changed how Rolldown groups
+modules into chunks (its record in IMPLEMENTATION_STATUS §1.11 says the start-up chunks hold the same
+source modules): fewer, larger shared chunks, so the precache holds 69 files instead of 87 for about
+the same bytes. The second column was measured by the
+independent verifier from a scratch build of the combined tree. MapLibre GL and admin code were
+absent from the entry and the overview chunk in both. Other chunks of note (first measurement): the
+MapLibre worker 518,806 B (147,886 B gzip), the Building Studio admin screen 130,280 B (38,155 B gzip,
+only on `/admin/studio`), the illustrated overview `IsometricModeStage-*.js` 33,560 B (11,591 B gzip);
+after G-26/G-27 the worker is unchanged, the Studio screen is `StudioSection-*.js` 91,248 B (25,745 B
+gzip) and `IsometricModeStage-*.js` 29,935 B (10,408 B gzip). `npm run perf:bundle -- --list` prints
+every chunk.
+
+**Page load** (`node scripts/perf/load.ts --url http://localhost:<port> --runs 5`, against
+`vite preview` of the same scratch build on a free port; headless Chromium, service workers blocked,
+median of 5 cold runs per viewport):
+
+| Viewport          | FCP   | DOMContentLoaded | Map style loaded |
+| ----------------- | ----- | ---------------- | ---------------- |
+| 1440 × 900        | 72 ms | 48 ms            | 795 ms           |
+| 390 × 844 (DPR 2) | 76 ms | 51 ms            | 804 ms           |
+
+Localhost, no throttling: CPU-side cost, not real-world load time. No budget, so no verdict.
 
 ## Test machine
 
@@ -28,7 +149,15 @@ total transfer size. Those are reported below without a pass/fail verdict.
 A low-end Android phone will be several times slower. Those numbers have **not** been measured; see
 [QA_STRATEGY.md](QA_STRATEGY.md#what-needs-human-or-on-device-verification).
 
-## Search latency (real index)
+## Baseline of 2026-10-23 (v1 dataset, historical)
+
+Everything from here to "Observations and follow-ups" was measured on **2026-10-23** by the
+documentation agent on the retired v1 dataset (`b628c5855b1d`, 790 routable places, most of them off
+campus, before off-campus places became unroutable). It is kept as the baseline the current numbers
+are compared with; it does not describe the current dataset. Another agent was code-splitting the app
+at the time, so bundle figures are given for two builds about 20 minutes apart.
+
+### Search latency (real index)
 
 **Method.**
 
@@ -65,7 +194,7 @@ much larger than the real index. It reported p95 values of 4.4 ms and 8.8 ms whe
 passed them. That is a measurement-environment
 problem, not a real-index regression. Run that suite serially in CI rather than relaxing it.
 
-## Route latency (real graph)
+### Route latency (real graph)
 
 **Method.**
 
@@ -90,7 +219,7 @@ in all; the router never bridges them.
 **Verdict: met.** The p95 is under 1 ms (under 0.25 ms for a single route) against a 150 ms budget.
 The graph is small. Search cost grows with the explored area, and the A* heuristic keeps that small.
 
-## Page load (local, unthrottled)
+### Page load (local, unthrottled)
 
 **Method.**
 
@@ -114,13 +243,13 @@ These are localhost numbers with no network latency or throttling. They show CPU
 real-world load time. On a 4G connection, transfer time for the gzipped sizes below dominates. No
 budget is defined, so there is no verdict.
 
-## Bundle sizes (`npx vite build`)
+### Bundle sizes (`npx vite build`)
 
 Built into a scratch directory, so the repository's `dist/` was not touched. Sizes are bytes on
 disk; gzip is level 9 and brotli uses default settings, both computed by Node `zlib`. Vite's own
 gzip column differs slightly.
 
-### Snapshot A: before 21:30 IST, 7 assets, precache 32 entries / 3,730 KiB
+#### Snapshot A: before 21:30 IST, 7 assets, precache 32 entries / 3,730 KiB
 
 | File                                  | Raw              | gzip            | brotli          | Loaded                                             |
 | ------------------------------------- | ---------------- | --------------- | --------------- | -------------------------------------------------- |
@@ -131,7 +260,7 @@ gzip column differs slightly.
 | `assets/workbox-window.prod.es5-*.js` | 5,714 B          | 2,246 B         | 1,995 B         | production only, to register the worker            |
 | `sw.js` + `workbox-*.js`              | 3,308 + 15,246 B | 1,517 + 5,257 B | 1,276 + 4,745 B | by the service worker                              |
 
-### Snapshot B: 21:43 IST, 28 JS/CSS assets, precache 55 entries / 3,745 KiB
+#### Snapshot B: 21:43 IST, 28 JS/CSS assets, precache 55 entries / 3,745 KiB
 
 Another agent's code-splitting had landed by then. The changes that matter:
 
@@ -149,7 +278,7 @@ The final layout is whatever the final build produces. Rerun `npx vite build` to
 the limit but within about 12 % of it. Most of that is MapLibre GL itself. No budget exists for the
 initial JS; the code-splitting cut it by about 40 % between the two snapshots.
 
-### Data and fonts
+#### Data and fonts
 
 | File (`public/data/`) | Raw             | gzip          | brotli       | Loaded                   |
 | --------------------- | --------------- | ------------- | ------------ | ------------------------ |
@@ -180,8 +309,9 @@ snapshot A.
 - **The initial download is dominated by MapLibre.** That is the `MapStage` chunk plus the worker,
   about 435 kB gzip together. The start-up JS, CSS and data together are about 312 kB gzip in
   snapshot A (167 + 17 + 128 kB), and less in B.
-- Production source maps are generated (`build.sourcemap: true`). They are not precached, because
-  `.map` files are not in the precache globs, and they are only downloaded when DevTools is open.
+- At the time, production source maps were generated (`build.sourcemap: true`). The published build
+  now has none (`build.sourcemap: false` in `vite.config.ts`, so no machine paths are shipped);
+  `vite build --sourcemap` makes a local debug build with them.
 - The next useful measurement is on a real mid-range Android phone over 4G: first load, a repeat
   load from the service worker, and time to first route. That has not been done.
 
@@ -315,7 +445,7 @@ own port, 4420. Each run's `test-results/perf/iso.json` was copied aside before 
 
 - Same laptop, Chromium, viewport and 4× CDP throttle as above.
 - Code: working tree on top of `2407afe`. Other agents had small uncommitted edits, including 4 lines
-  in `src/isometric/IsoStage.tsx`: a toast condition in the selection handler, not drawing code.
+  in `src/app/IsoStage.tsx` (then `src/isometric/IsoStage.tsx`): a toast condition in the selection handler, not drawing code.
 - No other agent's tests or builds were running. The only other Node processes were the owner's idle
   preview on 4410, which was not touched, and the chrome-devtools MCP servers.
 - CPU load was sampled every 2 s from `\Processor(_Total)\% Processor Time`, as a share of all 16
@@ -398,22 +528,22 @@ Full numbers are in the
   tiles.
 - **Admin and Studio screens** have no performance budget; their chunk sizes above are the only
   numbers.
-- Page-load timings in this file predate this wave and were not re-measured.
+- Page load, search, route and bundle were re-measured on 2026-10-29
+  ([Current measurements](#current-measurements-2026-10-29)); the D8 overview and bake-off numbers
+  above were not.
 
 ## How to reproduce
 
-The measurement scripts lived in the session's scratch directory, not in the repository. To repeat
-the measurements:
+The measurement scripts are committed in `scripts/perf/`. They read the real `public/data` and the
+artwork manifest with the production schemas, print the machine they ran on with every result, and
+accept `--json <file>` to keep the raw numbers.
 
-1. **Search.** In Node 24, import `docsFromPlaces`, `docsFromCategories` and `createSearchIndex`
-   from `src/search/index.ts` and `CATEGORIES` from `src/config/categories.ts`. Load
-   `public/data/places.json`, build the index, run a warm-up pass, then time `index.search(q)` for
-   each query.
-2. **Routing.** Import `createRouter` from `src/routing/index.ts` and load
-   `public/data/graph.json`. Pick random pairs of places that have both `location` and
-   `graphNodeId`, and time `router.route(...)` with `{ kind: 'place', nodeId: graphNodeId, … }`
-   endpoints.
-3. **Bundle.** Run `npx vite build --outDir <tmp> --emptyOutDir`, then gzip and brotli each file with
-   Node `zlib`.
-4. **Load.** Run `npx vite preview --outDir <tmp> --port <p>` and a Playwright script that waits for
-   `window.__ATLAS_MAP__.isStyleLoaded()` on `/?e2e=1`.
+| What   | Command                                                                                   | Fails when                                       |
+| ------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| Search | `npm run perf:search -- --check` (`--runs`, `--queries`, `--seed`)                        | with `--check`: any run's p95 ≥ `searchBudgetMs` |
+| Route  | `npm run perf:route -- --check` (`--pairs`, `--alt-pairs`, `--seed`)                      | with `--check`: any p95 ≥ `routeBudgetMs`        |
+| Bundle | `npx vite build` then `npm run perf:bundle` (`--dist <dir>`, `--list`)                    | always: any budget or isolation rule broken      |
+| Load   | `npx vite preview --outDir <dir> --port <free port>`, then `npm run perf:load -- --url …` | only when the page cannot be measured            |
+
+Use a scratch `--outDir` and a free port so a running preview is never disturbed. The D8 overview
+harness is `npx playwright test -c tests/perf/playwright.iso.config.ts --project=perf`.

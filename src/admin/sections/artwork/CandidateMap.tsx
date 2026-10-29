@@ -8,10 +8,10 @@
  * the owner chooses, nothing is snapped or guessed.
  */
 import { useMemo } from 'react';
-import { Badge } from '../../../components/ui/Badge.tsx';
-import { Button } from '../../../components/ui/Button.tsx';
-import type { CandidateFootprint } from '../../../isometric-art/schema.ts';
-import type { MapEditingProps } from '../../../map/editing/types.ts';
+import { Badge } from '../../../components/ui/index.ts';
+import { Button } from '../../../components/ui/index.ts';
+import type { CandidateFootprint } from '../../../isometric-art/index.ts';
+import type { MapEditingProps } from '../../../map/editing/index.ts';
 import type { CampusDataState } from '../../data/campus-data.ts';
 import { MapPanel } from '../../map/MapPanel.tsx';
 import {

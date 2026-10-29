@@ -11,8 +11,8 @@ import {
   duplicateCandidateSchema,
   overrideFieldsSchema,
   suggestionStatusSchema,
-} from '../../community/schema.ts';
-import { lngLatSchema, placeSchema, verificationStatusSchema, wheelchairSchema } from '../../data/schema.ts';
+} from '../../community/index.ts';
+import { lngLatSchema, placeSchema, verificationStatusSchema, wheelchairSchema } from '../../data/index.ts';
 
 const revision = z.number().int().positive();
 const nullableText = z.string().nullable();

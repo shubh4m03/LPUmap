@@ -164,7 +164,8 @@ describe('input validation and endpoint edge cases', () => {
   });
 
   it('routes very close points that snap to the same node as two connector legs', () => {
-    const r = expectOk(router.route({ from: pt(2, 3), to: pt(-3, -2), profile: 'walk' }));
+    // South-west of node 0 no walkable edge runs, so both points project onto the node.
+    const r = expectOk(router.route({ from: pt(-3, 0), to: pt(-2, -4), profile: 'walk' }));
     expect(r.edgeIds).toEqual([]);
     expect(r.coordinates).toHaveLength(3);
     expect(r.coordinates[1]).toEqual(at(0, 0));
@@ -204,7 +205,9 @@ describe('input validation and endpoint edge cases', () => {
         profile: 'walk',
       }),
     );
-    expect(r.edgeIds).toEqual([0]);
+    // Snapped onto the avenue's second edge 10 m past node 1, 5 m from the place.
+    expect(r.edgeIds).toEqual([0, 1]);
+    expect(r.snap.toM).toBeCloseTo(5, 1);
   });
 });
 
@@ -223,9 +226,18 @@ describe('snap', () => {
   );
   const router = createRouter(graph);
 
-  it('finds the nearest node within the snap radius', () => {
+  it('finds the nearest point on a usable edge within the snap radius', () => {
     const hit = router.snap(at(40, 30), 'walk');
+    expect(hit?.nodeId).toBeNull();
+    expect(hit?.edgeId).toBe(0);
+    expect(hit?.distanceM).toBeCloseTo(30, 1);
+    expect(haversineM(hit!.location, at(40, 0))).toBeLessThan(0.01);
+  });
+
+  it('reports a node when the nearest point is an edge end', () => {
+    const hit = router.snap(at(-30, 40), 'walk');
     expect(hit?.nodeId).toBe(0);
+    expect(hit?.edgeId).toBeNull();
     expect(hit?.distanceM).toBeCloseTo(50, 1);
   });
 
@@ -259,10 +271,10 @@ describe('geometry, distance and duration', () => {
   const router = createRouter(loadFixture('synthetic-campus.json'));
 
   it('includes connector legs and reports distance equal to the polyline length', () => {
-    const r = expectOk(router.route({ from: pt(-30, 5), to: pt(300, -40), profile: 'walk' }));
-    expect(r.coordinates[0]).toEqual(at(-30, 5));
+    const r = expectOk(router.route({ from: pt(-30, -5), to: pt(300, -40), profile: 'walk' }));
+    expect(r.coordinates[0]).toEqual(at(-30, -5));
     expect(r.coordinates[r.coordinates.length - 1]).toEqual(at(300, -40));
-    expect(r.snap.fromM).toBeCloseTo(haversineM(at(-30, 5), at(0, 0)), 6);
+    expect(r.snap.fromM).toBeCloseTo(haversineM(at(-30, -5), at(0, 0)), 6);
     expect(r.snap.toM).toBeCloseTo(40, 1);
     expect(r.distanceM).toBeCloseTo(polylineLength(r.coordinates), 9);
     expect(caveatCodes(r)).toEqual(expect.arrayContaining(['start-connector', 'end-connector']));
@@ -279,7 +291,7 @@ describe('geometry, distance and duration', () => {
   });
 
   it('does not flag short connectors (≤ 15 m) as estimates', () => {
-    const r = expectOk(router.route({ from: pt(0, 10), to: pt(300, 0), profile: 'walk' }));
+    const r = expectOk(router.route({ from: pt(-10, 0), to: pt(300, 0), profile: 'walk' }));
     expect(r.snap.fromM).toBeCloseTo(10, 1);
     expect(caveatCodes(r)).not.toContain('start-connector');
   });

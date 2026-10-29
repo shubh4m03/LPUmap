@@ -10,15 +10,15 @@
  */
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Badge, Button, EmptyState, ErrorState, Spinner } from '../../components/ui/index.ts';
-import { LIBRARY_CATEGORY_LABELS } from '../../building-studio/asset-library.ts';
+import { LIBRARY_CATEGORY_LABELS } from '../../building-studio/editor.ts';
 import {
   LIBRARY_CATEGORIES,
   ownerTemplateInputSchema,
   STUDIO_LIMITS,
   type OwnerTemplateInput,
   type TemplateDefinition,
-} from '../../building-studio/schema.ts';
-import { categoryLabel, STUDIO_CATEGORY_OPTIONS } from '../../building-studio/ui/fields.ts';
+} from '../../building-studio/index.ts';
+import { categoryLabel, STUDIO_CATEGORY_OPTIONS } from '../../building-studio/ui/index.ts';
 import {
   ACCURACY_LABELS,
   libraryItems,
@@ -26,7 +26,7 @@ import {
   variantDefaultsText,
   variantThumbnailUrl,
   type StudioLibraryItem,
-} from '../../building-studio/ui/library.ts';
+} from '../../building-studio/ui/index.ts';
 import { describeAdminError } from '../api/errors.ts';
 import { useAdminApi } from '../context.ts';
 import type { AdminSectionProps } from '../sections/types.ts';

@@ -9,7 +9,7 @@
  *     └──────── change point ────┘
  */
 import { create } from 'zustand';
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 import { EMPTY_SUGGEST_FORM, type SuggestErrors, type SuggestFormValues } from './suggest-model.ts';
 import type { SubmitOutcome } from './submit.ts';
 

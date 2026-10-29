@@ -25,7 +25,7 @@ labels) follows the roles observed in the owner's reference illustration (§2). 
 
 ```ts
 // Lazy-load like MapStage; the chunk never imports maplibre-gl.
-IsoStage({ theme, reducedMotion, padding, studioModels?, onOpenDirectory? })   // store-wired
+IsoStage({ theme, reducedMotion, padding, studioModels?, onOpenDirectory? })   // store-wired; src/app/IsoStage.tsx
 IsoView(props: IsoViewProps)                                                  // pure view (tests, harness)
 createIsoController({ frame, campusPoints, width?, height?, initial? }): IsoController
 // IsoController implements MapController (flyTo, fitCoordinates, resetView, zoomIn/Out, setPadding;
@@ -149,7 +149,7 @@ same checks belong in `tests/e2e/overview.spec.ts` against the app.
 - `src/app/store/types.ts`: add `'directory'` to `PanelId` and give it a title. `PanelBody` then
   renders `<DirectoryPanel/>`, and the mobile sheet peek uses `<DirectoryPeek onBrowse={…}/>`.
 - `src/components/layout/AppShell.tsx` (a `ViewStage`): mount
-  `lazy(() => import('../../isometric/IsoStage.tsx'))` when `viewMode === 'isometric'`, and pass
+  `src/app/IsoStage.tsx` (app glue since G-26; loaded lazily via `IsoStudioStage`) when `viewMode === 'isometric'`, and pass
   `onOpenDirectory={() => openPanel('directory')}`. Use `pxPerMetreForZoom` and `zoomForPxPerMetre` to
   carry the camera across a mode switch. Without WebGL2, fall back to `isometric`, not to the list (§8.3).
 - `studioModels`: integrate passes `studioModels.map((m) => isoStudioModel(m, …))` from the

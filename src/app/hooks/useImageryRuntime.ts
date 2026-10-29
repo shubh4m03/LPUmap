@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect } from 'react';
 import { useAnnounce } from '../../accessibility/index.ts';
-import { ToastContext } from '../../components/ui/toast-context.ts';
-import type { ProviderFailure } from '../../map/providers/types.ts';
+import { ToastContext } from '../../components/ui/index.ts';
+import type { ProviderFailure } from '../../map/providers/index.ts';
 import { useAppStore } from '../store/index.ts';
 import { VIEW_MODE_NAMES } from '../view-mode.ts';
 

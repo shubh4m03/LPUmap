@@ -4,8 +4,8 @@
  * which codes can never be acknowledged, and the change list of a draft
  * against the published version. Pure.
  */
-import { changedPaths } from '../template-compat.ts';
-import type { StudioDraft, ValidationCode, ValidationIssue } from '../schema.ts';
+import { changedPaths } from '../editor.ts';
+import type { StudioDraft, ValidationCode, ValidationIssue } from '../index.ts';
 
 export const RESOLVE_HINTS: Readonly<Record<ValidationCode, string>> = {
   'geometry-invalid': 'Change the dimensions or shape parameters.',

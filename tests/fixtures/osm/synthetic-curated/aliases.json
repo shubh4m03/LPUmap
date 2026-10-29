@@ -7,7 +7,9 @@
       "source": {
         "name": "Synthetic signage register",
         "url": "https://example.org/signage",
-        "retrievedAt": "2026-01-02"
+        "retrievedAt": "2026-01-02",
+        "license": "CC0-1.0 (synthetic test data)",
+        "attribution": "Synthetic fixture"
       }
     }
   ]

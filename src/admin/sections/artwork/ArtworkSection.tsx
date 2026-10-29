@@ -9,13 +9,13 @@
  * separate: nothing here writes image files or studio records.
  */
 import { useMemo, useState } from 'react';
-import { Button } from '../../../components/ui/Button.tsx';
-import { cx, FOCUS_RING } from '../../../components/ui/cx.ts';
-import { EmptyState } from '../../../components/ui/EmptyState.tsx';
-import { SegmentedControl } from '../../../components/ui/SegmentedControl.tsx';
-import { Spinner } from '../../../components/ui/Spinner.tsx';
-import { SearchInput } from '../../../components/ui/TextInput.tsx';
-import { ILLUSTRATION_DISCLAIMER, type IsometricArtManifest } from '../../../isometric-art/schema.ts';
+import { Button } from '../../../components/ui/index.ts';
+import { cx, FOCUS_RING } from '../../../components/ui/index.ts';
+import { EmptyState } from '../../../components/ui/index.ts';
+import { SegmentedControl } from '../../../components/ui/index.ts';
+import { Spinner } from '../../../components/ui/index.ts';
+import { SearchInput } from '../../../components/ui/index.ts';
+import { ILLUSTRATION_DISCLAIMER, type IsometricArtManifest } from '../../../isometric-art/index.ts';
 import { useAdminApi } from '../../context.ts';
 import { useResource } from '../../hooks/useResource.ts';
 import { adminHref } from '../../routes.ts';

@@ -8,7 +8,7 @@
 import { useEffect } from 'react';
 import { Button } from '../../components/ui/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
-import { useStudio } from '../../building-studio/ui/store.ts';
+import { useStudio } from '../../building-studio/ui/index.ts';
 import { ACCESS_PICK_RADIUS_M, candidatesNearClick, nearClickSummary } from '../map/access-pick.ts';
 import { formatMetres } from '../ui/format.ts';
 import { useStudioAccessCandidates } from './access-pick-data.ts';

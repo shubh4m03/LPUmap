@@ -24,64 +24,19 @@ import {
   studioQualityResponseSchema,
   templateListingSchema,
   validationResultSchema,
-  type ApplyTemplateRequest,
-  type ApplyTemplateResponse,
-  type ArchiveRequest,
-  type CreateStudioBuildingRequest,
-  type DeleteStudioBuildingRequest,
-  type DeleteStudioBuildingResponse,
-  type DuplicateRequest,
-  type OwnerTemplateInput,
-  type PublishRequest,
-  type PublishResponse,
-  type RestoreRequest,
-  type SaveDraftRequest,
   type StudioBuildingDetail,
-  type StudioBuildingList,
-  type StudioLibraryResponse,
-  type StudioListQuery,
-  type StudioQualityResponse,
-  type TemplateListing,
-  type ValidateRequest,
-  type ValidationResult,
-} from '../../building-studio/schema.ts';
-import { seg, type AdminHttp, type AdminResult } from './http.ts';
+  type StudioServerApi,
+} from '../../building-studio/index.ts';
+import type { AdminApiError } from './errors.ts';
+import { seg, type AdminHttp } from './http.ts';
 
-type R<T> = Promise<AdminResult<T>>;
-type Opts = { signal?: AbortSignal };
+export type { StudioRevisionBody } from '../../building-studio/index.ts';
 
-export interface StudioRevisionBody {
-  revision: number;
-}
-
-export interface StudioApi {
-  library(o?: Opts): R<StudioLibraryResponse>;
-  createTemplate(definition: OwnerTemplateInput): R<TemplateListing>;
-  /** Creates a new immutable version of an owner template. */
-  updateTemplate(
-    templateId: string,
-    body: { revision: number; definition: OwnerTemplateInput },
-  ): R<TemplateListing>;
-  retireTemplate(templateId: string, body: StudioRevisionBody): R<TemplateListing>;
-  unretireTemplate(templateId: string, body: StudioRevisionBody): R<TemplateListing>;
-
-  listBuildings(q?: StudioListQuery, o?: Opts): R<StudioBuildingList>;
-  getBuilding(id: string, o?: Opts): R<StudioBuildingDetail>;
-  createBuilding(body: CreateStudioBuildingRequest): R<StudioBuildingDetail>;
-  saveDraft(id: string, body: SaveDraftRequest): R<StudioBuildingDetail>;
-  discardDraft(id: string, body: StudioRevisionBody): R<StudioBuildingDetail>;
-  /** Dry run: no write. */
-  validate(body: ValidateRequest, o?: Opts): R<ValidationResult>;
-  publish(id: string, body: PublishRequest): R<PublishResponse>;
-  archive(id: string, body: ArchiveRequest): R<PublishResponse>;
-  restore(id: string, body: RestoreRequest): R<PublishResponse>;
-  /** Permanent; only archived records; `confirmId` must equal `id`. */
-  deleteBuilding(id: string, body: DeleteStudioBuildingRequest): R<DeleteStudioBuildingResponse>;
-  duplicate(id: string, body: DuplicateRequest): R<StudioBuildingDetail>;
-  /** `dryRun: true` previews (nothing saved). */
-  applyTemplate(id: string, body: ApplyTemplateRequest): R<ApplyTemplateResponse>;
-  quality(o?: Opts): R<StudioQualityResponse>;
-}
+/**
+ * The Studio's server port (src/building-studio/server-api.ts) with the admin
+ * client's failure value, so every result is an `AdminResult`.
+ */
+export type StudioApi = StudioServerApi<AdminApiError>;
 
 const b = (id: string) => `/studio/buildings/${seg(id)}`;
 const t = (id: string) => `/studio/templates/${seg(id)}`;

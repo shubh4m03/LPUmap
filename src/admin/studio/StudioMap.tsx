@@ -13,17 +13,17 @@
  *    handles are hidden and a click only lists the nodes near it.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Icon } from '../../components/ui/index.ts';
+import { Button, Icon, useNoticeToast } from '../../components/ui/index.ts';
 import { MapView, type MapController } from '../../map/index.ts';
-import type { EditPointerEvent, HandleDragEvent, MapEditingProps } from '../../map/editing/types.ts';
-import type { StudioRenderModel } from '../../building-studio/merge.ts';
-import { currentDraft } from '../../building-studio/editor-state.ts';
+import type { EditPointerEvent, HandleDragEvent, MapEditingProps } from '../../map/editing/index.ts';
+import type { StudioRenderModel } from '../../building-studio/index.ts';
+import { currentDraft } from '../../building-studio/editor.ts';
 import type { CampusData, DetectionsFile, LngLat } from '../../data/index.ts';
-import type { ModelConfigV1 } from '../../building-studio/schema.ts';
-import { applyHandleDrag, editHandles, type HandleSet } from '../../building-studio/ui/handles.ts';
-import { previewCollection, previewRenderSource } from '../../building-studio/ui/preview.ts';
-import { currentValidation } from '../../building-studio/ui/store.ts';
-import { nearestDetection } from '../../building-studio/ui/snap-targets.ts';
+import type { ModelConfigV1 } from '../../building-studio/index.ts';
+import { applyHandleDrag, editHandles, type HandleSet } from '../../building-studio/ui/index.ts';
+import { previewCollection, previewRenderSource } from '../../building-studio/ui/index.ts';
+import { currentValidation } from '../../building-studio/ui/index.ts';
+import { nearestDetection } from '../../building-studio/ui/index.ts';
 import { accessPickFeatures, useStudioAccessCandidates } from './access-pick-data.ts';
 import { useStudioServices, useStudioState } from './studio-context.ts';
 import '../../app/maplibre-worker.ts';
@@ -261,6 +261,7 @@ export function StudioMap(props: StudioMapProps) {
   );
 
   const [problem, setProblem] = useState<string | null>(null);
+  const onRenderNotice = useNoticeToast();
   const { onController, onFatal } = props;
   const onReady = useCallback((c: MapController) => onController(c), [onController]);
   useEffect(() => () => onController(null), [onController]);
@@ -292,6 +293,7 @@ export function StudioMap(props: StudioMapProps) {
         onReady={onReady}
         onError={onError}
         editing={editing}
+        onRenderNotice={onRenderNotice}
       />
       {problem ? (
         <div

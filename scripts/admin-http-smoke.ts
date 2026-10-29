@@ -82,6 +82,9 @@ async function call(
     headers,
     body: opts.raw ?? (opts.body === undefined ? undefined : JSON.stringify(opts.body)),
     redirect: 'manual',
+    // Local server only: a timeout so a hung server fails the smoke run, but no retry, because the
+    // steps are not idempotent (rate-limit buckets, publication-version deltas).
+    signal: AbortSignal.timeout(30_000),
   });
   const text = await res.text();
   let body: Json = {};

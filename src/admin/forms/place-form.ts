@@ -4,8 +4,8 @@
  * the request bodies carry only what the owner changed (PATCH semantics:
  * absent = keep, null = clear) so a stale form never resets other fields.
  */
-import { placeFieldsSchema, type OverrideFields, type PlaceFields } from '../../community/schema.ts';
-import type { LngLat, VerificationStatus, Wheelchair } from '../../data/schema.ts';
+import { placeFieldsSchema, type OverrideFields, type PlaceFields } from '../../community/index.ts';
+import type { LngLat, VerificationStatus, Wheelchair } from '../../data/index.ts';
 import type { UpdateLocationBody } from '../api/community.ts';
 import type { LocationRecord, SuggestionRecord } from '../api/schemas.ts';
 import { zodFieldErrors, type FieldErrors } from '../ui/form-errors.ts';

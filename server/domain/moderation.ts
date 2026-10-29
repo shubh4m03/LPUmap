@@ -15,7 +15,7 @@ import {
   placeFieldsSchema,
   SUGGESTION_TRANSITIONS,
   type SuggestionStatus,
-} from '../../src/community/schema.ts';
+} from '../../src/community/index.ts';
 import { auditStmt } from '../db/audit.ts';
 import { getLocationRow, insertLocationIfStmt } from '../db/locations.ts';
 import { bumpPublicationStmt } from '../db/meta.ts';

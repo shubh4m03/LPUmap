@@ -17,8 +17,8 @@
  *   extrusion fallback. render() never throws into MapLibre's frame.
  */
 import type { CustomLayerInterface, CustomRenderMethodInput, Map as MapLibreMap } from 'maplibre-gl';
-import type { LngLat } from '../../../data/schema.ts';
-import type { StudioMesh } from '../../mesh/types.ts';
+import type { LngLat } from '../../../data/index.ts';
+import type { StudioMesh } from '../../index.ts';
 import { buildMeshBuffers, hexToRgb, meshContentKey, type StudioAppearance } from './buffers.ts';
 import {
   createGpuMeshCache,

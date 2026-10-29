@@ -8,9 +8,9 @@ import type {
   FillLayerSpecification,
   LineLayerSpecification,
 } from 'maplibre-gl';
-import type { BasemapLayer } from '../data/schema.ts';
+import type { BasemapLayer } from '../data/index.ts';
 import { LAYER_IDS, SOURCE_IDS } from './ids.ts';
-import { mapThemeColors, type MapTheme } from './theme-colors.ts';
+import { mapThemeColors, type MapTheme } from '../styles/index.ts';
 
 type BasemapLayerSpec = BackgroundLayerSpecification | FillLayerSpecification | LineLayerSpecification;
 

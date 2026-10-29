@@ -10,8 +10,8 @@
  * section below (the Studio map) keeps most of the screen height.
  */
 import { useCallback, useMemo, useState, type ReactNode } from 'react';
-import { cx, FOCUS_RING } from '../../components/ui/cx.ts';
-import { Icon } from '../../components/icons/Icon.tsx';
+import { cx, FOCUS_RING } from '../../components/ui/index.ts';
+import { Icon } from '../../components/icons/index.ts';
 import { AdminLayoutContext, type AdminLayoutApi } from './layout-context.ts';
 
 export interface AdminLayoutProps {

@@ -6,16 +6,16 @@
  */
 import { useMemo, useState } from 'react';
 import { Badge, Button, Dialog } from '../../components/ui/index.ts';
-import { studioPublicLabel } from '../../building-studio/labels.ts';
-import { STUDIO_LIMITS, type WarningCode } from '../../building-studio/schema.ts';
-import { prohibitedSourceProblem } from '../../building-studio/ui/fields.ts';
+import { studioPublicLabel } from '../../building-studio/index.ts';
+import { STUDIO_LIMITS, type WarningCode } from '../../building-studio/index.ts';
+import { prohibitedSourceProblem } from '../../building-studio/ui/index.ts';
 import {
   currentValidation,
   missingAcks,
   studioPublishBlockers,
   PUBLISH_BLOCKER_TEXT,
-} from '../../building-studio/ui/store.ts';
-import { changeList } from '../../building-studio/ui/text.ts';
+} from '../../building-studio/ui/index.ts';
+import { changeList } from '../../building-studio/ui/index.ts';
 import { TextField } from './controls.tsx';
 import type { StudioDialog } from './StudioToolbar.tsx';
 import { useStudioServices, useStudioState } from './studio-context.ts';

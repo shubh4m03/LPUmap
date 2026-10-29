@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import type { VerificationStatus } from '../../data/schema.ts';
-import { Icon } from '../icons/Icon.tsx';
-import type { IconName } from '../icons/icon-paths.ts';
+import type { VerificationStatus } from '../../data/index.ts';
+import { Icon } from '../icons/index.ts';
+import type { IconName } from '../icons/index.ts';
 import { cx } from './cx.ts';
 import { VERIFICATION_BADGE, type BadgeTone } from './badge-meta.ts';
 

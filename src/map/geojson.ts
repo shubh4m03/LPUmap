@@ -3,10 +3,10 @@
  * these so a source is only re-uploaded (setData) when its input changes.
  */
 import type { Feature, FeatureCollection, LineString, Point, Polygon } from 'geojson';
-import { getCategory } from '../config/categories.ts';
+import { getCategory } from '../config/index.ts';
 import { APP_CONFIG } from '../config/index.ts';
-import type { LngLat, Place, Relation } from '../data/schema.ts';
-import { destinationPoint, isValidLngLat } from '../distance/geodesic.ts';
+import type { LngLat, Place, Relation } from '../data/index.ts';
+import { destinationPoint, isValidLngLat } from '../distance/index.ts';
 import type { MapRouteOverlay, MapUserLocation } from './types.ts';
 
 export type RouteRole = 'alternative' | 'completed' | 'remaining';

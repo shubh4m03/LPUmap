@@ -12,7 +12,7 @@
  *   Edges with unknown/limited wheelchair access remain usable but the route
  *   carries an "accessibility unverified" caveat (see build-route.ts).
  */
-import type { GraphEdge } from '../data/schema.ts';
+import type { GraphEdge } from '../data/index.ts';
 import { APP_CONFIG } from '../config/index.ts';
 import type { RoutePreference, RouteProfileDef, RouteProfileId } from './types.ts';
 import type { RoutingGraph } from './graph.ts';
@@ -101,6 +101,8 @@ export interface ProfileTables {
   arcPush: Uint8Array;
   /** 1 when the node touches at least one arc usable by this profile (either direction). */
   nodeUsable: Uint8Array;
+  /** 1 when the edge (index into graph.edges) is usable in at least one direction. */
+  edgeUsable: Uint8Array;
 }
 
 export function buildProfileTables(graph: RoutingGraph, profile: RouteProfileId): ProfileTables {
@@ -109,6 +111,7 @@ export function buildProfileTables(graph: RoutingGraph, profile: RouteProfileId)
   const timeCost = new Float64Array(arcs).fill(Infinity);
   const arcPush = new Uint8Array(arcs);
   const nodeUsable = new Uint8Array(graph.nodeCount);
+  const edgeUsable = new Uint8Array(graph.edgeCount);
   for (let i = 0; i < graph.edgeCount; i++) {
     const rule = edgeRule(profile, graph.edges[i]!);
     if (!rule) continue;
@@ -119,6 +122,7 @@ export function buildProfileTables(graph: RoutingGraph, profile: RouteProfileId)
     ];
     for (const [a, allowed] of directions) {
       if (!allowed) continue;
+      edgeUsable[i] = 1;
       lengthCost[a] = len;
       timeCost[a] = len * rule.secondsPerM;
       arcPush[a] = rule.push ? 1 : 0;
@@ -126,7 +130,7 @@ export function buildProfileTables(graph: RoutingGraph, profile: RouteProfileId)
       nodeUsable[graph.arcTarget[a]!] = 1;
     }
   }
-  return { profile, lengthCost, timeCost, arcPush, nodeUsable };
+  return { profile, lengthCost, timeCost, arcPush, nodeUsable, edgeUsable };
 }
 
 export function costTable(tables: ProfileTables, preference: RoutePreference): Float64Array {

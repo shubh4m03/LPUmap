@@ -1,5 +1,5 @@
 /** Suggestions repository. Parameterized statements only; ORDER BY from a whitelist. */
-import type { SuggestionStatus } from '../../src/community/schema.ts';
+import type { SuggestionStatus } from '../../src/community/index.ts';
 import type { SqlDatabase, SqlStatement } from './types.ts';
 import { clampLimit, decodeCursor, encodeCursor, likeContains, stmt } from './sql.ts';
 import { rowToSuggestion, type SuggestionRecord } from './records.ts';

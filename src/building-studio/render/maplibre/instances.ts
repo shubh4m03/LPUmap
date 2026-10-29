@@ -9,9 +9,9 @@
  * Meshes are memoised by `recordId@version` (published versions are
  * immutable), so re-renders and repeated syncs do not regenerate them.
  */
-import { fallbackPrismMesh, generateStudioMesh } from '../../mesh/generate.ts';
-import type { StudioMesh } from '../../mesh/types.ts';
-import { modelSupport, type ModelEnvelope, type StudioFootprint } from '../../schema.ts';
+import { fallbackPrismMesh, generateStudioMesh } from '../../index.ts';
+import type { StudioMesh } from '../../index.ts';
+import { modelSupport, type ModelEnvelope, type StudioFootprint } from '../../index.ts';
 import { FALLBACK_APPEARANCE, type StudioAppearance } from './buffers.ts';
 import type { StudioLayerInstance } from './layer.ts';
 

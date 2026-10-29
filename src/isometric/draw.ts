@@ -12,8 +12,8 @@
  * metre widths, exact foreshortening); buildings in view units.
  */
 import { APP_CONFIG } from '../config/index.ts';
-import type { BasemapLayer, LngLat } from '../data/schema.ts';
-import type { MapRouteOverlay } from '../map/types.ts';
+import type { BasemapLayer, LngLat } from '../data/index.ts';
+import type { MapRouteOverlay } from '../map/index.ts';
 import type { IsoFace } from './faces.ts';
 import type { Box, Pt } from './geometry.ts';
 import type { IsoThemeColors } from './iso-theme.ts';

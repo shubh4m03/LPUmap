@@ -4,9 +4,9 @@
  */
 import { createContext, useContext } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import type { StudioActions } from '../../building-studio/ui/actions.ts';
-import type { StudioLibraryItem } from '../../building-studio/ui/library.ts';
-import { useStudio, type StudioStore, type StudioUiState } from '../../building-studio/ui/store.ts';
+import type { StudioActions } from '../../building-studio/ui/index.ts';
+import type { StudioLibraryItem } from '../../building-studio/ui/index.ts';
+import { useStudio, type StudioStore, type StudioUiState } from '../../building-studio/ui/index.ts';
 import type { CampusData, LngLat } from '../../data/index.ts';
 
 export type LibraryState =

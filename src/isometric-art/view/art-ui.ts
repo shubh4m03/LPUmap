@@ -1,7 +1,7 @@
 /** Constants shared by the illustrated overview's components (kept out of .tsx for fast refresh). */
-import type { BadgeTone } from '../components/ui/index.ts';
-import { ASSOCIATION_STATUS_TEXT, type AssociationStatusName as AssociationStatus } from './text.ts';
-import type { ArtRect } from './viewport.ts';
+import type { BadgeTone } from '../../components/ui/index.ts';
+import { ASSOCIATION_STATUS_TEXT, type AssociationStatusName as AssociationStatus } from '../index.ts';
+import type { ArtRect } from '../index.ts';
 
 /**
  * The legend box of the master overview, in SOURCE PIXELS, with a 14 px

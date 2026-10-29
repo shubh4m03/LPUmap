@@ -1,4 +1,4 @@
-import { getCategory } from '../../config/categories.ts';
+import { getCategory } from '../../config/index.ts';
 import type { Place } from '../../data/index.ts';
 
 export interface OrgGroup {

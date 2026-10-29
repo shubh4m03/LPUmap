@@ -4,7 +4,7 @@
  * unrelated updates — e.g. a new GPS fix — never re-render the map shell.
  */
 import { create, type StoreApi, type UseBoundStore } from 'zustand';
-import { BUILD_VIEW_MODE_AVAILABILITY } from '../../map/providers/runtime.ts';
+import { BUILD_VIEW_MODE_AVAILABILITY } from '../../map/providers/index.ts';
 import { deepLinkViewMode, type ViewMode } from '../view-mode.ts';
 import { createMapSlice, defaultViewMode, type MapDefaults } from './map-slice.ts';
 import { createNavSlice, type WatcherFactory } from './nav-slice.ts';

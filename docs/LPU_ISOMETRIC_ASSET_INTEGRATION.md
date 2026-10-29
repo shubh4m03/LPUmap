@@ -1,10 +1,10 @@
 # LPU isometric artwork integration: contract, architecture and status
 
-> **Status:** integrated, 2026-10-24 (not yet committed). Schemas, the build/check script, derived web
+> **Status:** integrated 2026-10-24, committed in `6a07349` (2026-10-26). Schemas, the build/check script, derived web
 > copies, migration 0003 with its tested rollback, publication v3, the merge rule, the Illustrated
 > overview renderer, the directory/search/details wiring and the admin Artwork section with its
 > endpoints are built, reconciled by the integration owner (§10) and tested. Real gate results are in
-> [IMPLEMENTATION_STATUS.md §1.10](IMPLEMENTATION_STATUS.md#110-campus-illustration-artwork-integration-on-top-of-6050e91-uncommitted).
+> [IMPLEMENTATION_STATUS.md §1.10](IMPLEMENTATION_STATUS.md#110-campus-illustration-artwork-integration-on-top-of-6050e91-committed-in-6a07349).
 > Open items are in §9, the owner's verification guide in §11.
 
 The owner supplied 29 artwork files (`lpu-isometric-map-design/`) on 2026-10-24 with the statement "I own or am
@@ -179,7 +179,13 @@ resize and keyboard-focus panning:
   to the rendered overview for four regions (pins 58, 50, 1, 2): PSNR 47.9–53.1 dB, mean error 0.07–0.38 / 255 on
   desktop and mobile.
 
-### 3.2 Renderer (`src/isometric-art/`)
+### 3.2 Renderer (`src/isometric-art/`, `src/isometric-art/view/`, stage in `src/app/`)
+
+**Layout (G-26, 2026-10-29).** The pure parts (schema, associations, directory, viewport, hit-test geometry,
+image plan, hotspot model, manifest loader) are `src/isometric-art/index.ts`, which the directory, search, community
+and server import. The React renderer, detail card, legend, UI helpers and the read-only e2e hook are
+`src/isometric-art/view/` (entry `view/index.ts`). The store-wired stage `IsometricModeStage.tsx` and the session
+variant state (`isometric-variant.ts`) are app glue in `src/app/`, so nothing in `src/isometric-art` reads the app.
 
 **Choice: layered DOM, measured.** On the real 3371×2384 master at 4× CPU throttle in Chromium, one CSS
 transform on a layer holding the `<img>` tiles and an SVG of outlines gave a 16.7 ms frame median and p95 and a
@@ -187,16 +193,16 @@ first paint of about 0.5–0.6 s. Canvas2D gave a 33–50 ms median, a 50–67 m
 Without throttling both held 16.7 ms. The benchmark page is in scratch only; the numbers are from the renderer
 agent's run on 2026-10-24.
 
-| Module                    | Role                                                                                                                                                                                                                                                                                            |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `viewport.ts`             | The single transform `{scale, tx, ty}` (pure): point mapping both ways, clamp, zoom about a point, pan, pinch, resize (keeps the centre), initial view (whole traced campus if scale ≥ 0.36, else 0.5 for legibility on phones), framing, max scale 4. Translation is snapped to device pixels. |
-| `hotspot-geometry.ts`     | Hit test in source pixels through the inverse of the same transform: first a printed pin disc containing the point (so clicking "33" selects pin 33 although pin 36's outline runs under that disc), else the smallest outline containing it; touch tolerance only on a miss.                   |
-| `image-plan.ts`           | Smallest sharp-enough preview first, then the visible tiles of the coarsest sharp-enough level, else the full image. Derived copies whose `sourceSha256` does not match the original are ignored.                                                                                               |
-| `hotspot-model.ts`        | Model from the manifest and the merged associations; keyboard order (45 pins by printed number, then the other outlines); a building highlights only its verified subjects.                                                                                                                     |
-| `IllustratedOverview.tsx` | The view: mouse, wheel, drag, touch pan, pinch, keyboard (arrows, +/−, 0, Escape; Tab walks the outlines, Enter selects). Outlines are named by their exact printed label, or a neutral numbered name when nothing is printed.                                                                  |
-| `IsometricModeStage.tsx`  | App glue: variant switch ("Illustrated" / "Map-accurate"), store selection, focus requests, fallback to the map-accurate drawing with the reason announced.                                                                                                                                     |
-| `ArtworkDetailCard.tsx`   | Exact labels by role, the "not an official LPU block number" note, the original vignette, official name and block "Not verified" unless verified, Directions only for verified links.                                                                                                           |
-| `ArtworkLegend.tsx`       | A crop of the artwork's own legend (`LEGEND_CROP` 72, 1886, 678×432 source px; all five swatches, `PEDISTRIAN` as printed).                                                                                                                                                                     |
+| Module                           | Role                                                                                                                                                                                                                                                                                            |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `viewport.ts`                    | The single transform `{scale, tx, ty}` (pure): point mapping both ways, clamp, zoom about a point, pan, pinch, resize (keeps the centre), initial view (whole traced campus if scale ≥ 0.36, else 0.5 for legibility on phones), framing, max scale 4. Translation is snapped to device pixels. |
+| `hotspot-geometry.ts`            | Hit test in source pixels through the inverse of the same transform: first a printed pin disc containing the point (so clicking "33" selects pin 33 although pin 36's outline runs under that disc), else the smallest outline containing it; touch tolerance only on a miss.                   |
+| `image-plan.ts`                  | Smallest sharp-enough preview first, then the visible tiles of the coarsest sharp-enough level, else the full image. Derived copies whose `sourceSha256` does not match the original are ignored.                                                                                               |
+| `hotspot-model.ts`               | Model from the manifest and the merged associations; keyboard order (45 pins by printed number, then the other outlines); a building highlights only its verified subjects.                                                                                                                     |
+| `view/IllustratedOverview.tsx`   | The view: mouse, wheel, drag, touch pan, pinch, keyboard (arrows, +/−, 0, Escape; Tab walks the outlines, Enter selects). Outlines are named by their exact printed label, or a neutral numbered name when nothing is printed.                                                                  |
+| `src/app/IsometricModeStage.tsx` | App glue: variant switch ("Illustrated" / "Map-accurate"), store selection, focus requests, fallback to the map-accurate drawing with the reason announced.                                                                                                                                     |
+| `view/ArtworkDetailCard.tsx`     | Exact labels by role, the "not an official LPU block number" note, the original vignette, official name and block "Not verified" unless verified, Directions only for verified links.                                                                                                           |
+| `view/ArtworkLegend.tsx`         | A crop of the artwork's own legend (`LEGEND_CROP` 72, 1886, 678×432 source px; all five swatches, `PEDISTRIAN` as printed).                                                                                                                                                                     |
 
 **Touch taps** (final gate, 2026-10-26): a tap selects on `pointerup`, and the detail card can open right under
 the finger; Chromium then hit-tests again for the click it synthesizes from the touch, so that click landed on the
@@ -281,7 +287,7 @@ three repeated cycles. Recovery copy before any rollback: `wrangler d1 export`.
 ## 6. Gate mapping
 
 The results of the integration owner's runs are recorded in
-[IMPLEMENTATION_STATUS.md §1.10](IMPLEMENTATION_STATUS.md#110-campus-illustration-artwork-integration-on-top-of-6050e91-uncommitted);
+[IMPLEMENTATION_STATUS.md §1.10](IMPLEMENTATION_STATUS.md#110-campus-illustration-artwork-integration-on-top-of-6050e91-committed-in-6a07349);
 this table says where each gate is enforced.
 
 | Gate                       | Where it is enforced                                                                                                                                                                                                                     |
@@ -349,7 +355,7 @@ One implementation per service; every item below was found in the combined diff 
 | Association status wording | Three tables: `ASSOCIATION_BADGE` (renderer), `ARTWORK_STATUS` (directory), `ARTWORK_STATUS_TEXT` (search), with different words for the same status                 | `src/isometric-art/text.ts` (zod-free): `ASSOCIATION_STATUS_TEXT` (item's view) and `BUILDING_VERIFIED_ARTWORK_TEXT` (building's view); the three tables derive from it |
 | Contract wording constants | `ARTWORK_NUMBER_NOTE` copied by hand into `src/components/place/artwork-format.ts` (to keep zod out of the chunk)                                                    | Constants live in `text.ts`; `schema.ts` re-exports them; the copy imports the original                                                                                 |
 | "Official name"            | The detail card showed the linked building's MAP display name ("Unnamed building · 10 floors") as its official name; place details used the verified-provenance rule | One rule, `src/directory/identity.ts` `verifiedOfficialName`; the card shows the map name separately as "Map building"                                                  |
-| Variant / selection sync   | Directory package's own variant state and select-subject logic vs the renderer's (resolved by the directory package before integration)                              | `src/isometric-art/variant-state.ts` and the renderer's `subjectsForSelection`; one manifest load (`src/app/data/artwork.ts`, `useAtlas().artwork`)                     |
+| Variant / selection sync   | Directory package's own variant state and select-subject logic vs the renderer's (resolved by the directory package before integration)                              | `src/app/isometric-variant.ts` and the renderer's `subjectsForSelection`; one manifest load (`src/app/data/artwork.ts`, `useAtlas().artwork`)                           |
 | Studio artwork links       | The read-only Studio panel requested `/artwork/associations` on every Studio open; a missing artwork API crashed the whole Studio (13 failing tests)                 | Requested only when the owner opens the collapsed panel (`PanelSection onToggle`); tested                                                                               |
 
 Also wired by the integration owner: a route found or "choose on map" while the Illustrated overview is

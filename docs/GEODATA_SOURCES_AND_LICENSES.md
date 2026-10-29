@@ -182,6 +182,19 @@ a filter without storing it, but this phase did not.
 
 **Decision.** Same as MS: a lead layer for mapping, not a direct import.
 
+**Owner approval (recorded 2026-10-26).** The owner's rule "Google Maps, Google Earth and Street View
+are never a data source" (§7) does not cover this dataset: Google Open Buildings is a separate,
+openly licensed research dataset (ODbL 1.0 chosen here, attribution in the manifest source
+`google-open-buildings`). The owner approved it, together with the unverified detections layer, on
+2026-10-23. It is used **only** in that layer: 11 point detections in `public/data/detections.geojson`
+(`source: "google-open-buildings"`, manifest count `detections:google-open-buildings`), drawn flat and
+dashed, off by default, labelled unverified, never part of the campus building list, never routed and
+never used for names, heights or block numbers. Within that layer it also marks a Microsoft detection
+as corroborated (`confirmedBy: ["google-open-buildings"]`). The raw points are in
+`data/raw/detections/google-open-buildings/`; removing the source would be a pipeline change
+(`scripts/lib/detections.ts`, `scripts/lib/pipeline.ts`) followed by `npm run data:check`. (Audit item
+G-33: documented, kept.)
+
 ## 4. Overture Maps buildings
 
 | Field                   | Value                                                                                                                                                                                                                                                                                                                                                       |
@@ -332,7 +345,10 @@ the Site's content is strictly prohibited." This is unchanged from
 (iviewd.com) has no reuse licence.
 
 **Decision.** Unchanged. Store only short factual identifiers with citations. No
-images, maps or tour content. Block statements such as "Central Library … Block-37"
+images, maps or tour content. In `manifest.sources` every lpu.in citation carries the licence
+"All rights reserved (© Lovely Professional University); facts cited, no content reproduced", the
+attribution "Cited for identification only; © Lovely Professional University (www.lpu.in)" and
+`licenseUrl` https://www.lpu.in/terms-conditions.php (`scripts/lib/publisher-terms.ts`, G-07). Block statements such as "Central Library … Block-37"
 remain text leads with no position.
 
 ## 14. "LPU isometric map design" (owner-supplied campus illustration)

@@ -1,5 +1,5 @@
 /** Adapters from base places / DB records to duplicate-detection sources. */
-import type { DuplicateSource } from '../../src/community/duplicates.ts';
+import type { DuplicateSource } from '../../src/community/index.ts';
 import type { BaseData } from '../base-data.ts';
 import type { LocationRecord, SuggestionRecord } from '../db/records.ts';
 

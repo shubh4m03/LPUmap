@@ -6,11 +6,7 @@
  * artwork loaded (resolveIsometricVariant).
  */
 import { useSyncExternalStore } from 'react';
-import {
-  buildIsometricViewUrl,
-  parseIsometricVariantParam,
-  type IsometricVariant,
-} from '../app/view-mode.ts';
+import { buildIsometricViewUrl, parseIsometricVariantParam, type IsometricVariant } from './view-mode.ts';
 
 type Listener = () => void;
 

@@ -18,12 +18,12 @@ committed), and in the supply chain.
 | User's location               | Leak through storage, logs, URLs, network or test hooks                                            | Requested only from a user gesture; kept in memory; never persisted, logged, put in a URL or sent; the e2e hook exposes only _whether_ a marker is shown; correction reports contain no location. Details below                                                                                                   |
 | The user's device and session | XSS through OSM tag values, LPU names or URL parameters (a malicious name or `website` tag in OSM) | React text rendering only; `dangerouslySetInnerHTML` is banned by ESLint; no `innerHTML`, `eval` or `setHTML` in `src/`; MapLibre draws labels as glyphs, not HTML; strict CSP with `script-src 'self'`                                                                                                           |
 | Users following links         | `javascript:`/`data:` URLs, credential-bearing URLs, mailto header injection                       | `safeExternalUrl` (absolute `http(s)` only; rejects credentials, whitespace, control or invisible characters, backslashes and anything over 2,048 characters), `telHref` (6–15 digits), `mailHref` (single plain address; rejects `?&%,;:<>"` and newlines). External links open with `rel="noopener noreferrer"` |
-| App state                     | Deep-link injection (`?place=`)                                                                    | Ids must match `osm:(node\|way\|relation)/<digits>` or `cur:<slug>` (≤ 200 characters) before lookup; unknown ids show a message                                                                                                                                                                                  |
+| App state                     | Deep-link injection (`?place=`, `?view=`, `&iso=`)                                                 | `?place=` ids must match the id grammar in `src/app/deep-link.ts` before lookup: `osm:(node                                                                                                                                                                                                                       | way | relation)/<digits>`, `cur:<slug>`, `own:`/`com:<id>`(published owner and community locations) or`stu:<base32>`(Studio buildings), all ≤ 200 characters, or an artwork subject`art:(num | scene | area)-<slug>`(≤ 64); unknown ids show a message.`?view=`accepts only`satellite`, `earth`, `3d`, `iso`and`2d`(an unavailable mode is dropped from the URL), and`&iso=`only`art`or`map`; anything else is ignored |
 | App state                     | Corrupt or hostile local-storage values                                                            | Keys are read through `createStorage` (JSON parse plus Zod validation, falling back and deleting on mismatch). The theme key is a plain string checked with `isThemePreference`. Every access is wrapped in try/catch                                                                                             |
 | Dataset integrity             | A tampered or mismatched data file                                                                 | Same-origin only; Zod validation of every file; `schemaVersion` check before loading; precache revisions per file; `validate-data` in the build                                                                                                                                                                   |
 | Embedding                     | Clickjacking                                                                                       | `frame-ancestors 'none'`                                                                                                                                                                                                                                                                                          |
 | Corrections channel           | Phishing through a configurable URL                                                                | `VITE_CORRECTIONS_URL` is used only if it is `https:`; the report is plain text with a 6,000-character URL cap; the user always reviews it before copying or opening                                                                                                                                              |
-| Remote servers (OSM, LPU)     | Abusive scraping                                                                                   | `robots.txt` obeyed (RFC 9309 subset, exact product token); 2 s between requests; retries with backoff; an identifying User-Agent with an operator-supplied contact; no login, form or private API                                                                                                                |
+| Remote servers (OSM, LPU)     | Abusive scraping                                                                                   | `robots.txt` obeyed (RFC 9309 subset, exact product token); 2 s between requests; timeouts and bounded retries with backoff; the neutral User-Agent `LPU-Campus-Atlas-research/0.1` with no contact or personal identifier; no login, form or private API                                                         |
 | Third-party rights            | Redistributing LPU content                                                                         | Only names, titles and URLs are committed; HTML is cached only in the git-ignored `data/.cache/`                                                                                                                                                                                                                  |
 | Supply chain                  | A compromised or vulnerable dependency                                                             | Exact versions in `package.json`, a committed `package-lock.json`, `npm ci`, a small dependency set, `npm audit`                                                                                                                                                                                                  |
 
@@ -55,9 +55,20 @@ Cross-Origin-Opener-Policy: same-origin
 - **`worker-src 'self' blob:`**: the MapLibre worker is emitted as a same-origin asset and pointed at
   through `setWorkerUrl` (`src/app/maplibre-worker.ts`). `blob:` remains allowed for MapLibre's
   internal use.
-- **`connect-src 'self'`**: the app can only fetch its own files. Any future third-party request
-  (tiles, analytics, an API) would be blocked by the CSP, which is intentional.
+- **`connect-src`**: the site itself plus exactly the two optional imagery hosts
+  (`ibasemaps-api.arcgis.com` for Esri World Imagery, `tiles.maps.eox.at` for the EOX backdrop). A
+  build without `VITE_ARCGIS_API_KEY` or `VITE_EOX_BACKDROP` never contacts them. Any other
+  third-party request (tiles, analytics, another API) is blocked by the CSP, which is intentional.
 - **Geolocation** is allowed only for the app's own origin. Camera and microphone are disabled.
+- **`X-Robots-Tag: noindex, nofollow`** on `/admin`, `/admin/*` and `/api/*`. `public/_headers`
+  covers the static responses; Cloudflare does not apply it to Pages Functions, so every API response
+  also gets the header from `server/http/response.ts` (`tests/server/http/robots-header.test.ts`).
+  The admin page also adds a robots meta at runtime.
+- **Source maps are not published** (`vite.config.ts`: `build.sourcemap: false`, decided in the
+  2026-10-26 wave): they would ship the full source with the build machine's absolute paths, user
+  name included. Debug a local build with `npx vite build --sourcemap`. The smoke test also fails if
+  `index.html` references a map, and the bundle budgets (`npm run perf:bundle`) classify chunks by
+  stable code markers when no maps exist.
 
 HSTS is not set in `_headers`. Enable it at the domain level (Cloudflare: SSL/TLS → Edge
 Certificates → HSTS) once the custom domain is final.
@@ -97,25 +108,35 @@ plain language and must stay literally true.
 
 ## Local storage inventory
 
-All keys are namespaced `lpu-atlas:v1:` (`APP_CONFIG.storage`). They are validated on read and
-removed by "Clear all local data", which deletes every `lpu-atlas:` key in local and session storage
-for all versions.
+Visitor keys are namespaced `lpu-atlas:v1:` (`APP_CONFIG.storage`); the owner's Studio crash recovery
+uses `lpu-atlas:studio-recovery:v1:`. All are validated on read and removed by "Clear all local
+data", which deletes every `lpu-atlas:` key in local and session storage for all versions.
 
-| Key                             | Storage | Contents                                                     | Written by                         |
-| ------------------------------- | ------- | ------------------------------------------------------------ | ---------------------------------- |
-| `lpu-atlas:v1:favorites`        | local   | Array of place ids (max 200), newest first                   | `src/favorites/favorites-store.ts` |
-| `lpu-atlas:v1:recents`          | local   | Array of place ids (max 8). Not written while history is off | `src/favorites/recents-store.ts`   |
-| `lpu-atlas:v1:privacy`          | local   | `{ saveHistory: boolean }`                                   | `src/privacy/privacy-store.ts`     |
-| `lpu-atlas:v1:theme`            | local   | Plain string `light`, `dark` or `system`, validated on read  | `src/accessibility/theme.ts`       |
-| `lpu-atlas:v1:correction-draft` | session | The half-written correction form (no location)               | `src/feedback/draft-store.ts`      |
+| Key                                     | Storage | Contents                                                                                                | Written by                              |
+| --------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `lpu-atlas:v1:favorites`                | local   | Array of place ids (max 200), newest first                                                              | `src/favorites/favorites-store.ts`      |
+| `lpu-atlas:v1:recents`                  | local   | Array of place ids (max 8). Not written while history is off                                            | `src/favorites/recents-store.ts`        |
+| `lpu-atlas:v1:privacy`                  | local   | `{ saveHistory: boolean }`                                                                              | `src/privacy/privacy-store.ts`          |
+| `lpu-atlas:v1:theme`                    | local   | Plain string `light`, `dark` or `system`, validated on read                                             | `src/accessibility/theme.ts`            |
+| `lpu-atlas:v1:correction-draft`         | session | The half-written correction form (no location)                                                          | `src/feedback/draft-store.ts`           |
+| `lpu-atlas:studio-recovery:v1:<record>` | local   | **Owner only** (`/admin/studio`): unsaved Building Studio edits for crash recovery; cleared on sign-out | `src/building-studio/local-recovery.ts` |
 
 The browser also keeps:
 
-- **Cache Storage**: the Workbox precache, named with the `lpu-atlas` cache id. It holds the app
-  shell, dataset and glyphs, and no personal data.
+- **Cache Storage**:
+  - the Workbox precache, named with the `lpu-atlas` cache id. It holds the app shell, dataset and
+    glyphs (and the light artwork files), and no personal data;
+  - `lpu-atlas-publication-v1`: the last good copy of the owner's public publication
+    (`GET /api/locations`), for offline and slow starts (`src/app/data/publication.ts`). It is public
+    data only; the service worker itself never caches `/api/` responses.
+  - `lpu-atlas-isometric-art`: the service worker's only runtime cache. It keeps the heavy artwork
+    files of the Illustrated overview (originals, the full-size web copy, zoom tiles) after they are
+    first viewed: same-origin `/isometric-art/` images only, stale-while-revalidate, at most 96
+    entries for 30 days, purged first when storage runs low (`src/offline/pwa-config.ts`). No
+    personal data.
 - **The service-worker registration.**
 
-Neither is cleared by "Clear all local data". Use the browser's "Clear site data" for those.
+None of these is cleared by "Clear all local data". Use the browser's "Clear site data" for them.
 
 Map preferences (3D mode, layer visibility, labels) are not persisted. They reset on reload.
 
@@ -191,6 +212,14 @@ The address therefore reached those operators' request logs.
 - `.env.example` documents the variable as a contact the operator chooses to share. It is never
   shipped to the browser.
 - Operators should use a project or role address, not a personal one.
+
+**Update 2026-10-26 (G-08).** The contact variable is gone. Every scripted request now goes through
+`scripts/lib/http.ts`, which always sends the neutral User-Agent `LPU-Campus-Atlas-research/0.1`
+(it replaces any caller-supplied one), with a timeout and at most 3 retries with backoff.
+`DATA_FETCH_CONTACT` is no longer read; `fetch-public-data.ts` no longer requires it, and robots.txt
+groups are matched on the product token `LPU-Campus-Atlas-research`. `tests/unit/data/http.test.ts`
+fails if a script calls `fetch` directly (outside the shared client and the local admin smoke test)
+or sets its own User-Agent.
 
 **Residual risk.** Log entries already held by those four operators cannot be recalled from here.
 It is recorded here so that the maintainer can decide whether any follow-up with those operators is

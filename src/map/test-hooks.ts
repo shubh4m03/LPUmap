@@ -15,8 +15,8 @@
  * whether a location marker is shown. The camera centre is the map view, not
  * the user's position.
  */
-import type { Realistic3DDebug } from '../buildings3d/realistic3d.ts';
-import type { LngLat } from '../data/schema.ts';
+import type { Realistic3DDebug } from '../buildings3d/map-runtime.ts';
+import type { LngLat } from '../data/index.ts';
 import type { MapCamera } from './types.ts';
 
 export interface AtlasMapTestHooks {

@@ -10,7 +10,7 @@ import {
   type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
 } from 'react';
-import { cx, FOCUS_RING } from '../../components/ui/cx.ts';
+import { cx, FOCUS_RING } from '../../components/ui/index.ts';
 
 const FIELD = cx(
   'w-full min-w-0 rounded-md border border-border-strong bg-surface-sunken text-base text-text',

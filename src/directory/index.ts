@@ -30,3 +30,4 @@ export type {
   OfficialBlockLabel,
   RoutabilityReason,
 } from './types.ts';
+export { verifiedOfficialName } from './identity.ts';

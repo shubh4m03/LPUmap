@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import { currentDraft } from '../../building-studio/editor-state.ts';
-import type { StudioDraft } from '../../building-studio/schema.ts';
-import { useStudio } from '../../building-studio/ui/store.ts';
+import { currentDraft } from '../../building-studio/editor.ts';
+import type { StudioDraft } from '../../building-studio/index.ts';
+import { useStudio } from '../../building-studio/ui/index.ts';
 import { useStudioServices } from './studio-context.ts';
 
 /**

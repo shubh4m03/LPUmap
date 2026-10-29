@@ -7,8 +7,8 @@
  * (campusStatus 'inside' or 'crossing'). 'uncertain' footprints, detections
  * and context places are never directory entries.
  */
-import type { ArtworkDirectory, ArtworkOnlyEntry } from '../isometric-art/directory.ts';
-import type { ArtSubject, ManifestAsset } from '../isometric-art/schema.ts';
+import type { ArtworkDirectory, ArtworkOnlyEntry } from '../isometric-art/index.ts';
+import type { ArtSubject, ManifestAsset } from '../isometric-art/index.ts';
 import type {
   BuildingsFile,
   CampusStatus,
@@ -18,7 +18,7 @@ import type {
   Place,
   Provenance,
   Relation,
-} from '../data/schema.ts';
+} from '../data/index.ts';
 
 export type { DirectoryKeysLock };
 

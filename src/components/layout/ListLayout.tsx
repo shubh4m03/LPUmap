@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useIsMobile } from '../../accessibility/index.ts';
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { useAppStore } from '../../app/store/index.ts';
-import { CATEGORIES } from '../../config/categories.ts';
+import { CATEGORIES } from '../../config/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
 import { NavigationHud } from '../navigation/NavigationHud.tsx';
 import { SearchTrigger } from '../search/SearchTrigger.tsx';

@@ -4,13 +4,13 @@
  * why it is not applied and delete it deliberately.
  */
 import { useMemo, useState, type FormEvent, type ReactNode } from 'react';
-import { Badge } from '../../../components/ui/Badge.tsx';
-import { Button } from '../../../components/ui/Button.tsx';
-import { Spinner } from '../../../components/ui/Spinner.tsx';
-import { TextInput } from '../../../components/ui/TextInput.tsx';
-import { useToast } from '../../../components/ui/toast-context.ts';
-import { LIMITS } from '../../../community/schema.ts';
-import type { Place } from '../../../data/schema.ts';
+import { Badge } from '../../../components/ui/index.ts';
+import { Button } from '../../../components/ui/index.ts';
+import { Spinner } from '../../../components/ui/index.ts';
+import { TextInput } from '../../../components/ui/index.ts';
+import { useToast } from '../../../components/ui/index.ts';
+import { LIMITS } from '../../../community/index.ts';
+import type { Place } from '../../../data/index.ts';
 import type { OverrideDetail, OverrideView } from '../../api/schemas.ts';
 import { useAdminApi } from '../../context.ts';
 import { useAdminCampusData } from '../../data/campus-data.ts';

@@ -3,14 +3,15 @@
  * imports maplibre-gl (directly, or through the map module's runtime code).
  * Only `import type` from src/map is allowed. The studio adapter (studio.ts) is
  * the one file allowed to import the studio schema, and IsoStage must not
- * reach it.
+ * reach it. IsoStage is app glue in src/app since G-26 but loads with the
+ * overview chunk, so it is held to the same rules.
  */
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const DIR = resolve(process.cwd(), 'src/isometric');
-const files = readdirSync(DIR).filter((f) => /\.tsx?$/.test(f));
+const files = [...readdirSync(DIR).filter((f) => /\.tsx?$/.test(f)), '../app/IsoStage.tsx'];
 const src = (f: string) => readFileSync(join(DIR, f), 'utf8');
 const imports = (code: string) =>
   [...code.matchAll(/^import\s+(type\s+)?[\s\S]*?from\s+'([^']+)';/gm)].map((m) => ({
@@ -37,9 +38,10 @@ describe('src/isometric import boundary', () => {
     for (const f of files) {
       if (f === 'studio.ts') continue;
       for (const i of imports(src(f))) {
-        if (i.from.includes('building-studio/schema') || i.from.includes('building-studio/mesh/generate'))
+        // Any path into src/building-studio (its public entries carry the schema and the mesh generator).
+        if (i.from.includes('building-studio/'))
           expect({ file: f, ...i }).toEqual({ file: f, ...i, typeOnly: true });
-        expect(i.from).not.toMatch(/\.\/studio\.ts$/);
+        expect(i.from).not.toMatch(/(^\.|isometric)\/studio\.ts$/);
       }
     }
   });

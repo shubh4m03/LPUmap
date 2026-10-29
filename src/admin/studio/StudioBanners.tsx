@@ -6,8 +6,8 @@
  */
 import { useEffect, type ReactNode } from 'react';
 import { Button, Icon } from '../../components/ui/index.ts';
-import { cx } from '../../components/ui/cx.ts';
-import { LOCAL_RECOVERY_LABEL } from '../../building-studio/local-recovery.ts';
+import { cx } from '../../components/ui/index.ts';
+import { LOCAL_RECOVERY_LABEL } from '../../building-studio/editor.ts';
 import { useStudioServices, useStudioState } from './studio-context.ts';
 
 /** How long a confirmation stays before it fades. */

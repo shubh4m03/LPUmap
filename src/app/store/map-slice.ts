@@ -1,8 +1,8 @@
-import { LAYER_GROUPS, type LayerGroupId } from '../../config/categories.ts';
+import { LAYER_GROUPS, type LayerGroupId } from '../../config/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
-import { HEALTHY_RUNTIME, viewModeAvailability } from '../../map/providers/registry.ts';
-import { BUILD_PROVIDERS } from '../../map/providers/runtime.ts';
-import type { ProviderRegistry } from '../../map/providers/types.ts';
+import { HEALTHY_RUNTIME, viewModeAvailability } from '../../map/providers/index.ts';
+import { BUILD_PROVIDERS } from '../../map/providers/index.ts';
+import type { ProviderRegistry } from '../../map/providers/index.ts';
 import {
   isMapViewMode,
   mode3dFor,

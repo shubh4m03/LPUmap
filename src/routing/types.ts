@@ -2,7 +2,7 @@
  * Public routing types (see docs/MODULE_CONTRACTS.md). Pure — no DOM, React
  * or MapLibre — so the router runs in tests, workers and scripts alike.
  */
-import type { LngLat } from '../data/schema.ts';
+import type { LngLat } from '../data/index.ts';
 
 export type RouteProfileId = 'walk' | 'cycle' | 'step-free';
 export type RoutePreference = 'shortest' | 'fastest';
@@ -69,11 +69,24 @@ export interface RouteFailure {
 
 export type RouteResult = RouteOk | RouteFailure;
 
+/**
+ * Where a point joins the network for a profile: the nearest point on an edge
+ * the profile may use. `nodeId` is set when that point is a graph node (within
+ * 0.5 m of an edge end); otherwise `edgeId` names the edge it lies inside.
+ */
+export interface RouteSnap {
+  location: LngLat;
+  /** Straight-line distance from the query point, metres. */
+  distanceM: number;
+  nodeId: number | null;
+  edgeId: number | null;
+}
+
 export interface Router {
   route(req: RouteRequest): RouteResult;
   /** Best route first; extra entries only if they differ meaningfully. */
   alternatives(req: RouteRequest): RouteResult[];
-  snap(p: LngLat, profile: RouteProfileId): { nodeId: number; distanceM: number } | null;
+  snap(p: LngLat, profile: RouteProfileId): RouteSnap | null;
   readonly nodeCount: number;
   readonly edgeCount: number;
 }

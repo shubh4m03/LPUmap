@@ -400,7 +400,12 @@ describe('no artwork is fetched from another origin', () => {
 
   it('no artwork module embeds an absolute URL in code, and the CSP allows images from self only', () => {
     const dir = join(root, 'src', 'isometric-art');
-    const sources = listFiles(dir).filter((f) => /\.(?:ts|tsx)$/.test(f));
+    // The stage and the variant state are app glue in src/app since G-26, but still artwork code.
+    const sources = [
+      ...listFiles(dir).filter((f) => /\.(?:ts|tsx)$/.test(f)),
+      join(root, 'src', 'app', 'IsometricModeStage.tsx'),
+      join(root, 'src', 'app', 'isometric-variant.ts'),
+    ];
     expect(sources.length).toBeGreaterThan(0);
     for (const f of sources) expect(externalUrlsInSource(readFileSync(f, 'utf8')), rel(root, f)).toEqual([]);
     expect(externalUrlsInSource("const u = 'https://cdn.example/a.png'; // https://ok.example")).toEqual([

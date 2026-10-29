@@ -5,7 +5,7 @@
  * build cannot generate. Read-only: nothing is repaired automatically.
  */
 import { APP_CONFIG } from '../../../src/config/index.ts';
-import { modelSupport, type StudioQualityResponse } from '../../../src/building-studio/schema.ts';
+import { modelSupport, type StudioQualityResponse } from '../../../src/building-studio/index.ts';
 import { describeStudioOrphan } from '../../base-data.ts';
 import {
   generatorVersionsInUse,

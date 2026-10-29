@@ -5,8 +5,8 @@
  * Never written: owner changes go through the API only.
  */
 import { useEffect, useState } from 'react';
-import type { CampusData } from '../../data/campus-data.ts';
-import { DatasetError, loadCampusData } from '../../data/loader.ts';
+import type { CampusData } from '../../data/index.ts';
+import { DatasetError, loadCampusData } from '../../data/index.ts';
 
 let pending: Promise<CampusData> | null = null;
 

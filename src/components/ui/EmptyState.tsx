@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import { Icon } from '../icons/Icon.tsx';
-import type { IconName } from '../icons/icon-paths.ts';
+import { Icon } from '../icons/index.ts';
+import type { IconName } from '../icons/index.ts';
 import { Button } from './Button.tsx';
 import { cx } from './cx.ts';
 

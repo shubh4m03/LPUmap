@@ -1,5 +1,5 @@
 /** Wording shared by the overview's info panel, canvas label and announcements. */
-import type { HeightSource } from '../data/schema.ts';
+import type { HeightSource } from '../data/index.ts';
 import type { IsoRotation } from './projection.ts';
 import type { IsoBuilding } from './scene.ts';
 

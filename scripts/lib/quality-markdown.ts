@@ -163,7 +163,8 @@ export function qualityMarkdown(r: QualityReport, datasetVersion: string): strin
     '## Curated data',
     '',
     `Files present: ${r.curated.filesPresent.join(', ') || 'none'}. Aliases ${r.curated.aliases}, overrides ${r.curated.overrides}, ` +
-      `organizations ${r.curated.organizations} (${r.curated.anchoredOrganizations} anchored to a mapped place).`,
+      `organizations ${r.curated.organizations} (${r.curated.anchoredOrganizations} anchored to a mapped place), ` +
+      `path connections ${r.curated.pathConnections} (connected_by_path is produced only from these cited records).`,
     '',
     '## Notes',
     '',

@@ -11,9 +11,9 @@ import { useAnnounce, useIsMobile } from '../../accessibility/index.ts';
 import { cameraOf, getMapController } from '../../app/map-controller.ts';
 import { useAppStore } from '../../app/store/index.ts';
 import { isMapViewMode } from '../../app/view-mode.ts';
-import { LIMITS } from '../../community/schema.ts';
-import { ASSIGNABLE_CATEGORY_IDS } from '../../community/schema.ts';
-import { getCategory } from '../../config/categories.ts';
+import { LIMITS } from '../../community/index.ts';
+import { ASSIGNABLE_CATEGORY_IDS } from '../../community/index.ts';
+import { getCategory } from '../../config/index.ts';
 import { Button, Icon, TextInput, cx } from '../ui/index.ts';
 import { roundPoint } from './useSuggestEditing.ts';
 import {

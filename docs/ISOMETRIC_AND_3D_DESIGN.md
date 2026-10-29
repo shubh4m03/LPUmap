@@ -42,7 +42,7 @@ scratch folder `C:/Users/shubh_qypqua6/AppData/Local/Temp/claude/c--Users-shubh-
 ### 1.1 Buildings (`public/data/buildings.geojson`)
 
 > **Dataset update (amended 2026-10-24).** The table below was measured on dataset `b628c5855b1d`, which held
-> all 535 footprints of the snapshot (campus and nearby). The current dataset is **`62e807e6d444`**
+> all 535 footprints of the snapshot (campus and nearby). The current dataset is **`50fefb5e828b`**
 > (`manifest.json` `schemaVersion` 2, built from the same OSM snapshot retrieved 2026-10-23T09:39:00Z). Its
 > `buildings.geojson` holds only the campus inventory: **131** footprints, all `geometrySource` `osm` and
 > `inCampusInventory: true`, with `campusStatus` **128** `inside` and **3** `crossing`. The manifest accounts for
@@ -227,7 +227,20 @@ We have 137 campus footprints with estimated heights and 398 off-campus footprin
 The reasons in `docs/ARCHITECTURE.md` still hold, and the audit (§4) shows that nothing a second renderer
 would add is supported by our data. The enhancements, in order of value:
 
-1. **Campus-membership level of detail (LOD)**, which is source-backed. Split the extrusion into two layers:
+> **LOD as implemented (amended 2026-10-26; supersedes item 1 and the "context layer" in items 6 and §9.3).**
+> The owner's campus-only decision (2026-10-23) removed the off-campus footprints from `buildings.geojson`
+> altogether, so the planned `building-extrusion-context` layer and `src/buildings3d/lod.ts` were never
+> built and are not needed. Level of detail is implemented in `src/buildings3d/layers.ts` and
+> `APP_CONFIG.map`: one extrusion layer filtered to the campus inventory (`inCampusInventory`, never
+> `uncertain`; Studio-drawn buildings excluded), shown from zoom **14.5** (`extrusionMinZoom`), a flat
+> footprint fill below that zoom, outlines from zoom 15 and building labels from zoom **16**
+> (`labelMinZoom`). Phones still start in 2D. The frame watchdog (`src/buildings3d/watchdog.ts`) has no
+> context layer to hide: it reports slow frames, and the host first drops the Studio custom layer to the
+> extrusion fallback, then suggests the overview. Tests: `tests/unit/buildings3d/buildings3d.test.ts`
+> (minzoom, flat fill, campus filter) and `tests/unit/buildings3d/watchdog.test.ts`. The text of item 1 is
+> kept below as the original plan.
+
+1. **Campus-membership level of detail (LOD)** _(original plan; superseded, see the note above)_, which is source-backed. Split the extrusion into two layers:
    - `building-extrusion` filters on campus membership (`inside` or `straddling`): 137 footprints today.
      It keeps the honest `heightSource` colour encoding.
    - `building-extrusion-context` shows `outside` footprints with a neutral tone and lower opacity (opacity
@@ -444,7 +457,7 @@ once per rotation and cached.
 
 ### 6.5 Styling (palette roles)
 
-`src/isometric/iso-theme.ts` defines `IsoThemeColors` for `light` and `dark`, as `src/map/theme-colors.ts`
+`src/isometric/iso-theme.ts` defines `IsoThemeColors` for `light` and `dark`, as `src/styles/map-theme-colors.ts`
 does:
 
 - surroundings and campus ground;
@@ -815,13 +828,13 @@ main config forces `reduce` (`playwright.config.ts`).
 
 ### 9.3 Fallbacks
 
-| Situation                       | Fallback                                                                                           |
-| ------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Realistic 3D too slow           | Watchdog hides the context layer, then suggests the overview (toast). It never switches by itself. |
-| WebGL context lost              | Standard 2D, then the overview (not the list).                                                     |
-| No WebGL2                       | Overview + directory. The list layout stays available.                                             |
-| Overview misses gesture budgets | Lower the DPR cap to 1.5, then 1; hide labels during gestures; move the scene build to a worker.   |
-| No `OffscreenCanvas`            | Hidden `<canvas>` cache.                                                                           |
+| Situation                       | Fallback                                                                                                                                                                                                              |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Realistic 3D too slow           | Watchdog reports slow frames; the host drops the Studio custom layer to the extrusion fallback, then suggests the overview (toast). It never switches by itself. (There is no context layer: campus-only data, §5.2.) |
+| WebGL context lost              | Standard 2D, then the overview (not the list).                                                                                                                                                                        |
+| No WebGL2                       | Overview + directory. The list layout stays available.                                                                                                                                                                |
+| Overview misses gesture budgets | Lower the DPR cap to 1.5, then 1; hide labels during gestures; move the scene build to a worker.                                                                                                                      |
+| No `OffscreenCanvas`            | Hidden `<canvas>` cache.                                                                                                                                                                                              |
 
 ---
 
@@ -850,13 +863,13 @@ main config forces `reduce` (`playwright.config.ts`).
 
 ### 11.1 Ownership (parallel work packages)
 
-| Area                                                                                                                                                                                                                                                                                  | Owner                                | Notes                                                                                                                                          |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/data/schema.ts`, `src/app/store/types.ts`, `src/app/store/map-slice.ts` → `view-slice.ts`, `src/app/deep-link.ts`, `src/components/layout/*`, `src/components/map-controls/MapControls.tsx`, `src/config/index.ts`                                                               | **Integration lead** (single writer) | Shared contracts. Other agents propose diffs to the lead.                                                                                      |
-| `scripts/lib/membership.ts` (insideFraction, status), `scripts/lib/directory-keys.ts`, `scripts/assign-directory-keys.ts` (`npm run data:keys`), `scripts/lib/build-buildings.ts` additions, `scripts/lib/validate.ts` checks, `data/curated/directory-keys.json`, `src/directory/**` | **Data agent**                       | Builds stay deterministic; only `data:keys` writes the lock.                                                                                   |
-| `src/buildings3d/layers.ts` (two-layer LOD), `src/buildings3d/lighting.ts`, `src/buildings3d/lod.ts`, `src/buildings3d/models/{registry,maybe-add-model-layer}.ts`, `src/map/style.ts` (light), `src/map/MapView.tsx` (pixelRatio, watchdog)                                          | **Realistic-3D agent**               | No `three` dependency.                                                                                                                         |
-| `src/isometric/{projection,depth-order,scene,draw,hit-test,labels,markers,iso-theme,iso-controller,test-hooks}.ts`, `IsoView.tsx`, `IsoStage.tsx`, `src/components/directory/*` (panel UI)                                                                                            | **Isometric agent**                  | Must not import `maplibre-gl`. Consumes `src/directory` and `src/data` only.                                                                   |
-| Tests                                                                                                                                                                                                                                                                                 | Each owner for its own code          | Unit tests in `tests/unit/{isometric,directory,buildings3d}/**`; e2e in `tests/e2e/overview.spec.ts`; perf in `tests/e2e/perf/*.perf.spec.ts`. |
+| Area                                                                                                                                                                                                                                                                                                                                             | Owner                                | Notes                                                                                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/data/schema.ts`, `src/app/store/types.ts`, `src/app/store/map-slice.ts` → `view-slice.ts`, `src/app/deep-link.ts`, `src/components/layout/*`, `src/components/map-controls/MapControls.tsx`, `src/config/index.ts`                                                                                                                          | **Integration lead** (single writer) | Shared contracts. Other agents propose diffs to the lead.                                                                                      |
+| `scripts/lib/membership.ts` (insideFraction, status), `scripts/lib/directory-keys.ts`, `scripts/assign-directory-keys.ts` (`npm run data:keys`), `scripts/lib/build-buildings.ts` additions, `scripts/lib/validate.ts` checks, `data/curated/directory-keys.json`, `src/directory/**`                                                            | **Data agent**                       | Builds stay deterministic; only `data:keys` writes the lock.                                                                                   |
+| `src/buildings3d/layers.ts` (zoom LOD on one campus-only layer; the planned two-layer LOD and `src/buildings3d/lod.ts` were superseded by the campus-only data, see §5.2), `src/buildings3d/lighting.ts`, `src/buildings3d/models/{registry,maybe-add-model-layer}.ts`, `src/map/style.ts` (light), `src/map/MapView.tsx` (pixelRatio, watchdog) | **Realistic-3D agent**               | No `three` dependency.                                                                                                                         |
+| `src/isometric/{projection,depth-order,scene,draw,hit-test,labels,markers,iso-theme,iso-controller,test-hooks}.ts`, `IsoView.tsx`, `src/app/IsoStage.tsx` (app glue since G-26), `src/components/directory/*` (panel UI)                                                                                                                         | **Isometric agent**                  | Must not import `maplibre-gl`. Consumes `src/directory` and `src/data` only.                                                                   |
+| Tests                                                                                                                                                                                                                                                                                                                                            | Each owner for its own code          | Unit tests in `tests/unit/{isometric,directory,buildings3d}/**`; e2e in `tests/e2e/overview.spec.ts`; perf in `tests/e2e/perf/*.perf.spec.ts`. |
 
 **Interface freeze, in order:**
 

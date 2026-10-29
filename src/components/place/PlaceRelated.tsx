@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { useAppStore } from '../../app/store/index.ts';
-import { getCategory } from '../../config/categories.ts';
+import { getCategory } from '../../config/index.ts';
 import type { RelationType } from '../../data/index.ts';
 import { formatDistance } from '../../distance/index.ts';
 import { Button, ResultRow, iconForCategory } from '../ui/index.ts';

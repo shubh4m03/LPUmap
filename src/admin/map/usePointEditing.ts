@@ -12,8 +12,8 @@
  * dragged, and phones get tap input instead of the centre reticle.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { LngLat } from '../../data/schema.ts';
-import type { HandleDragEvent, MapEditingProps } from '../../map/editing/types.ts';
+import type { LngLat } from '../../data/index.ts';
+import type { HandleDragEvent, MapEditingProps } from '../../map/editing/index.ts';
 import type { AccessCandidate } from './access-points.ts';
 import { pointHandle, pointPreview, roundLngLat } from './preview.ts';
 

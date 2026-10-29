@@ -1,0 +1,4 @@
+{
+  "$comment": "The only source of connected_by_path relations (G-29). Each entry: {from: 'osm:way/1' | 'cur:slug', to, pathOsmWayId: <OSM way id of the joining path>, evidence: 'osm-tagging' | 'physical-survey' | 'official-publication', note: 'what the source shows, in your own words', source: {name, url, retrievedAt, license?, attribution?, licenseUrl?}}. The build refuses an entry unless both places exist on campus with a mapped position and the cited way is a walkable on-campus path in the routing graph that comes within 60 m of each. Never add a connection because two places merely look connected on the map or in the routing graph. No connection is recorded yet. See data/README.md.",
+  "connections": []
+}

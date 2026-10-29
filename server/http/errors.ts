@@ -3,7 +3,7 @@
  * `code` and a numeric `status` (this class, or the domain's DomainError) is
  * turned into an `apiErrorSchema` problem response by `errorResponse()`.
  */
-import type { ApiError } from '../../src/community/schema.ts';
+import type { ApiError } from '../../src/community/index.ts';
 
 export type ApiErrorCode = ApiError['error']['code'];
 export type ApiIssue = { path: string; message: string };

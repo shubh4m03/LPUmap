@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 import { candidatesNearClick, type NearClick } from './access-pick.ts';
 import type { AccessCandidate } from './access-points.ts';
 

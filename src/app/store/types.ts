@@ -4,14 +4,14 @@
  * update another slice's fields through `set`/`get`).
  */
 import type { StateCreator } from 'zustand';
-import type { SheetSnap } from '../../components/ui/sheet-snap.ts';
-import type { LayerGroupId } from '../../config/categories.ts';
-import type { LngLat } from '../../data/schema.ts';
+import type { SheetSnap } from '../../components/ui/index.ts';
+import type { LayerGroupId } from '../../config/index.ts';
+import type { LngLat } from '../../data/index.ts';
 import type { CorrectionKind } from '../../feedback/index.ts';
 import type { NavSlice } from './nav-types.ts';
 import type { RouteSlice } from './route-types.ts';
-import type { ImageryRuntime } from '../../map/providers/registry.ts';
-import type { ProviderRegistry } from '../../map/providers/types.ts';
+import type { ImageryRuntime } from '../../map/providers/index.ts';
+import type { ProviderRegistry } from '../../map/providers/index.ts';
 import type {
   MapViewMode,
   ResolvedViewMode,
@@ -102,9 +102,17 @@ export interface SelectOptions {
 export interface SelectionSlice {
   selectedPlaceId: string | null;
   focusRequest: FocusRequest | null;
+  /**
+   * A reviewed CANDIDATE building of an illustration item shown on the map as a dashed,
+   * labelled "Unconfirmed match" outline (never the selection, never routed). Cleared by
+   * the next selection change.
+   */
+  unconfirmedMatch: { buildingId: string; label: string } | null;
   selectPlace(id: string, opts?: SelectOptions): void;
   clearSelection(): void;
   requestFocus(target: FocusTarget): void;
+  /** Frames the candidate building and outlines it as an unconfirmed match. */
+  showUnconfirmedMatch(buildingId: string, label: string): void;
 }
 
 export interface MapSlice {

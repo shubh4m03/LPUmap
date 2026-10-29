@@ -8,6 +8,7 @@ import type { Place } from '../../../src/data/schema.ts';
 import type { PlaceRecord } from '../../../scripts/lib/build-places.ts';
 import { CuratedDataError, loadCurated, mergeCurated } from '../../../scripts/lib/curated.ts';
 import type { CuratedInputs } from '../../../scripts/lib/curated.ts';
+import { LPU_TERMS, publisherTerms } from '../../../scripts/lib/publisher-terms.ts';
 
 const FIXTURE_DIR = new URL('../../fixtures/osm/synthetic-curated/', import.meta.url);
 
@@ -37,9 +38,11 @@ const empty = (): CuratedInputs => ({
   aliases: { aliases: [] },
   overrides: { overrides: [] },
   organizations: { records: [] },
+  pathConnections: { connections: [] },
   present: [],
 });
-const src = { name: 'Synthetic source', url: 'https://example.org/s', retrievedAt: '2026-01-01' };
+const terms = { license: 'CC0-1.0 (synthetic test data)', attribution: 'Synthetic fixture' };
+const src = { name: 'Synthetic source', url: 'https://example.org/s', retrievedAt: '2026-01-01', ...terms };
 
 const tmpDirs: string[] = [];
 afterEach(() => {
@@ -110,6 +113,8 @@ describe('mergeCurated', () => {
         id: 'curated:example-org-s',
         name: 'Synthetic source',
         url: 'https://example.org/s',
+        license: terms.license,
+        attribution: terms.attribution,
         retrievedAt: '2026-01-01',
       },
     ]);
@@ -121,14 +126,14 @@ describe('mergeCurated', () => {
       {
         target: 'osm:way/1',
         set: { name: 'Admin Block', wheelchair: 'limited' },
-        source: { name: 'Survey' },
+        source: { name: 'Survey', ...terms },
         check: 'physical-survey',
         lastVerifiedAt: '2026-02-01',
       },
       {
         target: 'osm:way/2',
         set: { openingHours: 'Mo-Fr 09:00-17:00' },
-        source: { name: 'Tip' },
+        source: { name: 'Tip', ...terms },
         check: 'unverified-report',
         lastVerifiedAt: '2026-02-02',
       },
@@ -195,7 +200,13 @@ describe('mergeCurated', () => {
         inferred: false,
       }),
     ]);
-    expect(r.applied).toEqual({ aliases: 0, overrides: 0, organizations: 2, anchoredOrganizations: 1 });
+    expect(r.applied).toEqual({
+      aliases: 0,
+      overrides: 0,
+      organizations: 2,
+      anchoredOrganizations: 1,
+      pathConnections: 0,
+    });
   });
 
   it('rejects unresolved anchors and targets, unknown categories and duplicate ids', () => {
@@ -225,7 +236,7 @@ describe('mergeCurated', () => {
     c.overrides.overrides.push({
       target: 'osm:way/1',
       set: { categoryId: 'nope' },
-      source: { name: 's' },
+      source: { name: 's', ...terms },
       check: 'official-publication',
       lastVerifiedAt: '2026-01-01',
     });
@@ -251,6 +262,77 @@ describe('mergeCurated', () => {
     });
     dup.organizations.records.push({ ...dup.organizations.records[0]! });
     expect(() => mergeCurated([], dup)).toThrow(/duplicate place id/);
+  });
+
+  // G-07: every manifest source record carries a licence and an attribution.
+  it('gives lpu.in citations the honest "cited for identification; © LPU" terms', () => {
+    const c = empty();
+    c.organizations.records.push({
+      id: 'cur:lib',
+      name: 'Central Library',
+      aliases: [],
+      categoryId: 'library',
+      kind: 'organization',
+      source: {
+        name: 'LPU Libraries',
+        url: 'https://www.lpu.in/academics/libraries.php',
+        retrievedAt: '2026-10-23',
+      },
+      verificationStatus: 'imported',
+    });
+    const r = mergeCurated([], c);
+    expect(r.sources).toEqual([
+      {
+        id: 'curated:lpu-in-academics-libraries',
+        name: 'LPU Libraries',
+        url: 'https://www.lpu.in/academics/libraries.php',
+        license: LPU_TERMS.license,
+        attribution: LPU_TERMS.attribution,
+        licenseUrl: 'https://www.lpu.in/terms-conditions.php',
+        retrievedAt: '2026-10-23',
+      },
+    ]);
+    expect(LPU_TERMS.license).toMatch(
+      /All rights reserved.*Lovely Professional University.*no content reproduced/,
+    );
+    expect(LPU_TERMS.attribution).toMatch(/^Cited for identification only; © Lovely Professional University/);
+    expect(publisherTerms('https://happenings.lpu.in/x')).toBe(LPU_TERMS);
+    expect(publisherTerms('https://notlpu.in/x')).toBeNull();
+  });
+
+  it('refuses a source whose licence or attribution is unknown', () => {
+    const c = empty();
+    c.aliases.aliases.push(
+      {
+        target: 'osm:way/1',
+        aliases: ['A'],
+        source: { name: 'Blog', url: 'https://example.org/b', retrievedAt: '2026-01-01' },
+      },
+      {
+        target: 'osm:way/1',
+        aliases: ['B'],
+        source: { name: 'Half', url: 'https://example.org/h', retrievedAt: '2026-01-01', license: 'CC0-1.0' },
+      },
+    );
+    c.overrides.overrides.push({
+      target: 'osm:way/1',
+      set: { description: 'x' },
+      source: { name: 'Hearsay' },
+      check: 'unverified-report',
+      lastVerifiedAt: '2026-01-01',
+    });
+    expect.assertions(4);
+    try {
+      mergeCurated([osmPlace('osm:way/1')], c);
+    } catch (e) {
+      const msg = (e as CuratedDataError).problems;
+      expect(msg).toHaveLength(3);
+      expect(msg[0]).toContain(
+        'aliases.json aliases[0]: source "Blog" (https://example.org/b) has no licence/attribution',
+      );
+      expect(msg[1]).toContain('aliases.json aliases[1]: source "Half"');
+      expect(msg[2]).toContain('overrides.json overrides[0]: source "Hearsay" has no licence/attribution');
+    }
   });
 
   it('does not mutate the input when nothing is curated', () => {

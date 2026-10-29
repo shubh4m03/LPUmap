@@ -12,9 +12,9 @@ import {
   SegmentedControl,
   Spinner,
 } from '../../components/ui/index.ts';
-import { cx, FOCUS_RING } from '../../components/ui/cx.ts';
-import type { StudioBuildingSummary, StudioStatus } from '../../building-studio/schema.ts';
-import { categoryLabel } from '../../building-studio/ui/fields.ts';
+import { cx, FOCUS_RING } from '../../components/ui/index.ts';
+import type { StudioBuildingSummary, StudioStatus } from '../../building-studio/index.ts';
+import { categoryLabel } from '../../building-studio/ui/index.ts';
 import { describeAdminError } from '../api/errors.ts';
 import { useAdminApi } from '../context.ts';
 

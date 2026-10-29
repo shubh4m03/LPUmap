@@ -1,8 +1,17 @@
 # Module contracts
 
 This file fixes the public interface and file ownership of every module so
-they can be built and tested independently. A module's `index.ts` is its only
-public entry point; other modules import from it, never from internals.
+they can be built and tested independently. A module's `index.ts` is its public
+entry point; other modules import from it, never from internals. The few modules
+with a second entry (for example `src/building-studio/editor.ts`, the editing core
+kept out of the public chunks) list it, with the reason, in the module map
+`scripts/ci/module-boundaries.ts`; the table is in
+[ARCHITECTURE.md §Module dependency rules](ARCHITECTURE.md#module-dependency-rules).
+Imports also respect the layers there (a module never imports a higher layer,
+type-only imports included) and form no cycle. ESLint (`atlas/module-boundaries`)
+reports a violating import; `npm run lint:modules` and
+`tests/unit/ci/module-graph.test.ts` also fail on module and file cycles (G-26/G-27).
+Tests and scripts may import internals.
 
 ## Global conventions
 
@@ -16,7 +25,14 @@ public entry point; other modules import from it, never from internals.
 - **Distances** come only from `src/distance` (`haversineM`, projections).
 - **Config** comes only from `src/config` (`APP_CONFIG`, `CATEGORIES`). No
   magic numbers for speeds, thresholds or colours inside feature code.
-- **Data types** come only from `src/data/schema.ts` (Zod-inferred).
+- **Data types** come only from `src/data` (Zod-inferred in `schema.ts`,
+  imported through `src/data/index.ts`).
+- **Views do not read the app.** A view module (map, overviews, Studio UI)
+  receives app services as props or ports: MapView's notices go to
+  `onRenderNotice` (screens pass `useNoticeToast()` from `src/components/ui`),
+  the Studio UI talks to the server through `StudioServerApi`
+  (`src/building-studio/server-api.ts`), and the store-wired overview stages
+  live in `src/app`.
 - **Truthfulness**: never fabricate names, coordinates, hours, routes, people,
   or live status. Unknown is rendered as unknown.
 - **No HTML injection**: React text rendering only; ESLint bans
@@ -28,6 +44,42 @@ public entry point; other modules import from it, never from internals.
   `synthetic-*` when they are invented geometry.
 - Pure domain modules (`data` loader aside) must not import React, MapLibre
   or the DOM, so they stay testable and reusable by scripts.
+
+## Modules added after v1 and their owning documents
+
+The sections below fix the interfaces of the v1 modules. Modules added later keep their contract in
+the design document that owns them; this table points there, and
+[ARCHITECTURE.md](ARCHITECTURE.md#module-dependency-rules) gives the dependency rules for all of them.
+
+| Module                                          | Owner (work package)                        | Contract                                                                                                                         |
+| ----------------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `src/geo`                                       | data pipeline                               | [§v2 geographic contract](#v2-geographic-contract-data_schema_version-2) below                                                   |
+| `src/directory`                                 | data pipeline (artwork join: isometric-art) | [§Directory](#directory-srcdirectory) below; [LPU_ISOMETRIC_ASSET_INTEGRATION.md §5](LPU_ISOMETRIC_ASSET_INTEGRATION.md)         |
+| `src/community`, `server/`, `functions/`        | server-data, server-http                    | [COMMUNITY_MODULE_CONTRACTS.md](COMMUNITY_MODULE_CONTRACTS.md) (§Ownership)                                                      |
+| `src/admin`                                     | admin-ui                                    | [COMMUNITY_MODULE_CONTRACTS.md](COMMUNITY_MODULE_CONTRACTS.md), [ADMIN_OPERATIONS.md](ADMIN_OPERATIONS.md)                       |
+| `src/building-studio`, `src/buildings3d/models` | studio-core, studio-server, render-3d       | [BUILDING_STUDIO_DESIGN.md](BUILDING_STUDIO_DESIGN.md) (§14 Ownership)                                                           |
+| `src/isometric`                                 | isometric                                   | [ISOMETRIC_AND_3D_DESIGN.md](ISOMETRIC_AND_3D_DESIGN.md) (§11.1), [modules/isometric-overview.md](modules/isometric-overview.md) |
+| `src/isometric-art`                             | isometric-art (integration owner)           | [LPU_ISOMETRIC_ASSET_INTEGRATION.md](LPU_ISOMETRIC_ASSET_INTEGRATION.md) (§8 Ownership)                                          |
+| `src/map/providers`, `src/map/editing`          | map                                         | [MAP_PROVIDER_CONFIGURATION.md](MAP_PROVIDER_CONFIGURATION.md); [IMPLEMENTATION_STATUS.md §1.3](IMPLEMENTATION_STATUS.md)        |
+| `src/csp`                                       | platform (security)                         | [§src/csp](#srccsp--owner-platform-security) below                                                                               |
+
+## src/csp — owner: platform (security)
+
+The browser bundle's Zod entry. `vite.config.ts` aliases every bare `zod` import in client code to
+`src/csp/zod.ts`, which imports `src/csp/zod-jitless.ts` first (sets Zod's `jitless`, so Zod never
+probes `new Function`) and then re-exports Zod's own API unchanged. The server, scripts and Vitest
+import `zod` directly.
+
+- **Contract:** `import { z } from 'zod'` in `src/**` behaves exactly like Zod; no module imports
+  `src/csp/*` directly. Nothing else may be added here without a CSP reason.
+- **Why it exists:** `public/_headers` sends `script-src 'self'` with no `unsafe-eval`; Zod's JIT probe
+  was a CSP violation on every page (fix wave, IMPLEMENTATION_STATUS §1.9).
+- **Tests:** `tests/unit/csp/zod-jitless.test.ts` (the flag is set before any schema is built) and
+  `tests/e2e/csp.spec.ts` (zero CSP violations on `/`, the `/admin` sign-in and the signed-in
+  `/admin/studio` under the real `_headers` CSP).
+- **Changes** to the CSP itself are owned by the same owner and must update
+  [SECURITY_AND_PRIVACY.md](SECURITY_AND_PRIVACY.md) (a unit test compares the quoted CSP with
+  `public/_headers`).
 
 ## Generated dataset (public/data/) — owner: data pipeline
 
@@ -60,6 +112,16 @@ export class DatasetError extends Error {
 // Fetches manifest first; rejects with code 'schema-version' if
 // manifest.schemaVersion !== DATA_SCHEMA_VERSION; validates every file with Zod.
 export function loadCampusData(opts?: { baseUrl?: string; fetchImpl?: typeof fetch }): Promise<CampusData>;
+export const PLACE_KIND_LABELS: Record<PlaceKind, string>;
+// overlay.ts — shared by the publication merge (src/community) and the Studio merge
+// (src/building-studio), so neither imports the other:
+export const OWNER_SOURCE: SourceRecord;
+export const COMMUNITY_SOURCE: SourceRecord;
+export interface MergeIssue {
+  id: string;
+  reason: string;
+  message: string;
+}
 ```
 
 ## src/distance — owner: geo
@@ -141,9 +203,16 @@ export interface Router {
   route(req: RouteRequest): RouteResult;
   /** Best route first; extra entries only if they differ by ≥ alternativeMinDifference. */
   alternatives(req: RouteRequest): RouteResult[];
-  snap(p: LngLat, profile: RouteProfileId): { nodeId: number; distanceM: number } | null;
+  snap(p: LngLat, profile: RouteProfileId): RouteSnap | null;
   readonly nodeCount: number;
   readonly edgeCount: number;
+}
+/** nodeId when the snapped point is a graph node (within 0.5 m of an edge end), else edgeId. */
+export interface RouteSnap {
+  location: LngLat;
+  distanceM: number;
+  nodeId: number | null;
+  edgeId: number | null;
 }
 export function createRouter(graph: GraphFile): Router;
 export const ROUTE_PROFILES: Record<RouteProfileId, { id; label; description; speedMps: number }>;
@@ -151,6 +220,9 @@ export const ROUTE_PROFILES: Record<RouteProfileId, { id; label; description; sp
 
 Rules: A* with an admissible heuristic (straight-line distance ÷ the
 profile's fastest possible speed); deterministic tie-breaking by node id;
+endpoints without a usable place access node snap to the nearest point on an
+edge the profile may use, and that edge is split virtually for the search
+(partial edges cost their share; one-way rules apply to each piece);
 never invent connections between disconnected components; step-free excludes
 `steps` and `wheelchair: 'no'` edges and always adds an
 `accessibility-unverified` caveat when any used edge has `wheelchair: 'unknown'`.
@@ -374,6 +446,9 @@ export interface MapViewProps {
   onMapClick?(lngLat: LngLat): void;
   onReady?(controller: MapController): void;
   onError?(message: string): void;
+  /** Degradation notices (slow frames, studio fallback); without it MapView shows them inline.
+   *  The screens pass useNoticeToast() (src/components/ui): a warning toast for 10 s. */
+  onRenderNotice?(notice: RenderNotice): void;
 }
 export interface MapController {
   flyTo(lngLat: LngLat, zoom?: number): void;
@@ -489,6 +564,29 @@ Manifest sources for the v2 inputs: `osm` (ODbL 1.0); `microsoft-ml-buildings`
 `google-open-buildings` (ODbL 1.0, as chosen by the owner). Detection `source` maps to these ids
 through `DETECTION_MANIFEST_SOURCE_IDS`.
 
+Every `manifest.sources` entry has a non-empty `license` and `attribution` (G-07). Curated
+`curated:*` sources take them from the curated entry or, for www.lpu.in, from
+`scripts/lib/publisher-terms.ts`: licence "All rights reserved (© Lovely Professional University);
+facts cited, no content reproduced", attribution "Cited for identification only; © Lovely
+Professional University (www.lpu.in)", `licenseUrl` the site's terms page. `data:validate` fails
+on a source without either, on a place, relation or building whose `provenance.sourceId` is not
+registered, and on a place without `provenance.sourceRef` or `retrievedAt`. (The shared
+`sourceRecordSchema` keeps both fields optional because the client's owner and community overlay
+sources have no licence of their own.)
+
+### Relations (`relations.json`)
+
+`method` is one of `osm-containment`, `osm-entrance-on-outline`, `distance` or `curated`;
+`graph-path` was removed (G-29) because no relation may be derived from graph connectivity.
+`connected_by_path` (G-29) means "a mapped walkway joins these two places". `relationSchema`
+accepts it only with `method: 'curated'`, `inferred: false` and `pathOsmWayId` (the OSM way of
+the cited path), and accepts `pathOsmWayId` on no other type. The only producer is
+`data/curated/path-connections.json` (`scripts/lib/path-connections.ts`). An entry cites a source
+for that way (for example its OSM tags, such as `covered=yes`, or a survey) and is accepted only if
+both places exist on campus with a mapped position and the way is a walkable on-campus way in
+`graph.json` within `maxPlaceConnectorM` of each. `data:validate` checks again that the way
+exists in `graph.json`. **No record exists today**, so `counts["relation:connected_by_path"]` is 0.
+
 ### BuildingPropsV2 (flat and primitive, so MapLibre reads them directly)
 
 - **Facts, identity and provenance:** `id` (= place id), `name|null`, `displayName`, `categoryId`,
@@ -563,9 +661,13 @@ distanceToReviewGeometryM(g, sectionGeometry, projection): number;
 validatePointLocation(p, boundary, contextArea?): 'inside' | 'outside-in-context-area' | 'outside-area';
 ```
 
-Checked against the current dataset (`datasetVersion` b628c5855b1d): `classifyFootprint` gives 130
-inside, 7 crossing, 1 uncertain (`osm:way/422738892`, 0.4056) and 397 outside, with the same
-inside areas as docs/CAMPUS_GEOGRAPHY_AUDIT.md §3. That run used no review sections.
+When this contract was written it was checked against the v1 dataset (`datasetVersion`
+`b628c5855b1d`, historical): `classifyFootprint` gave 130 inside, 7 crossing, 1 uncertain
+(`osm:way/422738892`, 0.4056) and 397 outside, with the same inside areas as
+docs/CAMPUS_GEOGRAPHY_AUDIT.md §3; that run used no review sections. The current dataset applies the
+review sections and curated decisions; its manifest counts 128 inside, 3 crossing, 13 uncertain (held
+for review) and 390 outside of the 535 footprints in the snapshot (1 duplicate removed). The live
+figures are in [CAMPUS_BUILDING_COVERAGE.md](CAMPUS_BUILDING_COVERAGE.md).
 
 ### Counts (manifest `counts`, all derived from the processed files)
 

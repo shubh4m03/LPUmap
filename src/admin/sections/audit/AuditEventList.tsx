@@ -1,6 +1,6 @@
-import { Badge } from '../../../components/ui/Badge.tsx';
-import { Button } from '../../../components/ui/Button.tsx';
-import { cx, FOCUS_RING } from '../../../components/ui/cx.ts';
+import { Badge } from '../../../components/ui/index.ts';
+import { Button } from '../../../components/ui/index.ts';
+import { cx, FOCUS_RING } from '../../../components/ui/index.ts';
 import type { AuditEvent } from '../../api/schemas.ts';
 import type { AdminNavigate } from '../../router.ts';
 import { adminHref } from '../../routes.ts';

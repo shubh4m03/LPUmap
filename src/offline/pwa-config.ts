@@ -42,6 +42,9 @@ export const PRECACHE_IGNORES = [
   'isometric-art/original/**',
   'isometric-art/derived/*/tiles/**',
   'isometric-art/derived/*/web-full.*',
+  // vite-plugin-pwa adds the web manifest itself (revisioned from its content); globbing it
+  // as well listed it twice in the precache.
+  'manifest.webmanifest',
 ] as const;
 
 /** Cache of on-demand artwork (originals, web-full, tiles); separate from the precache. */
@@ -85,7 +88,10 @@ export const pwaOptions: Partial<VitePWAOptions> = {
   filename: SW_FILENAME,
   // Registration is done by sw-controller.ts (workbox-window), so the plugin injects nothing.
   injectRegister: false,
-  includeAssets: ['favicon.svg', 'robots.txt', 'icons/apple-touch-icon-180.png'],
+  // No includeAssets / manifest icons: PRECACHE_GLOBS already matches favicon.svg and every
+  // icons/*.png, and listing them again made duplicate precache entries. robots.txt is
+  // for crawlers only and is not needed offline.
+  includeManifestIcons: false,
   manifest: {
     name: APP_CONFIG.brand.name,
     short_name: APP_CONFIG.brand.shortName,
@@ -104,6 +110,8 @@ export const pwaOptions: Partial<VitePWAOptions> = {
   workbox: {
     globPatterns: [...PRECACHE_GLOBS],
     globIgnores: [...PRECACHE_IGNORES],
+    // The published build has no source maps (vite.config.ts), and neither has sw.js.
+    sourcemap: false,
     // The dataset files are large GeoJSON; fail the build rather than silently skip one.
     maximumFileSizeToCacheInBytes: 8 * MB,
     navigateFallback: 'index.html',

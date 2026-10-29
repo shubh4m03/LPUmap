@@ -12,7 +12,7 @@ import {
 } from '../../../src/buildings3d/index.ts';
 import { APP_CONFIG } from '../../../src/config/index.ts';
 import type { HeightSource } from '../../../src/data/schema.ts';
-import { MAP_THEME_COLORS } from '../../../src/map/theme-colors.ts';
+import { MAP_THEME_COLORS } from '../../../src/styles/map-theme-colors.ts';
 import { evalProperty, toHex } from '../map/style-eval.ts';
 
 const [extrusion] = buildingExtrusionLayers('light');
@@ -135,6 +135,16 @@ describe('setBuildingMode', () => {
     );
     expect(m.dragRotate.enable).toHaveBeenCalled();
     expect(m.touchPitch.enable).toHaveBeenCalled();
+  });
+
+  it('3D on a phone (compact) tilts to the lower pitch3dCompact', () => {
+    const m = modeMap();
+    setBuildingMode(m as unknown as BuildingModeMap, true, { reducedMotion: true, compact: true });
+    expect(m.jumpTo).toHaveBeenCalledWith({
+      pitch: APP_CONFIG.map.pitch3dCompact,
+      bearing: APP_CONFIG.map.bearing3d,
+    });
+    expect(APP_CONFIG.map.pitch3dCompact).toBeLessThan(APP_CONFIG.map.pitch3d);
   });
 
   it('2D with reduced motion: jumps flat and north-up, hides extrusions and disables rotate/pitch', () => {

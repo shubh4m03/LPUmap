@@ -3,14 +3,14 @@
  * map to `null` (never `undefined`) so records round-trip through JSON and
  * audit snapshots unchanged.
  */
-import type { LngLat, VerificationStatus, Wheelchair } from '../../src/data/schema.ts';
+import type { LngLat, VerificationStatus, Wheelchair } from '../../src/data/index.ts';
 import {
   overrideFieldsSchema,
   type OverrideFields,
   type PublishedLocation,
   type PublishedOverride,
   type SuggestionStatus,
-} from '../../src/community/schema.ts';
+} from '../../src/community/index.ts';
 
 export interface SuggestionRecord {
   id: string;

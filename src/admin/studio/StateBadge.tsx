@@ -1,6 +1,6 @@
 import { Badge, type BadgeTone } from '../../components/ui/index.ts';
-import type { StatusKind } from '../../building-studio/editor-state.ts';
-import { studioStatus } from '../../building-studio/ui/store.ts';
+import type { StatusKind } from '../../building-studio/editor.ts';
+import { studioStatus } from '../../building-studio/ui/index.ts';
 import { useStudioState } from './studio-context.ts';
 
 const TONE: Readonly<Record<StatusKind, BadgeTone>> = {

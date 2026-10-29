@@ -4,7 +4,7 @@
  * to start.
  */
 import { EmptyState, SegmentedControl } from '../../components/ui/index.ts';
-import { currentValidation } from '../../building-studio/ui/store.ts';
+import { currentValidation } from '../../building-studio/ui/index.ts';
 import type { DetectionsFile } from '../../data/index.ts';
 import { AppearanceSection } from './AppearancePanel.tsx';
 import { DimensionsSection, PositionSection, ShapeSection } from './GeometryPanel.tsx';

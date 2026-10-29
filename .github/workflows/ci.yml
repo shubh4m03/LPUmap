@@ -1,13 +1,26 @@
 # Continuous integration for LPU Campus Atlas.
 #
-# Job `verify` runs the same gates as `npm run check`, in the same order, plus
-# a data-sync guard: the generated dataset (public/data), its generated reports
+# Job `verify` runs the same gates as `npm run check`, in the same order (the
+# server typecheck and server suites included), plus a data-sync guard: the generated dataset (public/data), its generated reports
 # (docs/DATA_QUALITY_REPORT.md, docs/CAMPUS_BUILDING_COVERAGE.md) and the
 # curated JSON Schemas are committed, so rebuilding them from the committed raw
 # snapshots must not change a byte; the map-key lock (data/curated/directory-keys.json)
 # must be up to date. data:check fails on any validation error, including the
 # count-change guard against the dataset committed at HEAD. No secrets are used
 # anywhere in this workflow.
+#
+# Browser tests never skip silently: Chromium is installed BEFORE the unit tests
+# and `npm run test:browsers` fails the job if it is missing (the Chromium Vitest
+# suite would otherwise skip itself), and every skipped Playwright test is
+# checked against the explicit rules in scripts/ci/skip-policy.ts by the
+# reporter in playwright.config.ts (counted in the job summary; any other skip
+# fails the run). The imagery-dependent map-modes tests that the default build
+# skips run in job `imagery-e2e` against builds with the test-only Esri key and
+# with the EOX backdrop (synthetic tiles only; nothing is fetched from a provider).
+#
+# Wall-clock budget suites run in their own serial step (`npm run test:perf`)
+# so parallel jsdom suites cannot steal their CPU; the bundle-size budgets
+# (docs/PERFORMANCE.md) are checked on the production build (`npm run perf:bundle`).
 #
 # Job `audit` (npm audit --audit-level=high):
 #   - production dependencies (what ships to browsers): BLOCKING.
@@ -57,8 +70,26 @@ jobs:
       - name: Typecheck
         run: npm run -s typecheck
 
+      - name: Typecheck (server and functions)
+        run: npm run -s typecheck:server
+
+      - name: Install Playwright Chromium
+        # Before the unit tests: the Chromium Vitest suite must run here, never skip.
+        run: npx playwright install --with-deps chromium
+
+      - name: Browsers are installed (no silent browser-test skips)
+        run: npm run -s test:browsers
+
       - name: Unit and integration tests
         run: npm run -s test
+
+      - name: Wall-clock budget suites (serial)
+        # Search/route/studio/overview timing budgets, isolated from the parallel run above.
+        run: npm run -s test:perf
+
+      - name: Server suites (handlers, domain, auth, studio, migrations on a local in-memory D1)
+        # wrangler's getPlatformProxy runs D1 locally; no account, no secret, never a remote database.
+        run: npm run -s test:server
 
       - name: Rebuild and validate data
         run: npm run -s data:check
@@ -101,6 +132,11 @@ jobs:
       - name: Smoke test the build
         run: npm run -s smoke
 
+      - name: Bundle-size budgets
+        # docs/PERFORMANCE.md §Bundle budgets: chunk, entry, start-up JS/CSS, overview chunk, precache;
+        # MapLibre and admin code kept out of the entry and the overview.
+        run: npm run -s perf:bundle
+
       - name: Upload dist
         uses: actions/upload-artifact@v4
         with:
@@ -109,16 +145,15 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
-
       - name: Derived artwork is reproducible and visually equivalent
         # Re-derives every copy twice in Chromium (must be byte-identical between the runs) and
         # re-measures the COMMITTED copies against the originals (thresholds + negative controls).
         # Bytes may differ from the committed ones on another Chromium/OS; equivalence is the gate.
         run: npm run -s art:verify
 
-      - name: End-to-end tests (all projects)
+      - name: End-to-end tests (all projects, default build without imagery)
+        env:
+          E2E_IMAGERY: none
         run: npx playwright test
 
       - name: Upload Playwright report
@@ -126,6 +161,61 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+          retention-days: 14
+
+  imagery-e2e:
+    name: Map modes e2e (${{ matrix.imagery }} imagery build, synthetic tiles)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # The test-only key is not a secret: map-modes.spec.ts intercepts every provider
+          # request and asserts this exact token; no real Esri request is ever made.
+          - imagery: esri
+            arcgis_key: TEST_ONLY_fake_arcgis_key_0123456789abcdef
+            eox: ''
+          - imagery: eox
+            arcgis_key: ''
+            eox: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node (from .nvmrc)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build with the imagery configuration
+        env:
+          VITE_ARCGIS_API_KEY: ${{ matrix.arcgis_key }}
+          VITE_EOX_BACKDROP: ${{ matrix.eox }}
+        run: npx vite build --outDir "$RUNNER_TEMP/dist-${{ matrix.imagery }}" --emptyOutDir
+
+      - name: Map-modes e2e on that build (all projects)
+        env:
+          E2E_DIST: ${{ runner.temp }}/dist-${{ matrix.imagery }}
+          E2E_IMAGERY: ${{ matrix.imagery }}
+        run: npx playwright test tests/e2e/map-modes.spec.ts
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.imagery }}
           path: |
             playwright-report
             test-results

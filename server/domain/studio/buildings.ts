@@ -45,9 +45,9 @@ import {
   type StudioBuildingSummary,
   type StudioDraft,
   type ValidationResult,
-} from '../../../src/building-studio/schema.ts';
-import { createEnuFrame } from '../../../src/building-studio/footprint.ts';
-import { applyTemplateVersion } from '../../../src/building-studio/template-compat.ts';
+} from '../../../src/building-studio/index.ts';
+import { createEnuFrame } from '../../../src/building-studio/index.ts';
+import { applyTemplateVersion } from '../../../src/building-studio/editor.ts';
 import { auditStmt, type AuditInput } from '../../db/audit.ts';
 import { bumpPublicationStmt, getPublicationState, PUBLICATION_VERSION_KEY } from '../../db/meta.ts';
 import { GUARD_AFTER_CHANGE, changes, decodeCursor, encodeCursor } from '../../db/sql.ts';

@@ -1,12 +1,12 @@
-import type { RenderNotice } from '../buildings3d/realistic3d.ts';
+import type { RenderNotice } from '../buildings3d/map-runtime.ts';
 import type { StudioRenderSource } from '../building-studio/render/maplibre/index.ts';
-import type { LayerGroupId } from '../config/categories.ts';
-import type { CampusData } from '../data/campus-data.ts';
-import type { DetectionsFile, LngLat, Place } from '../data/schema.ts';
+import type { LayerGroupId } from '../config/index.ts';
+import type { CampusData } from '../data/index.ts';
+import type { DetectionsFile, LngLat, Place } from '../data/index.ts';
 import type { MapEditingProps } from './editing/types.ts';
 import type { CameraView } from './providers/camera.ts';
 import type { ImageryProvider, ProviderFailure } from './providers/types.ts';
-import type { MapTheme } from './theme-colors.ts';
+import type { MapTheme } from '../styles/index.ts';
 
 export interface MapRouteOverlay {
   coordinates: LngLat[];
@@ -58,6 +58,10 @@ export interface MapViewProps {
   theme: MapTheme;
   mode3d: boolean;
   reducedMotion: boolean;
+  /** A candidate building drawn as a dashed, labelled "Unconfirmed match" outline (src/map/unconfirmed-match.ts). */
+  unconfirmedMatch?: { buildingId: string; label: string } | null;
+  /** Phone layout (< 768 px): Campus 3D tilts to APP_CONFIG.map.pitch3dCompact instead of pitch3d. */
+  compact?: boolean;
   visibleGroups: ReadonlySet<LayerGroupId>;
   showLabels: boolean;
   selectedPlaceId: string | null;
@@ -85,7 +89,10 @@ export interface MapViewProps {
   /** Opt-in "Nearby, outside campus" layer: contextPlaces become markers with the "Outside campus" badge. */
   showNearbyOutsideCampus?: boolean;
   contextPlaces?: readonly Place[];
-  /** Degradation notices (slow frames, studio fallback). Without it MapView shows a toast or an inline notice. */
+  /**
+   * Degradation notices (slow frames, studio fallback). The screens pass a warning toast
+   * (useNoticeToast, src/components/ui); without a handler MapView shows the notice inline.
+   */
   onRenderNotice?(notice: RenderNotice): void;
 
   // --- Basemap imagery (src/map/providers; all optional, absent = the campus map) ---

@@ -6,13 +6,13 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '../../components/ui/index.ts';
-import { IsoView } from '../../isometric/IsoView.tsx';
-import type { IsoController } from '../../isometric/iso-controller.ts';
+import { IsoView } from '../../isometric/index.ts';
+import type { IsoController } from '../../isometric/index.ts';
 import { isoStudioModel } from '../../isometric/studio.ts';
-import type { StudioRenderModel } from '../../building-studio/merge.ts';
-import { currentDraft } from '../../building-studio/editor-state.ts';
-import { isoPreview } from '../../building-studio/ui/iso-preview.ts';
-import { previewFootprint } from '../../building-studio/ui/preview.ts';
+import type { StudioRenderModel } from '../../building-studio/index.ts';
+import { currentDraft } from '../../building-studio/editor.ts';
+import { isoPreview } from '../../building-studio/ui/index.ts';
+import { previewFootprint } from '../../building-studio/ui/index.ts';
 import type { BoundaryReviewFile, CampusData } from '../../data/index.ts';
 import { useStudioServices, useStudioState } from './studio-context.ts';
 

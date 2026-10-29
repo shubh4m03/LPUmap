@@ -1,14 +1,12 @@
 /**
  * src/isometric — the isometric overview (docs/ISOMETRIC_AND_3D_DESIGN.md §6,
- * Decision D4). Canvas2D only; never imports maplibre-gl. Load IsoStage lazily:
+ * Decision D4). Canvas2D only; never imports maplibre-gl. Nothing here reads the
+ * app: src/app/IsoStage.tsx wires IsoView to the store, and the app loads it
+ * lazily through src/app/IsoStudioStage.tsx.
  *
- *   const IsoStage = lazy(() => import('../../isometric/IsoStage.tsx').then((m) => ({ default: m.IsoStage })));
- *
- * `isoStudioModel` (./studio.ts) is exported separately so the overview chunk
- * does not pull in the studio schema.
+ * `isoStudioModel` (./studio.ts) is a second public entry, apart from this one,
+ * so the overview chunk does not pull in the studio schema.
  */
-export { IsoStage } from './IsoStage.tsx';
-export type { IsoStageProps } from './IsoStage.tsx';
 export { IsoView } from './IsoView.tsx';
 export type { IsoViewProps } from './IsoView.tsx';
 export { createIsoController, FOCUS_PX_PER_M } from './iso-controller.ts';

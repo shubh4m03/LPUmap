@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import { Icon } from '../../components/icons/Icon.tsx';
-import { cx, FOCUS_RING } from '../../components/ui/cx.ts';
+import { Icon } from '../../components/icons/index.ts';
+import { cx, FOCUS_RING } from '../../components/ui/index.ts';
 import { onInAppClick } from './links.ts';
 
 export interface PageProps {

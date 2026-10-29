@@ -1,7 +1,7 @@
 /** Truthful wording for place facts. Unknown values are labelled as unknown, never guessed. */
 import { APP_CONFIG } from '../../config/index.ts';
 import type { CampusZone, Place, PlaceKind, Provenance, Wheelchair } from '../../data/index.ts';
-import { PLACE_KIND_LABELS } from '../../data/place-labels.ts';
+import { PLACE_KIND_LABELS } from '../../data/index.ts';
 import { safeExternalUrl } from '../../utils/safe-url.ts';
 
 export const KIND_LABELS: Record<PlaceKind, string> = PLACE_KIND_LABELS;

@@ -20,9 +20,9 @@ import {
   type StudioLibraryResponse,
   type TemplateDefinition,
   type TemplateListing,
-} from '../../../src/building-studio/schema.ts';
-import { modelFromVariant, renderCostForFaces } from '../../../src/building-studio/asset-library.ts';
-import { generateStudioMeshDetailed } from '../../../src/building-studio/mesh/generate.ts';
+} from '../../../src/building-studio/index.ts';
+import { modelFromVariant, renderCostForFaces } from '../../../src/building-studio/editor.ts';
+import { generateStudioMeshDetailed } from '../../../src/building-studio/index.ts';
 import { APP_CONFIG } from '../../../src/config/index.ts';
 import { auditStmt } from '../../db/audit.ts';
 import { changes } from '../../db/sql.ts';

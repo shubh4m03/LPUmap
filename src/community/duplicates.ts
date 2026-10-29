@@ -15,9 +15,9 @@
  *  3. identical normalised name anywhere inside APP_CONFIG.map.maxBounds.
  */
 import { APP_CONFIG } from '../config/index.ts';
-import type { LngLat } from '../data/schema.ts';
-import { haversineM } from '../distance/geodesic.ts';
-import { normalize } from '../search/normalize.ts';
+import type { LngLat } from '../data/index.ts';
+import { haversineM } from '../distance/index.ts';
+import { normalize } from '../search/index.ts';
 import type { DuplicateCandidate } from './schema.ts';
 import { insideContributionArea } from './geo.ts';
 

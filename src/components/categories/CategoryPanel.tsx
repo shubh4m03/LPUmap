@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { useNow } from '../../app/hooks/useNow.ts';
 import { useAppStore } from '../../app/store/index.ts';
-import { getCategory } from '../../config/categories.ts';
+import { getCategory } from '../../config/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
 import { Button, EmptyState, ResultRow, iconForCategory } from '../ui/index.ts';
 import { categoryRows } from './category-list.ts';

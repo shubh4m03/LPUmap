@@ -12,7 +12,7 @@
  */
 import { createStore, type StoreApi } from 'zustand/vanilla';
 import { useStore } from 'zustand';
-import { jsonEqual } from '../canonical.ts';
+import { jsonEqual } from '../index.ts';
 import {
   currentDraft,
   editorReducer,
@@ -24,11 +24,11 @@ import {
   type EditorState,
   type EditorStatus,
   type PublishBlocker,
-} from '../editor-state.ts';
-import { canRedo, canUndo, currentMarker, initHistory, nextLabels } from '../history.ts';
-import type { RecoveryEntry } from '../local-recovery.ts';
-import type { SnapProposal } from '../geometry.ts';
-import type { LngLat } from '../../data/schema.ts';
+} from '../editor.ts';
+import { canRedo, canUndo, currentMarker, initHistory, nextLabels } from '../editor.ts';
+import type { RecoveryEntry } from '../editor.ts';
+import type { SnapProposal } from '../editor.ts';
+import type { LngLat } from '../../data/index.ts';
 import { placementDraft } from './fields.ts';
 import type {
   StudioBuildingDetail,
@@ -36,7 +36,7 @@ import type {
   StudioDraft,
   ValidationResult,
   WarningCode,
-} from '../schema.ts';
+} from '../index.ts';
 
 export interface StudioValidation {
   result: ValidationResult;

@@ -1,8 +1,9 @@
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { useAppStore } from '../../app/store/index.ts';
 import type { ArtworkThumbnail } from '../../directory/index.ts';
-import type { ArtworkLabelView, ArtworkOnlyEntry } from '../../isometric-art/directory.ts';
-import type { AssociationEvidence } from '../../isometric-art/schema.ts';
+import type { ArtworkLabelView, ArtworkOnlyEntry } from '../../isometric-art/index.ts';
+import type { AssociationEvidence } from '../../isometric-art/index.ts';
+import { publicReasonText } from '../../isometric-art/index.ts';
 import { ARTWORK_STATUS, artworkStatusOf } from '../directory/directory-view-model.ts';
 import { ArtworkNumberGlyph } from '../directory/MapKeyGlyph.tsx';
 import { Badge, Button, Icon } from '../ui/index.ts';
@@ -202,7 +203,9 @@ export function ArtworkDetails({ entry: e }: { entry: ArtworkOnlyEntry }) {
             ) : null}
           </div>
         ) : null}
-        {e.association.reason ? <p className="mt-1.5 text-sm text-muted">{e.association.reason}</p> : null}
+        {e.association.reason ? (
+          <p className="mt-1.5 text-sm text-muted">{publicReasonText(e.association.reason)}</p>
+        ) : null}
         <EvidenceList evidence={e.association.evidence} />
         <p className="mt-1.5 flex gap-2 text-sm text-muted">
           <Icon name="warning" className="mt-0.5 shrink-0 text-warning" />

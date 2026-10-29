@@ -13,7 +13,7 @@ import {
   type AssociationEvidence,
   type AssociationStatus,
   type PublishedArtworkAssociation,
-} from '../../src/isometric-art/schema.ts';
+} from '../../src/isometric-art/index.ts';
 import { stmt } from './sql.ts';
 import type { SqlDatabase, SqlStatement } from './types.ts';
 

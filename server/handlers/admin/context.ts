@@ -1,12 +1,12 @@
 /** Per-request context handed to admin route handlers. */
 import type { z } from 'zod';
-import { LIMITS } from '../../../src/community/schema.ts';
+import { LIMITS } from '../../../src/community/index.ts';
 import type { Actor, Permission } from '../../auth/authorize.ts';
 import { insertAudit } from '../../db/audit.ts';
 import type { AuditEntityType } from '../../db/records.ts';
 import type { SqlDatabase } from '../../db/types.ts';
 import type { ParsedEnv } from '../../env.ts';
-import { STUDIO_LIMITS } from '../../../src/building-studio/schema.ts';
+import { STUDIO_LIMITS } from '../../../src/building-studio/index.ts';
 import type { StudioContext } from '../../domain/studio/context.ts';
 import { parseWith, readJsonBody } from '../../http/body.ts';
 import { assertJsonBounds } from '../../http/json-bounds.ts';

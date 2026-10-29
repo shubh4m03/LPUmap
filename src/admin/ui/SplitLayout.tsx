@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { cx } from '../../components/ui/cx.ts';
+import { cx } from '../../components/ui/index.ts';
 
 /**
  * Map editor layout: a scrollable panel beside a full-height map on wide

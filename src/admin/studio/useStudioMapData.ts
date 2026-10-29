@@ -9,7 +9,7 @@
  * other published studio buildings are not drawn (reported, never hidden).
  */
 import { useCallback, useEffect, useState } from 'react';
-import type { StudioRenderModel } from '../../building-studio/merge.ts';
+import type { StudioRenderModel } from '../../building-studio/index.ts';
 import { applyPublication } from '../../app/data/apply-publication.ts';
 import { loadPublication } from '../../app/data/publication.ts';
 import {

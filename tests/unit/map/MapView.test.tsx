@@ -446,6 +446,48 @@ describe('MapView', () => {
     expect(map.easeTo).not.toHaveBeenCalled();
   });
 
+  it('phones (compact) open and switch Campus 3D at the lower compact pitch', () => {
+    mount({ mode3d: true, compact: true });
+    expect(lastMap().options.pitch).toBe(APP_CONFIG.map.pitch3dCompact);
+    cleanup();
+    const { rerender } = mount({ reducedMotion: true, compact: true });
+    const map = lastMap();
+    load(map);
+    rerender({ mode3d: true });
+    expect(map.jumpTo).toHaveBeenCalledWith({
+      pitch: APP_CONFIG.map.pitch3dCompact,
+      bearing: APP_CONFIG.map.bearing3d,
+    });
+  });
+
+  it('outlines an unconfirmed match only while one is shown, and redraws it in the new theme', () => {
+    const { rerender } = mount();
+    const map = lastMap();
+    load(map);
+    expect(map.addSource).not.toHaveBeenCalledWith('unconfirmed-match', expect.anything());
+    rerender({ unconfirmedMatch: { buildingId: 'osm:way/12', label: 'Unconfirmed match: Test' } });
+    expect(map.addSource).toHaveBeenCalledWith(
+      'unconfirmed-match',
+      expect.objectContaining({ type: 'geojson' }),
+    );
+    expect(map.addLayer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: 'unconfirmed-match-outline',
+        paint: expect.objectContaining({ 'line-dasharray': [2, 1.5] }),
+      }),
+    );
+    rerender({ theme: 'dark' });
+    expect(map.addLayer).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        id: 'unconfirmed-match-label',
+        paint: expect.objectContaining({ 'text-color': expect.any(String) }),
+      }),
+    );
+    rerender({ unconfirmedMatch: null });
+    expect(map.getLayer('unconfirmed-match-outline')).toBeUndefined();
+    expect(map.getSource('unconfirmed-match')).toBeUndefined();
+  });
+
   it('does not install the e2e hook without the flag', () => {
     mount();
     load(lastMap());

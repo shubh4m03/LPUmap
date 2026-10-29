@@ -9,7 +9,7 @@
  * duration estimate; nothing here invents a speed.
  */
 import { APP_CONFIG } from '../config/index.ts';
-import type { LngLat } from '../data/schema.ts';
+import type { LngLat } from '../data/index.ts';
 import {
   cumulativeLengthsM,
   haversineM,

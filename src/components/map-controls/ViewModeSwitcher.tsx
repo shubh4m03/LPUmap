@@ -10,11 +10,11 @@ import {
   viewModeBlockedReason,
   type ViewMode,
 } from '../../app/view-mode.ts';
-import { PHOTOREAL_UNAVAILABLE_DETAIL } from '../../map/providers/types.ts';
-import { Icon } from '../icons/Icon.tsx';
-import type { IconName } from '../icons/icon-paths.ts';
-import { cx, FOCUS_RING } from '../ui/cx.ts';
-import { ToastContext } from '../ui/toast-context.ts';
+import { PHOTOREAL_UNAVAILABLE_DETAIL } from '../../map/providers/index.ts';
+import { Icon } from '../icons/index.ts';
+import type { IconName } from '../icons/index.ts';
+import { cx, FOCUS_RING } from '../ui/index.ts';
+import { ToastContext } from '../ui/index.ts';
 
 const ICONS: Record<ViewMode, IconName> = {
   realistic3d: 'cube',

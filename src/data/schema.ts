@@ -168,17 +168,50 @@ export const relationTypeSchema = z.enum([
   'part_of',
 ]);
 
-export const relationSchema = z.object({
-  id: z.string().min(1),
-  type: relationTypeSchema,
-  from: z.string().min(1),
-  to: z.string().min(1),
-  /** true when derived from geometry rather than stated by a source. */
-  inferred: z.boolean(),
-  method: z.enum(['osm-containment', 'osm-entrance-on-outline', 'graph-path', 'distance', 'curated']),
-  distanceM: z.number().nonnegative().optional(),
-  provenance: provenanceSchema,
-});
+/**
+ * `connected_by_path` (G-29) states that a mapped walkway joins two places. It
+ * is produced ONLY from explicit evidence: a curated record
+ * (data/curated/path-connections.json) that cites the joining OSM way, such as
+ * a covered walkway. It is never derived from graph connectivity or distance,
+ * so it is always `method: 'curated'`, `inferred: false` and carries the way
+ * id in `pathOsmWayId`. No such record exists today.
+ */
+export const relationSchema = z
+  .object({
+    id: z.string().min(1),
+    type: relationTypeSchema,
+    from: z.string().min(1),
+    to: z.string().min(1),
+    /** true when derived from geometry rather than stated by a source. */
+    inferred: z.boolean(),
+    method: z.enum(['osm-containment', 'osm-entrance-on-outline', 'distance', 'curated']),
+    distanceM: z.number().nonnegative().optional(),
+    /** connected_by_path only: the OSM way of the cited path; it must exist in graph.json. */
+    pathOsmWayId: z.number().int().positive().optional(),
+    provenance: provenanceSchema,
+  })
+  .superRefine((r, ctx) => {
+    if (r.type === 'connected_by_path') {
+      if (r.method !== 'curated' || r.inferred)
+        ctx.addIssue({
+          code: 'custom',
+          path: ['method'],
+          message: `${r.id}: connected_by_path needs explicit evidence (method 'curated', inferred false)`,
+        });
+      if (r.pathOsmWayId === undefined)
+        ctx.addIssue({
+          code: 'custom',
+          path: ['pathOsmWayId'],
+          message: `${r.id}: connected_by_path must cite the joining path (pathOsmWayId)`,
+        });
+    } else if (r.pathOsmWayId !== undefined) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['pathOsmWayId'],
+        message: `${r.id}: pathOsmWayId belongs to connected_by_path relations only`,
+      });
+    }
+  });
 
 export const relationsFileSchema = z.object({
   schemaVersion: z.literal(DATA_SCHEMA_VERSION),

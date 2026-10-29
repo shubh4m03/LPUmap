@@ -3,7 +3,7 @@
  * pipeline's quality report and by tests; findings are data issues to fix at
  * the source, never something the UI papers over.
  */
-import type { Place, Relation } from '../data/schema.ts';
+import type { Place, Relation } from '../data/index.ts';
 
 export type RelationIssueCode =
   | 'duplicate-relation-id'

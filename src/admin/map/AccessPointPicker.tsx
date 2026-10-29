@@ -6,10 +6,10 @@
  * validates the choice again.
  */
 import { useId } from 'react';
-import { Button } from '../../components/ui/Button.tsx';
-import { TextInput } from '../../components/ui/TextInput.tsx';
+import { Button } from '../../components/ui/index.ts';
+import { TextInput } from '../../components/ui/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 import type { AccessCandidate } from './access-points.ts';
 import { formatMetres } from '../ui/format.ts';
 import type { AccessChoice } from './access-choice.ts';

@@ -1,38 +1,44 @@
 # Implementation status
 
-**As of 2026-10-24.** Commit `2407afe` holds the final UI wave (owner specs A, B and C), server
+**As of 2026-10-29.** Commit `2407afe` holds the final UI wave (owner specs A, B and C), server
 hardening and the first QA fixes. Commit `6050e91` holds the **fix wave** (§1.9): D3 off-campus
 routing, D4, D5, the honeypot decoy, the Zod CSP violation, the Studio leave prompt, access-point
-picking on the map and new e2e coverage. On top of `6050e91`, the working tree holds the
-**campus-illustration (artwork) integration** (§1.10). **It is not committed yet**; the project lead
-commits.
+picking on the map and new e2e coverage. Commit `6a07349` holds the **campus-illustration (artwork)
+integration** (§1.10), including the touch ghost-click fix of its final gate. On top of `6a07349`, the
+working tree holds the **master-spec conformance wave** (§1.11), worked on by several workstreams at
+once. **It is not committed yet**; the project lead commits. One verdict per requirement, with
+evidence, is in [ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md).
 
-Every result in this file is from a real run. The gate in [§2](#2-how-it-was-verified) was re-run in
-full by the verification agent after the fixers finished. Anything that was not run, or could not be
-tested, says so.
+Every result in this file is from a real run. The final gate of this wave
+([§2.1](#21-this-waves-final-gate-2026-10-29)) was run after every workstream had finished, on a fresh
+clone of the combined tree (tree `82b840b9bc48`), and passed end to end. Anything that was not run,
+or could not be tested, says so.
 
 ## At a glance
 
-| Area                                       | State                                                                                                                                    |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Community: "Suggest a missing place"       | Built, tested end to end against the real server handlers                                                                                |
-| Owner admin (`/admin`): moderation, editor | Built, tested end to end against the real server handlers                                                                                |
-| Building Studio (Creative Mode)            | Built, tested end to end (save, reload, second browser, publish, archive, restore, model existing, template, duplicate, delete, 409)     |
-| Map engine (free sources only)             | Built: five view modes, optional Esri imagery, optional EOX backdrop, fallbacks. Tested with synthetic tiles only                        |
-| Photorealistic 3D                          | **Not implemented, by owner decision** (no billing). Shown as unavailable with the reason                                                |
-| Full gate (types, lint, format, all tests) | **All green** on the fix-wave tree (see [§2](#2-how-it-was-verified))                                                                    |
-| Acceptance checklist                       | **56 PASS** (one of them, D3, after a fix), **0 FAIL, 1 NOT TESTABLE** of 57 items (see [§3](#3-acceptance-checklist-summary))           |
-| Off-campus routing (D3)                    | **Fixed**: off-campus places are never routing endpoints; verified in the real app                                                       |
-| Campus illustration (Illustrated overview) | Built and integrated (§1.10): renderer, directory/search/details, admin Artwork section, migration 0003. 0 verified links (owner action) |
-| Artwork gate (working tree and clean tree) | **Green** (§1.10): Vitest 2508 passed / 1 skipped, server 1536 / 4 skipped; clean tree Playwright 324 passed, 0 failed, 106 skipped      |
-| Performance (D8)                           | Overview budgets met in 3 of 3 runs; one heavy-scene budget still over (§4); phone numbers still missing (owner action 4)                |
+| Area                                       | State                                                                                                                                                                              |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Community: "Suggest a missing place"       | Built, tested end to end against the real server handlers                                                                                                                          |
+| Owner admin (`/admin`): moderation, editor | Built, tested end to end against the real server handlers                                                                                                                          |
+| Building Studio (Creative Mode)            | Built, tested end to end (save, reload, second browser, publish, archive, restore, model existing, template, duplicate, delete, 409)                                               |
+| Map engine (free sources only)             | Built: five view modes, optional Esri imagery, optional EOX backdrop, fallbacks. Tested with synthetic tiles only                                                                  |
+| Photorealistic 3D                          | **Not implemented, by owner decision** (no billing). Shown as unavailable with the reason                                                                                          |
+| Full gate (types, lint, format, all tests) | **Green on this wave's tree** (fresh clone, [§2.1](#21-this-waves-final-gate-2026-10-29)): Vitest 2674 + 36 perf, server 1590, Playwright 379 passed, 0 failed                     |
+| Master specification                       | **230 PASS, 18 PARTIAL, 0 FAIL, 1 NOT TESTABLE**, 3 superseded, 3 N/A of 255 ([ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md)); open G-items in §4                                    |
+| Acceptance checklist                       | **56 PASS** (one of them, D3, after a fix), **0 FAIL, 1 NOT TESTABLE** of 57 items (see [§3](#3-acceptance-checklist-summary))                                                     |
+| Off-campus routing (D3)                    | **Fixed**: off-campus places are never routing endpoints; verified in the real app                                                                                                 |
+| Campus illustration (Illustrated overview) | Built and integrated (§1.10): renderer, directory/search/details, admin Artwork section, migration 0003. 0 verified links (owner action)                                           |
+| Artwork gate (committed `6a07349`)         | **Green** (§1.10), final run on a fresh clone: Vitest 2513 passed, server 1588 passed / 4 opt-in skipped, Playwright 324 passed, 0 failed                                          |
+| CI                                         | `npm run check` and CI now include the server typecheck and suites, a browser check, the e2e skip policy and bundle budgets; **CI has never run** (no Git remote, owner action 11) |
+| Performance (D8)                           | Overview budgets met in 3 of 3 runs; one heavy-scene budget still over (§4); phone numbers still missing (owner action 4)                                                          |
 
 ## 1. What exists
 
 Paths are relative to the repository root.
 
 §1.1 was committed in `e8f313a`; §1.2–§1.8 were committed in `2407afe`; §1.9 (the fix wave) was
-committed in `6050e91`; §1.10 (the artwork integration) is uncommitted.
+committed in `6050e91`; §1.10 (the artwork integration) was committed in `6a07349`; §1.11 (the
+master-spec conformance wave) is uncommitted.
 
 ### 1.1 Already committed in `e8f313a` (unchanged in scope)
 
@@ -261,7 +267,7 @@ for byte (checked with `cmp`).
   173.8 / 190.0 ms). The custom 3D layer's own CPU p95 at 4× is 4.4 / 3.5 ms (≤ 5 ms). Two numbers are
   still over budget; see §4.
 
-### 1.10 Campus-illustration (artwork) integration on top of `6050e91` (uncommitted)
+### 1.10 Campus-illustration (artwork) integration on top of `6050e91` (committed in `6a07349`)
 
 Contract and reconciliation record: [LPU_ISOMETRIC_ASSET_INTEGRATION.md](LPU_ISOMETRIC_ASSET_INTEGRATION.md)
 (§10 lists every competing implementation the integration owner merged into one; §11 is the owner's
@@ -269,7 +275,19 @@ verification guide; §14 the limitations). Files and exact labels:
 [LPU_ISOMETRIC_ASSET_INVENTORY.md](LPU_ISOMETRIC_ASSET_INVENTORY.md); per-subject links:
 [LPU_ISOMETRIC_ASSET_MAPPING.md](LPU_ISOMETRIC_ASSET_MAPPING.md) (generated); provenance and the owner's
 ownership statement: [GEODATA_SOURCES_AND_LICENSES.md §14](GEODATA_SOURCES_AND_LICENSES.md#14-lpu-isometric-map-design-owner-supplied-campus-illustration).
-Results below are from real runs on 2026-10-24.
+Results below are from real runs on 2026-10-24, and the final gate of 2026-10-26.
+
+- **Final gate (2026-10-26, recorded in the commit message of `6a07349`).** On a fresh clone of the
+  tree to be committed: `npm ci`, build, the art checks and smoke OK; **Vitest 2513 passed; server
+  1588 passed (4 opt-in skipped); Playwright 324 passed, 0 failed**; hotspot clicks 45/45 on desktop,
+  tablet and mobile after zoom, pan and resize; migration apply / rollback / re-apply keeps links and
+  audit history; 154 labels identical to the artwork. The figures in the gate bullets below are the
+  earlier runs of 2026-10-24.
+- **Touch ghost-click fix (final gate).** A tap selects on `pointerup` and the detail card can open
+  under the finger; Chromium's synthesized click then hit the card's Close button and undid the
+  selection (reproduced on the tablet project at 614×870). The stage now cancels `touchend`, so no
+  synthesized click follows a tap. Regression test: `tests/unit/isometric-art/renderer-component.test.tsx`
+  ("no ghost click"); details in [LPU_ISOMETRIC_ASSET_INTEGRATION.md](LPU_ISOMETRIC_ASSET_INTEGRATION.md).
 
 - **What was built.** The owner's 29 files are shown unchanged as the **Illustrated overview**, the
   default `?view=iso` variant (`&iso=map` keeps the footprint-based drawing). 65 clickable outlines on
@@ -330,7 +348,157 @@ Results below are from real runs on 2026-10-24.
   quotes the internal research file path in the curated reason; on a DPR-2 phone the overview downloads
   about 2.1 MB of images on opening; Safari, Firefox and real touch hardware were not tested.
 
+### 1.11 Master-spec conformance wave on top of `6a07349` (uncommitted)
+
+Input: the master-spec conformance audit of the committed tree at `6050e91` (255 requirements, work
+items G-01–G-33, overlaps O-1–O-7 left to the later Creator Mode and food module). Several workstreams
+worked on the same tree at once; [ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md) has the verdict per
+requirement and names the open items. This section records each workstream's work; all of it was
+verified together by the final gate in [§2.1](#21-this-waves-final-gate-2026-10-29).
+
+- **Data (G-07, G-08, G-29).** All 33 manifest sources carry a licence and an attribution (the 30
+  lpu.in sources from `scripts/lib/publisher-terms.ts`); the build refuses a source with unknown terms
+  and `validate.ts` errors on a missing one. Every outside request in `scripts/` goes through
+  `scripts/lib/http.ts` (fixed User-Agent, 180 s / 60 s stall timeouts, bounded retries with backoff,
+  never on 404). `connected_by_path` relations come only from `data/curated/path-connections.json`
+  (0 records today), each citing a walkable on-campus OSM way within 60 m of both places; the old
+  inferred `graph-path` method is gone. The dataset was rebuilt as `50fefb5e828b` (same counts as
+  `62e807e6d444`; manifest licences and the quality report's curated-file list changed).
+- **App (G-13, G-15–G-22 code parts, artwork leftovers).** Phone reset view and 42° phone 3D pitch;
+  location purpose primer on the main locate button; `/admin` and `/api` noindex; WCAG 2.2 AA axe in
+  light and dark over admin, suggest and the overview; dataset-age notice after 120 days;
+  admin-only chunks out of the precache (computed from the chunk graph); push-bike decision guarded by
+  a test; shared geodesy constants and grid index (except `src/routing/snap.ts`);
+  `THIRD_PARTY_LICENSES.txt` generated with a licence allow-list; no source maps or local paths in the
+  build; public curated reasons without internal paths; bidi controls refused in printed artwork text.
+- **Routing and tracking (G-24, G-25, G-28).** The walk tracker averages bursts of fixes (stationary
+  over-count 113.6 m → 1.3 m on seeded tracks); map points and GPS positions snap to the nearest point
+  on a usable edge without changing the graph (A* checked against Dijkstra on random graphs); new e2e
+  for arrival and walk summary, no-route starts, history off and "Clear all local data". No screenshot
+  baselines (reason in [QA_STRATEGY.md](QA_STRATEGY.md)).
+
+The CI and documentation work:
+
+- **G-01, the gate runs the server.** `npm run check` and CI job `verify` now run
+  `typecheck:server` and `test:server` (the server suites over a local in-memory D1; never a remote
+  database). [DEPLOYMENT.md](DEPLOYMENT.md) §Before deploying lists the real gate.
+- **G-03, no silent browser skips.** CI installs Chromium before the unit tests and
+  `npm run test:browsers` (`scripts/ci/require-browsers.ts`) fails when it is missing, so the
+  Chromium Vitest suite cannot skip itself. Every skipped Playwright test is checked by a reporter
+  (`scripts/ci/playwright-skip-reporter.ts`) against explicit rules with reasons
+  (`scripts/ci/skip-policy.ts`: reason, projects, imagery build); the count per reason and project goes
+  to the job summary and `test-results/skip-summary.json`, and in CI (or with
+  `E2E_SKIP_POLICY=enforce`) any other skip, a `fixme` or a test that did not run fails the run. The
+  imagery-dependent map-modes tests run in a new job `imagery-e2e` against an Esri build (test-only
+  key) and an EOX build, with synthetic tiles only.
+- **G-04, budgets enforced and timing tests isolated.** `npm run perf:bundle` checks the production
+  build against the bundle budgets in [PERFORMANCE.md](PERFORMANCE.md#bundle-budgets-enforced) (chunk,
+  entry, start-up JS and CSS, overview chunk, precache; MapLibre and admin code out of the entry and the
+  overview) in `check` and CI. The six wall-clock suites run serially in `npm run test:perf` and are
+  excluded from the parallel `npm test`.
+- **G-05, measurements reproducible.** `scripts/perf/{search,route,bundle,load}.ts` are committed;
+  search, route, bundle and page load were re-measured on the current dataset `50fefb5e828b`
+  (search p95 ≤ 0.50 ms of 50 ms; route p95 ≤ 2.22 ms of 150 ms; entry 84,469 B gzip; precache 87
+  files, 5,557 kB) — [PERFORMANCE.md §Current measurements](PERFORMANCE.md#current-measurements-2026-10-29).
+- **Documentation truth pass.** G-09 [ARCHITECTURE.md](ARCHITECTURE.md) rewritten for the real system
+  (static app plus optional Pages Functions and D1, every module, layer and dependency rules, `src/csp`
+  ownership); G-10 every current-state doc cites the dataset in `public/data/manifest.json`, and the
+  README has screenshots captured from this app (`docs/screenshots/`); G-11
+  [ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md) and [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)
+  (stages beyond v1); G-12 [QA_STRATEGY.md](QA_STRATEGY.md) and `CONTRIBUTING.md` cover the server
+  suites, the real-handler e2e backend and migrations; G-14 [ISOMETRIC_AND_3D_DESIGN.md](ISOMETRIC_AND_3D_DESIGN.md)
+  describes the LOD as implemented; G-16 [SECURITY_AND_PRIVACY.md](SECURITY_AND_PRIVACY.md) lists every
+  storage key and the current deep-link grammar; G-33 [GEODATA_SOURCES_AND_LICENSES.md §3](GEODATA_SOURCES_AND_LICENSES.md#3-google-open-buildings-v3)
+  records the owner's approval of the Google Open Buildings points in the unverified detections layer.
+  `data-refresh.yml` no longer passes a contact variable; the fetchers send a neutral User-Agent.
+- **Regression tests.** `tests/unit/ci/gates.test.ts` (the gate lists of `check` and CI, Chromium
+  before the unit tests, the imagery job, no secrets, every wall-clock suite in the serial step, the
+  skip reporter registered), `tests/unit/ci/skip-policy.test.ts` (the policy, and every literal skip
+  reason in `tests/e2e` has a rule), `tests/unit/ci/bundle-budget.test.ts` (each budget and isolation
+  rule, with and without source maps), `tests/unit/docs/dataset-version.test.ts` (current dataset
+  facts) and `tests/unit/docs/docs-integrity.test.ts` (links and anchors, storage inventory, deep-link
+  grammar, gate lists, budget table, acceptance report). **Proven by revert** on 2026-10-29: with the
+  `HEAD` version of `package.json`, `ci.yml`, `playwright.config.ts`, `README.md`, `DEPLOYMENT.md`,
+  `SECURITY_AND_PRIVACY.md`, `PERFORMANCE.md` or `DATA_SOURCES.md` put back one at a time, 2 to 8 of
+  these tests failed for each; each file was restored byte for byte (checked with `cmp`).
+  `require-browsers.ts` exits 1 with an empty `PLAYWRIGHT_BROWSERS_PATH` and 0 with Chromium installed.
+- **G-26/G-27, module boundaries** (run alone after the other workstreams, 2026-10-29). The layers,
+  public entries and no-cycle rule are code: the module map `scripts/ci/module-boundaries.ts`, the
+  ESLint rule `atlas/module-boundaries` (`scripts/ci/eslint-module-boundaries.ts`, no new
+  dependency), and `npm run lint:modules` / `tests/unit/ci/module-graph.test.ts` for cycles. Before:
+  2 module cycles holding 7 two-way links, 19 wrong-way imports and 635 imports of other modules'
+  internals; after: none of each, 0 file-level cycles (511 files). The overview stages and the
+  isometric variant state moved to `src/app`; the artwork renderer to `src/isometric-art/view/`; the
+  map palette to `src/styles/map-theme-colors.ts`; `normalizeDirectoryText` to
+  `src/utils/directory-text.ts`; the overlay source records to `src/data/overlay.ts`. The Studio UI
+  takes the server as a port (`src/building-studio/server-api.ts`) and MapView takes its notice
+  handler as a prop (`useNoticeToast`). Second entries where a barrel would change what a chunk carries:
+  `building-studio/editor.ts`, `buildings3d/map-runtime.ts`, `privacy/privacy-store.ts` (full list in
+  [ARCHITECTURE.md §Module dependency rules](ARCHITECTURE.md#module-dependency-rules)). Behaviour is
+  unchanged: the start-up chunks and the precache hold the same source modules as before (start-up JS
+  130.62 kB gzip, was 133.77; precache 5,552.62 kB, was 5,559.83); the Pages Functions bundles grew by
+  about 0.9 kB each (0.14 %). **Proven by revert**: re-adding any one of the seven links, a wrong-way
+  import or a deep import fails `module-graph.test.ts` (1 to 3 tests each); MapStage without
+  `onRenderNotice` fails the app-shell toast test; the pre-change Studio actions fail the injected
+  `describeError` test. Each file was restored byte for byte (`cmp`).
+- **Independent verification (2026-10-29, after the workstreams).** Three defects found and fixed,
+  each with a test that fails without its fix:
+  - G-26/G-27 left the **whole Playwright suite unable to load** (0 tests ran): `src/app/view-mode.ts`
+    now imports the providers entry, whose `runtime.ts` read `import.meta.env.VITE_…` at load, and
+    `visual-sanity.spec.ts` imports `view-mode.ts` in plain Node. `runtime.ts` now checks
+    `typeof import.meta.env` first; the production build is byte-identical, and a build with an
+    imagery key still inlines only that key. Test: `tests/unit/ci/e2e-imports-load.test.ts` loads
+    every src module the e2e files import in plain Node.
+  - G-16, server half: `public/_headers` does not reach Pages Functions responses, so `/api` was
+    indexable. `server/http/response.ts` now sets `X-Robots-Tag: noindex, nofollow` on every API
+    response. Test: `tests/server/http/robots-header.test.ts`.
+  - [ISOMETRIC_AND_3D_DESIGN.md](ISOMETRIC_AND_3D_DESIGN.md) still named `62e807e6d444` as the
+    current dataset. `tests/unit/docs/dataset-version.test.ts` now checks every doc that names "the
+    current dataset". The PERFORMANCE bundle table was re-measured after G-26/G-27 (69 precache files,
+    not 87), and the §4 entries that G-16, G-19 and the artwork fixes closed were updated.
+
 ## 2. How it was verified
+
+### 2.1 This wave's final gate (2026-10-29)
+
+Run by the final gatekeeper on 2026-10-29 from 19:32 to about 20:07 IST, after every workstream had
+finished (no other build or test process was running). **Clean checkout:** a new scratch directory,
+`git clone` of the repository, checkout of `6a07349`, then exactly what would be committed applied on
+top (`git diff HEAD --binary` plus the 79 non-ignored untracked files). Every file of the clone was
+byte-identical (sha256) to the working tree; **tree hash `82b840b9bc489f6a7d1a8185c4ec4e7b6c5ed26b`**,
+the same as `git write-tree` of the working tree through a temporary index. Then `npm ci` (no
+`package-lock.json` change since `6a07349`; no new dependency). Ports 4711–4714 only, never 4410 or
+4520; no `.env.local` and no `VITE_*` variable for the default build; never a remote D1. The two
+documentation files refreshed after the gate (this file and ACCEPTANCE_REPORT.md) were re-checked
+with Prettier and the docs tests (see below the table).
+
+| Command (in the clean clone)                                                                                 | Result                                                                                                                                                                                                                                                                                                                                                                |
+| ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run check` with `E2E_SKIP_POLICY=enforce`, `E2E_IMAGERY=none` (every step below, in order, one command) | **exit 0**, 19:33:52–19:56:42                                                                                                                                                                                                                                                                                                                                         |
+| · `format:check`, `lint`, `typecheck`, `typecheck:server`, `test:browsers`                                   | all exit 0 (Prettier clean, ESLint 0 warnings, both tsc configs 0 errors, Chromium present)                                                                                                                                                                                                                                                                           |
+| · `npm test` (parallel)                                                                                      | 219 files: **2674 passed, 1 skipped**, 0 failed (67 s)                                                                                                                                                                                                                                                                                                                |
+| · `npm run test:perf` (serial)                                                                               | 6 files: **36 passed**, 0 failed (19 s)                                                                                                                                                                                                                                                                                                                               |
+| · `npm run test:server`                                                                                      | 42 files: **1590 passed, 4 skipped** (the opt-in rollback drill), 0 failed (378 s)                                                                                                                                                                                                                                                                                    |
+| · `npm run data:check`                                                                                       | dataset **`50fefb5e828b`**, 0 warnings, 0 errors (baseline `62e807e6d444` from git HEAD); `public/data` and every other file byte-identical to the working tree afterwards                                                                                                                                                                                            |
+| · `art:check`, `vite build`, `art:check-dist`                                                                | 28 originals, 65 hotspots, 82 subjects, 81 published files; dist manifest and 81 files byte-identical                                                                                                                                                                                                                                                                 |
+| · `smoke`                                                                                                    | "Smoke OK: 10 checks passed. Precache: 69 files, 5.3 MiB"; no secrets in 89 text files                                                                                                                                                                                                                                                                                |
+| · `perf:bundle`                                                                                              | every budget holds: largest chunk 1,093.40 kB raw; entry 83.27 kB gzip; start-up JS 130.51 kB; CSS 19.53 kB; overview chunk 17.13 kB; precache 69 files, 5,550.67 kB                                                                                                                                                                                                  |
+| · `test:e2e` (all 5 projects, default build, real-handler backend, 6 workers, no retries)                    | **379 passed, 0 failed, 106 skipped** (14.0 min); skip policy **0 violations**                                                                                                                                                                                                                                                                                        |
+| `npm run data:check` again                                                                                   | exit 0, 0 warnings, 0 errors; byte-identical again (twice byte-identical)                                                                                                                                                                                                                                                                                             |
+| `npm run data:keys -- --check`                                                                               | 110 keyed; 0 added, 0 retired, 0 transferred                                                                                                                                                                                                                                                                                                                          |
+| CI data-sync guard after a commit (throwaway commit in the scratch clone only, never pushed)                 | `data:check` with that commit as baseline rebuilds `50fefb5e828b`; `git diff --exit-code` on `public/data`, the two generated reports, `data/schemas` and the key lock: no change                                                                                                                                                                                     |
+| `npm run art:verify` (CI step)                                                                               | exit 0: 53/53 derived files byte-identical across two runs and to the committed copies; the three negative controls rejected                                                                                                                                                                                                                                          |
+| CI job `imagery-e2e`: `map-modes.spec.ts` on an Esri build (test-only key) and an EOX build                  | Esri: **53 passed**, 12 skipped, 0 violations; EOX: **23 passed**, 42 skipped, 0 violations (synthetic tiles only)                                                                                                                                                                                                                                                    |
+| `npm audit --omit=dev --audit-level=high` / full tree (report-only in CI)                                    | production: **0 vulnerabilities**; full tree: 7 in dev tooling (1 high: `undici` via `wrangler`/`miniflare`; 2 moderate; 4 low via `vite-plugin-pwa`/`workbox-build`)                                                                                                                                                                                                 |
+| `dist/` scan                                                                                                 | 0 source maps; no `C:\Users`, `/Users/`, `/home/`, `AppData`, user name or e-mail address; the only "shubh" matches are the OpenStreetMap names "Shubham villa 1/2". Precache: 69 unique entries and no admin chunk (the 12 chunks that contain admin markers such as `/api/admin` or `AdminApp` are all outside it; the entry only names the lazy `AdminApp` import) |
+
+**Earlier in the wave** (history): the CI and documentation workstream's run of 16:20–17:40 IST on
+the shared tree, while others were still editing on a saturated machine, had timeouts in `npm test`
+and `test:perf`, one tsc error in a file then in progress, and 6 repeatable axe `target-size` failures
+on the overview detail card's Close button on phones. All of these were fixed before the final gate,
+which had none of them.
+
+### 2.2 Fix-wave gate (2026-10-24, history)
 
 The verification agent re-ran the whole gate on 2026-10-24 (13:47–14:03 IST) on the shared working
 tree (`2407afe` plus the fix wave), from the repository root. Builds went to a scratch directory,
@@ -434,6 +602,24 @@ by the verification agent and by the repo e2e and unit tests listed in §1.9.
 
 ## 4. Known gaps
 
+- **Master-spec items still open after this wave** (verdicts in
+  [ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md)):
+  - **G-21, partly:** `src/routing/snap.ts` still sizes its grid search box with its own
+    `1/111_000` and keeps its own edge grid; `tests/unit/distance/single-source.test.ts` lists it
+    as the one known exception (12.1, 12.4).
+  - **G-24, partly:** no e2e for copying and downloading a correction report (unit tests only), and
+    no `toHaveScreenshot` baselines until a pinned Linux Playwright image is used both to record them
+    and in CI (20.3, 20.4).
+  - **G-29, data:** the `connected_by_path` producer and its validation exist, but
+    `data/curated/path-connections.json` has 0 records, so the dataset has 0 such relations (9.4).
+  - **G-23** corrections to existing places (with Creator Mode), **G-30** device budgets (D8 and the
+    50-model redraw), **G-31** manual checks (screen reader, on-device GPS) and the optional **G-32**
+    were not part of this wave. O-1–O-7 belong to Creator Mode and the food module.
+  - The audit's own gap list (`MASTER_SPEC_CONFORMANCE.md`) was no longer available at the final
+    gate; the ACCEPTANCE_REPORT rows are the record. G-06 is not referenced there and was not checked.
+- **Dev-tooling advisories:** `npm audit` reports 7 in dev dependencies (1 high in `undici` via
+  `wrangler`/`miniflare`); production dependencies have none. CI reports these without blocking.
+
 - **Photorealistic 3D is not implemented** (owner decision, no billing). It is shown as unavailable.
 - **GLB / glTF import is not enabled.** A file validator exists (`src/building-studio/glb-validator.ts`),
   but storing models needs an R2 binding and drawing them needs the Three.js adoption gate. The
@@ -475,18 +661,20 @@ by the verification agent and by the repo e2e and unit tests listed in §1.9.
 - **Wording**: the overlap message can show a `stu:` id twice when the other building has no name; in
   the isometric overview some studio models appear grey rather than in their chosen wall colour. (The
   unnamed studio-building wording is fixed, §1.9.)
-- **Admin chunks are precached** by the service worker for every public visitor (no secrets, wasted
-  bytes), and `public/_headers` has no `X-Robots-Tag` for `/admin` (the page adds a `noindex` meta at
-  runtime only). `src/app/App.tsx` prefetches the public shell chunk, so `/admin` downloads it too.
+- **`/admin` downloads the public shell chunk**: `src/app/App.tsx` prefetches it before the route is
+  known. (Fixed this wave: admin-only chunks are no longer precached, G-19, and `/admin`, `/admin/*`
+  and every `/api` response carry `X-Robots-Tag: noindex, nofollow`, G-16; the API's header comes
+  from `server/http/response.ts`, because Cloudflare applies `_headers` to static files only.)
 - **Bake-off report §6** (open item 2) is left as written; its addendum says the item is now narrowed
   to the unthrottled full redraw.
 - **Campus illustration** (§1.10; full list in
   [LPU_ISOMETRIC_ASSET_INTEGRATION.md §9 and §14](LPU_ISOMETRIC_ASSET_INTEGRATION.md#9-open-items)):
   it is a 2D schematic drawing from 2019, so it cannot be rotated or tilted, is not geographically
-  exact, and may be out of date. Map modes do not outline an "Unconfirmed match" candidate; on desktop
-  the detail card and the details panel can show the same item side by side; the public details panel
-  quotes an internal research file path in the curated reason; a DPR-2 phone downloads about 2.1 MB of
-  images on opening; Safari, Firefox and real touch hardware were not tested. The generated
+  exact, and may be out of date. A DPR-2 phone downloads about 2.1 MB of images on opening (re-measured
+  2026-10-29: 1.99 MiB at DPR 2 and 3, 0.63 MiB at DPR 1); Safari, Firefox and real touch hardware were
+  not tested. (Fixed this wave: map modes outline an "Unconfirmed match" candidate, the detail card is
+  hidden while the details panel shows the same item, and the public curated reason no longer quotes
+  internal file paths or field names.) The generated
   `LPU_ISOMETRIC_ASSET_MAPPING.md` has no "evidence that would verify it" column (the guide is in the
   integration doc §11).
 
@@ -521,49 +709,68 @@ by the verification agent and by the repo e2e and unit tests listed in §1.9.
    dependency; nothing to do unless you want imported models.
 8. **Delete `C:\lpuw014438`.** It is a leftover folder outside the repository (about 2.2 MB, holding a
    `v3` directory). The project does not use it. I did not delete it.
-9. **Commit**: the lead commits the working tree; the fix wave (§1.9) is committed in `6050e91`, the
-   artwork integration (§1.10) is not committed yet.
+9. **Commit**: the lead commits the working tree; the fix wave (§1.9) is committed in `6050e91` and the
+   artwork integration (§1.10) in `6a07349`; the master-spec conformance wave (§1.11) is not committed
+   yet. Its final gate passed on tree `82b840b9bc48` (§2.1), plus the refreshed
+   IMPLEMENTATION_STATUS.md and ACCEPTANCE_REPORT.md.
 10. **Campus illustration links** (§1.10). In `/admin/artwork`, link illustration items to buildings,
     following the walks in
     [LPU_ISOMETRIC_ASSET_INTEGRATION.md §11](LPU_ISOMETRIC_ASSET_INTEGRATION.md#11-owner-verification-guide).
     "Verified" needs evidence: a site sign, an official document or your own statement. A link never
     sets an official block number. Also decide whether the `art:scene-103` caption may be displayed,
     and review the 44 outlines and the inventory items marked for manual verification.
+11. **Create a Git remote so CI can run.** The repository has no remote, so `.github/workflows/ci.yml`
+    has never run. Push to a private GitHub repository (GitHub Actions: jobs `verify`,
+    `imagery-e2e` and `audit`; no secret is needed, the imagery job uses a test-only key against
+    synthetic tiles). The first run is the first proof of the CI wiring on a clean Linux runner,
+    including the e2e skip policy (`scripts/ci/skip-policy.ts`).
+12. **Phone frame time (D8).** Same as owner action 4: on a real mid-range Android phone, Realistic 3D
+    with studio models, rAF p95 against the 33 ms budget. Headless numbers are CPU-rendered and cannot
+    close it ([PERFORMANCE.md §Gaps](PERFORMANCE.md#gaps-not-measured)).
+13. **Screen-reader pass.** NVDA with Chrome on Windows and VoiceOver on iOS Safari over the student
+    workflows (search, place details, directions, tracking, saved places), the illustrated overview
+    and the admin. Automated axe checks pass but cannot judge reading order, announcements or the
+    usefulness of labels ([QA_STRATEGY.md](QA_STRATEGY.md#what-needs-human-or-on-device-verification)).
+14. **On-device GPS walk.** Walk a route on campus with Android Chrome and iOS Safari: permission
+    prompt, accuracy ring, off-route and arrival behaviour, background/lock-screen behaviour and
+    battery. Only simulated positions have been tested.
 
 ## 6. Decisions made autonomously
 
 These were made by the build agents within the owner's rules, not by the owner. Each can be revisited.
 
-| Decision                                                                                               | Reason                                                                                               |
-| ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| Esri World Imagery (free tier, PAYG off) as the only high-resolution imagery, opt-in by key            | Free source with documented attribution and a no-bill free tier; Google needs billing                |
-| EOX Sentinel-2 2016 backdrop opt-in only, Satellite 2D only, camera capped at zoom 14                  | CC BY 4.0 and keyless, but 10 m imagery shows no buildings; it must not pretend otherwise            |
-| Imagery date shown only inside the verified area and never as "live"                                   | The Wayback date was verified for the campus only                                                    |
-| No terrain                                                                                             | Measured relief of about 4.7 m across the campus would not be visible                                |
-| No 3D-tiles renderer, no new npm dependency                                                            | No billing-free photoreal source exists, so the dependency is not justified                          |
-| The store refuses unavailable modes; deep links to them are dropped; fallbacks end at the overview     | Otherwise `?view=earth` would have drawn the 2D map under a "Photorealistic" label; no blank screen  |
-| Accessible name "Satellite map" instead of "Satellite 2D map"                                          | "Satellite 2D map" contains "2D map" and broke role queries for the 2D map                           |
-| `maxPitch` 60                                                                                          | MapLibre marks higher values experimental                                                            |
-| Imagery never cached offline; CSP allows exactly the two provider hosts                                | Esri's terms forbid storing data; one rule for every provider                                        |
-| `/admin` as a lazy chunk; CSRF token in memory only; logout clears all Studio crash recovery           | No admin code or text in the public bundle; nothing sensitive left in the browser after logout       |
-| Approve corrections cannot clear the submitted description (the form points to Edit instead)           | Approve corrections are override fields and cannot clear it; silently keeping old text would mislead |
-| Hidden locations shown by a client-side filter                                                         | The server lists all locations including hidden ones and has no GET by id                            |
-| The Studio's server check runs on its own request and counts only for the exact draft it checked       | A check must never block a save, and a stale result must not count for a changed draft               |
-| "Apply template" previews on the server for a saved record and applies locally for a draft with edits  | Keeps unsaved edits; the server stays the authority for saved records                                |
-| E2E runs the real handlers over an in-memory local D1                                                  | Tests the real server without mocks and without touching any remote database                         |
-| Off-campus places are never routing endpoints; they keep their `graphNodeId` in the data (D3)          | The QA brief's rule; the owner can still see the validated access node                               |
-| The honeypot decoy mirrors a real acceptance (201, real duplicates, padded timing), no rate limits     | A bot must not tell a decoy from a real answer; counting decoys against limits was left out          |
-| The bare `zod` import in the client is aliased to a shim that sets `jitless` first                     | Removes the CSP `script-src` eval violation without loosening the CSP; the server is unchanged       |
-| The Studio leave prompt saves the edits to crash recovery before leaving                               | Leaving should never lose work silently; moving between Studio records is not held                   |
-| Access points picked on the map only from validated walkable nodes within 25 m; nothing moves          | A click must never invent an access point or move the place                                          |
-| Below 1024 px the admin section links are a tab row and the Studio side panels open one at a time      | At 768 px the side columns left the Studio map almost no width                                       |
-| The Illustrated overview is the default `?view=iso` variant; the footprint drawing stays as `&iso=map` | The owner made the artwork the authoritative visual source; the map-accurate drawing stays available |
-| Artwork links belong to depicted subjects, not files                                                   | One vignette captions 14 numbered buildings and the master shows 45                                  |
-| Curated baseline: the 19 leads reviewed "confirm-on-site" are approximate; everything else unresolved  | Only reviewed candidates may be shown, and only as "Unconfirmed match"; nothing is verified by us    |
-| Layered DOM renderer (one CSS transform for image and outlines), not Canvas2D                          | Measured at 4× CPU throttle: 16.7 ms p95 frames vs 50–67 ms; 0.5 s vs 3.2–3.6 s first paint          |
-| Lossless WebP derived copies of the master (53 files), not lossy                                       | Lossy q0.9 visibly softened window grids and coloured text at 1:1                                    |
-| The `0003` rollback keeps the decisions table and every audit row                                      | A destructive rollback would lose the owner's decisions; re-applying restores them exactly           |
-| The `art:scene-103` caption is held from display; the file and its exact transcription are kept        | Its meaning is unclear; only the owner can decide whether it may be shown                            |
+| Decision                                                                                               | Reason                                                                                                    |
+| ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| Esri World Imagery (free tier, PAYG off) as the only high-resolution imagery, opt-in by key            | Free source with documented attribution and a no-bill free tier; Google needs billing                     |
+| EOX Sentinel-2 2016 backdrop opt-in only, Satellite 2D only, camera capped at zoom 14                  | CC BY 4.0 and keyless, but 10 m imagery shows no buildings; it must not pretend otherwise                 |
+| Imagery date shown only inside the verified area and never as "live"                                   | The Wayback date was verified for the campus only                                                         |
+| No terrain                                                                                             | Measured relief of about 4.7 m across the campus would not be visible                                     |
+| No 3D-tiles renderer, no new npm dependency                                                            | No billing-free photoreal source exists, so the dependency is not justified                               |
+| The store refuses unavailable modes; deep links to them are dropped; fallbacks end at the overview     | Otherwise `?view=earth` would have drawn the 2D map under a "Photorealistic" label; no blank screen       |
+| Accessible name "Satellite map" instead of "Satellite 2D map"                                          | "Satellite 2D map" contains "2D map" and broke role queries for the 2D map                                |
+| `maxPitch` 60                                                                                          | MapLibre marks higher values experimental                                                                 |
+| Imagery never cached offline; CSP allows exactly the two provider hosts                                | Esri's terms forbid storing data; one rule for every provider                                             |
+| `/admin` as a lazy chunk; CSRF token in memory only; logout clears all Studio crash recovery           | No admin code or text in the public bundle; nothing sensitive left in the browser after logout            |
+| Approve corrections cannot clear the submitted description (the form points to Edit instead)           | Approve corrections are override fields and cannot clear it; silently keeping old text would mislead      |
+| Hidden locations shown by a client-side filter                                                         | The server lists all locations including hidden ones and has no GET by id                                 |
+| The Studio's server check runs on its own request and counts only for the exact draft it checked       | A check must never block a save, and a stale result must not count for a changed draft                    |
+| "Apply template" previews on the server for a saved record and applies locally for a draft with edits  | Keeps unsaved edits; the server stays the authority for saved records                                     |
+| E2E runs the real handlers over an in-memory local D1                                                  | Tests the real server without mocks and without touching any remote database                              |
+| Off-campus places are never routing endpoints; they keep their `graphNodeId` in the data (D3)          | The QA brief's rule; the owner can still see the validated access node                                    |
+| The honeypot decoy mirrors a real acceptance (201, real duplicates, padded timing), no rate limits     | A bot must not tell a decoy from a real answer; counting decoys against limits was left out               |
+| The bare `zod` import in the client is aliased to a shim that sets `jitless` first                     | Removes the CSP `script-src` eval violation without loosening the CSP; the server is unchanged            |
+| The Studio leave prompt saves the edits to crash recovery before leaving                               | Leaving should never lose work silently; moving between Studio records is not held                        |
+| Access points picked on the map only from validated walkable nodes within 25 m; nothing moves          | A click must never invent an access point or move the place                                               |
+| Below 1024 px the admin section links are a tab row and the Studio side panels open one at a time      | At 768 px the side columns left the Studio map almost no width                                            |
+| The Illustrated overview is the default `?view=iso` variant; the footprint drawing stays as `&iso=map` | The owner made the artwork the authoritative visual source; the map-accurate drawing stays available      |
+| Artwork links belong to depicted subjects, not files                                                   | One vignette captions 14 numbered buildings and the master shows 45                                       |
+| Curated baseline: the 19 leads reviewed "confirm-on-site" are approximate; everything else unresolved  | Only reviewed candidates may be shown, and only as "Unconfirmed match"; nothing is verified by us         |
+| Layered DOM renderer (one CSS transform for image and outlines), not Canvas2D                          | Measured at 4× CPU throttle: 16.7 ms p95 frames vs 50–67 ms; 0.5 s vs 3.2–3.6 s first paint               |
+| Lossless WebP derived copies of the master (53 files), not lossy                                       | Lossy q0.9 visibly softened window grids and coloured text at 1:1                                         |
+| The `0003` rollback keeps the decisions table and every audit row                                      | A destructive rollback would lose the owner's decisions; re-applying restores them exactly                |
+| The `art:scene-103` caption is held from display; the file and its exact transcription are kept        | Its meaning is unclear; only the owner can decide whether it may be shown                                 |
+| No separate "push" routing profile; pushing a bike stays inside Cycle (`push-bike` steps) (G-20)       | The router has no push profile; Cycle already walks the bike where the map says to push, at pushing speed |
+| No `toHaveScreenshot` baselines yet (G-24)                                                             | CI runs on Linux and development on Windows; baselines differ by OS (QA_STRATEGY.md)                      |
 
 ## 7. Deployment checklist
 
@@ -571,12 +778,12 @@ Full details: [`docs/DEPLOYMENT.md`](DEPLOYMENT.md) and [`docs/ADMIN_OPERATIONS.
 
 1. **Commit** the working tree (lead) and confirm `git status` is clean. Make sure no `.env.local`,
    `.dev.vars` or key is staged.
-2. **Run the gate** locally or in CI (all green on 2026-10-24, §2):
-   `npx tsc --noEmit -p .`, `npx tsc --noEmit -p tsconfig.server.json`, `npx eslint . --max-warnings=0`,
-   `npx prettier --check .`, `npx vitest run`, `npx vitest run -c vitest.server.config.ts`,
-   `npm run data:check`, `npm run art:check`, `npx vite build`, `npm run art:check-dist`,
-   `npm run smoke`, `npx playwright test` (`npm run build` runs the data, art, type and dist checks
-   around `vite build`).
+2. **Run the gate**: `npm run check` locally (Playwright's Chromium installed) or CI. It runs, in
+   order: format, lint, both typechecks, the browser check, the parallel unit and integration tests,
+   the serial timing suites, the server suites, `data:check`, `art:check`, `vite build`,
+   `art:check-dist`, smoke, the bundle budgets and the full Playwright suite
+   ([DEPLOYMENT.md §Before deploying](DEPLOYMENT.md)). `npm run build` runs the data, art, type and
+   dist checks around `vite build`.
 3. **Cloudflare Pages project**: build command `npm run build`, output `dist`, `NODE_VERSION=24` for
    Production and Preview.
 4. **D1**: `npx wrangler d1 create lpu-atlas`, then replace the placeholder `database_id` in

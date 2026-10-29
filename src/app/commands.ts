@@ -2,7 +2,7 @@
  * Palette commands and layer docs. Every command listed here is wired in
  * useCommandRunner — none is a placeholder.
  */
-import { categoriesInGroup, LAYER_GROUPS, type LayerGroupId } from '../config/categories.ts';
+import { categoriesInGroup, LAYER_GROUPS, type LayerGroupId } from '../config/index.ts';
 import type { SearchDoc } from '../search/index.ts';
 import type { IconName } from '../components/icons/index.ts';
 

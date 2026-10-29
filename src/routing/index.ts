@@ -13,6 +13,7 @@ export type {
   RouteProfileId,
   RouteRequest,
   RouteResult,
+  RouteSnap,
   RouteStep,
   RouteStepKind,
   Router,

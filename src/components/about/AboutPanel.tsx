@@ -6,12 +6,13 @@
  */
 import type { JSX } from 'react';
 import { useAtlas } from '../../app/data/atlas-context.ts';
+import { datasetAge, datasetAgeWarning } from '../../app/data/dataset-age.ts';
 import { publicationStatusText } from '../../app/data/publication-status.ts';
 import { useAppStore } from '../../app/store/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
 import { formatDate, ExternalLink } from '../place/index.ts';
 import { FactList, PanelSection } from '../settings/PanelSection.tsx';
-import { Button } from '../ui/index.ts';
+import { Button, Icon } from '../ui/index.ts';
 import { OSM_CONTRIBUTE_URL, count, coverageFacts, fmt, placeStats } from './about-model.ts';
 import { QualitySummary } from './QualitySummary.tsx';
 import { SourcesSection } from './SourcesSection.tsx';
@@ -24,6 +25,7 @@ export function AboutPanel(): JSX.Element {
   const unnamed = count(m, 'buildings:unnamed');
   const buildings = count(m, 'buildings');
   const components = count(m, 'graph:components');
+  const ageWarning = datasetAgeWarning(datasetAge(m.builtFrom));
 
   return (
     <div className="flex flex-col gap-6 p-4">
@@ -41,6 +43,15 @@ export function AboutPanel(): JSX.Element {
             ['Owner updates', publicationStatusText(publication, studioSkipped)],
           ]}
         />
+        {ageWarning ? (
+          <p
+            role="note"
+            className="flex items-start gap-2 rounded-md border border-warning bg-warning-soft p-2 text-sm text-text"
+          >
+            <Icon name="warning" className="mt-0.5 shrink-0 text-warning" />
+            <span>{ageWarning}</span>
+          </p>
+        ) : null}
       </PanelSection>
 
       <SourcesSection manifest={m} />

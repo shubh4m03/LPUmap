@@ -4,11 +4,11 @@
  * centre reticle on phones, the map centre elsewhere) and 1 m step buttons.
  */
 import { useState, type KeyboardEvent } from 'react';
-import { Button } from '../../components/ui/Button.tsx';
-import { IconButton } from '../../components/ui/IconButton.tsx';
-import { TextInput } from '../../components/ui/TextInput.tsx';
-import type { LngLat } from '../../data/schema.ts';
-import { isValidLngLat } from '../../distance/geodesic.ts';
+import { Button } from '../../components/ui/index.ts';
+import { IconButton } from '../../components/ui/index.ts';
+import { TextInput } from '../../components/ui/index.ts';
+import type { LngLat } from '../../data/index.ts';
+import { isValidLngLat } from '../../distance/index.ts';
 import { nudge, round7 } from './preview.ts';
 
 export interface PositionFieldsProps {

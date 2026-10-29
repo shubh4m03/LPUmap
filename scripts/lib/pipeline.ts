@@ -328,7 +328,10 @@ export function computeBuild(opts: BuildOptions): ComputedBuild {
   });
   attachConnectors(records, graphResult.graph, APP_CONFIG.routing.maxPlaceConnectorM);
   const curated = loadCurated(opts.curatedDir);
-  const merged = mergeCurated(records, curated);
+  const merged = mergeCurated(records, curated, {
+    graph: graphResult.graph,
+    maxDistanceM: APP_CONFIG.routing.maxPlaceConnectorM,
+  });
 
   const campusRecords: PlaceRecord[] = [];
   const contextRecords: PlaceRecord[] = [];

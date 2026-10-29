@@ -41,11 +41,26 @@ describe('toast offset above the attribution (pure)', () => {
 
 const realRect = Element.prototype.getBoundingClientRect;
 let attribHeight = ATTRIB_HEIGHT;
+/** Top of a `data-toast-clearance` element (null: none measured). */
+let clearanceTop: number | null = null;
 
 beforeEach(() => {
   resetAppStore();
   Object.defineProperty(window, 'innerHeight', { configurable: true, writable: true, value: VIEWPORT_H });
   vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
+    if (clearanceTop !== null && this.hasAttribute('data-toast-clearance')) {
+      const top = clearanceTop;
+      return {
+        x: 0,
+        y: top,
+        top,
+        left: 0,
+        right: 390,
+        bottom: top + 280,
+        width: 390,
+        height: 280,
+      } as DOMRect;
+    }
     if (this.classList.contains('maplibregl-ctrl-attrib')) {
       const top = VIEWPORT_H - QUICKBAR_PX - attribHeight;
       return {
@@ -67,6 +82,7 @@ afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
   attribHeight = ATTRIB_HEIGHT;
+  clearanceTop = null;
 });
 
 const offset = () => parseFloat(document.documentElement.style.getPropertyValue('--ds-toast-offset'));
@@ -85,6 +101,20 @@ describe('layouts lift the toast stack above the attribution', () => {
     // The toast stack's bottom edge sits at viewportH - offset: above the attribution's top.
     expect(VIEWPORT_H - offset()).toBeLessThanOrEqual(ATTRIB_TOP - ATTRIBUTION_GAP_PX);
     expect(offset()).toBeGreaterThan(QUICKBAR_PX + ATTRIBUTION_CLEARANCE_PX);
+  });
+
+  it('phone: content marked data-toast-clearance (the illustration card) is cleared too', async () => {
+    const cardTop = 420;
+    clearanceTop = cardTop;
+    const withCard = (
+      <>
+        {fakeMap}
+        <div data-toast-clearance="">Illustration detail card</div>
+      </>
+    );
+    renderWithAtlas(<MobileLayout map={withCard} />);
+    await act(async () => new Promise((r) => requestAnimationFrame(() => r(undefined))));
+    expect(VIEWPORT_H - offset()).toBeLessThanOrEqual(cardTop - ATTRIBUTION_GAP_PX);
   });
 
   it('desktop: the stack also follows a taller attribution', async () => {

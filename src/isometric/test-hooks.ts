@@ -14,7 +14,7 @@
  * Like __ATLAS_MAP__ it exposes no user position. Tests drive the overview
  * through the UI (pointer, keyboard), never through this hook.
  */
-import type { LngLat } from '../data/schema.ts';
+import type { LngLat } from '../data/index.ts';
 import type { IsoView } from './iso-controller.ts';
 
 export interface IsoFrameStats {

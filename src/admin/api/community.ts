@@ -16,8 +16,8 @@ import type {
   OverrideFields,
   placeFieldsSchema,
   SuggestionStatus,
-} from '../../community/schema.ts';
-import type { LngLat } from '../../data/schema.ts';
+} from '../../community/index.ts';
+import type { LngLat } from '../../data/index.ts';
 import { seg, type AdminHttp, type AdminResult } from './http.ts';
 import {
   approveResultSchema,

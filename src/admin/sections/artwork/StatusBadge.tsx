@@ -1,5 +1,5 @@
-import { Badge } from '../../../components/ui/Badge.tsx';
-import type { AssociationStatus } from '../../../isometric-art/schema.ts';
+import { Badge } from '../../../components/ui/index.ts';
+import type { AssociationStatus } from '../../../isometric-art/index.ts';
 import { STATUS_LABELS } from './artwork-model.ts';
 
 const TONES = { verified: 'success', approximate: 'warning', unresolved: 'neutral' } as const;

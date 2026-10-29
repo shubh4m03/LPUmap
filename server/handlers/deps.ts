@@ -2,7 +2,7 @@
 import type { FetchLike } from '../auth/access.ts';
 import type { BaseData, StudioBaseData } from '../base-data.ts';
 import type { Env, ParsedEnv } from '../env.ts';
-import type { IsometricArtManifest } from '../../src/isometric-art/schema.ts';
+import type { IsometricArtManifest } from '../../src/isometric-art/index.ts';
 import { HttpError } from '../http/errors.ts';
 import type { Services } from './ports.ts';
 

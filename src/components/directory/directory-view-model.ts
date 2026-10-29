@@ -7,19 +7,19 @@
  * (§8.5): every building drawn is listed here, and so is every item of the
  * campus illustration.
  */
-import { getCategory } from '../../config/categories.ts';
+import { getCategory } from '../../config/index.ts';
 import type {
   ArtworkThumbnail,
   CampusDirectory,
   DirectoryEntry,
   DirectoryItem,
 } from '../../directory/index.ts';
-import type { ArtworkOnlyEntry } from '../../isometric-art/directory.ts';
+import type { ArtworkOnlyEntry } from '../../isometric-art/index.ts';
 import {
   ASSOCIATION_STATUS_TEXT,
   BUILDING_VERIFIED_ARTWORK_TEXT,
   type StatusText,
-} from '../../isometric-art/text.ts';
+} from '../../isometric-art/index.ts';
 
 export type DirectoryGrouping = 'cell' | 'category' | 'artwork';
 

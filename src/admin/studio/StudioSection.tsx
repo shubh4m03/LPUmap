@@ -25,20 +25,20 @@ import {
   SegmentedControl,
   Spinner,
 } from '../../components/ui/index.ts';
-import { cx } from '../../components/ui/cx.ts';
+import { cx } from '../../components/ui/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
 import type { MapController } from '../../map/index.ts';
-import type { MapControllerWithCamera } from '../../map/types.ts';
-import { currentDraft, shouldGuardUnload } from '../../building-studio/editor-state.ts';
-import { createStudioActions } from '../../building-studio/ui/actions.ts';
-import { builtInLibraryItems, libraryItems } from '../../building-studio/ui/library.ts';
+import type { MapControllerWithCamera } from '../../map/index.ts';
+import { currentDraft, shouldGuardUnload } from '../../building-studio/editor.ts';
+import { createStudioActions } from '../../building-studio/ui/index.ts';
+import { builtInLibraryItems, libraryItems } from '../../building-studio/ui/index.ts';
 import {
   checkTarget,
   createStudioStore,
   currentValidation,
   useStudio,
-} from '../../building-studio/ui/store.ts';
-import type { TemplateDefinition } from '../../building-studio/schema.ts';
+} from '../../building-studio/ui/index.ts';
+import type { TemplateDefinition } from '../../building-studio/index.ts';
 import type { BoundaryReviewFile, DetectionsFile, LngLat } from '../../data/index.ts';
 import { describeAdminError } from '../api/errors.ts';
 import { useAdminApi } from '../context.ts';
@@ -91,6 +91,7 @@ export default function StudioSection({ route, navigate }: AdminSectionProps) {
     () =>
       createStudioActions({
         api: api.studio,
+        describeError: describeAdminError,
         store,
         onRecordChange: (id) => navigate({ section: 'studio', id }),
         onPublicationChange: refreshMap,

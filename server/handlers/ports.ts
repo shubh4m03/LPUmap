@@ -8,7 +8,7 @@
 import type { BaseData, StudioBaseData } from '../base-data.ts';
 import type { ArtworkDomainContext } from '../domain/artwork/associations.ts';
 import type { StudioContext } from '../domain/studio/context.ts';
-import type { IsometricArtManifest } from '../../src/isometric-art/schema.ts';
+import type { IsometricArtManifest } from '../../src/isometric-art/index.ts';
 import type { SqlDatabase } from '../db/types.ts';
 import type { IdGenerator } from '../ids.ts';
 import type { RateLimitRepo, SaltRepo, SessionRepo } from '../auth/ports.ts';
@@ -18,7 +18,7 @@ import type {
   OverrideFields,
   PlaceFields,
   Publication,
-} from '../../src/community/schema.ts';
+} from '../../src/community/index.ts';
 
 export interface DomainCtx {
   now: Date;

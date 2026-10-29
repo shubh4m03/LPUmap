@@ -188,7 +188,19 @@ open them.
 
 ## Screenshots
 
-No screenshots are committed to the repository yet. Run the app locally (below) to see it.
+Captured on 2026-10-29 from this app only: a production build (`npx vite build`, no imagery key, so
+no third-party tiles) served by `vite preview` and photographed with Playwright's headless Chromium.
+The map is drawn from the project's own GeoJSON; the illustrated overview shows the owner's campus
+illustration ([GEODATA_SOURCES_AND_LICENSES.md §14](docs/GEODATA_SOURCES_AND_LICENSES.md#14-lpu-isometric-map-design-owner-supplied-campus-illustration)).
+No Google, Esri or other third-party imagery appears in them.
+
+| Realistic 3D (1440 × 900, `?view=3d`)                       | 2D map with place details (`?view=2d&place=…`)                                     |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| ![Realistic 3D campus map](docs/screenshots/desktop-3d.jpg) | ![2D map with the School of Design details](docs/screenshots/desktop-2d-place.jpg) |
+
+| Illustrated overview (1440 × 900, `?view=iso`)                                                  | Phone, 2D map (390 × 844)                                    |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| ![Illustrated overview of the owner's campus artwork](docs/screenshots/desktop-illustrated.jpg) | ![Phone layout of the 2D map](docs/screenshots/phone-2d.jpg) |
 
 ## Quick start
 
@@ -210,31 +222,40 @@ Build and preview the production bundle (the service worker is registered only i
 builds):
 
 ```sh
-npm run build          # data:check, then tsc --noEmit, then vite build → dist/
+npm run build          # data:check, art:check, tsc --noEmit, vite build → dist/, then art:check-dist
 npm run preview        # http://localhost:4173 (strict port)
 ```
 
 ## Testing
 
-| Command                             | What it runs                                                                                                                                                        |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm test`                          | All Vitest suites (unit + integration) in jsdom                                                                                                                     |
-| `npm run test:unit`                 | `tests/unit` only                                                                                                                                                   |
-| `npm run test:integration`          | `tests/integration` only (data pipeline on a synthetic snapshot and on the real committed snapshot)                                                                 |
-| `npm run test:e2e`                  | Playwright against `vite preview` on port 4173 plus a local real-handler backend, in five viewports (needs a prior `vite build`)                                    |
-| `npm run test:server`               | Server suites (`vitest.server.config.ts`): handlers, domain, auth, studio and red-team tests on a local in-memory D1                                                |
-| `npm run test:a11y`                 | Only the Playwright specs tagged `@a11y` (axe checks)                                                                                                               |
-| `npm run smoke`                     | `scripts/smoke.ts`: checks the built `dist/` (HTML shell, web manifest, service worker, shipped dataset, a real search and route, secret scan)                      |
-| `npm run check`                     | The full gate: `format:check` → `lint` → `typecheck` → `test` → `data:check` → `art:check` → `vite build` → `art:check-dist` → `smoke` → `test:e2e`                 |
-| `npm run art:check`                 | Campus illustration: validates inventory, hotspots and registry, original sha256s, and that the committed `public/isometric-art/` outputs are current (no Chromium) |
-| `npm run art:build`                 | Regenerates `public/isometric-art/manifest.json`, the published originals and `docs/LPU_ISOMETRIC_ASSET_MAPPING.md` (deterministic)                                 |
-| `npm run art:derive` / `art:verify` | Dev only (Playwright Chromium): makes / re-checks the derived WebP copies of the master and their visual equivalence with the original                              |
-| `npm run typecheck`                 | `tsc --noEmit`                                                                                                                                                      |
-| `npm run lint`                      | `eslint . --max-warnings=0`                                                                                                                                         |
-| `npm run format:check`              | `prettier --check .`                                                                                                                                                |
+| Command                                            | What it runs                                                                                                                                                                                                                             |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm test`                                         | The Vitest suites (unit, integration, coverage) in parallel, except the wall-clock budget files                                                                                                                                          |
+| `npm run test:perf`                                | The wall-clock budget files (search, routing, studio, overview, merge timings), serially, so parallel suites cannot steal their CPU                                                                                                      |
+| `npm run test:unit`                                | `tests/unit` only                                                                                                                                                                                                                        |
+| `npm run test:integration`                         | `tests/integration` only (data pipeline on a synthetic snapshot and on the real committed snapshot; artwork checks)                                                                                                                      |
+| `npm run test:server`                              | Server suites (`vitest.server.config.ts`): handlers, domain, auth, studio, artwork, migrations and red-team tests on a local in-memory D1                                                                                                |
+| `npm run test:e2e`                                 | Playwright against `vite preview` on port 4173 plus a local real-handler backend, in five viewports (needs a prior `vite build`). Every skipped test is counted by reason and checked against `scripts/ci/skip-policy.ts`                |
+| `npm run test:a11y`                                | Only the Playwright specs tagged `@a11y` (axe checks)                                                                                                                                                                                    |
+| `npm run test:browsers`                            | Fails when Playwright's Chromium is missing (so no browser test can skip silently)                                                                                                                                                       |
+| `npm run smoke`                                    | `scripts/smoke.ts`: checks the built `dist/` (HTML shell, web manifest, service worker, shipped dataset, a real search and route, secret scan)                                                                                           |
+| `npm run perf:bundle`                              | Bundle-size budgets of the built `dist/` (chunk, entry, start-up JS/CSS, overview chunk, precache; MapLibre and admin code kept out of the entry); see [docs/PERFORMANCE.md](docs/PERFORMANCE.md#bundle-budgets-enforced)                |
+| `npm run perf:search` / `perf:route` / `perf:load` | Re-measure search and route latency on the real dataset, and page load against a running preview (`scripts/perf/`)                                                                                                                       |
+| `npm run check`                                    | The full gate: `format:check` → `lint` → `typecheck` → `typecheck:server` → `test:browsers` → `test` → `test:perf` → `test:server` → `data:check` → `art:check` → `vite build` → `art:check-dist` → `smoke` → `perf:bundle` → `test:e2e` |
+| `npm run art:check`                                | Campus illustration: validates inventory, hotspots and registry, original sha256s, and that the committed `public/isometric-art/` outputs are current (no Chromium)                                                                      |
+| `npm run art:build`                                | Regenerates `public/isometric-art/manifest.json`, the published originals and `docs/LPU_ISOMETRIC_ASSET_MAPPING.md` (deterministic)                                                                                                      |
+| `npm run art:derive` / `art:verify`                | Dev only (Playwright Chromium): makes / re-checks the derived WebP copies of the master and their visual equivalence with the original                                                                                                   |
+| `npm run typecheck` / `typecheck:server`           | `tsc --noEmit` for the app, scripts and tests / for `server/`, `functions/` and `tests/server` (`tsconfig.server.json`)                                                                                                                  |
+| `npm run lint`                                     | `eslint . --max-warnings=0`                                                                                                                                                                                                              |
+| `npm run format:check`                             | `prettier --check .`                                                                                                                                                                                                                     |
 
-CI (`.github/workflows/ci.yml`) runs the same gates on every push and pull request. It also checks
-that rebuilding the data leaves `public/data` unchanged, and audits production dependencies.
+CI (`.github/workflows/ci.yml`) runs every `npm run check` gate in the same order on every push and
+pull request (a unit test, `tests/unit/ci/gates.test.ts`, keeps the two in step). It also checks
+that rebuilding the data leaves `public/data` unchanged, runs the imagery-dependent map-mode tests
+against builds with a test-only Esri key and with the EOX backdrop (synthetic tiles only), and audits
+production dependencies. **The repository has no Git remote yet, so CI has never run**; until the
+owner adds one, the gate results in [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md)
+are local runs.
 
 First-time setup for end-to-end tests:
 
@@ -273,10 +294,11 @@ build. The full rules are in [data/README.md](data/README.md) and
 
 Offline builds always work from the **committed snapshot**: `data/raw/osm/campus-bbox.osm` and
 `boundary-relation-21599790.osm`, retrieved 2026-10-23 through the OSM API because Overpass was
-unreachable from the retrieving machine. To refresh:
+unreachable from the retrieving machine. The fetch scripts need no setting: every request sends the neutral
+User-Agent `LPU-Campus-Atlas-research/0.1` (no contact or personal identifier), with a timeout and bounded
+retries (`scripts/lib/http.ts`). To refresh:
 
 ```sh
-export DATA_FETCH_CONTACT="you@example.org"   # or a URL; sent in the User-Agent
 npm run data:fetch -- --force
 npm run data:check
 # review docs/DATA_QUALITY_REPORT.md and the count-change warnings, then commit raw + generated files together
@@ -305,13 +327,12 @@ The same refresh can be run on GitHub as the manual "Data refresh" workflow
 See `.env.example`. **None is a secret**, and nothing needs to be set to build or run the app.
 `VITE_*` values are embedded in the browser bundle at build time, so a secret must never go in one.
 
-| Variable               | Used by                                                | Effect                                                                                                                                                                                 |
-| ---------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `VITE_CORRECTIONS_URL` | `src/feedback/report.ts`                               | An `https://` URL, such as a GitHub "new issue" URL. When set, the correction dialog offers "Open prefilled report". When empty or not https, reports can only be copied or downloaded |
-| `VITE_PUBLIC_SITE_URL` | Declared in `.env.example`                             | Reserved for canonical and Open Graph metadata. **The current code does not read it**, so setting it has no effect yet                                                                 |
-| `DATA_FETCH_CONTACT`   | `scripts/fetch-osm.ts`, `scripts/fetch-public-data.ts` | A contact e-mail or URL, sent in the data scripts' User-Agent as the OSM and Overpass usage policies ask. Required for live runs of `data:fetch-public`. Never shipped to the browser  |
-| `VITE_ARCGIS_API_KEY`  | `src/map/providers/`                                   | Optional free-tier ArcGIS key for Esri World Imagery. **Public once built**; put it only in `.env.local` (git-ignored) or the host's build settings, never in git. See below           |
-| `VITE_EOX_BACKDROP`    | `src/map/providers/`                                   | `true` adds the keyless EOX Sentinel-2 2016 backdrop (10 m, Satellite map only, when no Esri key is set). Empty = off                                                                  |
+| Variable               | Used by                    | Effect                                                                                                                                                                                 |
+| ---------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_CORRECTIONS_URL` | `src/feedback/report.ts`   | An `https://` URL, such as a GitHub "new issue" URL. When set, the correction dialog offers "Open prefilled report". When empty or not https, reports can only be copied or downloaded |
+| `VITE_PUBLIC_SITE_URL` | Declared in `.env.example` | Reserved for canonical and Open Graph metadata. **The current code does not read it**, so setting it has no effect yet                                                                 |
+| `VITE_ARCGIS_API_KEY`  | `src/map/providers/`       | Optional free-tier ArcGIS key for Esri World Imagery. **Public once built**; put it only in `.env.local` (git-ignored) or the host's build settings, never in git. See below           |
+| `VITE_EOX_BACKDROP`    | `src/map/providers/`       | `true` adds the keyless EOX Sentinel-2 2016 backdrop (10 m, Satellite map only, when no Esri key is set). Empty = off                                                                  |
 
 The owner features need server-side settings (`AUTH_MODE` and friends) that are **not** `VITE_`
 variables and never reach the browser; see [Admin setup](#admin-setup).
@@ -412,7 +433,7 @@ The app is a static site: `dist/` after `npm run build`. The reference host is *
 `public/_headers` sets the Content Security Policy, the security headers and the cache rules.
 Settings, update behaviour, rollback and other hosts are covered in
 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). The owner tools additionally need the Pages Functions, the
-D1 binding `DB` with migrations 0001 and 0002 applied, and `AUTH_MODE` (see
+D1 binding `DB` with migrations 0001, 0002 and 0003 applied, and `AUTH_MODE` (see
 [Admin setup](#admin-setup)); without them the site runs as a static map.
 
 ## Troubleshooting
@@ -424,42 +445,57 @@ D1 binding `DB` with migrations 0001 and 0002 applied, and `AUTH_MODE` (see
 | Playwright: `Executable doesn't exist`                                     | Run `npx playwright install chromium` once                                                                                                                                                                                                                                                                                                                                                                              |
 | Old version still shows after a deploy, or after `npm run preview`         | The service worker serves the precached version until you accept the update prompt. Reload once and choose "Update now" in the banner, or in DevTools → Application → Service workers click "Unregister" and then "Clear site data". Dev builds (`npm run dev`) never register a worker; the preview origin (`localhost:4173`) keeps its worker between preview runs, so an old build can appear there until you update |
 | `data:validate` fails after editing a curated file                         | The error names the file and the record. Common causes: an `anchor.target` or alias `target` that is not an id in the snapshot, a missing `source`, or an override without a `check` field                                                                                                                                                                                                                              |
-| `data:fetch-public` says "Set DATA_FETCH_CONTACT"                          | Set it as shown above. `-- --offline` re-extracts from the local cache without network access                                                                                                                                                                                                                                                                                                                           |
 | Build fails in Workbox with a file-size error                              | A precached file is larger than 8 MB. This failure is intentional (see `src/offline/README.md`)                                                                                                                                                                                                                                                                                                                         |
 
 ## Known limitations
 
-These come from [docs/DATA_QUALITY_REPORT.md](docs/DATA_QUALITY_REPORT.md) (dataset `b628c5855b1d`,
-from the OSM snapshot of 2026-10-23) and from the module reviews. The module docs under
-[docs/modules/](docs/modules/) give the detail.
+Current dataset: dataset `50fefb5e828b` (schema 2, built from the OSM snapshot of 2026-10-23):
+**131** campus buildings (128 unnamed), **227** campus places (31 without a map position), **261**
+places just outside campus (opt-in layer), **123** unverified detected footprints, and a walking
+graph of **1,636** nodes and **1,770** edges in **9** components. The figures come from
+`public/data/manifest.json` and [docs/DATA_QUALITY_REPORT.md](docs/DATA_QUALITY_REPORT.md)
+(`tests/unit/docs/dataset-version.test.ts` keeps this paragraph in step with the manifest). The
+module docs under [docs/modules/](docs/modules/) give the detail, and the engineering gaps still open
+are in [docs/IMPLEMENTATION_STATUS.md §4](docs/IMPLEMENTATION_STATUS.md#4-known-gaps) and
+[docs/ACCEPTANCE_REPORT.md](docs/ACCEPTANCE_REPORT.md).
 
-- **Sparse naming.** 499 of 535 building footprints are unnamed (134 of them on campus). Campus
-  block numbers ("Block 34") are not in OpenStreetMap and no official source gives their positions,
-  so blocks cannot be searched for by number.
+- **Campus only.** The map holds the 131 buildings of the campus inventory (128 inside the OSM
+  boundary, 3 crossing it). 390 footprints of the snapshot lie outside and are excluded, and 13 are
+  held for the owner's review. Places outside the boundary appear only in the opt-in "Nearby,
+  outside campus" layer and are never routing endpoints.
+- **Sparse naming.** 128 of the 131 campus buildings are unnamed in OpenStreetMap. Campus block
+  numbers ("Block 34") are not in OpenStreetMap and no official source gives their positions, so
+  none is applied; unnamed buildings carry the app's own map keys (for example "E2-05"), labelled as
+  not official. Block numbers are recorded only with the owner's first-hand evidence.
 - **Unlocated official records.** The 32 official schools and facilities (for example the Central
-  Library, which the official page says is in "Block-37", and the Uni Health Centre) are searchable
-  but have no map position. Only "School of Design" is anchored, to an OSM building with the same
-  name; human confirmation of that anchor is still recommended.
-- **Empty or sparse categories.** No drinking water, washroom or printing points are mapped. Health,
-  ATM and bank, library, gate and hostel each have fewer than 3 on-campus records.
-- **Building heights.** No building has a measured height. 137 heights are estimated from floor
-  counts (3.2 m per level) and 398 are placeholders (6 m), shown in a lighter tone.
+  Library, which the official page says is in "Block-37", and the Uni Health Centre) are searchable,
+  but only "School of Design" has a map position (anchored to an OSM building with the same name;
+  human confirmation is still recommended).
+- **Empty or sparse categories.** On campus, food, health and library have 1 mapped place each;
+  drinking water, washrooms, printing, ATMs and banks, gates, hostels and transport have none.
+- **Building heights.** No building has a measured height: 122 are estimated from floor counts
+  (3.2 m per level) and 9 are 6 m placeholders, shown in a lighter tone.
 - **Routing coverage.** The walking graph has 9 disconnected components; the largest holds 92.2 % of
-  nodes. 34 located places are more than 60 m from any walkable node and cannot be routed to. The
-  app never draws a made-up connection. Untagged trunk roads (NH44) are excluded from routing. The
-  router snaps to the nearest graph node, not the nearest point on an edge.
+  its nodes. 28 campus places with a position are more than 60 m from any walkable node and cannot be
+  routed to. The app never draws a made-up connection, and untagged trunk roads (NH44) are excluded
+  from routing. Snapping and its limits are described in
+  [docs/modules/routing.md](docs/modules/routing.md).
 - **Step-free routing** can only avoid mapped steps and `wheelchair=no` ways. There are no
   wheelchair tags on campus paths and no mapped entrances (0 entrance nodes), so step-free routes
   always carry an "accessibility unverified" caveat.
-- **Opening hours.** Almost no places have hours. Only a conservative subset of the OSM
-  `opening_hours` syntax is evaluated; anything else (public holidays, months, sunrise) shows as
-  "not in a format we can interpret", with the raw value.
+- **Opening hours.** None of the 227 campus places has opening hours in the data. Only a conservative
+  subset of the OSM `opening_hours` syntax is evaluated; anything else (public holidays, months,
+  sunrise) shows as "not in a format we can interpret", with the raw value.
 - **No data for:** mess menus, a shuttle or bus timetable, an events feed, faculty offices,
   indoor maps or rooms. No public source was found (see [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md)),
   so these show as unavailable rather than invented.
-- **Imported, not verified.** Every record is `imported`. No physical survey has been done.
-- **GPS behaviour has been tested only with simulated positions** (jsdom and Playwright). The
-  real-device checks still open are listed in [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md#what-needs-human-or-on-device-verification).
+- **Imported, not verified.** Every record is `imported`. No physical survey has been done. The
+  detected footprints (Microsoft and Google Open Buildings) are an unverified, opt-in layer only.
+- **Not yet verified on real devices:** GPS (tested only with simulated positions in jsdom and
+  Playwright), a screen-reader pass, and 3D frame time on a mid-range phone (D8). These are owner
+  actions; the full list is in
+  [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md#what-needs-human-or-on-device-verification).
+- **CI has never run**: the repository has no Git remote yet, so every gate result is a local run.
 - **Campus illustration links.** No illustration item is verified yet: 19 are "Unconfirmed match"
   (reviewed candidate footprints) and 63 are unresolved, until the owner records evidence in
   Admin → Artwork. 44 of the 65 traced outlines are flagged for manual review (drawn dashed with
@@ -478,8 +514,10 @@ functions/       Cloudflare Pages Functions (thin entry points over server/)
 server/          API handlers, domain logic (community, Building Studio, publication), auth, D1 access
 migrations/      D1 migrations 0001 (community), 0002 (Building Studio), 0003 (artwork links); rollback in docs/db/
 lpu-isometric-map-design/  the owner's original campus illustration (29 files, never modified; checked by sha256)
-scripts/         Node 24 TypeScript CLIs: fetch-osm, fetch-public-data, build-data, validate-data, smoke, generate-icons
-  lib/           pipeline stages (parse, geometry, buildings, places, graph, relations, quality, validate)
+scripts/         Node 24 TypeScript CLIs: fetch-osm, fetch-public-data, fetch-footprints, build-data, validate-data, build-isometric-art, smoke, generate-icons
+  lib/           pipeline stages (parse, geometry, buildings, places, graph, relations, quality, validate) and artwork checks
+  perf/          performance measurements (search, route, page load) and the enforced bundle budgets
+  ci/            CI helpers: the e2e skip policy and its Playwright reporter, the browser presence check
 src/
   config/        APP_CONFIG (speeds, thresholds, budgets) and the category registry
   data/          Zod schemas (shared with scripts) and the dataset loader
@@ -491,6 +529,9 @@ src/
   facilities/    directory, opening hours, nearest, relation checks
   map/           MapView (MapLibre), style, layers, controller, e2e hook; providers/ (free imagery), editing/ (map-editing contract)
   isometric/     Canvas2D isometric overview (the Map-accurate style)
+  directory/     building directory (map keys, artwork join) shared by every view
+  geo/           campus boundary service (point/footprint membership) shared by app, scripts and server
+  csp/           the CSP-safe Zod entry (jitless) that the client's bare `zod` import is aliased to
   isometric-art/ the Illustrated overview: artwork contracts, manifest loader, associations, renderer, detail card
   building-studio/  studio schema, mesh generator, validation, history, editor state, studio UI store
   community/     publication and contribution schemas shared with the server
@@ -506,38 +547,42 @@ tests/
   unit/          Vitest suites, one folder per module or UI area
   integration/   data pipeline end-to-end (synthetic and real snapshot)
   fixtures/      synthetic-* OSM and graph fixtures
+  coverage/      building-coverage suite on the real processed dataset
   server/        server suites on a local in-memory D1 (vitest.server.config.ts)
+  perf/          browser performance harness for the isometric overview (playwright.iso.config.ts)
   e2e/           Playwright specs; backend/ runs the real handlers locally for admin, suggest and studio specs
 ```
 
 ## Documentation
 
-| Document                                                                           | Topic                                                                                   |
-| ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                                       | System diagram, module boundaries, data flow, key decisions, extension points           |
-| [docs/MODULE_CONTRACTS.md](docs/MODULE_CONTRACTS.md)                               | Public interface of every module                                                        |
-| [docs/modules/](docs/modules/)                                                     | One page per module: purpose, interface, invariants, tests, limitations                 |
-| [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md)                         | The staged plan that was followed, with acceptance criteria                             |
-| [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md)                                       | Every source, its licence and status, and what was looked for but not found             |
-| [docs/DATA_QUALITY_REPORT.md](docs/DATA_QUALITY_REPORT.md)                         | Generated by `data:build`: counts, gaps, survey priorities                              |
-| [docs/research/LPU_PUBLIC_SOURCES.md](docs/research/LPU_PUBLIC_SOURCES.md)         | Every LPU page examined, `robots.txt` and terms findings                                |
-| [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md)                                         | Test pyramid, browser matrix, workflows, accessibility, CI stages                       |
-| [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md)                       | Threat model, CSP, storage inventory, location privacy, supply chain, incident record   |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                                           | Cloudflare Pages, headers, service-worker updates, rollback, D1 migrations, other hosts |
-| [docs/ADMIN_OPERATIONS.md](docs/ADMIN_OPERATIONS.md)                               | Owner runbook: auth setup, moderation, backups, recovery, credentials, incidents        |
-| [docs/COMMUNITY_MODULE_CONTRACTS.md](docs/COMMUNITY_MODULE_CONTRACTS.md)           | Suggestions, moderation, locations, overrides, audit: API and data contracts            |
-| [docs/BUILDING_STUDIO_DESIGN.md](docs/BUILDING_STUDIO_DESIGN.md)                   | Building Studio design: schema, validation, publication, rollback                       |
-| [docs/ISOMETRIC_AND_3D_DESIGN.md](docs/ISOMETRIC_AND_3D_DESIGN.md)                 | Isometric overview, realistic 3D and view modes                                         |
-| [docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md](docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md) | Campus illustration contract: assets, hotspots, associations, migration 0003, gates     |
-| [docs/LPU_ISOMETRIC_ASSET_INVENTORY.md](docs/LPU_ISOMETRIC_ASSET_INVENTORY.md)     | The 29 artwork files and their exact printed labels                                     |
-| [docs/LPU_ISOMETRIC_ASSET_MAPPING.md](docs/LPU_ISOMETRIC_ASSET_MAPPING.md)         | Generated: every illustration item and its link status                                  |
-| [docs/MAP_PROVIDER_CONFIGURATION.md](docs/MAP_PROVIDER_CONFIGURATION.md)           | The five view modes, free imagery providers, fallbacks, CSP and privacy                 |
-| [docs/GEODATA_SOURCES_AND_LICENSES.md](docs/GEODATA_SOURCES_AND_LICENSES.md)       | Licences of every geodata and imagery source, including what is not used (Google)       |
-| [docs/PERFORMANCE.md](docs/PERFORMANCE.md)                                         | Budgets and measured search, route, load and bundle numbers                             |
-| [docs/PROJECT_ASSESSMENT.md](docs/PROJECT_ASSESSMENT.md)                           | Starting state and data reachability                                                    |
-| [data/README.md](data/README.md)                                                   | Pipeline rules and curated-file formats                                                 |
-| [src/offline/README.md](src/offline/README.md)                                     | Offline and PWA strategy                                                                |
-| [CONTRIBUTING.md](CONTRIBUTING.md)                                                 | Coding standards, data-contribution rules, PR checklist                                 |
+| Document                                                                           | Topic                                                                                           |
+| ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                                       | System diagram, module boundaries, data flow, key decisions, extension points                   |
+| [docs/MODULE_CONTRACTS.md](docs/MODULE_CONTRACTS.md)                               | Public interface of every module                                                                |
+| [docs/modules/](docs/modules/)                                                     | One page per module: purpose, interface, invariants, tests, limitations                         |
+| [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md)                         | The staged plan that was followed (v1 stages A–E and the later waves), with acceptance criteria |
+| [docs/ACCEPTANCE_REPORT.md](docs/ACCEPTANCE_REPORT.md)                             | Every master-spec part and owner spec with PASS / PARTIAL / FAIL / NOT TESTABLE and evidence    |
+| [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md)                     | What is built, how it was verified, known gaps, owner actions                                   |
+| [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md)                                       | Every source, its licence and status, and what was looked for but not found                     |
+| [docs/DATA_QUALITY_REPORT.md](docs/DATA_QUALITY_REPORT.md)                         | Generated by `data:build`: counts, gaps, survey priorities                                      |
+| [docs/research/LPU_PUBLIC_SOURCES.md](docs/research/LPU_PUBLIC_SOURCES.md)         | Every LPU page examined, `robots.txt` and terms findings                                        |
+| [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md)                                         | Test pyramid, browser matrix, workflows, accessibility, CI stages                               |
+| [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md)                       | Threat model, CSP, storage inventory, location privacy, supply chain, incident record           |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                                           | Cloudflare Pages, headers, service-worker updates, rollback, D1 migrations, other hosts         |
+| [docs/ADMIN_OPERATIONS.md](docs/ADMIN_OPERATIONS.md)                               | Owner runbook: auth setup, moderation, backups, recovery, credentials, incidents                |
+| [docs/COMMUNITY_MODULE_CONTRACTS.md](docs/COMMUNITY_MODULE_CONTRACTS.md)           | Suggestions, moderation, locations, overrides, audit: API and data contracts                    |
+| [docs/BUILDING_STUDIO_DESIGN.md](docs/BUILDING_STUDIO_DESIGN.md)                   | Building Studio design: schema, validation, publication, rollback                               |
+| [docs/ISOMETRIC_AND_3D_DESIGN.md](docs/ISOMETRIC_AND_3D_DESIGN.md)                 | Isometric overview, realistic 3D and view modes                                                 |
+| [docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md](docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md) | Campus illustration contract: assets, hotspots, associations, migration 0003, gates             |
+| [docs/LPU_ISOMETRIC_ASSET_INVENTORY.md](docs/LPU_ISOMETRIC_ASSET_INVENTORY.md)     | The 29 artwork files and their exact printed labels                                             |
+| [docs/LPU_ISOMETRIC_ASSET_MAPPING.md](docs/LPU_ISOMETRIC_ASSET_MAPPING.md)         | Generated: every illustration item and its link status                                          |
+| [docs/MAP_PROVIDER_CONFIGURATION.md](docs/MAP_PROVIDER_CONFIGURATION.md)           | The five view modes, free imagery providers, fallbacks, CSP and privacy                         |
+| [docs/GEODATA_SOURCES_AND_LICENSES.md](docs/GEODATA_SOURCES_AND_LICENSES.md)       | Licences of every geodata and imagery source, including what is not used (Google)               |
+| [docs/PERFORMANCE.md](docs/PERFORMANCE.md)                                         | Budgets and measured search, route, load and bundle numbers                                     |
+| [docs/PROJECT_ASSESSMENT.md](docs/PROJECT_ASSESSMENT.md)                           | Starting state and data reachability                                                            |
+| [data/README.md](data/README.md)                                                   | Pipeline rules and curated-file formats                                                         |
+| [src/offline/README.md](src/offline/README.md)                                     | Offline and PWA strategy                                                                        |
+| [CONTRIBUTING.md](CONTRIBUTING.md)                                                 | Coding standards, data-contribution rules, PR checklist                                         |
 
 ## Credits
 

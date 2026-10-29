@@ -3,13 +3,13 @@
  * base-place search to start a new override) and /admin/overrides/<place id>.
  */
 import { useMemo, useState } from 'react';
-import { Badge } from '../../components/ui/Badge.tsx';
-import { Button } from '../../components/ui/Button.tsx';
-import { cx, FOCUS_RING } from '../../components/ui/cx.ts';
-import { EmptyState } from '../../components/ui/EmptyState.tsx';
-import { SegmentedControl } from '../../components/ui/SegmentedControl.tsx';
-import { Spinner } from '../../components/ui/Spinner.tsx';
-import { SearchInput } from '../../components/ui/TextInput.tsx';
+import { Badge } from '../../components/ui/index.ts';
+import { Button } from '../../components/ui/index.ts';
+import { cx, FOCUS_RING } from '../../components/ui/index.ts';
+import { EmptyState } from '../../components/ui/index.ts';
+import { SegmentedControl } from '../../components/ui/index.ts';
+import { Spinner } from '../../components/ui/index.ts';
+import { SearchInput } from '../../components/ui/index.ts';
 import { useAdminApi } from '../context.ts';
 import { useAdminCampusData } from '../data/campus-data.ts';
 import { useResource } from '../hooks/useResource.ts';

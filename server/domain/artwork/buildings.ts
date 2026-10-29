@@ -6,7 +6,7 @@
  * Drafts and archived studio records are not campus buildings for this
  * purpose, and nothing is ever guessed: an id outside this set is refused.
  */
-import { isArtworkBuildingId } from '../../../src/isometric-art/schema.ts';
+import { isArtworkBuildingId } from '../../../src/isometric-art/index.ts';
 import type { StudioBaseData } from '../../base-data.ts';
 import { stmt } from '../../db/sql.ts';
 import type { SqlDatabase } from '../../db/types.ts';

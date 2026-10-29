@@ -23,9 +23,9 @@ import type {
   SymbolLayerSpecification,
 } from 'maplibre-gl';
 import { APP_CONFIG } from '../config/index.ts';
-import type { DetectionsFile, SourceRecord } from '../data/schema.ts';
-import { DETECTION_MANIFEST_SOURCE_IDS } from '../data/schema.ts';
-import type { MapTheme } from '../map/theme-colors.ts';
+import type { DetectionsFile, SourceRecord } from '../data/index.ts';
+import { DETECTION_MANIFEST_SOURCE_IDS } from '../data/index.ts';
+import type { MapTheme } from '../styles/index.ts';
 import { safeExternalUrl } from '../utils/safe-url.ts';
 import { BUILDING_LAYER_IDS } from './layers.ts';
 import { realistic3dColors } from './palette.ts';

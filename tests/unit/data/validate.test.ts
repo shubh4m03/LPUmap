@@ -156,6 +156,46 @@ describe('validateDataset', () => {
     expect((await codes(corrupt<RelationsFile>('relations.json', mutate))).errors).toContain(code);
   });
 
+  // G-29: a connected_by_path relation must cite a walkable way that exists in graph.json.
+  it('connected_by_path: accepts a cited walkable way, rejects a way missing from graph.json', async () => {
+    const graph = JSON.parse(readFileSync(join(built, 'graph.json'), 'utf8')) as GraphFile;
+    const way = graph.edges.find((e) => e.foot && e.osmWayId !== null)!.osmWayId!;
+    const withPath = (pathOsmWayId: number) => (j: RelationsFile) => {
+      const { from, to } = first(j.relations);
+      j.relations.push({
+        id: `connected_by_path:${from}->${to}`,
+        type: 'connected_by_path',
+        from,
+        to,
+        inferred: false,
+        method: 'curated',
+        pathOsmWayId,
+        provenance: { sourceId: 'osm', verificationStatus: 'imported' },
+      });
+    };
+    expect((await codes(corrupt<RelationsFile>('relations.json', withPath(way)))).errors).toEqual([]);
+    expect((await codes(corrupt<RelationsFile>('relations.json', withPath(987654321)))).errors).toEqual([
+      'relation-path',
+    ]);
+  });
+
+  // G-07: every manifest source states its licence and attribution; every record cites a registered source.
+  it.each<[string, (m: Manifest) => void, string]>([
+    ['a source without licence', (m) => delete m.sources[1]!.license, 'source-license'],
+    ['a source without attribution', (m) => delete m.sources[1]!.attribution, 'source-attribution'],
+    ['a blank attribution', (m) => (first(m.sources).attribution = ' '), 'source-attribution'],
+  ])('manifest: %s', async (_name, mutate, code) => {
+    expect((await codes(corrupt<Manifest>('manifest.json', mutate))).errors).toContain(code);
+  });
+
+  it.each<PlaceCase>([
+    ['an unregistered source', (j) => (first(j.places).provenance.sourceId = 'nowhere'), 'provenance-source'],
+    ['no sourceRef', (j) => delete first(j.places).provenance.sourceRef, 'provenance-ref'],
+    ['no retrievedAt', (j) => delete first(j.places).provenance.retrievedAt, 'provenance-retrieved'],
+  ])('provenance: place with %s', async (_name, mutate, code) => {
+    expect((await codes(corrupt<PlacesFile>('places.json', mutate))).errors).toEqual([code]);
+  });
+
   it.each<GraphCase>([
     ['wrong length', (j) => (first(j.edges).lengthM *= 1.05), 'graph-length'],
     ['duplicate edge', (j) => j.edges.push({ ...first(j.edges), id: j.edges.length }), 'graph-duplicate'],

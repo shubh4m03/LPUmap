@@ -1,9 +1,9 @@
 import { useId } from 'react';
-import { Badge, Button, IconButton } from '../components/ui/index.ts';
+import { Badge, Button, IconButton } from '../../components/ui/index.ts';
 import { ASSOCIATION_BADGE } from './art-ui.ts';
-import type { ArtModel, ArtSubjectView } from './hotspot-model.ts';
-import { artworkUrl } from './manifest-loader.ts';
-import { ARTWORK_NUMBER_NOTE, type LabelQuote } from './schema.ts';
+import type { ArtModel, ArtSubjectView } from '../index.ts';
+import { artworkUrl } from '../index.ts';
+import { ARTWORK_NUMBER_NOTE, type LabelQuote } from '../index.ts';
 
 /** What the card may say about a linked map building (only ever shown for a VERIFIED link). */
 export interface LinkedBuildingInfo {

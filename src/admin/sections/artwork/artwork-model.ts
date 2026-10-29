@@ -13,8 +13,8 @@ import {
   PROHIBITED_SOURCE_MESSAGE,
   containsProhibitedSourceUrl,
   isProhibitedSourceUrl,
-} from '../../../building-studio/text.ts';
-import type { EVIDENCE_KINDS } from '../../../isometric-art/schema.ts';
+} from '../../../building-studio/index.ts';
+import type { EVIDENCE_KINDS } from '../../../isometric-art/index.ts';
 import {
   ARTWORK_NUMBER_NOTE,
   UNCONFIRMED_MATCH_LABEL,
@@ -24,7 +24,7 @@ import {
   type AssociationStatus,
   type IsometricArtManifest,
   type LabelQuote,
-} from '../../../isometric-art/schema.ts';
+} from '../../../isometric-art/index.ts';
 import type { ArtworkAssociationView } from '../../api/artwork.ts';
 import type { FieldErrors } from '../../ui/form-errors.ts';
 

@@ -3,8 +3,9 @@
  * point being edited, other records as guides, access-point candidates and
  * the chosen access line. Roles are styled by src/map/editing/layers.ts.
  */
-import type { LngLat } from '../../data/schema.ts';
-import type { EditHandle, EditPreviewCollection, EditPreviewFeature } from '../../map/editing/types.ts';
+import { createLocalProjection } from '../../distance/index.ts';
+import type { LngLat } from '../../data/index.ts';
+import type { EditHandle, EditPreviewCollection, EditPreviewFeature } from '../../map/editing/index.ts';
 import type { AccessCandidate } from './access-points.ts';
 
 export interface PointPreviewInput {
@@ -59,11 +60,10 @@ export function pointHandle(point: LngLat | null, label = 'Drag to move the poin
   return point ? [{ id: 'move', kind: 'move', position: point, label }] : [];
 }
 
-/** Moves `p` by metres east/north (mobile step buttons). */
+/** Moves `p` by metres east/north (mobile step buttons), with the shared local projection. */
 export function nudge(p: LngLat, eastM: number, northM: number): LngLat {
-  const dLat = northM / 111_320;
-  const dLon = eastM / (111_320 * Math.cos((p[1] * Math.PI) / 180));
-  return [round7(p[0] + dLon), round7(p[1] + dLat)];
+  const [lon, lat] = createLocalProjection(p).toLngLat([eastM, northM]);
+  return [round7(lon), round7(lat)];
 }
 
 /** 7 decimals (~1 cm): what we store and send. */

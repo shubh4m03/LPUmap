@@ -17,10 +17,10 @@
  * model, ≈ |n|·tan(lat)/R relative: 300 m north at 31.25° N moves a point by
  * < 1 cm (asserted in tests/unit/studio-render/placement.test.ts).
  */
-import type { LngLat } from '../../../data/schema.ts';
+import type { LngLat } from '../../../data/index.ts';
+// The one shared mean Earth radius; MapLibre's Mercator uses the same value.
+import { EARTH_RADIUS_M } from '../../../distance/index.ts';
 
-/** Mean Earth radius used by MapLibre (and src/distance/geodesic.ts). */
-export const EARTH_RADIUS_M = 6371008.8;
 const EARTH_CIRCUMFERENCE_M = 2 * Math.PI * EARTH_RADIUS_M;
 
 export interface MercatorPoint {

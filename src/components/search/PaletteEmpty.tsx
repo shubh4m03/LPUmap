@@ -1,5 +1,5 @@
 import { useAppStore } from '../../app/store/index.ts';
-import { CATEGORIES } from '../../config/categories.ts';
+import { CATEGORIES } from '../../config/index.ts';
 import { Button, EmptyState, iconForCategory } from '../ui/index.ts';
 
 /** Honest no-match state: most campus buildings simply have no name in OpenStreetMap yet. */

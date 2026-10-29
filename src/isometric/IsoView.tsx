@@ -3,7 +3,7 @@ import { announce } from '../accessibility/index.ts';
 import { IconButton } from '../components/ui/index.ts';
 import { APP_CONFIG } from '../config/index.ts';
 import type { CampusData, LngLat } from '../data/index.ts';
-import type { MapPadding, MapRouteOverlay } from '../map/types.ts';
+import type { MapPadding, MapRouteOverlay } from '../map/index.ts';
 import { cappedDpr, drawDynamic, drawStatic, type DrawView, type IsoCtx } from './draw.ts';
 import { hitTest } from './hit-test.ts';
 import { isoBuildingTitle, topDirection } from './info.ts';

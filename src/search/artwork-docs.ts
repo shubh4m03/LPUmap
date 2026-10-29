@@ -12,9 +12,9 @@
  *  - a label held for the owner's review, and an area with nothing printed on
  *    it, are not searchable (they would only flood generic queries).
  */
-import type { DirectoryArtworkLink } from '../directory/types.ts';
-import type { ArtworkOnlyEntry } from '../isometric-art/directory.ts';
-import { ASSOCIATION_STATUS_TEXT } from '../isometric-art/text.ts';
+import type { DirectoryArtworkLink } from '../directory/index.ts';
+import type { ArtworkOnlyEntry } from '../isometric-art/index.ts';
+import { ASSOCIATION_STATUS_TEXT } from '../isometric-art/index.ts';
 import type { SearchDoc } from './types.ts';
 
 export const ARTWORK_DOC_PREFIX = 'artwork:';

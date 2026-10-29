@@ -11,7 +11,7 @@
  *
  * Shared with scripts/: erasable syntax and `.ts` import extensions only.
  */
-import type { LngLat } from '../data/schema.ts';
+import type { LngLat } from '../data/index.ts';
 import { createLocalProjection, haversineM, isValidLngLat } from './geodesic.ts';
 
 export const DEFAULT_GRID_CELL_SIZE_M = 100;

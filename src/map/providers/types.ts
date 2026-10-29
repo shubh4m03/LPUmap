@@ -15,7 +15,7 @@
  * Implementations (registry, capability detection, MapLibre wiring) live in
  * the rest of src/map/providers/ (owned by map-providers).
  */
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 
 // ---------------------------------------------------------------------------
 // Attribution (rendered as text nodes and links — never as HTML)
@@ -200,6 +200,15 @@ export interface ProviderCamera {
   zoom: number;
   pitch: number;
   bearing: number;
+}
+
+/**
+ * For each provider-backed view mode (src/app/view-mode.ts): null when it can be
+ * shown, else the user-facing reason. Filled by `viewModeAvailability`.
+ */
+export interface ViewModeAvailability {
+  satellite: string | null;
+  photoreal: string | null;
 }
 
 // ---------------------------------------------------------------------------

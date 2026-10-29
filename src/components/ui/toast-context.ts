@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 
 export type ToastTone = 'neutral' | 'success' | 'warning' | 'danger';
 
@@ -30,4 +30,25 @@ export function useToast(): ToastApi {
   const api = useContext(ToastContext);
   if (!api) throw new Error('useToast must be used inside <ToastProvider>.');
   return api;
+}
+
+/** How long a degradation notice (why the map changed what it draws) stays on screen. */
+export const NOTICE_TOAST_MS = 10000;
+
+/**
+ * A handler that shows a view's degradation notice (MapView's `onRenderNotice`) as a
+ * warning toast, or undefined outside <ToastProvider> so the view's own inline
+ * notice applies. The views take it as a prop instead of reading this context.
+ */
+export function useNoticeToast(): ((notice: { message: string }) => void) | undefined {
+  const api = useContext(ToastContext);
+  return useMemo(
+    () =>
+      api
+        ? (notice: { message: string }) => {
+            api.show({ message: notice.message, tone: 'warning', durationMs: NOTICE_TOAST_MS });
+          }
+        : undefined,
+    [api],
+  );
 }

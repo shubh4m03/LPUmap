@@ -5,8 +5,8 @@
  * with; a conflict shows the server's message and offers a reload.
  */
 import { useState } from 'react';
-import { LIMITS } from '../../../community/schema.ts';
-import { TextInput } from '../../../components/ui/TextInput.tsx';
+import { LIMITS } from '../../../community/index.ts';
+import { TextInput } from '../../../components/ui/index.ts';
 import type { SuggestionRecord } from '../../api/schemas.ts';
 import { useAdminApi } from '../../context.ts';
 import { useAction } from '../../hooks/useAction.ts';

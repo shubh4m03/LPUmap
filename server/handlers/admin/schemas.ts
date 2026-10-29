@@ -12,7 +12,7 @@ import {
   overrideFieldsSchema,
   placeFieldsSchema,
   suggestionStatusSchema,
-} from '../../../src/community/schema.ts';
+} from '../../../src/community/index.ts';
 import { MAX_PASSWORD_LENGTH } from '../../auth/password.ts';
 import { HttpError } from '../../http/errors.ts';
 

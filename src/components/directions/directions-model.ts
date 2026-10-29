@@ -37,6 +37,16 @@ export const PROFILE_COPY: Record<RouteProfileId, ProfileCopy> = {
   },
 };
 
+/**
+ * Pushing a bicycle (G-20, decided 2026-10-26): there is no separate "push" profile, because the
+ * router has none (src/routing/profiles.ts PROFILE_IDS). Pushing is part of Cycle: the cycle
+ * profile walks the bike at APP_CONFIG.routing.pushBikeSpeedMps on edges mapped `bicycle=push`
+ * and on steps, marks those legs "push-bike" and adds a caveat with the distance. The picker
+ * therefore offers Walk, Cycle and Step-free only, and the Cycle copy and pace footnote say
+ * where and how fast the bike is pushed. A path where cycling is not allowed at all (not even
+ * pushing) is not used by Cycle; walking the bike along foot-only paths would need a router
+ * profile of its own.
+ */
 export const PROFILE_ORDER: readonly RouteProfileId[] = ['walk', 'cycle', 'step-free'];
 
 export const PREFERENCE_COPY: Record<RouteProfileId, string> = {

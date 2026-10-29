@@ -8,7 +8,7 @@
  *  3. Otherwise the exact inverse onto the ground plane: a point for "pick on
  *     map", or a click on empty space.
  */
-import type { LngLat } from '../data/schema.ts';
+import type { LngLat } from '../data/index.ts';
 import { boxContains, pointInRings } from './geometry.ts';
 import type { PlacedLabel } from './labels.ts';
 import type { ScreenTransform } from './projection.ts';

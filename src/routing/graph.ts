@@ -10,8 +10,8 @@
  * counted), never "repaired". Nodes sharing a coordinate stay separate unless
  * an edge connects them.
  */
-import type { GraphEdge, GraphFile, LngLat } from '../data/schema.ts';
-import { haversineM, isValidLngLat } from '../distance/geodesic.ts';
+import type { GraphEdge, GraphFile, LngLat } from '../data/index.ts';
+import { haversineM, isValidLngLat } from '../distance/index.ts';
 
 export interface RoutingGraph {
   readonly nodeCount: number;

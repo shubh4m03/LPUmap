@@ -3,9 +3,9 @@
  * invented: titles come from source names or the app's own map keys, and every
  * fact keeps its provenance.
  */
-import type { BuildingProps, Place, Provenance } from '../data/schema.ts';
+import type { BuildingProps, Place, Provenance } from '../data/index.ts';
 import { artworkNumberQuery, buildArtworkLayer } from './artwork.ts';
-import { normalizeDirectoryText } from './normalize.ts';
+import { normalizeDirectoryText } from '../utils/directory-text.ts';
 import {
   ROUTABILITY_NOTES,
   type CampusDirectory,

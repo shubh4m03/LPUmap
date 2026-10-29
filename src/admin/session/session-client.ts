@@ -13,7 +13,7 @@
  *      ├─503 not-configured         ─▶ not-configured
  *      └─network / 5xx / bad body   ─▶ error (retry)
  */
-import { clearAllRecovery } from '../../building-studio/local-recovery.ts';
+import { clearAllRecovery } from '../../building-studio/editor.ts';
 import type { AdminApi } from '../api/index.ts';
 import { describeAdminError, type AdminApiError } from '../api/errors.ts';
 import { ACCESS_LOGOUT_PATH } from '../api/session.ts';

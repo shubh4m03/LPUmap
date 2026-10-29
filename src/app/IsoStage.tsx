@@ -1,15 +1,15 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { useAtlas } from '../app/data/atlas-context.ts';
-import { setMapController } from '../app/map-controller.ts';
-import { pickPlaceOnMap, pickPointOnMap } from '../app/map-picking.ts';
-import { buildRouteOverlay, useAppStore } from '../app/store/index.ts';
-import { ToastContext } from '../components/ui/toast-context.ts';
+import { useAtlas } from './data/atlas-context.ts';
+import { setMapController } from './map-controller.ts';
+import { pickPlaceOnMap, pickPointOnMap } from './map-picking.ts';
+import { buildRouteOverlay, useAppStore } from './store/index.ts';
+import { ToastContext } from '../components/ui/index.ts';
 import type { LngLat } from '../data/index.ts';
-import type { MapPadding } from '../map/types.ts';
-import type { IsoController } from './iso-controller.ts';
-import { IsoView } from './IsoView.tsx';
-import type { IsoStudioModel } from './scene.ts';
+import type { MapPadding } from '../map/index.ts';
+import type { IsoController } from '../isometric/index.ts';
+import { IsoView } from '../isometric/index.ts';
+import type { IsoStudioModel } from '../isometric/index.ts';
 
 export interface IsoStageProps {
   theme: 'light' | 'dark';

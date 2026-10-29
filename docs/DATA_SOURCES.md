@@ -14,7 +14,15 @@ It also lists what was searched for and **not** found.
 The page-by-page record of the LPU research is in
 [research/LPU_PUBLIC_SOURCES.md](research/LPU_PUBLIC_SOURCES.md). The pipeline rules are in
 [data/README.md](../data/README.md). Generated counts are in
-[DATA_QUALITY_REPORT.md](DATA_QUALITY_REPORT.md), for dataset `b628c5855b1d`.
+[DATA_QUALITY_REPORT.md](DATA_QUALITY_REPORT.md). Geodata licences, including the sources that were
+evaluated and rejected (Google Maps/Earth/Street View are never a source), are in
+[GEODATA_SOURCES_AND_LICENSES.md](GEODATA_SOURCES_AND_LICENSES.md); imagery providers in
+[MAP_PROVIDER_CONFIGURATION.md](MAP_PROVIDER_CONFIGURATION.md).
+
+Current dataset: dataset `50fefb5e828b` (schema 2, built from the OSM snapshot of 2026-10-23):
+**131** campus buildings (128 unnamed), **227** campus places (31 without a map position), **261**
+places just outside campus (opt-in layer), **123** unverified detected footprints, and a walking
+graph of **1,636** nodes and **1,770** edges in **9** components.
 
 ## Provenance model
 
@@ -25,18 +33,20 @@ Every place carries `provenance`:
 - `retrievedAt`
 - `verificationStatus`
 
-| `verificationStatus` | Meaning                                                                                                        | Count in the current dataset |
-| -------------------- | -------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `imported`           | Taken from a cited source, not checked on the ground. **All OSM and LPU-page records are imported**            | 855                          |
-| `verified`           | Only through a curated override with `check: physical-survey` or `official-publication`; sets `lastVerifiedAt` | 0                            |
-| `unverified`         | A curated override from an `unverified-report`                                                                 | 0                            |
-| `estimated`          | Reserved in the schema for derived values                                                                      | 0                            |
+| `verificationStatus` | Meaning                                                                                                        | Count in the current dataset                    |
+| -------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `imported`           | Taken from a cited source, not checked on the ground. **All OSM and LPU-page records are imported**            | 227 campus places + 261 nearby (context) places |
+| `verified`           | Only through a curated override with `check: physical-survey` or `official-publication`; sets `lastVerifiedAt` | 0                                               |
+| `unverified`         | A curated override from an `unverified-report`                                                                 | 0                                               |
+| `estimated`          | Reserved in the schema for derived values                                                                      | 0                                               |
 
 Building heights also carry a `heightSource`:
 
 - `osm-height`: a measured tag. There are none in this snapshot.
-- `osm-levels-estimate`: `building:levels` × 3.2 m. 137 buildings.
-- `fallback`: a 6 m placeholder. 398 buildings.
+- `osm-levels-estimate`: `building:levels` × 3.2 m. 122 campus buildings.
+- `fallback`: a 6 m placeholder. 9 campus buildings.
+- `studio-model`: a model placed by the owner in the Building Studio (publication only, never in
+  `public/data`).
 
 The UI shows the verification badge, the source and the retrieval date on every place. The 3D legend
 shows the height source.
@@ -52,21 +62,21 @@ shows the height source.
 | Retrieved      | 2026-10-23T09:39:00Z (`data/raw/osm/SOURCE.json`, `method: "osm-api-map"`)                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | Files          | `data/raw/osm/campus-bbox.osm` (2.3 MB), `data/raw/osm/boundary-relation-21599790.osm` (26 KB), committed                                                                                                                                                                                                                                                                                                                                                                                                       |
 | Transformation | `npm run data:build`, offline and deterministic. The steps are: boundary from relation 21599790 ("Lovely Professional University", multipolygon); building footprints with height source; places classified by `src/config/categories.ts`, with zone `on-campus` or `off-campus-nearby`; a walking/cycling graph of one edge per consecutive node pair, joined only at shared nodes; place-to-graph connectors of at most 60 m; relations (`located_in`, `part_of`, `nearby`, `accessed_via`); a quality report |
-| Output         | 855 places (233 on campus, 622 off campus nearby), 535 buildings, 389 basemap features, 760 relations, a graph of 1,636 nodes / 1,770 edges / 9 components                                                                                                                                                                                                                                                                                                                                                      |
+| Output         | 227 campus places (`places.json`) and 261 nearby off-campus places (`context-places.json`, opt-in layer, never routable); 131 campus buildings of the 535 footprints in the snapshot (128 inside, 3 crossing; 390 outside excluded, 13 held for review, 1 duplicate removed); 349 basemap features; 196 relations; a graph of 1,636 nodes / 1,770 edges / 9 components                                                                                                                                          |
 | Verification   | `imported`. No physical survey has been done                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | Limitations    | See the gaps listed below                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
 Gaps in the OSM data:
 
-- 499 of 535 footprints are unnamed (134 on campus).
+- 128 of the 131 campus buildings are unnamed.
 - No `height` tags.
 - No wheelchair tags on paths and no mapped steps.
 - 0 entrance nodes.
 - Almost no opening hours.
 - No drinking water, washrooms or printing mapped.
-- Most named POIs are in the off-campus Law Gate area. "Law gate" itself is mapped as a residential
-  area, not as a gate.
-- 34 places are more than 60 m from the graph.
+- Most named POIs are in the off-campus Law Gate area (now in the opt-in nearby layer). "Law gate"
+  itself is mapped as a residential area, not as a gate.
+- 28 campus places with a position are more than 60 m from the graph.
 - Untagged trunk roads (NH44) are excluded from routing.
 
 **Overpass was unreachable.** Both `overpass-api.de` and `overpass.kumi.systems` refused connections
@@ -90,7 +100,32 @@ tests with a mocked `fetch`.
 | Verification   | `imported`. The site's own disclaimer says its information may be incomplete or out of date. The School of Design anchor rests on an identical name and an on-campus position; human confirmation is recommended                                                                                                                                                                                                                                                                       |
 | Limitations    | No positions are published for any school or facility. "Block-37" for the Central Library is stated, but no block has a published position. Some records use discipline labels ("Planning", "Theatre & Music") because the page prints no "School of …" form                                                                                                                                                                                                                           |
 
-### 3. Wikidata (consulted, not imported)
+### 3. Machine-detected building footprints (unverified layer)
+
+| Field        | Value                                                                                                                                                                                                                                                                                                             |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Sources      | Microsoft Global ML Building Footprints (CDLA-Permissive-2.0) and Google Open Buildings v3 points (ODbL 1.0 chosen; owner-approved with the layer on 2026-10-23). Details, URLs and retrieval: [GEODATA_SOURCES_AND_LICENSES.md §2–§3](GEODATA_SOURCES_AND_LICENSES.md#2-microsoft-global-ml-building-footprints) |
+| Files        | `data/raw/detections/{microsoft-ml,google-open-buildings}/` (`npm run data:fetch-footprints`) → `public/data/detections.geojson`                                                                                                                                                                                  |
+| Output       | 123 detections (112 Microsoft, 11 Google Open Buildings) inside or near the boundary, each with its source, confidence where published and the best OSM match                                                                                                                                                     |
+| Verification | **Unverified by definition.** Shown only in the opt-in "Unverified detected footprints" layer, drawn flat and dashed; never in the building list, search, routing or 3D; never a source of names, heights or block numbers                                                                                        |
+
+### 4. Satellite imagery (optional, runtime only, not data)
+
+Esri World Imagery (free tier, pay-as-you-go off, only with `VITE_ARCGIS_API_KEY`) and the EOX
+Sentinel-2 cloudless 2016 backdrop (CC BY 4.0, only with `VITE_EOX_BACKDROP=true`) can be drawn under
+the map. Nothing is extracted from them: no tracing, heights or names. Tiles are never cached. See
+[MAP_PROVIDER_CONFIGURATION.md](MAP_PROVIDER_CONFIGURATION.md) and
+[IMAGERY_COVERAGE_AND_FRESHNESS.md](IMAGERY_COVERAGE_AND_FRESHNESS.md).
+
+### 5. Owner-supplied campus illustration (not geodata)
+
+The owner's 29 artwork files (`lpu-isometric-map-design/`, used with the owner's statement that they
+own or are authorised to use them) are the visual source of the Illustrated overview only. They are
+never evidence of a position or an official block number. Provenance and labels:
+[GEODATA_SOURCES_AND_LICENSES.md §14](GEODATA_SOURCES_AND_LICENSES.md#14-lpu-isometric-map-design-owner-supplied-campus-illustration)
+and [LPU_ISOMETRIC_ASSET_INVENTORY.md](LPU_ISOMETRIC_ASSET_INVENTORY.md).
+
+### 6. Wikidata (consulted, not imported)
 
 | Field   | Value                                                                                                                                                                                             |
 | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -98,7 +133,7 @@ tests with a mocked `fetch`.
 | Licence | CC0                                                                                                                                                                                               |
 | Use     | Confirmed the official website, the "LPU" alias and a point coordinate. Nothing was imported, because the OSM boundary is more precise. Wikipedia was not fetched; Wikidata covers the same facts |
 
-### 4. Map glyphs (not data, listed for completeness)
+### 7. Map glyphs (not data, listed for completeness)
 
 Noto Sans SDF glyph ranges (Latin, Latin-1, Latin Extended-A/B and general punctuation) were
 downloaded on 2026-10-23 from `demotiles.maplibre.org`. They are licensed under SIL OFL 1.1, and
@@ -127,10 +162,10 @@ one as unavailable or as an empty category, with links to the official pages whe
 | **Official campus map**                 | None on the fetched pages. The only visual is a third-party 360° tour (`iviewd.com/lpu2/`) with no reuse licence and no coordinates             | The map is built from OSM only                                                                                                              |
 | **Washrooms, drinking water, printing** | Not published; not mapped in OSM                                                                                                                | Empty categories with an explanation                                                                                                        |
 | **Opening hours**                       | Library service timings and a 24×7 health centre are stated, but are not tied to mapped features, and the disclaimer warns they may be outdated | Not imported; hours show as unknown                                                                                                         |
-| **Bank / ATM names and positions**      | "Five banks" and ATMs are mentioned, none named or positioned                                                                                   | Only OSM-mapped banks and ATMs appear (2 records, both off campus)                                                                          |
+| **Bank / ATM names and positions**      | "Five banks" and ATMs are mentioned, none named or positioned                                                                                   | Only OSM-mapped banks and ATMs appear: 2 records, both off campus, so only in the opt-in nearby layer                                       |
 | **Accessibility information**           | No published step-free routes, ramps or lifts. No wheelchair tags in OSM                                                                        | Step-free routes always carry "accessibility unverified"                                                                                    |
 | **Building entrances**                  | 0 entrance nodes in OSM                                                                                                                         | Routes finish with a straight connector leg from the nearest graph node to the place's position; a connector longer than 15 m gets a caveat |
-| **Building heights**                    | No `height` tags; 137 footprints have `building:levels`                                                                                         | Estimated or placeholder heights, labelled as such                                                                                          |
+| **Building heights**                    | No `height` tags; 122 campus footprints have `building:levels`                                                                                  | Estimated or placeholder heights, labelled as such                                                                                          |
 
 Not examined, on purpose:
 
@@ -142,11 +177,12 @@ Not examined, on purpose:
 ## Refreshing sources
 
 ```sh
-DATA_FETCH_CONTACT="<e-mail or URL>" npm run data:fetch -- --force       # OSM snapshot
-DATA_FETCH_CONTACT="<e-mail or URL>" npm run data:fetch-public -- --dry-run   # LPU names, preview only
-npm run data:check                                                       # rebuild + validate
+npm run data:fetch -- --force                # OSM snapshot
+npm run data:fetch-public -- --dry-run        # LPU names, preview only
+npm run data:check                            # rebuild + validate
 ```
 
 Review the count-change warnings and `docs/DATA_QUALITY_REPORT.md`, then commit the raw, curated and
-generated files together. `DATA_FETCH_CONTACT` must be a contact the operator is happy to share with
-the remote servers. See [SECURITY_AND_PRIVACY.md](SECURITY_AND_PRIVACY.md#incident-record-personal-e-mail-sent-in-user-agent-headers-during-research).
+generated files together. Every scripted request sends the neutral User-Agent `LPU-Campus-Atlas-research/0.1` (no contact or
+personal identifier), has a timeout and is retried at most 3 times with backoff (`scripts/lib/http.ts`).
+See [SECURITY_AND_PRIVACY.md](SECURITY_AND_PRIVACY.md#incident-record-personal-e-mail-sent-in-user-agent-headers-during-research).

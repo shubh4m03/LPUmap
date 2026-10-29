@@ -4,9 +4,9 @@
  * → layout (header / nav / main / aside slots) → the active section.
  */
 import { Suspense, useEffect, useState } from 'react';
-import { Button } from '../components/ui/Button.tsx';
-import { cx, FOCUS_RING } from '../components/ui/cx.ts';
-import { Spinner } from '../components/ui/Spinner.tsx';
+import { Button } from '../components/ui/index.ts';
+import { cx, FOCUS_RING } from '../components/ui/index.ts';
+import { Spinner } from '../components/ui/index.ts';
 import { AdminContext, createAdminServices, useAdminSessionClient, type AdminServices } from './context.ts';
 import type { SessionInfo } from './api/schemas.ts';
 import { AdminLayout } from './layout/AdminLayout.tsx';

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAnnounce } from '../../accessibility/index.ts';
-import { isIllustratedShown } from '../../isometric-art/variant-state.ts';
+import { isIllustratedShown } from '../isometric-variant.ts';
 import { carryCamera } from '../map-controller.ts';
 import { useAppStore } from '../store/index.ts';
 import { useImageryRuntimeSync } from './useImageryRuntime.ts';

@@ -4,6 +4,7 @@ import { currentDraft } from '../../../src/building-studio/editor-state.ts';
 import { nudgeMove } from '../../../src/building-studio/geometry.ts';
 import { loadRecovery, saveRecovery } from '../../../src/building-studio/local-recovery.ts';
 import type { StudioDraft } from '../../../src/building-studio/schema.ts';
+import { describeAdminError } from '../../../src/admin/api/errors.ts';
 import { createStudioActions } from '../../../src/building-studio/ui/actions.ts';
 import {
   createStudioStore,
@@ -33,7 +34,14 @@ function setup() {
   const storage = memoryStorage();
   const onRecordChange = vi.fn();
   const onPublicationChange = vi.fn();
-  const actions = createStudioActions({ api, store, storage, onRecordChange, onPublicationChange });
+  const actions = createStudioActions({
+    api,
+    describeError: describeAdminError,
+    store,
+    storage,
+    onRecordChange,
+    onPublicationChange,
+  });
   const edit = (fn: (d: StudioDraft) => StudioDraft, label = 'edit') =>
     store.dispatch({ type: 'edit', draft: fn(currentDraft(store.getState().editor)!), label });
   return { api, store, storage, actions, onRecordChange, onPublicationChange, edit };
@@ -84,6 +92,25 @@ describe('placement and the first save', () => {
     expect(s.notice).toBeNull();
     expect(studioStatus(s).kind).toBe('unsaved');
     expect(s.editor.head).toBeNull();
+  });
+
+  it('failures are worded by the injected describeError (the Studio never imports the admin client)', async () => {
+    const api = fakeStudioApi();
+    const store = createStudioStore();
+    const describeError = vi.fn((e: { kind: string; code: string | null }) => `custom: ${e.kind}/${e.code}`);
+    const actions = createStudioActions({ api, describeError, store, storage: memoryStorage() });
+    actions.startPlacement(academic, academic.variants[0]!.id, ANCHOR);
+    actions.confirmPlacement();
+    api.createBuilding.mockResolvedValue(problem(409, 'conflict', 'Changed elsewhere'));
+    expect(await actions.saveDraft()).toBe(false);
+    expect(describeError).toHaveBeenCalledWith(
+      expect.objectContaining({ kind: 'conflict', code: 'conflict' }),
+    );
+    expect(store.getState().editor.lastError).toMatchObject({
+      op: 'create',
+      code: 'conflict',
+      message: 'custom: conflict/conflict',
+    });
   });
 
   it('no response for a write: the outcome is stated as unknown', async () => {
@@ -449,7 +476,12 @@ describe('crash recovery (S8)', () => {
 
     // A fresh page (same browser storage).
     const store2 = createStudioStore();
-    const a2 = createStudioActions({ api: t.api, store: store2, storage: t.storage });
+    const a2 = createStudioActions({
+      api: t.api,
+      describeError: describeAdminError,
+      store: store2,
+      storage: t.storage,
+    });
     await a2.open(STU_ID);
     expect(store2.getState().recovery?.draft).toEqual(mine);
     expect(studioStatus(store2.getState()).dirty).toBe(false);

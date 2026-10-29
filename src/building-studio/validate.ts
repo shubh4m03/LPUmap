@@ -29,7 +29,7 @@ import type {
   GraphFile,
   LngLat,
   Place,
-} from '../data/schema.ts';
+} from '../data/index.ts';
 import {
   classifyFootprint,
   createBoundary,
@@ -37,7 +37,7 @@ import {
   type CampusBoundary,
   type MembershipResult,
   type PolygonalGeometry,
-} from '../geo/boundary.ts';
+} from '../geo/index.ts';
 import { createEnuFrame, deriveFootprint, lngLatToLocalPolygon, type FootprintResult } from './footprint.ts';
 import type { LocalPolygon, Vec2 } from './mesh/types.ts';
 import { pointToPolygonM, segmentToPolygonM } from './planar.ts';

@@ -1,27 +1,28 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useAnnounce } from '../accessibility/index.ts';
-import { useAtlas } from '../app/data/atlas-context.ts';
-import { setMapController } from '../app/map-controller.ts';
-import { placeEndpoint, routeBlockReason } from '../app/place-actions.ts';
-import { useAppStore } from '../app/store/index.ts';
-import { resolveIsometricVariant, type IsometricVariant } from '../app/view-mode.ts';
+import { useAtlas } from './data/atlas-context.ts';
+import { setMapController } from './map-controller.ts';
+import { placeEndpoint, routeBlockReason } from './place-actions.ts';
+import { useAppStore } from './store/index.ts';
+import { resolveIsometricVariant, type IsometricVariant } from './view-mode.ts';
 import { SegmentedControl, useToast } from '../components/ui/index.ts';
-import type { MapPadding } from '../map/types.ts';
-import { verifiedOfficialName } from '../directory/identity.ts';
-import { ArtworkDetailCard, type LinkedBuildingInfo } from './ArtworkDetailCard.tsx';
-import { ArtworkLegend } from './ArtworkLegend.tsx';
-import { buildArtModel, legendLabels, subjectsForSelection, type ArtModel } from './hotspot-model.ts';
-import { IllustratedOverview, NARROW_PX, type ArtController } from './IllustratedOverview.tsx';
-import { artImageSources } from './image-plan.ts';
-import type { EffectiveArtworkAssociation } from './associations.ts';
-import { ARTWORK_UNAVAILABLE_REASON, artworkUrl } from './manifest-loader.ts';
-import { ILLUSTRATION_DISCLAIMER, type IsometricArtManifest } from './schema.ts';
+import type { MapPadding } from '../map/index.ts';
+import { verifiedOfficialName } from '../directory/index.ts';
+import { ArtworkDetailCard, type LinkedBuildingInfo } from '../isometric-art/view/index.ts';
+import { ArtworkLegend } from '../isometric-art/view/index.ts';
+import { buildArtModel, legendLabels, subjectsForSelection, type ArtModel } from '../isometric-art/index.ts';
+import { IllustratedOverview, NARROW_PX, type ArtController } from '../isometric-art/view/index.ts';
+import { artImageSources } from '../isometric-art/index.ts';
+import type { EffectiveArtworkAssociation } from '../isometric-art/index.ts';
+import { ARTWORK_UNAVAILABLE_REASON, artworkUrl } from '../isometric-art/index.ts';
+import { ILLUSTRATION_DISCLAIMER, type IsometricArtManifest } from '../isometric-art/index.ts';
+import { unconfirmedMatchLabel } from '../isometric-art/index.ts';
 import {
   setIllustratedShown,
   setRequestedIsometricVariant,
   useRequestedIsometricVariant,
-} from './variant-state.ts';
+} from './isometric-variant.ts';
 
 /** Space the variant switch takes above a stage's own top-left controls (CSS px). */
 export const VARIANT_SWITCH_SPACE = 56;
@@ -273,8 +274,9 @@ function IllustratedStage({
     (buildingId: string) => {
       const name = getPlace(buildingId)?.displayName ?? 'the candidate building';
       toMap();
-      // Framed only: never selected (it is not this item's identity) and never routed to.
-      useAppStore.getState().requestFocus({ kind: 'place', placeId: buildingId });
+      // Framed and outlined as "Unconfirmed match" (dashed): never selected (it is not this
+      // item's identity) and never routed to.
+      useAppStore.getState().showUnconfirmedMatch(buildingId, unconfirmedMatchLabel(name));
       toast.show({
         message: `Showing an unconfirmed match on the map: ${name}. It is not confirmed to be the illustrated building, so no directions are offered for it.`,
         tone: 'warning',
@@ -297,10 +299,11 @@ function IllustratedStage({
     ) : null;
 
   const narrow = typeof window !== 'undefined' && window.innerWidth < NARROW_PX;
-  // On a phone the details sheet (opened from search, the directory or a link) already shows
-  // the item: a second card would only cover the outline above it.
+  // The details panel (side panel on larger screens, sheet on a phone; opened from search, the
+  // directory or a link) already shows the selected item: a second card beside or over it would
+  // only repeat it and cover the outline.
   const card =
-    activeSubjectId && !(narrow && detailsOpen) ? (
+    activeSubjectId && !detailsOpen ? (
       <ArtworkDetailCard
         model={model}
         subjectId={activeSubjectId}

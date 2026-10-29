@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { Icon } from '../icons/Icon.tsx';
-import type { IconName } from '../icons/icon-paths.ts';
+import { Icon } from '../icons/index.ts';
+import type { IconName } from '../icons/index.ts';
 import { IconButton } from './IconButton.tsx';
 import { cx, FOCUS_RING } from './cx.ts';
 import { useAnyModalOpen } from './modal-presence.ts';

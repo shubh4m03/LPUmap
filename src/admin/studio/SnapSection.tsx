@@ -5,9 +5,9 @@
  * command. Unverified detected footprints can be shown as guides; a model
  * fitted to one records `geometryGuide` and stays unverified.
  */
-import { proposeAngleSnap, proposeEdgeAlignment, proposeGuideFit } from '../../building-studio/geometry.ts';
+import { proposeAngleSnap, proposeEdgeAlignment, proposeGuideFit } from '../../building-studio/editor.ts';
 import type { DetectionsFile } from '../../data/index.ts';
-import { nearestBuildingOutline, nearestDetection } from '../../building-studio/ui/snap-targets.ts';
+import { nearestBuildingOutline, nearestDetection } from '../../building-studio/ui/index.ts';
 import { Button } from '../../components/ui/index.ts';
 import { CheckField, PanelSection } from './controls.tsx';
 import { useStudioServices, useStudioState } from './studio-context.ts';

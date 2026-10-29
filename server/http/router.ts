@@ -5,8 +5,8 @@
  * Parameters are matched per path segment and percent-decoded, so base place
  * ids containing '/' (osm:way/123) must be sent encoded (osm%3Away%2F123).
  */
-import { OWNER_TEMPLATE_ID_RE, STUDIO_ID_RE } from '../../src/building-studio/schema.ts';
-import { ART_SUBJECT_ID_MAX, ART_SUBJECT_ID_RE } from '../../src/isometric-art/schema.ts';
+import { OWNER_TEMPLATE_ID_RE, STUDIO_ID_RE } from '../../src/building-studio/index.ts';
+import { ART_SUBJECT_ID_MAX, ART_SUBJECT_ID_RE } from '../../src/isometric-art/index.ts';
 import { ID_PATTERNS } from '../ids.ts';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';

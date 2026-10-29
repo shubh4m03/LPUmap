@@ -4,6 +4,8 @@
  * blocked site data make localStorage throw.
  */
 import { APP_CONFIG } from '../config/index.ts';
+// The store entry, not ../privacy/index.ts: the start-up chunk must not carry the privacy facts
+// (their text is shown only in Settings).
 import { registerLocalDataReset } from '../privacy/privacy-store.ts';
 
 export type ThemePreference = 'system' | 'light' | 'dark';

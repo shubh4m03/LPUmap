@@ -18,8 +18,8 @@
  * never change when a template does (they store the full resolved model).
  */
 import { APP_CONFIG } from '../config/index.ts';
-import { CATEGORIES } from '../config/categories.ts';
-import type { LngLat } from '../data/schema.ts';
+import { CATEGORIES } from '../config/index.ts';
+import type { LngLat } from '../data/index.ts';
 import { generateStudioMeshDetailed } from './mesh/generate.ts';
 import {
   LIBRARY_CATEGORIES,

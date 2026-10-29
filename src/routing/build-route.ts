@@ -1,15 +1,18 @@
 /**
- * Turns a found arc path into the public RouteOk: geometry with connector
- * legs, true distance/duration, steps and caveats.
+ * Turns a found path into the public RouteOk: geometry with connector legs,
+ * true distance/duration, steps and caveats.
  *
- * - coordinates = [from.location, ...path node coords, to.location]; a
+ * - coordinates = [from.location, snapped start, ...node coords, snapped end,
+ *   to.location]. A snapped point is a node or a point inside an edge (the
+ *   path's first and last pieces then cover only part of that edge). A
  *   connector leg shorter than MIN_CONNECTOR_DRAW_M is dropped.
  * - distanceM is the haversine polyline length of `coordinates`.
  * - durationS sums each edge's profile time plus connector legs at
  *   connectorSpeedMps (walking, or pushing a bicycle).
  */
-import type { LngLat } from '../data/schema.ts';
-import { haversineM } from '../distance/geodesic.ts';
+import type { LngLat } from '../data/index.ts';
+import { haversineM } from '../distance/index.ts';
+import type { PathPiece } from './astar.ts';
 import { CONNECTOR_CAVEAT_M, MIN_CONNECTOR_DRAW_M } from './constants.ts';
 import { nodeCoord, type RoutingGraph } from './graph.ts';
 import { connectorSpeedMps, type ProfileTables } from './profiles.ts';
@@ -25,7 +28,7 @@ export interface BuildRouteArgs {
   to: RouteEndpoint;
   fromSnap: SnapHit;
   toSnap: SnapHit;
-  arcs: readonly number[];
+  pieces: readonly PathPiece[];
 }
 
 export function polylineLength(coords: readonly LngLat[]): number {
@@ -42,14 +45,13 @@ function edgeKind(args: BuildRouteArgs, arc: number): RouteStepKind {
 }
 
 export function buildRoute(args: BuildRouteArgs): RouteOk {
-  const { graph, tables, from, to, arcs } = args;
+  const { graph, tables, from, to, pieces } = args;
   const profile = tables.profile;
-  const nodes = [args.fromSnap.nodeId];
-  for (const a of arcs) nodes.push(graph.arcTarget[a]!);
-  const firstNode = nodeCoord(graph, nodes[0]!);
-  const lastNode = nodeCoord(graph, nodes[nodes.length - 1]!);
-  const startLeg = haversineM(from.location, firstNode);
-  const endLeg = haversineM(lastNode, to.location);
+  const arcs = pieces.map((p) => p.arc);
+  const firstPoint = args.fromSnap.point;
+  const lastPoint = args.toSnap.point;
+  const startLeg = haversineM(from.location, firstPoint);
+  const endLeg = haversineM(lastPoint, to.location);
   const connectorSpeed = connectorSpeedMps(profile);
 
   const coordinates: LngLat[] = [];
@@ -69,11 +71,14 @@ export function buildRoute(args: BuildRouteArgs): RouteOk {
     coordinates.push([from.location[0], from.location[1]]);
     legs.push(connectorLeg('start', startLeg, 0));
   }
-  coordinates.push(firstNode);
-  for (const a of arcs) {
+  coordinates.push([firstPoint[0], firstPoint[1]]);
+  for (const piece of pieces) {
+    const a = piece.arc;
     const edge = graph.edges[graph.arcEdge[a]!]!;
     const startIndex = coordinates.length - 1;
-    const end = nodeCoord(graph, graph.arcTarget[a]!);
+    // A piece stopping short of its arc's target ends at the snapped destination point.
+    const end: LngLat =
+      piece.end === 1 ? nodeCoord(graph, graph.arcTarget[a]!) : [lastPoint[0], lastPoint[1]];
     const lengthM = haversineM(coordinates[startIndex]!, end);
     coordinates.push(end);
     legs.push({
@@ -81,7 +86,10 @@ export function buildRoute(args: BuildRouteArgs): RouteOk {
       name: typeof edge.name === 'string' && edge.name.trim() !== '' ? edge.name : null,
       noun: genericNoun(String(edge.highway), edge.steps === true),
       lengthM,
-      durationS: tables.timeCost[a]!,
+      durationS:
+        piece.start === 0 && piece.end === 1
+          ? tables.timeCost[a]!
+          : tables.timeCost[a]! * (piece.end - piece.start),
       startIndex,
     });
   }
@@ -120,7 +128,8 @@ function buildCaveats(
   legs: RouteLeg[],
   snap: { fromM: number; toM: number },
 ): RouteCaveat[] {
-  const { graph, tables, arcs } = args;
+  const { graph, tables } = args;
+  const arcs = args.pieces.map((p) => p.arc);
   const profile = tables.profile;
   const caveats: RouteCaveat[] = [];
   const edges = arcs.map((a) => graph.edges[graph.arcEdge[a]!]!);

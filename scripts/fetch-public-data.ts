@@ -4,8 +4,9 @@
  * normal build: run manually with `npm run data:fetch-public [-- --dry-run] [-- --offline]`.
  *
  * Politeness: robots.txt is fetched and obeyed for every URL, one request at a
- * time with a delay, timeouts, bounded retries with exponential backoff, and a
- * User-Agent carrying DATA_FETCH_CONTACT.
+ * time with a delay, timeouts, bounded retries with exponential backoff, and the
+ * neutral User-Agent `LPU-Campus-Atlas-research/0.1` (scripts/lib/http.ts; no
+ * contact or personal identifier is sent).
  *
  * Licensing: the site's terms allow personal, non-commercial viewing only, so raw
  * HTML is cached under the git-ignored data/.cache/lpu/ and never committed. Only
@@ -21,13 +22,15 @@ import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'no
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { CATEGORIES } from '../src/config/categories.ts';
+import { fetchResponseWithRetry, ROBOTS_PRODUCT_TOKEN } from './lib/http.ts';
 
 export const ORIGIN = 'https://www.lpu.in';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_FILE = join(ROOT, 'data/curated/organizations.json');
 const SNAPSHOT_FILE = join(ROOT, 'data/raw/lpu/public-pages.snapshot.json');
 const CACHE_DIR = join(ROOT, 'data/.cache/lpu');
-const AGENT_TOKEN = 'LPUCampusAtlasDataBot';
+/** robots.txt groups are matched on this exact product token (it prefixes RESEARCH_USER_AGENT). */
+export const AGENT_TOKEN = ROBOTS_PRODUCT_TOKEN;
 const TIMEOUT_MS = 20_000;
 const RETRIES = 3;
 const BACKOFF_BASE_MS = 1500;
@@ -380,26 +383,17 @@ export function serialize(file: OrgFile): string {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-async function fetchText(url: string, userAgent: string): Promise<Page> {
-  let lastError: unknown;
-  for (let attempt = 0; attempt <= RETRIES; attempt++) {
-    if (attempt > 0) await sleep(BACKOFF_BASE_MS * 2 ** (attempt - 1));
-    try {
-      const res = await fetch(url, {
-        headers: { 'User-Agent': userAgent, Accept: 'text/html,text/plain' },
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-        redirect: 'follow',
-      });
-      if (res.status === 429 || res.status >= 500) throw new Error(`HTTP ${res.status}`);
-      if (!res.ok) return { url, html: '', status: res.status }; // 4xx: not retried
-      // Deterministic, so retrying would only repeat the off-site request.
-      if (new URL(res.url).origin !== ORIGIN) return { url, html: '', status: -1 };
-      return { url, html: await res.text(), status: res.status };
-    } catch (err) {
-      lastError = err;
-    }
-  }
-  throw new Error(`Failed to fetch ${url}: ${String(lastError)}`);
+async function fetchText(url: string): Promise<Page> {
+  const res = await fetchResponseWithRetry(
+    fetch,
+    url,
+    { headers: { Accept: 'text/html,text/plain' }, redirect: 'follow' },
+    { retries: RETRIES, baseDelayMs: BACKOFF_BASE_MS, timeoutMs: TIMEOUT_MS },
+  );
+  if (res.status < 200 || res.status >= 300) return { url, html: '', status: res.status }; // 4xx: not retried
+  // Deterministic, so retrying would only repeat the off-site request.
+  if (new URL(res.url).origin !== ORIGIN) return { url, html: '', status: -1 };
+  return { url, html: res.text, status: res.status };
 }
 
 async function mapBounded<T, R>(
@@ -432,12 +426,7 @@ const cacheFile = (url: string) =>
     `${new URL(url).pathname.replace(/^\/|\/$/g, '').replace(/[^a-z0-9]+/gi, '_') || 'index'}.html`,
   );
 
-async function loadPages(
-  urls: string[],
-  offline: boolean,
-  userAgent: string,
-  robots: string,
-): Promise<Page[]> {
+async function loadPages(urls: string[], offline: boolean, robots: string): Promise<Page[]> {
   if (offline) {
     return urls.map((url) => {
       const file = cacheFile(url);
@@ -449,7 +438,7 @@ async function loadPages(
   return mapBounded(urls, CONCURRENCY, POLITE_DELAY_MS, async (url) => {
     const { pathname, search } = new URL(url);
     if (!robotsAllows(robots, AGENT_TOKEN, pathname + search)) throw new Error(`robots.txt disallows ${url}`);
-    const page = await fetchText(url, userAgent);
+    const page = await fetchText(url);
     if (page.status === -1) throw new Error(`Refusing ${url}: redirected off ${ORIGIN}`);
     if (page.status !== 200) throw new Error(`HTTP ${page.status} for ${url}`);
     mkdirSync(CACHE_DIR, { recursive: true });
@@ -470,23 +459,18 @@ async function main(): Promise<void> {
   const args = new Set(process.argv.slice(2));
   const dryRun = args.has('--dry-run');
   const offline = args.has('--offline');
-  const contact = process.env.DATA_FETCH_CONTACT?.trim();
-  if (!offline && !contact) throw new Error('Set DATA_FETCH_CONTACT (see .env.example) before fetching.');
-  const userAgent = `${AGENT_TOKEN}/1.0 (LPU Campus Atlas data refresh; contact: ${contact ?? 'n/a'})`;
   let robots = '';
   if (!offline) {
     // RFC 9309: 4xx means no restrictions; 5xx/network errors throw in fetchText (fail closed).
-    const res = await fetchText(`${ORIGIN}/robots.txt`, userAgent);
+    const res = await fetchText(`${ORIGIN}/robots.txt`);
     if (res.status === -1) throw new Error('robots.txt redirected off-site; refusing to crawl.');
     robots = res.html;
   }
 
-  const [index] = await loadPages([`${ORIGIN}${SCHOOLS_INDEX_PATH}`], offline, userAgent, robots);
+  const [index] = await loadPages([`${ORIGIN}${SCHOOLS_INDEX_PATH}`], offline, robots);
   const cards = extractSchoolCards(index?.html ?? '');
   const urls = [...cards.map((c) => c.url), ...FACILITY_TARGETS.map((f) => `${ORIGIN}${f.path}`)];
-  const pages = new Map(
-    [index as Page, ...(await loadPages(urls, offline, userAgent, robots))].map((p) => [p.url, p]),
-  );
+  const pages = new Map([index as Page, ...(await loadPages(urls, offline, robots))].map((p) => [p.url, p]));
   // Offline re-extraction must not stamp old cached HTML with today's date.
   const retrievedAt = oldestFetchDate([...pages.values()]);
 

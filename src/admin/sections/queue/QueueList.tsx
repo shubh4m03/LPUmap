@@ -1,10 +1,10 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { Button } from '../../../components/ui/Button.tsx';
-import { Badge } from '../../../components/ui/Badge.tsx';
-import { cx, FOCUS_RING } from '../../../components/ui/cx.ts';
-import { EmptyState } from '../../../components/ui/EmptyState.tsx';
-import { Spinner } from '../../../components/ui/Spinner.tsx';
-import { SearchInput } from '../../../components/ui/TextInput.tsx';
+import { Button } from '../../../components/ui/index.ts';
+import { Badge } from '../../../components/ui/index.ts';
+import { cx, FOCUS_RING } from '../../../components/ui/index.ts';
+import { EmptyState } from '../../../components/ui/index.ts';
+import { Spinner } from '../../../components/ui/index.ts';
+import { SearchInput } from '../../../components/ui/index.ts';
 import type { AdminApiError } from '../../api/errors.ts';
 import type { SuggestionRecord } from '../../api/schemas.ts';
 import { useAdminApi } from '../../context.ts';

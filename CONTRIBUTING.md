@@ -53,25 +53,59 @@ npx playwright install chromium   # once, for end-to-end tests
 - **No HTML injection.** Render text with React. `dangerouslySetInnerHTML` is banned by an ESLint
   rule. External links go through `safeExternalUrl`, phone links through `telHref` and e-mail links
   through `mailHref` (`src/utils/safe-url.ts`).
-- **No new network origins.** The CSP in `public/_headers` allows only `'self'`. Do not add
-  third-party tiles, fonts, analytics or CDNs.
+- **No new network origins.** The CSP in `public/_headers` allows `'self'` plus exactly the two
+  optional imagery hosts (Esri World Imagery and the EOX backdrop, used only when a build configures
+  them). Do not add third-party tiles, fonts, analytics or CDNs; a new origin needs an owner decision,
+  a CSP change and an update to [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md).
 - **Location stays on the device.** Never log, persist or transmit user coordinates.
 - **Local storage** goes through `createStorage` (`src/utils/storage.ts`), which validates and
-  versions every key under `lpu-atlas:v1:`. Add any new key to the storage inventory in
-  [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md) and to the privacy facts.
+  versions every key under `lpu-atlas:v1:`. Add any new key (and any Cache Storage name) to the
+  storage inventory in [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md) and to the
+  privacy facts; `tests/unit/docs/docs-integrity.test.ts` fails when a key in the code is missing
+  there.
 
 **UI**
 
 - **Design system only.** Use the primitives in `src/components/ui` (Button, IconButton, Dialog,
   BottomSheet, SidePanel, Badge, ResultRow, EmptyState, …) and the token-backed Tailwind utilities
   (`bg-surface`, `text-muted`, `border-border-strong`, …). Raw hex colours and ad-hoc spacing scales
-  are not accepted. Map colours live in `src/map/theme-colors.ts`, because MapLibre cannot read CSS
+  are not accepted. Map colours live in `src/styles/map-theme-colors.ts`, because MapLibre cannot read CSS
   variables; keep them in step with `src/styles/tokens.css`.
 - **Accessibility.** WCAG 2.2 AA is the intent. Every control needs an accessible name. Keyboard
   operation must be complete, focus must be visible and managed, and status changes are announced
   through the live region. Respect `prefers-reduced-motion`. Never use colour as the only signal.
 - **Small, cohesive files.** Aim for under about 300 lines and split by responsibility.
 - **Formatting** is Prettier (`npm run format`). Lint must pass with zero warnings.
+
+## Server, D1 and migrations
+
+The owner features run on Cloudflare Pages Functions (`functions/`, thin entry points) over
+`server/` (HTTP layer, handlers, auth, domain logic, D1 repositories). Contracts:
+[docs/COMMUNITY_MODULE_CONTRACTS.md](docs/COMMUNITY_MODULE_CONTRACTS.md),
+[docs/BUILDING_STUDIO_DESIGN.md](docs/BUILDING_STUDIO_DESIGN.md) and
+[docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md](docs/LPU_ISOMETRIC_ASSET_INTEGRATION.md) §4; operations:
+[docs/ADMIN_OPERATIONS.md](docs/ADMIN_OPERATIONS.md).
+
+- **Server code never imports React, the DOM, MapLibre or `src/app`/`src/components`/`src/admin`.**
+  It may import the pure shared modules (`src/community`, `src/building-studio` core, `src/data`,
+  `src/geo`, `src/config`, the `src/isometric-art` schema). See the dependency rules in
+  [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#module-dependency-rules).
+- **Typecheck and test both sides.** `npm run typecheck:server` (`tsconfig.server.json`) and
+  `npm run test:server` (`vitest.server.config.ts`: `tests/server/**` on a local in-memory D1 through
+  wrangler's `getPlatformProxy`) are part of `npm run check` and CI.
+- **Fail closed and audit.** Admin routes answer 503 without `AUTH_MODE`; every write is one D1
+  transaction with an audit row and a `revision` check (409 on conflict). New routes get an entry in
+  the route audit spec and a test in `tests/server/security/`.
+- **Migrations.** Add a new numbered file in `migrations/` (never edit an applied one), a down script
+  in `docs/db/` that keeps the owner's data where it can, and a test in `tests/server/migrations/`
+  that applies it to a fresh and a populated database, proves a failing statement leaves nothing
+  applied, runs the down script and re-applies. Document the order (migration before code) in
+  [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). Run `npm run db:migrate:local` for local development.
+- **Never touch a remote database** from tests or scripts. Never commit `.dev.vars`, secrets, a
+  password hash or an Access audience value.
+- **End-to-end** admin, suggestion, Studio and artwork specs run the real handlers through
+  `tests/e2e/backend/server.ts` (in-memory D1, throwaway password); extend that harness rather than
+  mocking the API.
 
 ## Contributing data
 
@@ -128,14 +162,23 @@ validation.
 - Data pipeline changes need `tests/integration/pipeline*.test.ts` to pass. The real-snapshot test
   guards the committed dataset.
 - User-visible flows need an end-to-end check in `tests/e2e/` across the Playwright viewports (see
-  [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md)).
+  [docs/QA_STRATEGY.md](docs/QA_STRATEGY.md)). A test that applies only to some viewports skips with
+  a reason that has a rule in `scripts/ci/skip-policy.ts`; any other skip fails CI.
+- A test that measures wall-clock time goes in the serial `test:perf` list in `package.json` (and is
+  excluded from `test`); `tests/unit/ci/gates.test.ts` enforces it. Never relax a budget to pass.
+- Server behaviour needs a test in `tests/server/` (local in-memory D1); a security-relevant change
+  also needs an attack case in `tests/server/security/`.
 
 ## Pull request checklist
 
-- [ ] `npm run check` passes locally: format, lint, typecheck, unit and integration tests,
-      `data:check`, build, smoke and e2e. At minimum, the
-      `tsc`, `eslint --max-warnings=0`, `prettier --check`, `vitest run`, `data:check` and
-      `vite build` steps pass.
+- [ ] `npm run check` passes locally: format, lint, both typechecks (`typecheck`,
+      `typecheck:server`), the browser check, unit and integration tests, the serial budget suites
+      (`test:perf`), the server suites (`test:server`), `data:check`, `art:check`, build,
+      `art:check-dist`, smoke, bundle budgets (`perf:bundle`) and e2e. CI runs the same gates.
+- [ ] No Playwright test is skipped outside the rules in `scripts/ci/skip-policy.ts` (the e2e run
+      prints the skip summary; a new viewport-specific skip needs a rule with its reason).
+- [ ] Server changes: `npm run typecheck:server` and `npm run test:server` pass; a new D1 migration
+      has a down script in `docs/db/`, a migration test and a deployment note.
 - [ ] No fabricated data. Every new or changed record cites a real source, and no coordinates were
       typed in by hand.
 - [ ] Public interfaces unchanged, or `docs/MODULE_CONTRACTS.md` and `docs/modules/*` updated.

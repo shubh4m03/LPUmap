@@ -12,8 +12,8 @@
  * React view animates or jumps (reduced motion) when a change asks for it.
  */
 import { APP_CONFIG } from '../config/index.ts';
-import type { LngLat } from '../data/schema.ts';
-import type { MapController, MapPadding } from '../map/types.ts';
+import type { LngLat } from '../data/index.ts';
+import type { MapController, MapPadding } from '../map/index.ts';
 import { boxOf, type Pt } from './geometry.ts';
 import {
   createIsoProjection,

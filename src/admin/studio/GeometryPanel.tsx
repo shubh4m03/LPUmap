@@ -6,7 +6,7 @@
  */
 import { useState } from 'react';
 import { Button, SegmentedControl } from '../../components/ui/index.ts';
-import { cx } from '../../components/ui/cx.ts';
+import { cx } from '../../components/ui/index.ts';
 import {
   anchorFromCoordinates,
   NUDGE_STEPS,
@@ -16,14 +16,14 @@ import {
   setRotation,
   type Compass,
   type DimensionField,
-} from '../../building-studio/geometry.ts';
-import type { ModelConfigV1, ShapeParams } from '../../building-studio/schema.ts';
+} from '../../building-studio/editor.ts';
+import type { ModelConfigV1, ShapeParams } from '../../building-studio/index.ts';
 import {
   DIMENSION_LABELS,
   heightFloorsConflict,
   outsidePublishRange,
   publishRangeText,
-} from '../../building-studio/ui/fields.ts';
+} from '../../building-studio/ui/index.ts';
 import { useStudioServices, useStudioState } from './studio-context.ts';
 import { CheckField, NumberField, PanelSection, SelectField } from './controls.tsx';
 import { useDraftEdit } from './useDraftEdit.ts';

@@ -10,8 +10,8 @@ import { useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useIsMobile } from '../../accessibility/index.ts';
 import { useAppStore } from '../../app/store/index.ts';
-import type { LngLat } from '../../data/schema.ts';
-import type { EditPreviewCollection, MapEditingProps } from '../../map/editing/types.ts';
+import type { LngLat } from '../../data/index.ts';
+import type { EditPreviewCollection, MapEditingProps } from '../../map/editing/index.ts';
 import { useSuggestStore } from './suggest-store.ts';
 
 const round7 = (v: number) => Math.round(v * 1e7) / 1e7;

@@ -61,7 +61,7 @@ wiring belongs to the integrate step.
 | About → Data sources          | Each source links its `url` and `licenseUrl`; Microsoft also links the shipped `/data/licenses/CDLA-Permissive-2.0.txt`                                                                                                                    | `src/components/about/SourcesSection.tsx`                         |
 | Off-campus markers            | "Outside campus" badge under every marker of the opt-in layer                                                                                                                                                                              | `APP_CONFIG.optionalLayers.nearbyOutsideCampus.badge`             |
 
-Colour classes (`src/map/theme-colors.ts`, `src/buildings3d/palette.ts`): measured, estimated and
+Colour classes (`src/styles/map-theme-colors.ts`, `src/buildings3d/palette.ts`): measured, estimated and
 placeholder extrusions keep their existing tones; studio fallback blocks use a cool blue-grey that is none
 of them (tested). Detection outlines reach 3:1 against the campus ground and the background in both
 themes; badge text reaches 4.5:1 on its halo (tested).

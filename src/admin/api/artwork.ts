@@ -18,7 +18,7 @@ import {
   candidateFootprintSchema,
   curatedAssociationSchema,
   type ArtworkAssociationWrite,
-} from '../../isometric-art/schema.ts';
+} from '../../isometric-art/index.ts';
 import { seg, type AdminHttp, type AdminResult } from './http.ts';
 import { auditEventSchema } from './schemas.ts';
 

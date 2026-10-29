@@ -26,7 +26,7 @@ import { APP_CONFIG } from '../../../src/config/index.ts';
 import { manifestSchema, type SourceRecord } from '../../../src/data/schema.ts';
 import { buildMapStyle } from '../../../src/map/style.ts';
 import { contrastRatio } from '../../../src/map/contrast.ts';
-import { MAP_THEME_COLORS } from '../../../src/map/theme-colors.ts';
+import { MAP_THEME_COLORS } from '../../../src/styles/map-theme-colors.ts';
 import { evalFilter, evalProperty, toHex } from '../map/style-eval.ts';
 import { syntheticCampusData } from '../map/synthetic-campus-data.ts';
 

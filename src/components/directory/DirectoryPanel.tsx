@@ -2,8 +2,8 @@ import { useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { selectDirectoryItem } from '../../app/artwork-selection.ts';
 import { useAppStore } from '../../app/store/index.ts';
 import type { ArtworkThumbnail, DirectoryEntry, DirectoryItem } from '../../directory/index.ts';
-import type { ArtworkOnlyEntry } from '../../isometric-art/directory.ts';
-import { getRequestedIsometricVariant } from '../../isometric-art/variant-state.ts';
+import type { ArtworkOnlyEntry } from '../../isometric-art/index.ts';
+import { getRequestedIsometricVariant } from '../../app/isometric-variant.ts';
 import { Badge, EmptyState, SearchInput, SegmentedControl, cx } from '../ui/index.ts';
 import {
   ARTWORK_STATUS,

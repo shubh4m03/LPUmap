@@ -5,10 +5,10 @@
  * preview record, so an off-campus draft is honestly reported as "not shown"
  * instead of being drawn. Pure.
  */
-import type { CampusData } from '../../data/campus-data.ts';
-import type { BoundaryReviewSection, CuratedMembershipDecision } from '../../data/schema.ts';
-import { mergeStudioBuildings, type StudioCampusData, type StudioRenderModel } from '../merge.ts';
-import type { PublishedStudioBuilding, StudioDraft, StudioFootprint } from '../schema.ts';
+import type { CampusData } from '../../data/index.ts';
+import type { BoundaryReviewSection, CuratedMembershipDecision } from '../../data/index.ts';
+import { mergeStudioBuildings, type StudioCampusData, type StudioRenderModel } from '../index.ts';
+import type { PublishedStudioBuilding, StudioDraft, StudioFootprint } from '../index.ts';
 import { PREVIEW_RECORD_ID } from './preview.ts';
 
 export interface IsoPreviewInput {

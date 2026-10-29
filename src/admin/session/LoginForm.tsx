@@ -1,6 +1,6 @@
 import { useId, useState, type FormEvent } from 'react';
-import { Button } from '../../components/ui/Button.tsx';
-import { TextInput } from '../../components/ui/TextInput.tsx';
+import { Button } from '../../components/ui/index.ts';
+import { TextInput } from '../../components/ui/index.ts';
 
 export interface LoginFormProps {
   busy: boolean;

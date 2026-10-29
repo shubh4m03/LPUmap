@@ -6,13 +6,14 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import { useReducedMotion, useTheme } from '../../accessibility/index.ts';
+import { useNoticeToast } from '../../components/ui/index.ts';
 import '../../app/maplibre-worker.ts';
-import { LAYER_GROUPS, type LayerGroupId } from '../../config/categories.ts';
-import type { CampusData } from '../../data/campus-data.ts';
-import type { LngLat } from '../../data/schema.ts';
-import type { MapEditingProps } from '../../map/editing/types.ts';
-import { MapView } from '../../map/MapView.tsx';
-import type { MapController } from '../../map/types.ts';
+import { LAYER_GROUPS, type LayerGroupId } from '../../config/index.ts';
+import type { CampusData } from '../../data/index.ts';
+import type { LngLat } from '../../data/index.ts';
+import type { MapEditingProps } from '../../map/editing/index.ts';
+import { MapView } from '../../map/index.ts';
+import type { MapController } from '../../map/index.ts';
 
 export interface AdminMapProps {
   data: CampusData;
@@ -31,6 +32,7 @@ export default function AdminMap({ data, editing, focus = null, className, onErr
   const reducedMotion = useReducedMotion();
   const [controller, setController] = useState<MapController | null>(null);
   const groups = useMemo(() => ALL_GROUPS, []);
+  const onRenderNotice = useNoticeToast();
 
   useEffect(() => {
     if (controller && focus) controller.flyTo(focus.lngLat, focus.zoom);
@@ -52,6 +54,7 @@ export default function AdminMap({ data, editing, focus = null, className, onErr
       onReady={setController}
       onError={onError}
       editing={editing}
+      onRenderNotice={onRenderNotice}
     />
   );
 }

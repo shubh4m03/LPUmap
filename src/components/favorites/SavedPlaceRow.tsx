@@ -1,7 +1,7 @@
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { placeEndpoint, routeBlockReason } from '../../app/place-actions.ts';
 import { useAppStore } from '../../app/store/index.ts';
-import { getCategory } from '../../config/categories.ts';
+import { getCategory } from '../../config/index.ts';
 import type { Place } from '../../data/index.ts';
 import { IconButton, ResultRow, iconForCategory } from '../ui/index.ts';
 import { placeSubtitle } from './saved-format.ts';

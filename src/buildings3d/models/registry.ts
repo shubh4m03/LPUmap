@@ -9,7 +9,7 @@
  * procedural studio models are NOT registry entries: they render through the
  * studio custom layer (S1).
  */
-import type { LngLat } from '../../data/schema.ts';
+import type { LngLat } from '../../data/index.ts';
 
 export interface ModelEntry {
   /** Footprint this model replaces (its extrusion is filtered out while the model is shown). */

@@ -1,14 +1,20 @@
 /**
  * Raw OSM snapshot refresh. Tries Overpass first, falls back to the OSM API
- * 0.6 (/relation/<id>/full and /map?bbox). Polite: identifiable User-Agent,
- * sequential requests, bounded retries with exponential backoff.
+ * 0.6 (/relation/<id>/full and /map?bbox). Polite: the neutral research
+ * User-Agent, sequential requests, timeouts and bounded retries with
+ * exponential backoff (scripts/lib/http.ts).
  */
 import { existsSync, mkdirSync, renameSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { bboxOfCoords } from './geometry.ts';
+import { FetchFailedError, fetchTextWithRetry } from './http.ts';
+import type { RetryOptions } from './http.ts';
 import { relationGeometry } from './osm-geometry.ts';
 import { parseOsm } from './osm-parse.ts';
 import type { SourceMeta } from './source-meta.ts';
+
+export { FetchFailedError, fetchTextWithRetry } from './http.ts';
+export type { RetryOptions } from './http.ts';
 
 export const OVERPASS_ENDPOINTS = [
   'https://overpass-api.de/api/interpreter',
@@ -19,24 +25,6 @@ export const OSM_API = 'https://api.openstreetmap.org/api/0.6';
 export const FETCH_MARGIN_DEG = 0.005;
 export const BBOX_FILE = 'campus-bbox.osm';
 export const boundaryFile = (relationId: number) => `boundary-relation-${relationId}.osm`;
-
-export interface RetryOptions {
-  retries?: number;
-  baseDelayMs?: number;
-  timeoutMs?: number;
-  sleep?: (ms: number) => Promise<void>;
-}
-
-export class FetchFailedError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'FetchFailedError';
-  }
-}
-
-export function userAgent(version: string, contact: string | undefined): string {
-  return `LPU-Campus-Atlas-data/${version} (+${contact?.trim() || 'no contact configured; set DATA_FETCH_CONTACT'})`;
-}
 
 export function withMargin(
   b: [number, number, number, number],
@@ -55,39 +43,11 @@ export function overpassBboxQuery(b: readonly [number, number, number, number]):
   return `[out:xml][timeout:180];(nwr(${b[1]},${b[0]},${b[3]},${b[2]}););(._;>;);out meta;`;
 }
 
-const defaultSleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
-const retryable = (status: number) => status === 429 || status >= 500;
-
-/** GET/POST with retries on network errors, 429 and 5xx. Other HTTP errors fail immediately. */
-export async function fetchTextWithRetry(
-  fetchImpl: typeof fetch,
-  url: string,
-  init: RequestInit,
-  opts: RetryOptions = {},
-): Promise<string> {
-  const retries = opts.retries ?? 3;
-  const sleep = opts.sleep ?? defaultSleep;
-  let lastError = '';
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    if (attempt > 0) await sleep((opts.baseDelayMs ?? 2000) * 2 ** (attempt - 1));
-    try {
-      const res = await fetchImpl(url, { ...init, signal: AbortSignal.timeout(opts.timeoutMs ?? 180_000) });
-      if (res.ok) return await res.text();
-      lastError = `HTTP ${res.status}`;
-      if (!retryable(res.status)) break;
-    } catch (e) {
-      lastError = (e as Error).message;
-    }
-  }
-  throw new FetchFailedError(`${url}: ${lastError}`);
-}
-
 export interface FetchSnapshotOptions {
   rawDir: string;
   relationId: number;
   force: boolean;
   fetchImpl: typeof fetch;
-  userAgent: string;
   now: () => Date;
   retry?: RetryOptions;
   log?: (msg: string) => void;
@@ -113,7 +73,7 @@ async function viaOverpass<T>(
         endpoint,
         {
           method: 'POST',
-          headers: { 'User-Agent': o.userAgent, 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: `data=${encodeURIComponent(query)}`,
         },
         o.retry,
@@ -131,7 +91,7 @@ export async function fetchSnapshot(o: FetchSnapshotOptions): Promise<FetchSnaps
   const files = [boundaryFile(o.relationId), BBOX_FILE];
   const exists = [...files, 'SOURCE.json'].every((f) => existsSync(join(o.rawDir, f)));
   if (exists && !o.force) return { status: 'cached' };
-  const get = { method: 'GET', headers: { 'User-Agent': o.userAgent } };
+  const get = { method: 'GET' };
 
   let boundaryText = (
     await viaOverpass(o, overpassRelationQuery(o.relationId), (t) => assertHasRelation(t, o.relationId))

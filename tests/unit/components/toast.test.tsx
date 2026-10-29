@@ -1,7 +1,14 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { useEffect } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { Dialog, ToastProvider, useToast, type ToastOptions } from '../../../src/components/ui/index.ts';
+import {
+  Dialog,
+  NOTICE_TOAST_MS,
+  ToastProvider,
+  useNoticeToast,
+  useToast,
+  type ToastOptions,
+} from '../../../src/components/ui/index.ts';
 
 let api: ReturnType<typeof useToast> | null = null;
 
@@ -94,6 +101,40 @@ describe('Toast', () => {
   it('useToast throws outside the provider', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(() => render(<Grab />)).toThrow(/ToastProvider/);
+  });
+});
+
+describe('useNoticeToast', () => {
+  let notify: ReturnType<typeof useNoticeToast> | 'unset' = 'unset';
+  function GrabNotice() {
+    const n = useNoticeToast();
+    useEffect(() => {
+      notify = n;
+    }, [n]);
+    return null;
+  }
+  afterEach(() => {
+    notify = 'unset';
+  });
+
+  it('shows a view notice as a warning toast for NOTICE_TOAST_MS (10 s)', () => {
+    render(
+      <ToastProvider>
+        <GrabNotice />
+      </ToastProvider>,
+    );
+    expect(NOTICE_TOAST_MS).toBe(10000);
+    act(() => (notify as (n: { message: string }) => void)({ message: 'Models are plain blocks now.' }));
+    expect(screen.getByText('Models are plain blocks now.')).toBeInTheDocument();
+    act(() => vi.advanceTimersByTime(NOTICE_TOAST_MS - 100));
+    expect(screen.getByText('Models are plain blocks now.')).toBeInTheDocument();
+    act(() => vi.advanceTimersByTime(1000));
+    expect(screen.queryByText('Models are plain blocks now.')).toBeNull();
+  });
+
+  it('is undefined outside <ToastProvider>, so the view shows its notice inline', () => {
+    render(<GrabNotice />);
+    expect(notify).toBeUndefined();
   });
 });
 

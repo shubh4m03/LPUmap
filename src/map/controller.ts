@@ -1,7 +1,8 @@
 import type { Map as MapLibreMap } from 'maplibre-gl';
+import { pitch3dFor } from '../buildings3d/index.ts';
 import { APP_CONFIG } from '../config/index.ts';
-import type { LngLat } from '../data/schema.ts';
-import { isValidLngLat } from '../distance/geodesic.ts';
+import type { LngLat } from '../data/index.ts';
+import { isValidLngLat } from '../distance/index.ts';
 import type { MapCamera, MapControllerWithCamera, MapPadding } from './types.ts';
 
 /** Follow-me camera glide per accepted fix (fixes arrive about once a second). */
@@ -32,6 +33,8 @@ export type ControllerMap = Pick<
 export interface ControllerState {
   reducedMotion(): boolean;
   mode3d(): boolean;
+  /** Phone layout: Campus 3D uses the lower APP_CONFIG.map.pitch3dCompact. Absent = false. */
+  compact?(): boolean;
 }
 
 function boundsOf(coords: LngLat[]): [[number, number], [number, number]] {
@@ -90,7 +93,7 @@ export function createMapController(map: ControllerMap, state: ControllerState):
       const camera = {
         center: APP_CONFIG.map.center,
         zoom: APP_CONFIG.map.zoom,
-        pitch: mode3d ? APP_CONFIG.map.pitch3d : 0,
+        pitch: mode3d ? pitch3dFor(state.compact?.() ?? false) : 0,
         bearing: mode3d ? APP_CONFIG.map.bearing3d : 0,
       };
       if (animate()) map.easeTo({ ...camera, essential: true });

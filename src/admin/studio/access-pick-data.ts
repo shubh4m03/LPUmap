@@ -4,14 +4,11 @@
  */
 import { useMemo } from 'react';
 import { APP_CONFIG } from '../../config/index.ts';
-import { currentDraft } from '../../building-studio/editor-state.ts';
-import {
-  walkableNodesNearFootprint,
-  type FootprintAccessCandidate,
-} from '../../building-studio/ui/fields.ts';
-import { previewFootprint } from '../../building-studio/ui/preview.ts';
-import { useStudio } from '../../building-studio/ui/store.ts';
-import type { EditPreviewFeature } from '../../map/editing/types.ts';
+import { currentDraft } from '../../building-studio/editor.ts';
+import { walkableNodesNearFootprint, type FootprintAccessCandidate } from '../../building-studio/ui/index.ts';
+import { previewFootprint } from '../../building-studio/ui/index.ts';
+import { useStudio } from '../../building-studio/ui/index.ts';
+import type { EditPreviewFeature } from '../../map/editing/index.ts';
 import { useStudioServices } from './studio-context.ts';
 
 /**

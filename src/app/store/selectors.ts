@@ -1,5 +1,5 @@
 /** Pure selectors over AppState. Keep them cheap and referentially stable. */
-import type { MapRouteOverlay } from '../../map/types.ts';
+import type { MapRouteOverlay } from '../../map/index.ts';
 import type { RouteOk } from '../../routing/index.ts';
 import type { AppState } from './types.ts';
 

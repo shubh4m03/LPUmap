@@ -4,13 +4,13 @@
  * timestamps and revision; client-supplied status/actor fields are stripped
  * by the schema and ignored. Honeypot handling is the HTTP layer's job.
  */
-import { findPossibleDuplicates } from '../../src/community/duplicates.ts';
+import { findPossibleDuplicates } from '../../src/community/index.ts';
 import {
   contributionInputSchema,
   type ContributionInput,
   type DuplicateCandidate,
   type SuggestionStatus,
-} from '../../src/community/schema.ts';
+} from '../../src/community/index.ts';
 import { auditStmt, entityHistory } from '../db/audit.ts';
 import { listLocationRows } from '../db/locations.ts';
 import type { AuditEvent, SuggestionRecord } from '../db/records.ts';

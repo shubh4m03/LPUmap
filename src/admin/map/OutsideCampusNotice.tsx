@@ -4,7 +4,7 @@
  * it (owner decision 2, src/community/merge.ts rule 4a). Never blocks the
  * action; it states the consequence so the owner decides knowingly.
  */
-import { Icon } from '../../components/icons/Icon.tsx';
+import { Icon } from '../../components/icons/index.ts';
 import type { CampusZoneVerdict } from './campus-zone.ts';
 
 export const OUTSIDE_CAMPUS_TITLE = 'Outside the campus boundary';

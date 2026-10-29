@@ -3,8 +3,8 @@
  * filtering of the full list (GET /locations returns every location incl.
  * hidden; there are few), and picking a record from a map click.
  */
-import type { LngLat } from '../../../data/schema.ts';
-import { haversineM } from '../../../distance/geodesic.ts';
+import type { LngLat } from '../../../data/index.ts';
+import { haversineM } from '../../../distance/index.ts';
 import type { LocationRecord } from '../../api/schemas.ts';
 
 export interface LocationFilters {

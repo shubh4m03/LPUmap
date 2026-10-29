@@ -16,7 +16,7 @@ import {
   WINDOW_PATTERNS,
   type ModelConfigV1,
   type TemplateVariant,
-} from '../../building-studio/schema.ts';
+} from '../../building-studio/index.ts';
 import {
   APPEARANCE_PRESETS,
   applyPreset,
@@ -24,9 +24,9 @@ import {
   roofOptions,
   withRoofShape,
   withWindowPattern,
-} from '../../building-studio/ui/fields.ts';
-import { modelThumbnailSvg } from '../../building-studio/thumbnails.ts';
-import { starterTemplate } from '../../building-studio/asset-library.ts';
+} from '../../building-studio/ui/index.ts';
+import { modelThumbnailSvg } from '../../building-studio/editor.ts';
+import { starterTemplate } from '../../building-studio/editor.ts';
 import { CheckField, NumberField, PanelSection, SelectField } from './controls.tsx';
 import { useStudioServices, useStudioState } from './studio-context.ts';
 import { useDraftEdit } from './useDraftEdit.ts';

@@ -5,9 +5,9 @@
  * into the route-distance ordering. Results say nothing about whether a
  * facility is open or available.
  */
-import type { LngLat, Place } from '../data/schema.ts';
+import type { LngLat, Place } from '../data/index.ts';
 import { haversineM, isValidLngLat } from '../distance/index.ts';
-import type { RouteProfileId, Router } from '../routing/types.ts';
+import type { RouteProfileId, Router } from '../routing/index.ts';
 import type { FacilityDirectory } from './directory.ts';
 
 export interface NearestResult {

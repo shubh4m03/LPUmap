@@ -119,8 +119,9 @@ Real rendering is exercised by the Playwright specs through the e2e hook.
   dismissing.
 - Glyph coverage is Latin, Latin-1, Latin Extended-A/B and general punctuation only. Other scripts
   in OSM names render as blank on the map, and this is not reported as an error.
-- Map colours are hex values in `src/map/theme-colors.ts`, because MapLibre cannot read CSS custom
+- Map colours are hex values in `src/styles/map-theme-colors.ts`, because MapLibre cannot read CSS custom
   properties. They must be kept in step with `src/styles/tokens.css` by hand.
 - Some category fill colours in `src/config/categories.ts` miss their own 3:1 target against the map
   surface. Markers stay distinguishable because of a high-contrast ring.
-- Heights are only as good as OSM: no measured heights, 137 estimated from floors, 398 placeholders.
+- Heights are only as good as OSM: no measured heights; of the 131 campus buildings, 122 are
+  estimated from floors and 9 are placeholders (the current manifest's `heightSource:*` counts).

@@ -50,6 +50,18 @@
               "url": {
                 "type": "string",
                 "format": "uri"
+              },
+              "license": {
+                "type": "string",
+                "minLength": 1
+              },
+              "attribution": {
+                "type": "string",
+                "minLength": 1
+              },
+              "licenseUrl": {
+                "type": "string",
+                "format": "uri"
               }
             },
             "required": ["name"],

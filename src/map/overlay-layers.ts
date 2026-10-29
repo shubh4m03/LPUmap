@@ -11,9 +11,9 @@ import type {
   SymbolLayerSpecification,
 } from 'maplibre-gl';
 import { APP_CONFIG } from '../config/index.ts';
-import type { LayerGroupId } from '../config/categories.ts';
+import type { LayerGroupId } from '../config/index.ts';
 import { LAYER_IDS, SOURCE_IDS } from './ids.ts';
-import { mapThemeColors, type MapTheme } from './theme-colors.ts';
+import { mapThemeColors, type MapTheme } from '../styles/index.ts';
 
 export const FONT_REGULAR = ['Noto Sans Regular'];
 export const FONT_BOLD = ['Noto Sans Bold'];

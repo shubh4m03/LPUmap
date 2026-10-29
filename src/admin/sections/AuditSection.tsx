@@ -5,11 +5,11 @@
  * a NEW change — history is never rewritten.
  */
 import { useState, type FormEvent } from 'react';
-import { Button } from '../../components/ui/Button.tsx';
-import { EmptyState } from '../../components/ui/EmptyState.tsx';
-import { Spinner } from '../../components/ui/Spinner.tsx';
-import { TextInput } from '../../components/ui/TextInput.tsx';
-import { useToast } from '../../components/ui/toast-context.ts';
+import { Button } from '../../components/ui/index.ts';
+import { EmptyState } from '../../components/ui/index.ts';
+import { Spinner } from '../../components/ui/index.ts';
+import { TextInput } from '../../components/ui/index.ts';
+import { useToast } from '../../components/ui/index.ts';
 import type { AdminApiError } from '../api/errors.ts';
 import type { AuditEvent } from '../api/schemas.ts';
 import { useAdminApi } from '../context.ts';

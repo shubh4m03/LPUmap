@@ -11,6 +11,10 @@ export const ILLUSTRATION_DISCLAIMER =
   'Schematic illustration of the campus. It is not geographically exact: positions, sizes and distances are not to scale.';
 /** Label of an approximate association (a candidate footprint): never "match", "location" or "verified". */
 export const UNCONFIRMED_MATCH_LABEL = 'Unconfirmed match';
+/** The map label of a candidate building outlined as an unconfirmed match (dashed outline). */
+export function unconfirmedMatchLabel(candidateName: string): string {
+  return `${UNCONFIRMED_MATCH_LABEL}: ${candidateName}`;
+}
 /** Shown next to every artwork number or "BLOCK-…" text taken from the artwork. */
 export const ARTWORK_NUMBER_NOTE = 'Number as printed on the illustration; not an official LPU block number.';
 
@@ -47,6 +51,31 @@ export const ASSOCIATION_STATUS_TEXT: Readonly<Record<AssociationStatusName, Sta
     description: 'Shown on the illustration only. It has no map position and cannot be routed to.',
   },
 };
+
+/** A repository file path such as `docs/research/block-leads/block-candidates.json`. */
+const FILE_PATH = String.raw`(?:[\w.-]+/)+[\w.-]+\.(?:json|md|ts|tsx|csv|geojson|txt|ya?ml)`;
+const PATH_ONLY_PARENS = new RegExp(String.raw`\s*\(${FILE_PATH}\)`, 'g');
+const PATH_FIRST_IN_PARENS = new RegExp(String.raw`\(${FILE_PATH},\s*`, 'g');
+const BARE_PATH = new RegExp(String.raw`\s*${FILE_PATH}`, 'g');
+/** A parenthetical naming an internal field (camelCase, e.g. `needsManualVerification`). */
+const INTERNAL_FIELD_PARENS = /\s*\([^()]*\b[a-z]+[A-Z][A-Za-z]*\b[^()]*\)/g;
+
+/**
+ * The curated association reason as shown to the PUBLIC: the human sentence
+ * only. Internal research-file paths and record field names (which the owner
+ * sees unchanged in /admin) are removed; ids such as `osm:way/1` and every
+ * other word are kept as written.
+ */
+export function publicReasonText(reason: string): string {
+  return reason
+    .replace(PATH_ONLY_PARENS, '')
+    .replace(PATH_FIRST_IN_PARENS, '(')
+    .replace(INTERNAL_FIELD_PARENS, '')
+    .replace(BARE_PATH, '')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+([.,:;])/g, '$1')
+    .trim();
+}
 
 /** The same verified link seen from a map BUILDING (directory row, place details). */
 export const BUILDING_VERIFIED_ARTWORK_TEXT: StatusText = {

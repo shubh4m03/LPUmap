@@ -3,7 +3,7 @@
  * under src/admin/ is downloaded only when this renders (on /admin paths).
  */
 import { lazy, Suspense } from 'react';
-import { Spinner } from '../components/ui/Spinner.tsx';
+import { Spinner } from '../components/ui/index.ts';
 
 /** Shown when the admin chunk cannot be downloaded (offline, interrupted deploy): never a blank page. */
 function AdminLoadFailed() {

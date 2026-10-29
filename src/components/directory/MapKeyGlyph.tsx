@@ -1,4 +1,4 @@
-import { spokenMapKey } from '../../isometric/labels.ts';
+import { spokenMapKey } from '../../isometric/index.ts';
 
 /**
  * The map-key glyph (Decision D6): a diamond, never a circle, with the key in

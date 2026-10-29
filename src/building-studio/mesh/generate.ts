@@ -33,8 +33,8 @@
  * lower level is generated instead and generateStudioMeshDetailed reports
  * both the requested and the rendered level, so the UI can say so.
  */
-import type { LngLat } from '../../data/schema.ts';
-import { isValidLngLat } from '../../distance/geodesic.ts';
+import type { LngLat } from '../../data/index.ts';
+import { isValidLngLat } from '../../distance/index.ts';
 import {
   createEnuFrame,
   lngLatToLocalPolygon,

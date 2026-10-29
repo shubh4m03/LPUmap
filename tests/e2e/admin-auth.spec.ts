@@ -9,7 +9,7 @@ import type { Page } from '@playwright/test';
 import { expect, test } from './backend/fixtures.ts';
 
 const axe = (page: Page) =>
-  new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+  new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
 
 test.describe('Admin sign-in', () => {
   test('unauthenticated /admin shows only the login, and the API refuses data', async ({
@@ -69,7 +69,7 @@ test.describe('Admin sign-in', () => {
       await admin.goto(path);
       await expect(page.getByRole('heading', { name: heading, level: 1 })).toBeVisible();
       const r = await new AxeBuilder({ page })
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
         // MapLibre's own canvas/controls are covered by the public map's accessibility suite.
         .exclude('.maplibregl-map')
         .analyze();

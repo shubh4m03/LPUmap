@@ -10,15 +10,15 @@
  * Drafts and archived records are never in a publication; nothing here could
  * show them. Without a publication the base data is returned unchanged.
  */
-import { mergePublication, type MergeReport } from '../../community/merge.ts';
-import type { Publication } from '../../community/schema.ts';
+import { mergePublication, type MergeReport } from '../../community/index.ts';
+import type { Publication } from '../../community/index.ts';
 import {
   mergeStudioBuildings,
   type StudioMergeReport,
   type StudioRenderModel,
-} from '../../building-studio/merge.ts';
-import type { CampusData } from '../../data/campus-data.ts';
-import type { BoundaryReviewFile, Place } from '../../data/schema.ts';
+} from '../../building-studio/index.ts';
+import type { CampusData } from '../../data/index.ts';
+import type { BoundaryReviewFile, Place } from '../../data/index.ts';
 
 /** Membership inputs the server used at publish (boundary-review.json); null = not available. */
 export type BoundaryReviewInput = Pick<BoundaryReviewFile, 'sections' | 'decisions'>;

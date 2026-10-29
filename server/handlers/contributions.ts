@@ -11,9 +11,9 @@
  * nothing, not even a rate-limit counter, is written.
  */
 import { APP_CONFIG } from '../../src/config/index.ts';
-import { LIMITS, contributionInputSchema } from '../../src/community/schema.ts';
-import type { ContributionResponse } from '../../src/community/schema.ts';
-import { insideContributionArea } from '../../src/community/geo.ts';
+import { LIMITS, contributionInputSchema } from '../../src/community/index.ts';
+import type { ContributionResponse } from '../../src/community/index.ts';
+import { insideContributionArea } from '../../src/community/index.ts';
 import { enforceRateLimits } from '../auth/rate-limit.ts';
 import type { RateRule } from '../auth/rate-limit.ts';
 import { parseEnv } from '../env.ts';

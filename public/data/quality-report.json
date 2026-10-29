@@ -7493,12 +7493,14 @@
       "aliases.json",
       "overrides.json",
       "organizations.json",
+      "path-connections.json",
       "boundary-review.json"
     ],
     "aliases": 0,
     "overrides": 0,
     "organizations": 32,
-    "anchoredOrganizations": 1
+    "anchoredOrganizations": 1,
+    "pathConnections": 0
   },
   "directory": {
     "lockVersion": 1,

@@ -10,7 +10,7 @@
  * the owner can never verify against a manifest the server cannot read.
  * Read-only: the manifest and the originals are never written.
  */
-import { isometricArtManifestSchema, type IsometricArtManifest } from '../src/isometric-art/schema.ts';
+import { isometricArtManifestSchema, type IsometricArtManifest } from '../src/isometric-art/index.ts';
 import { DomainError } from './errors.ts';
 
 export type FetchAsset = (path: string) => Promise<Response>;

@@ -8,9 +8,9 @@ import {
   fetchTextWithRetry,
   FetchFailedError,
   overpassBboxQuery,
-  userAgent,
   withMargin,
 } from '../../../scripts/lib/fetch-osm-lib.ts';
+import { RESEARCH_USER_AGENT } from '../../../scripts/lib/http.ts';
 import { sourceMetaSchema } from '../../../scripts/lib/source-meta.ts';
 
 const FIXTURE = readFileSync(
@@ -32,11 +32,6 @@ const tmp = () => {
 };
 
 describe('helpers', () => {
-  it('identifies the client in the User-Agent', () => {
-    expect(userAgent('0.1.0', 'ops@example.org')).toBe('LPU-Campus-Atlas-data/0.1.0 (+ops@example.org)');
-    expect(userAgent('0.1.0', undefined)).toMatch(/DATA_FETCH_CONTACT/);
-  });
-
   it('adds a margin and orders Overpass bbox as s,w,n,e', () => {
     expect(withMargin([75.7, 31.25, 75.71, 31.26], 0.005)).toEqual([75.695, 31.245, 75.715, 31.265]);
     expect(overpassBboxQuery([75.695, 31.245, 75.715, 31.265])).toContain('nwr(31.245,75.695,31.265,75.715)');
@@ -79,7 +74,6 @@ describe('fetchTextWithRetry', () => {
 describe('fetchSnapshot', () => {
   const base = {
     relationId: 900001,
-    userAgent: 'test-agent',
     now: () => new Date('2026-05-06T07:08:09.123Z'),
     retry: { ...noSleep, retries: 0 },
   };
@@ -100,7 +94,8 @@ describe('fetchSnapshot', () => {
     const calls: string[] = [];
     const f = vi.fn(async (url: string, init?: RequestInit) => {
       calls.push(`${init?.method} ${url}`);
-      expect((init?.headers as Record<string, string>)['User-Agent']).toBe('test-agent');
+      expect(new Headers(init?.headers).get('User-Agent')).toBe(RESEARCH_USER_AGENT);
+      expect(init?.signal).toBeInstanceOf(AbortSignal);
       if (url.includes('overpass')) throw new Error('connect ETIMEDOUT');
       return text(FIXTURE);
     });

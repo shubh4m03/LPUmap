@@ -1,7 +1,7 @@
 import { useAtlas } from '../../app/data/atlas-context.ts';
 import { useNow } from '../../app/hooks/useNow.ts';
 import { useAppStore } from '../../app/store/index.ts';
-import { getCategory } from '../../config/categories.ts';
+import { getCategory } from '../../config/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
 import type { Place } from '../../data/index.ts';
 import { formatDistance, haversineM } from '../../distance/index.ts';

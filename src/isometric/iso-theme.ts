@@ -4,7 +4,7 @@
  * The roles follow the visual language of the owner's reference illustration
  * (warm brick walls, light roofs, green grounds, dark roads, crisp edges,
  * clean labels) but every value is our own, chosen next to the design tokens
- * in src/styles/tokens.css and src/map/theme-colors.ts. No value is sampled
+ * in src/styles/tokens.css and src/styles/map-theme-colors.ts. No value is sampled
  * from the illustration. tests/unit/isometric/iso-theme.test.ts checks WCAG
  * contrast: text ≥ 4.5:1 on its halo/fill; markers, selection and the route
  * ≥ 3:1 against every surface they are drawn over.

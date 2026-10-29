@@ -7,16 +7,16 @@
  */
 import { useMemo } from 'react';
 import { Badge, Button, Spinner } from '../../components/ui/index.ts';
-import { cx } from '../../components/ui/cx.ts';
-import { prohibitedSourceProblem } from '../../building-studio/ui/fields.ts';
+import { cx } from '../../components/ui/index.ts';
+import { prohibitedSourceProblem } from '../../building-studio/ui/index.ts';
 import {
   ACK_REASON_MAX,
   ACK_REASON_MIN,
   currentValidation,
   validAckReason,
-} from '../../building-studio/ui/store.ts';
-import { groupIssues, RESOLVE_HINTS, SEVERITY_HEADINGS } from '../../building-studio/ui/text.ts';
-import type { ValidationIssue, WarningCode } from '../../building-studio/schema.ts';
+} from '../../building-studio/ui/index.ts';
+import { groupIssues, RESOLVE_HINTS, SEVERITY_HEADINGS } from '../../building-studio/ui/index.ts';
+import type { ValidationIssue, WarningCode } from '../../building-studio/index.ts';
 import { TextField } from './controls.tsx';
 import { useStudioServices, useStudioState } from './studio-context.ts';
 

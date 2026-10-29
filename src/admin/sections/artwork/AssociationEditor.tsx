@@ -8,18 +8,18 @@
  * after a refresh. The artwork files are never written from here.
  */
 import { useCallback, useMemo, useState, type FormEvent } from 'react';
-import { Badge } from '../../../components/ui/Badge.tsx';
-import { Button } from '../../../components/ui/Button.tsx';
-import { Spinner } from '../../../components/ui/Spinner.tsx';
-import { TextInput } from '../../../components/ui/TextInput.tsx';
-import { useToast } from '../../../components/ui/toast-context.ts';
+import { Badge } from '../../../components/ui/index.ts';
+import { Button } from '../../../components/ui/index.ts';
+import { Spinner } from '../../../components/ui/index.ts';
+import { TextInput } from '../../../components/ui/index.ts';
+import { useToast } from '../../../components/ui/index.ts';
 import {
   ASSOCIATION_STATUSES,
   EVIDENCE_KINDS,
   type ArtSubject,
   type AssociationStatus,
   type IsometricArtManifest,
-} from '../../../isometric-art/schema.ts';
+} from '../../../isometric-art/index.ts';
 import type { ArtworkAssociationDetail } from '../../api/artwork.ts';
 import { useAdminApi } from '../../context.ts';
 import { useAdminCampusData } from '../../data/campus-data.ts';

@@ -4,8 +4,8 @@
  * override's fields, so fields this screen does not edit are carried over
  * unchanged from the stored override (never silently dropped).
  */
-import type { OverrideFields } from '../../../community/schema.ts';
-import type { Place } from '../../../data/schema.ts';
+import type { OverrideFields } from '../../../community/index.ts';
+import type { Place } from '../../../data/index.ts';
 import type { PutOverrideBody } from '../../api/community.ts';
 import type { OverrideRecord, OverrideView } from '../../api/schemas.ts';
 import { categoryLabel, ORPHAN_REASON_LABELS } from '../../ui/format.ts';

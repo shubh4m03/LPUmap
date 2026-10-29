@@ -15,12 +15,12 @@
  *    wider panning limit, so the cap is reachable on wide screens).
  */
 import type { ExpressionSpecification, Map as MapLibreMap } from 'maplibre-gl';
-import { extrusionColorExpression } from '../../buildings3d/layers.ts';
-import { realistic3dColors } from '../../buildings3d/palette.ts';
+import { extrusionColorExpression } from '../../buildings3d/index.ts';
+import { realistic3dColors } from '../../buildings3d/index.ts';
 import { APP_CONFIG } from '../../config/index.ts';
 import { LAYER_IDS, LABEL_LAYER_IDS } from '../ids.ts';
 import { buildLayers } from '../style.ts';
-import { mapThemeColors, type MapTheme } from '../theme-colors.ts';
+import { mapThemeColors, type MapTheme } from '../../styles/index.ts';
 import { attributionHtml } from './attribution.ts';
 import type { ImageryProvider } from './types.ts';
 

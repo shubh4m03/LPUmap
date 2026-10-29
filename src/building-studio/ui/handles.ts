@@ -12,11 +12,12 @@
  * A model of an existing base building ('footprint-prism') gets no handles:
  * its mapped footprint is authoritative (S5) and is never moved by a drag.
  */
-import type { LngLat } from '../../data/schema.ts';
-import { createEnuFrame, moveByMetres, normalizeRotation, rotateToEnu } from '../geometry.ts';
-import type { Vec2 } from '../mesh/types.ts';
-import type { ModelConfigV1 } from '../schema.ts';
-import type { EditHandle, HandleDragEvent, ResizeAxis } from '../../map/editing/types.ts';
+import type { LngLat } from '../../data/index.ts';
+import { createEnuFrame } from '../index.ts';
+import { moveByMetres, normalizeRotation, rotateToEnu } from '../editor.ts';
+import type { Vec2 } from '../index.ts';
+import type { ModelConfigV1 } from '../index.ts';
+import type { EditHandle, HandleDragEvent, ResizeAxis } from '../../map/editing/index.ts';
 
 export type ModelSide = 'front' | 'back' | 'left' | 'right';
 export const MODEL_SIDES: readonly ModelSide[] = ['front', 'back', 'left', 'right'];

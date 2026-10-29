@@ -1,13 +1,13 @@
+import type { FeatureCollection } from 'geojson';
 import { Map as MapLibreMap } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { setBuildingMode, supportsWebGL } from '../buildings3d/index.ts';
-import { detectionAttributionHtml } from '../buildings3d/optional-layers.ts';
-import { attachRealistic3D, type Realistic3DHandle, type RenderNotice } from '../buildings3d/realistic3d.ts';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { pitch3dFor, setBuildingMode, supportsWebGL } from '../buildings3d/index.ts';
+import { detectionAttributionHtml } from '../buildings3d/map-runtime.ts';
+import { attachRealistic3D, type Realistic3DHandle, type RenderNotice } from '../buildings3d/map-runtime.ts';
 import type { StudioRenderSource } from '../building-studio/render/maplibre/index.ts';
-import { ToastContext } from '../components/ui/toast-context.ts';
 import { APP_CONFIG } from '../config/index.ts';
-import { isValidLngLat } from '../distance/geodesic.ts';
+import { isValidLngLat } from '../distance/index.ts';
 import {
   applySelection,
   applyShowLabels,
@@ -36,6 +36,7 @@ import { classifyImageryError, ImageryHealth, type TileErrorLike } from './provi
 import { applyImagery, IMAGERY_SOURCE_ID } from './providers/imagery-layer.ts';
 import { buildMapStyle, glyphsUrl, OSM_ATTRIBUTION_HTML } from './style.ts';
 import { installMapTestHooks } from './test-hooks.ts';
+import { applyUnconfirmedMatch, unconfirmedMatchCollection } from './unconfirmed-match.ts';
 import type { MapViewProps } from './types.ts';
 
 const NO_STUDIO_MODELS: readonly StudioRenderSource[] = [];
@@ -57,6 +58,7 @@ export function MapView(props: MapViewProps) {
     data,
     theme,
     mode3d,
+    compact = false,
     reducedMotion,
     visibleGroups,
     showLabels,
@@ -71,6 +73,7 @@ export function MapView(props: MapViewProps) {
     contextPlaces,
     editing = null,
     imagery = null,
+    unconfirmedMatch = null,
   } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<MapLibreMap | null>(null);
@@ -85,7 +88,6 @@ export function MapView(props: MapViewProps) {
   const [inlineNotice, setInlineNotice] = useState<RenderNotice | null>(null);
   // Per-map debounce of imagery tile errors (auth/quota fail at once; network after several).
   const imageryHealthRef = useRef<ImageryHealth | null>(null);
-  const toast = useContext(ToastContext);
 
   const footprintIds = useMemo(
     () => new Set(data.buildings.features.map((f) => f.properties.id)),
@@ -121,11 +123,10 @@ export function MapView(props: MapViewProps) {
   const userGeo = useMemo(() => userLocationCollection(userLocation), [userLocation]);
   const groupKey = groupsKey(visibleGroups);
 
-  // Realistic-3D degradation notices: the parent's handler, else a toast, else an inline notice.
+  // Realistic-3D degradation notices: the parent's handler (a toast, see useNoticeToast), else inline.
   const showNotice = (notice: RenderNotice) => {
     const p = latest.current.props;
     if (p.onRenderNotice) p.onRenderNotice(notice);
-    else if (toast) toast.show({ message: notice.message, tone: 'warning', durationMs: 10000 });
     else setInlineNotice(notice);
   };
 
@@ -194,7 +195,7 @@ export function MapView(props: MapViewProps) {
         maxBounds: APP_CONFIG.map.maxBounds,
         maxPitch: MAX_PITCH,
         pixelRatio: Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO),
-        pitch: p.mode3d ? APP_CONFIG.map.pitch3d : 0,
+        pitch: p.mode3d ? pitch3dFor(p.compact ?? false) : 0,
         bearing: p.mode3d ? APP_CONFIG.map.bearing3d : 0,
         dragRotate: p.mode3d,
         touchPitch: p.mode3d,
@@ -287,6 +288,7 @@ export function MapView(props: MapViewProps) {
       const controller = createMapController(instance, {
         reducedMotion: () => latest.current.props.reducedMotion,
         mode3d: () => latest.current.props.mode3d,
+        compact: () => latest.current.props.compact ?? false,
       });
       uninstallHooks = installMapTestHooks({
         getCamera: () => controller.getCamera(),
@@ -375,10 +377,10 @@ export function MapView(props: MapViewProps) {
   useEffect(() => {
     const a = applied.current;
     if (!map || a.mode3d === mode3d) return;
-    setBuildingMode(map, mode3d, { reducedMotion });
+    setBuildingMode(map, mode3d, { reducedMotion, compact });
     r3d?.setMode3d(mode3d);
     a.mode3d = mode3d;
-  }, [map, r3d, mode3d, reducedMotion]);
+  }, [map, r3d, mode3d, reducedMotion, compact]);
 
   // Basemap imagery: after the theme effect, so a theme change (which re-sets every paint
   // property) gets the imagery contrast overrides back.
@@ -407,6 +409,16 @@ export function MapView(props: MapViewProps) {
   useEffect(() => {
     r3d?.setNearbyOutsideCampus(showNearbyOutsideCampus);
   }, [r3d, showNearbyOutsideCampus]);
+
+  // "Unconfirmed match": the candidate's footprint, dashed and labelled (rebuilt on a theme change).
+  const unconfirmedGeo = useMemo(
+    () => unconfirmedMatchCollection(data.buildings as FeatureCollection, unconfirmedMatch),
+    [data.buildings, unconfirmedMatch],
+  );
+  useEffect(() => {
+    if (!map) return;
+    applyUnconfirmedMatch(map, theme, unconfirmedGeo);
+  }, [map, theme, unconfirmedGeo]);
 
   useEffect(() => {
     if (!map) return;

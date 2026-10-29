@@ -44,8 +44,8 @@ import type {
   MembershipMethod,
   MembershipReasonCode,
   ReviewGeometry,
-} from '../data/schema.ts';
-import { createLocalProjection, isValidLngLat, type LocalProjection } from '../distance/geodesic.ts';
+} from '../data/index.ts';
+import { createLocalProjection, isValidLngLat, type LocalProjection } from '../distance/index.ts';
 
 // ---------------------------------------------------------------------------
 // Types

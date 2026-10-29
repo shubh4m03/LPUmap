@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { ToastContext } from '../../components/ui/toast-context.ts';
+import { ToastContext } from '../../components/ui/index.ts';
 import {
   createOptionalLoaders,
   DatasetError,

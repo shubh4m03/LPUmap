@@ -4,10 +4,10 @@
  * (a placement guide only, never data). Pure; nothing here moves a model —
  * geometry.ts turns a target into a proposal the owner may apply.
  */
-import type { BuildingsFile, DetectionsFile, LngLat } from '../../data/schema.ts';
-import { createEnuFrame, lngLatToLocalPolygon } from '../footprint.ts';
-import { pointToPolygonM } from '../planar.ts';
-import type { ModelConfigV1 } from '../schema.ts';
+import type { BuildingsFile, DetectionsFile, LngLat } from '../../data/index.ts';
+import { createEnuFrame, lngLatToLocalPolygon } from '../index.ts';
+import { pointToPolygonM } from '../index.ts';
+import type { ModelConfigV1 } from '../index.ts';
 
 export interface OutlineTarget {
   id: string;

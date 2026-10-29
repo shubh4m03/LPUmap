@@ -2,7 +2,9 @@
 
 This is the staged plan that was actually followed to build LPU Campus Atlas, with the acceptance
 criteria each module had to meet. Progress against the plan and the final acceptance results are
-recorded separately by the lead in `docs/IMPLEMENTATION_STATUS.md` and `docs/ACCEPTANCE_REPORT.md`.
+recorded separately in [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md) and
+[ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md). Stages A–E built the static v1; the waves that followed
+are in [Beyond v1](#beyond-v1-the-delivered-waves).
 
 ## Principles that shaped the plan
 
@@ -137,8 +139,79 @@ A final pass by the lead:
 - run the full gate and the e2e suite
 - spot-check the workflows in a browser
 - reconcile every module's open issues
-- write `docs/IMPLEMENTATION_STATUS.md` and `docs/ACCEPTANCE_REPORT.md`
+- write [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md) (the acceptance report itself,
+  [ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md), was first committed in Stage L)
 
 Items that only a human or a real device can verify are listed in
 [QA_STRATEGY.md](QA_STRATEGY.md#what-needs-human-or-on-device-verification) and are reported as
 unverified, not as passed.
+
+## Beyond v1: the delivered waves
+
+Stages A–E delivered the static v1 (`27acd56` … `f8d43f0`). The waves below followed owner decisions
+that changed the scope; each ended with a full gate run recorded in its commit message and in
+[IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md). The verdict for every requirement is in
+[ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md).
+
+### Stage F: community backend (`7075dfc`)
+
+**Owner decision:** moderated contributions and owner edits on Cloudflare Pages Functions + D1,
+superseding the v1 "no backend" rule. **Built:** suggestions, private moderation, owner locations
+and overrides of base places, an append-only audit log, the publication layer with ETag, a pure merge
+service; Cloudflare Access or password sessions (HttpOnly `__Host-` cookie, CSRF, rate-limited login),
+failing closed when unconfigured. **Exit:** server suites on a local D1 and a real HTTP flow against
+`wrangler pages dev` pass; nothing self-publishes.
+
+### Stage G: geography audit and the campus-only dataset (`902af56`, `ceb0ac0`, `9207811`, `de688b4`)
+
+**Owner decisions:** campus-only data, off-campus places only in an opt-in layer and never routable;
+detections as an unverified layer; block numbers only with owner evidence. **Built:** the campus
+geography audit, geodata sources and licences, the isometric/3D design; schema v2 with campus
+membership (inside, crossing, outside, uncertain) from a shared boundary service, context places,
+detections, directory keys, the count-change guard; block-number leads for the owner (not applied).
+**Exit:** two byte-identical rebuilds, the coverage suite, override-survival and rollback tests.
+
+### Stage H: Building Studio core, isometric overview, view modes (`e8f313a`)
+
+**Built:** the Studio contract and migration 0002 (tested down script), mesh generators, validation,
+history, recovery, thumbnails, the Studio server (17 endpoints, atomic publish, revisions), the
+renderer bake-off (raw WebGL2 layer for owner models with a fill-extrusion fallback), the Canvas2D
+isometric overview and the building directory, `?view=` deep links. **Exit:** red-team fixes, gate
+green; device frame time (D8) left open.
+
+### Stage I: admin app, Studio editor, suggestions, map providers (`2407afe`)
+
+**Owner specs A, B and C.** **Built:** `/admin` (lazy chunk) with queue, locations, overrides,
+history, quality, Studio and templates; the public "Suggest a missing place" flow; five view modes on
+free sources only (optional Esri key, optional EOX backdrop, Photorealistic 3D shown as unavailable);
+the real-handler e2e backend. **Exit:** the 57-item QA acceptance checklist on the real app.
+
+### Stage J: fix wave (`6050e91`)
+
+**Fixed** the checklist defects D3 (off-campus places were routable), D4 and D5, the honeypot decoy
+parity, the Zod CSP violation, the Studio leave prompt, access points picked on the map. **Exit:**
+each fix has a regression test proven to fail without it; 56 PASS, 0 FAIL, 1 NOT TESTABLE of 57.
+
+### Stage K: the owner's campus illustration (`6a07349`)
+
+**Owner decision:** the owner's artwork is the authoritative visual source of the isometric
+experience; geography stays separate. **Built:** inventory and hotspots, the art pipeline with
+integrity checks in build and CI, the Illustrated overview, block-wise directory and search, the admin
+Artwork section and migration 0003. **Exit:** artwork gates 1–5 on a fresh clone (Vitest 2513, server
+1588 with 4 opt-in skips, Playwright 324 passed and 0 failed).
+
+### Stage L: master-spec conformance (2026-10-26, this wave)
+
+**Input:** the master-spec conformance audit (255 requirements, 33 work items G-01–G-33).
+**Waves:** gate integrity (server suites in `check` and CI, no silent browser skips, bundle budgets,
+committed performance scripts), data provenance and fetch robustness, a documentation truth pass
+(architecture, current dataset numbers, acceptance report, QA and contributing guides, security
+inventory), and small UX and code fixes, worked on in parallel by separate workstreams. **Exit:** the
+full `npm run check` gate on the combined tree, each fix with a regression test proven by a temporary
+revert, and this plan, the status file and the acceptance report refreshed from the real results.
+
+### Next: Creator Mode and the food module
+
+Planned after Stage L: owner editing of names, aliases, categories, opening hours and entrances
+(`accessed_via`), corrections to existing places, food outlets with sourced menus and hours, and a
+shared facility card. The overlapping audit items O-1–O-7 belong to that work, not to Stage L.

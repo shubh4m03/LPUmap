@@ -10,12 +10,12 @@ import {
   buildingFootprintLayers,
   lightSpecification,
 } from '../buildings3d/index.ts';
-import type { LayerGroupId } from '../config/categories.ts';
-import type { CampusData } from '../data/campus-data.ts';
+import type { LayerGroupId } from '../config/index.ts';
+import type { CampusData } from '../data/index.ts';
 import { basemapLayers } from './basemap-layers.ts';
 import { SOURCE_IDS } from './ids.ts';
 import { overlayLayers } from './overlay-layers.ts';
-import type { MapTheme } from './theme-colors.ts';
+import type { MapTheme } from '../styles/index.ts';
 
 export const OSM_ATTRIBUTION_HTML =
   '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors (ODbL)</a>';

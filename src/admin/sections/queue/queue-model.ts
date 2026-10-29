@@ -8,7 +8,7 @@ import {
   canTransition,
   suggestionStatusSchema,
   type SuggestionStatus,
-} from '../../../community/schema.ts';
+} from '../../../community/index.ts';
 import type { SuggestionsQuery } from '../../api/community.ts';
 
 export type StatusFilter = SuggestionStatus | 'all';

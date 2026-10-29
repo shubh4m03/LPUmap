@@ -1,8 +1,8 @@
 /** Shared domain validation: request bodies, contribution area and access points. */
 import { z } from 'zod';
-import { accessPointSchema } from '../../src/community/schema.ts';
-import { checkAccessNode, insideContributionArea } from '../../src/community/geo.ts';
-import type { LngLat } from '../../src/data/schema.ts';
+import { accessPointSchema } from '../../src/community/index.ts';
+import { checkAccessNode, insideContributionArea } from '../../src/community/index.ts';
+import type { LngLat } from '../../src/data/index.ts';
 import type { BaseData } from '../base-data.ts';
 import { fail, parseOrThrow, unprocessable } from '../errors.ts';
 

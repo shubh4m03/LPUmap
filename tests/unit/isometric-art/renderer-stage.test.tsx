@@ -14,11 +14,11 @@ import { getMapController } from '../../../src/app/map-controller.ts';
 import { useAppStore } from '../../../src/app/store/index.ts';
 import { ToastProvider } from '../../../src/components/ui/index.ts';
 import { mergeArtworkAssociations } from '../../../src/isometric-art/associations.ts';
-import { IsometricModeStage } from '../../../src/isometric-art/IsometricModeStage.tsx';
+import { IsometricModeStage } from '../../../src/app/IsometricModeStage.tsx';
 import {
   getRequestedIsometricVariant,
   resetRequestedIsometricVariant,
-} from '../../../src/isometric-art/variant-state.ts';
+} from '../../../src/app/isometric-variant.ts';
 import { NO_INSETS } from '../../../src/isometric-art/viewport.ts';
 import { loadManifest } from './renderer-fixtures.ts';
 
@@ -140,6 +140,14 @@ describe('IsometricModeStage', () => {
     ).not.toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(useAppStore.getState().selectedPlaceId).toBeNull();
+  });
+
+  it('with the details panel open for the item there is no second card beside it (desktop too)', () => {
+    renderStage(services({ manifest, associations }));
+    act(() => useAppStore.setState({ selectedPlaceId: 'art:num-25', activePanel: 'details' }));
+    expect(screen.queryByTestId('art-detail-card')).not.toBeInTheDocument();
+    act(() => useAppStore.setState({ activePanel: 'none' }));
+    expect(screen.getByTestId('art-detail-card')).toBeInTheDocument();
   });
 
   it('an approximate candidate building selected elsewhere highlights nothing (no identity join)', () => {

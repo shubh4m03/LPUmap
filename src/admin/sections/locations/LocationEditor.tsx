@@ -6,12 +6,12 @@
  */
 import { useMemo, useState, type FormEvent } from 'react';
 import { useIsMobile } from '../../../accessibility/index.ts';
-import { Badge } from '../../../components/ui/Badge.tsx';
-import { Button } from '../../../components/ui/Button.tsx';
-import { cx, FOCUS_RING } from '../../../components/ui/cx.ts';
-import { TextInput } from '../../../components/ui/TextInput.tsx';
-import { useToast } from '../../../components/ui/toast-context.ts';
-import type { LngLat } from '../../../data/schema.ts';
+import { Badge } from '../../../components/ui/index.ts';
+import { Button } from '../../../components/ui/index.ts';
+import { cx, FOCUS_RING } from '../../../components/ui/index.ts';
+import { TextInput } from '../../../components/ui/index.ts';
+import { useToast } from '../../../components/ui/index.ts';
+import type { LngLat } from '../../../data/index.ts';
 import type { LocationRecord } from '../../api/schemas.ts';
 import { useAdminApi } from '../../context.ts';
 import type { CampusDataState } from '../../data/campus-data.ts';

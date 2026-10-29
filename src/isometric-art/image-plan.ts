@@ -15,7 +15,16 @@
  * Choice: the base layer is the preview when there is one (fast first paint,
  * few bytes on phones), else the full image. When the zoom needs more pixels
  * than the base has, a detail layer is added: the visible tiles of the
- * coarsest pyramid level that is sharp enough, else the full image.
+ * coarsest pyramid level that is sharp enough, else the full image. Under
+ * tiles the base is only a placeholder, so the smallest preview is used.
+ *
+ * Measured (2026-10-26, re-measured 2026-10-29; 390 × 844 phone, opening view at LEGIBLE_SCALE 0.5,
+ * service worker blocked): DPR 1 loads the 1600-px preview only (0.63 MiB);
+ * DPR 2 and 3 load it plus 12 level-0 tiles (1.99 MiB). Level 0 is what 1:1
+ * sharpness needs there (1.0 device px per source px); level 1 (0.5 px/px) is
+ * no sharper than the preview, so lighter tiles would halve the opening view's
+ * resolution. With today's single preview the smallest-preview rule changes
+ * nothing; a smaller preview from the art pipeline would cut the DPR-2 open.
  */
 import type { ManifestAsset } from './schema.ts';
 import type { ArtRect, ArtSourceSpace } from './viewport.ts';
@@ -136,7 +145,9 @@ export function planArtImages(
   const level = sharp ?? (tiles.has(0) ? 0 : levels[levels.length - 1]);
   if (level !== undefined) {
     const visibleTiles = (tiles.get(level) ?? []).filter((t) => intersects(t, visible));
-    if (visibleTiles.length > 0) return { base, detail: visibleTiles };
+    // The tiles carry the visible detail; the base is only the placeholder under them (while
+    // they load, and at the edges during a pan), so the LIGHTEST preview is enough for it.
+    if (visibleTiles.length > 0) return { base: previews[0] ?? base, detail: visibleTiles };
   }
   return full && full !== base ? { base, detail: [full] } : { base, detail: [] };
 }

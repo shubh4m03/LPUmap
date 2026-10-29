@@ -12,7 +12,9 @@
       "source": {
         "name": "Synthetic directory",
         "url": "https://example.org/directory",
-        "retrievedAt": "2026-01-05"
+        "retrievedAt": "2026-01-05",
+        "license": "CC0-1.0 (synthetic test data)",
+        "attribution": "Synthetic fixture"
       },
       "verificationStatus": "imported"
     },
@@ -26,7 +28,9 @@
       "source": {
         "name": "Synthetic directory",
         "url": "https://example.org/directory",
-        "retrievedAt": "2026-01-05"
+        "retrievedAt": "2026-01-05",
+        "license": "CC0-1.0 (synthetic test data)",
+        "attribution": "Synthetic fixture"
       },
       "verificationStatus": "unverified"
     }

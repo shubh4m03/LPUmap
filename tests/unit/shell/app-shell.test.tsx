@@ -15,6 +15,7 @@ import type * as DataModule from '../../../src/data/index.ts';
 import type * as Buildings3d from '../../../src/buildings3d/index.ts';
 import type * as ViewModeModule from '../../../src/app/view-mode.ts';
 import type { MapViewProps } from '../../../src/map/index.ts';
+import { resetDatasetAgeNotice } from '../../../src/app/hooks/useDatasetAgeNotice.ts';
 import { resetAppStore } from '../app/render-helpers.tsx';
 import { syntheticCampus } from '../app/synthetic-campus.ts';
 
@@ -159,6 +160,16 @@ describe('App shell', () => {
       destination: null,
       selectedPlaceId: null,
     });
+  });
+
+  it('shows the map’s degradation notices as a warning toast (MapView gets a handler, not the toast context)', async () => {
+    renderApp();
+    await screen.findByTestId('mock-map');
+    expect(mapProps.current!.onRenderNotice).toBeTypeOf('function');
+    act(() =>
+      mapProps.current!.onRenderNotice!({ id: 'studio-slow', message: 'Models are plain blocks now.' }),
+    );
+    expect(await screen.findByText('Models are plain blocks now.')).toBeInTheDocument();
   });
 
   it('a ?place deep link selects and focuses the place', async () => {
@@ -312,6 +323,15 @@ describe('App shell', () => {
     expect(useAppStore.getState().viewMode).toBe('isometric');
     // A fallback is not written to the URL (a shared link must not force the overview elsewhere).
     expect(window.location.search).not.toContain('view=');
+  });
+
+  it('warns at start-up when the dataset is older than the configured age (G-18)', async () => {
+    resetDatasetAgeNotice();
+    const old = syntheticCampus();
+    old.manifest.builtFrom = '2020-01-01T00:00:00Z';
+    vi.mocked(loadCampusData).mockResolvedValue(old);
+    renderApp();
+    expect(await screen.findByText(/The campus data was retrieved on 1 Jan 2020/)).toBeInTheDocument();
   });
 
   it('the locate control names its action and exposes its state without aria-pressed', async () => {

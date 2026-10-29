@@ -10,8 +10,8 @@
  * - Access nodes are validated (exists, walkable, ≤ maxPlaceConnectorM), never snapped.
  * - Every change bumps publication_version and writes an audit row in the same batch.
  */
-import { overrideFieldsSchema, type OverrideFields } from '../../src/community/schema.ts';
-import type { LngLat, Place } from '../../src/data/schema.ts';
+import { overrideFieldsSchema, type OverrideFields } from '../../src/community/index.ts';
+import type { LngLat, Place } from '../../src/data/index.ts';
 import { auditStmt } from '../db/audit.ts';
 import { bumpPublicationStmt } from '../db/meta.ts';
 import {

@@ -6,7 +6,7 @@
  * membership at publish, and the validation run: the shared validator plus a
  * small server safety net.
  */
-import { createEnuFrame, lngLatToLocalPolygon } from '../../../src/building-studio/footprint.ts';
+import { createEnuFrame, lngLatToLocalPolygon } from '../../../src/building-studio/index.ts';
 import {
   modelSupport,
   studioDraftSchema,
@@ -21,15 +21,15 @@ import {
   type ValidationCode,
   type ValidationIssue,
   type ValidationResult,
-} from '../../../src/building-studio/schema.ts';
+} from '../../../src/building-studio/index.ts';
 import {
   membershipForPublish,
   polygonCoordsOf,
   studioFootprintFor,
   validationResult,
-} from '../../../src/building-studio/validate.ts';
-import type { LngLat } from '../../../src/data/schema.ts';
-import { classifyFootprint, pointOnSurface, type MembershipResult } from '../../../src/geo/boundary.ts';
+} from '../../../src/building-studio/editor.ts';
+import type { LngLat } from '../../../src/data/index.ts';
+import { classifyFootprint, pointOnSurface, type MembershipResult } from '../../../src/geo/index.ts';
 import type { StudioBaseData } from '../../base-data.ts';
 import { listPublishedStudioVersions } from '../../db/studio-buildings.ts';
 import type { SqlDatabase } from '../../db/types.ts';

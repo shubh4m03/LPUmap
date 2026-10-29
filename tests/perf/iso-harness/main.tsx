@@ -19,9 +19,7 @@ import { DirectoryPanel } from '../../../src/components/directory/index.ts';
 import { Spinner, ToastProvider } from '../../../src/components/ui/index.ts';
 import './harness.css';
 
-const IsoStage = lazy(() =>
-  import('../../../src/isometric/IsoStage.tsx').then((m) => ({ default: m.IsoStage })),
-);
+const IsoStage = lazy(() => import('../../../src/app/IsoStage.tsx').then((m) => ({ default: m.IsoStage })));
 const NO_PADDING = { top: 0, right: 0, bottom: 0, left: 0 };
 
 function focusDirectory() {

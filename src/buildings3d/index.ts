@@ -16,7 +16,7 @@ export {
   type BuildingLegendKey,
   type BuildingLegendOptions,
 } from './layers.ts';
-export { setBuildingMode, MODE_TRANSITION_MS, type BuildingModeMap } from './mode.ts';
+export { pitch3dFor, setBuildingMode, MODE_TRANSITION_MS, type BuildingModeMap } from './mode.ts';
 export {
   LIGHT_AZIMUTH_DEG,
   LIGHT_INTENSITY,

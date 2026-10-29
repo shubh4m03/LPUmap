@@ -45,28 +45,35 @@ It is shared by place details and search.
 
 ### CLIs
 
-| Command                                                                                      | Behaviour                                                                                                                     |
-| -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `node scripts/build-data.ts [--input --curated --out --cache --report --schemas --relation]` | Builds `public/data/*`, `docs/DATA_QUALITY_REPORT.md` and `data/schemas/*.json`, then runs Prettier on the generated files    |
-| `node scripts/validate-data.ts [--dir --previous --check-links]`                             | Schemas plus invariants; exit 1 on any error; warns on suspicious count changes against the previous manifest                 |
-| `node scripts/fetch-osm.ts [--force --out --relation]`                                       | Overpass (2 endpoints, retries) → OSM API 0.6 fallback; does nothing if a snapshot exists                                     |
-| `node scripts/fetch-public-data.ts [--dry-run] [--offline]`                                  | Re-extracts official LPU names under `robots.txt`; needs `DATA_FETCH_CONTACT` for live runs; refuses drops over 40 % (exit 2) |
+| Command                                                                                      | Behaviour                                                                                                                        |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `node scripts/build-data.ts [--input --curated --out --cache --report --schemas --relation]` | Builds `public/data/*`, `docs/DATA_QUALITY_REPORT.md` and `data/schemas/*.json`, then runs Prettier on the generated files       |
+| `node scripts/validate-data.ts [--dir --previous --check-links]`                             | Schemas plus invariants; exit 1 on any error; warns on suspicious count changes against the previous manifest                    |
+| `node scripts/fetch-osm.ts [--force --out --relation]`                                       | Overpass (2 endpoints) → OSM API 0.6 fallback; timeouts, retries, UA `LPU-Campus-Atlas-research/0.1`; no-op if a snapshot exists |
+| `node scripts/fetch-public-data.ts [--dry-run] [--offline]`                                  | Re-extracts official LPU names under `robots.txt` (product token `LPU-Campus-Atlas-research`); refuses drops over 40 % (exit 2)  |
 
 ## Generated dataset
 
-These figures are for the current `manifest.json`: `datasetVersion` `b628c5855b1d`, schema 1, built
-from OSM retrieved 2026-10-23T09:39:00Z.
+Current dataset: dataset `50fefb5e828b` (schema 2, built from the OSM snapshot of 2026-10-23):
+**131** campus buildings (128 unnamed), **227** campus places (31 without a map position), **261**
+places just outside campus (opt-in layer), **123** unverified detected footprints, and a walking
+graph of **1,636** nodes and **1,770** edges in **9** components. (The v1 dataset `b628c5855b1d`, schema
+1, held all 535 footprints and 855 places; it is the rollback target in
+[DATA_ROLLBACK.md](../DATA_ROLLBACK.md).)
 
-| File                  | Contents                                                                                               |
-| --------------------- | ------------------------------------------------------------------------------------------------------ |
-| `manifest.json`       | Schema and dataset version, sources with licences, per-file bytes and SHA-256, counts, bbox            |
-| `boundary.geojson`    | The campus polygon from OSM relation 21599790                                                          |
-| `buildings.geojson`   | 535 footprints, with `heightM`, `minHeightM`, `heightSource`, `levels`, name and category              |
-| `basemap.geojson`     | 389 features: roads, paths, water, green areas, …                                                      |
-| `places.json`         | 855 places. Ids are `osm:<type>/<id>` or `cur:<slug>`                                                  |
-| `relations.json`      | 760 relations: `located_in` 167, `part_of` 200, `nearby` 393, `accessed_via` 0                         |
-| `graph.json`          | 1,636 nodes and 1,770 edges, with access per mode, steps, wheelchair, oneway, indoor, surface and name |
-| `quality-report.json` | Machine-readable quality report; rendered as `docs/DATA_QUALITY_REPORT.md`                             |
+| File                   | Contents                                                                                                                         |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `manifest.json`        | Schema and dataset version, sources with licences, per-file bytes and SHA-256, counts, bbox                                      |
+| `boundary.geojson`     | The campus polygon from OSM relation 21599790                                                                                    |
+| `buildings.geojson`    | 131 campus-inventory footprints (128 inside, 3 crossing) with render height and source, levels, membership, map key and category |
+| `context-places.json`  | 261 places just outside campus (lazy; the opt-in "Nearby, outside campus" layer, never routable)                                 |
+| `detections.geojson`   | 123 machine-detected footprints (112 Microsoft, 11 Google Open Buildings; lazy, unverified layer)                                |
+| `boundary-review.json` | 25 boundary-review items (lazy; admin data quality and docs)                                                                     |
+| `basemap.geojson`      | 349 features: roads, paths, water, green areas, …                                                                                |
+| `places.json`          | 227 campus places. Ids are `osm:<type>/<id>` or `cur:<slug>`                                                                     |
+| `relations.json`       | 196 relations: `located_in` 2, `part_of` 194, `nearby` 0, `accessed_via` 0, `connected_by_path` 0                                |
+| `graph.json`           | 1,636 nodes and 1,770 edges, with access per mode, steps, wheelchair, oneway, indoor, surface and name                           |
+| `quality-report.json`  | Machine-readable quality report; rendered as `docs/DATA_QUALITY_REPORT.md`                                                       |
 
 ## Invariants
 

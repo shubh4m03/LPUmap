@@ -23,11 +23,12 @@ function fakeMap(zoom = 15) {
   return m;
 }
 
-function setup(opts: { reducedMotion?: boolean; mode3d?: boolean; zoom?: number } = {}) {
+function setup(opts: { reducedMotion?: boolean; mode3d?: boolean; zoom?: number; compact?: boolean } = {}) {
   const map = fakeMap(opts.zoom);
   const ctrl = createMapController(map as unknown as ControllerMap, {
     reducedMotion: () => opts.reducedMotion ?? false,
     mode3d: () => opts.mode3d ?? false,
+    compact: () => opts.compact ?? false,
   });
   return { map, ctrl };
 }
@@ -132,6 +133,14 @@ describe('createMapController', () => {
     tilted.ctrl.resetView();
     expect(tilted.map.jumpTo).toHaveBeenCalledWith(
       expect.objectContaining({ pitch: APP_CONFIG.map.pitch3d, bearing: APP_CONFIG.map.bearing3d }),
+    );
+  });
+
+  it('resetView on a phone in 3D uses the compact pitch', () => {
+    const phone = setup({ mode3d: true, reducedMotion: true, compact: true });
+    phone.ctrl.resetView();
+    expect(phone.map.jumpTo).toHaveBeenCalledWith(
+      expect.objectContaining({ pitch: APP_CONFIG.map.pitch3dCompact, bearing: APP_CONFIG.map.bearing3d }),
     );
   });
 

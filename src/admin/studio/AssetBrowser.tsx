@@ -7,21 +7,21 @@
  */
 import { useMemo, useState } from 'react';
 import { Badge, Button, EmptyState, SearchInput } from '../../components/ui/index.ts';
-import { cx, FOCUS_RING } from '../../components/ui/cx.ts';
-import { LIBRARY_CATEGORY_LABELS, searchLibrary } from '../../building-studio/asset-library.ts';
+import { cx, FOCUS_RING } from '../../components/ui/index.ts';
+import { LIBRARY_CATEGORY_LABELS, searchLibrary } from '../../building-studio/editor.ts';
 import {
   LIBRARY_CATEGORIES,
   type LibraryCategory,
   type TemplateDefinition,
-} from '../../building-studio/schema.ts';
+} from '../../building-studio/index.ts';
 import {
   ACCURACY_LABELS,
   RENDER_COST_LABELS,
   variantDefaultsText,
   variantThumbnailUrl,
   type StudioLibraryItem,
-} from '../../building-studio/ui/library.ts';
-import { categoryLabel } from '../../building-studio/ui/fields.ts';
+} from '../../building-studio/ui/index.ts';
+import { categoryLabel } from '../../building-studio/ui/index.ts';
 import { SelectField } from './controls.tsx';
 import { useStudioServices } from './studio-context.ts';
 

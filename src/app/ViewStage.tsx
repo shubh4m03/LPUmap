@@ -11,7 +11,7 @@ const IsoStudioStage = lazy(() =>
 );
 // The isometric mode: the owner's illustration (default) or the map-accurate drawing (?iso=map).
 const IsometricModeStage = lazy(() =>
-  import('../isometric-art/IsometricModeStage.tsx').then((m) => ({ default: m.IsometricModeStage })),
+  import('./IsometricModeStage.tsx').then((m) => ({ default: m.IsometricModeStage })),
 );
 
 export interface ViewStageProps extends MapStageProps {

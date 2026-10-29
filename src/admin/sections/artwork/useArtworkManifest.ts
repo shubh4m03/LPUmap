@@ -5,8 +5,8 @@
  * an error with a retry, never as an empty list.
  */
 import { useEffect, useState } from 'react';
-import { loadIsometricArtManifest, type ManifestLoadResult } from '../../../isometric-art/manifest-loader.ts';
-import type { IsometricArtManifest } from '../../../isometric-art/schema.ts';
+import { loadIsometricArtManifest, type ManifestLoadResult } from '../../../isometric-art/index.ts';
+import type { IsometricArtManifest } from '../../../isometric-art/index.ts';
 
 let pending: Promise<ManifestLoadResult> | null = null;
 

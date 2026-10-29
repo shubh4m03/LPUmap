@@ -2,7 +2,7 @@
  * In-memory facility directory built from the generated dataset. Every count
  * and relationship is derived from the records passed in — nothing is added.
  */
-import type { Place, Relation, RelationType } from '../data/schema.ts';
+import type { Place, Relation, RelationType } from '../data/index.ts';
 
 /** UI wording per relation type. `nearby` is explicitly not a physical connection. */
 export const RELATION_LABELS: Record<RelationType, string> = {

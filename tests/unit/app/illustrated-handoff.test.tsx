@@ -14,7 +14,7 @@ import {
   ILLUSTRATED_ROUTE_REASON,
   illustratedHandoffReason,
 } from '../../../src/app/view-mode.ts';
-import { setIllustratedShown } from '../../../src/isometric-art/variant-state.ts';
+import { setIllustratedShown } from '../../../src/app/isometric-variant.ts';
 
 const ok = { ok: true };
 

@@ -5,7 +5,7 @@
  */
 import { useEffect } from 'react';
 import { useAppStore, type PickTarget } from '../../app/store/index.ts';
-import type { SheetSnap } from '../ui/sheet-snap.ts';
+import type { SheetSnap } from '../ui/index.ts';
 
 let restoreSnap: SheetSnap | null = null;
 

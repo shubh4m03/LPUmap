@@ -9,7 +9,7 @@
  * layer reads the same object, so studio models and extrusions are lit alike.
  */
 import type { LightSpecification } from 'maplibre-gl';
-import type { MapTheme } from '../map/theme-colors.ts';
+import type { MapTheme } from '../styles/index.ts';
 import { realistic3dColors } from './palette.ts';
 
 export const LIGHT_AZIMUTH_DEG = 210;
